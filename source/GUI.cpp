@@ -744,6 +744,106 @@ namespace BlastOff
 	bool TopRightResetButton::IsSlidingOut() const
 	{
 		return m_SlideOutTick >= 0;
+    }
+
+
+    MuteButton::MuteButton(
+        const bool* const programIsMuted,
+        const CoordinateTransformer* const coordTransformer,
+        const ProgramConfiguration* const programConfig,
+        ImageTextureLoader* const imageTextureLoader,
+        const Callback& muteCallback,
+        const CameraEmpty* const cameraEmpty
+    ) : Button(
+        muteCallback,
+        LazyLoadUnselectedTexture,
+        LazyLoadSelectedTexture,
+        imageTextureLoader,
+        Vector2f::Zero(),
+        c_EngineSize,
+        cameraEmpty,
+        coordTransformer,
+        programConfig
+    ),
+    m_IsActive(programIsMuted)
+    {
+        const auto initializePosition = 
+            [&, this]()
+        {
+            const Vector2f viewportSize = coordTransformer->GetViewportSize();
+            Vector2f enginePosition = 
+            {
+                ((viewportSize - c_EngineSize) / 2.0f) - c_Margins
+            };
+            enginePosition -= Vector2f{ 0, c_Margins.y + c_EngineSize.y };
+            m_Sprite->Move(enginePosition);
+        };
+
+        const auto initializeActiveBar = 
+            [&, this]()
+        {
+            const Rect2f engineRect(Vector2f::Zero(), c_ActiveBarSize);
+            m_ActiveBar = ImageSprite::LoadFromPath(
+                engineRect,
+                c_ActiveBarTexturePath,
+                coordTransformer,
+                programConfig,
+                imageTextureLoader
+            );
+            m_ActiveBar->SetParent(m_Sprite.get());
+        };
+
+        initializePosition();
+        initializeActiveBar();
+    }
+
+    void MuteButton::Update()
+    {
+        Button::Update();
+    }
+
+    void MuteButton::Draw() const
+    {
+        Button::Draw();
+
+        if (*m_IsActive)
+            m_ActiveBar->Draw();
+    }
+
+    const Vector2f MuteButton::c_Margins = { 3 / 20.0f, 3 / 20.0f };
+    const Vector2f MuteButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
+    const Vector2f MuteButton::c_ActiveBarSize = { 21 / 40.0f, 21 / 40.0f };
+
+    const char* const MuteButton::c_UnselectedTexturePath =
+    {
+        "UnselectedMute.png"
+    };
+    const char* const MuteButton::c_SelectedTexturePath =
+    {
+        "SelectedMute.png"
+    };
+    const char* const MuteButton::c_ActiveBarTexturePath =
+    {
+        "MuteActiveBar.png"
+    };
+
+	const Texture* MuteButton::LazyLoadUnselectedTexture
+		(ImageTextureLoader* const imageTextureLoader)
+	{
+		const Texture* result =
+		{
+			imageTextureLoader->LazyLoadTexture(c_UnselectedTexturePath)
+		};
+		return result;
+	}
+
+	const Texture* MuteButton::LazyLoadSelectedTexture(ImageTextureLoader* const imageTextureLoader)
+	{
+		const Texture* result =
+		{
+			imageTextureLoader->LazyLoadTexture(c_SelectedTexturePath)
+		};
+		return result;
 	}
 
 

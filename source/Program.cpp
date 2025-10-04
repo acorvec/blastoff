@@ -246,12 +246,25 @@ namespace BlastOff
 				m_ShouldReset = true;
 			};
 
+        const auto muteUnmuteCallback = 
+            [this]()
+            {
+                m_IsMuted = !m_IsMuted;
+
+                if (m_IsMuted)
+                    SetMasterVolume(0);
+                else
+                    SetMasterVolume(1);
+            };
+
 		m_Game = std::make_unique<Game>(
+            &m_IsMuted,
 			&c_Config,
 			&m_ImageTextureLoader,
 			m_TextTextureLoader.get(),
 			&m_SoundLoader,
 			resetCallback,
+            muteUnmuteCallback,
 			&m_Font,
 			m_Window->GetPosition(),
 			m_Window->GetSize()

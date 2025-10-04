@@ -15,15 +15,17 @@ namespace BlastOff
 	struct Game
 	{
 		Game(
-			const ProgramConfiguration* const programConfig,
-			ImageTextureLoader* const imageTextureLoader,
-			TextTextureLoader* const textTextureLoader,
-			SoundLoader* const soundLoader,
-			const Callback& resetCallback,
-			const Font* const font,
-			const Vector2i* const windowPosition,
-			const Vector2i* const windowSize
-		);
+            const bool* const programIsMuted,
+            const ProgramConfiguration* const programConfig,
+    		ImageTextureLoader* const imageTextureLoader,
+	    	TextTextureLoader* const textTextureLoader,
+    		SoundLoader* const soundLoader,
+		    const Callback& resetCallback,
+            const Callback& muteUnmuteCallback,
+	    	const Font* const font,
+		    const Vector2i* const windowPosition,
+    		const Vector2i* const windowSize		
+        );
 
 		void Update();
 		void Draw() const;
@@ -53,6 +55,7 @@ namespace BlastOff
 		unique_ptr<GameEndMenu> m_WinMenu = nullptr;
 		unique_ptr<GameEndMenu> m_LoseMenu = nullptr;
 		unique_ptr<TopRightResetButton> m_TopRightResetButton = nullptr;
+        unique_ptr<MuteButton> m_MuteButton = nullptr;
 
 		const Sound* m_WinSound = nullptr;
 		const Sound* m_LoseSound = nullptr;

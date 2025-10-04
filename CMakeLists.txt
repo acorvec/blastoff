@@ -20,6 +20,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(raylib)
 
+FetchContent_Declare(
+    ubuntufonts
+    GIT_REPOSITORY "https://github.com/canonical/Ubuntu-Sans-fonts.git"
+    GIT_TAG "main"
+    GIT_PROGRESS TRUE
+)
+
 file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/source/*.cpp")
 set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/sources/")
 

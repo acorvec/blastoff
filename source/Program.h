@@ -28,6 +28,7 @@ namespace BlastOff
 
 		bool m_IsRunning = true;
 		bool m_ShouldReset = false;
+        bool m_IsMuted = false;
 
 		Font m_Font = { 0 };
 

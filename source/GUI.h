@@ -56,7 +56,7 @@ namespace BlastOff
 		virtual void UpdateStatistic() = 0;
 
 		static const Texture* LazyLoadBackingTexture
-		(ImageTextureLoader* const imageTextureLoader);
+    		(ImageTextureLoader* const imageTextureLoader);
 	};
 
 	struct FuelBar : public GUIBar
@@ -314,6 +314,41 @@ namespace BlastOff
 		bool IsSlidingOut() const;
 	};
 
+    struct MuteButton : public Button
+    {
+        MuteButton(
+            const bool* const programIsMuted,
+            const CoordinateTransformer* const coordTransformer,
+            const ProgramConfiguration* const programConfig,
+            ImageTextureLoader* const imageTextureLoader,
+            const Callback& muteCallback,
+            const CameraEmpty* const cameraEmpty
+        );
+
+        void SlideOut();
+        void Update() override;
+        void Draw() const override;
+
+    protected:
+        static const Vector2f c_Margins;
+        static const Vector2f c_EngineSize;
+        static const Vector2f c_ActiveBarSize;
+        static const char* const c_UnselectedTexturePath;
+        static const char* const c_SelectedTexturePath;
+        static const char* const c_ActiveBarTexturePath;
+
+        static inline Texture m_UnselectedTexture = { 0 };
+        static inline Texture m_SelectedTexture = { 0 };
+
+        const bool* m_IsActive = nullptr;
+        unique_ptr<ImageSprite> m_ActiveBar = nullptr;
+
+        static const Texture* LazyLoadUnselectedTexture
+            (ImageTextureLoader* const imageTextureLoader);
+        static const Texture* LazyLoadSelectedTexture
+            (ImageTextureLoader* const imageTextureLoader);
+    };
+
 	struct GameEndMenu
 	{
 		GameEndMenu(
@@ -392,5 +427,5 @@ namespace BlastOff
 	private:
 		static const Colour4i c_BackingColour;
 		static const char* const c_MessageText;
-	};
+    };
 }

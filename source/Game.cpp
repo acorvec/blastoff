@@ -5,11 +5,13 @@
 namespace BlastOff
 {
 	Game::Game(
+        const bool* const programIsMuted,
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
 		SoundLoader* const soundLoader,
 		const Callback& resetCallback,
+        const Callback& muteUnmuteCallback,
 		const Font* const font,
 		const Vector2i* const windowPosition,
 		const Vector2i* const windowSize
@@ -367,7 +369,7 @@ namespace BlastOff
 				);
 			};
 
-		const auto initializeResetButton =
+		const auto initializeGUIButtons =
 			[&, this]()
 			{
 				m_TopRightResetButton = std::make_unique<TopRightResetButton>(
@@ -377,6 +379,14 @@ namespace BlastOff
 					resetCallback,
 					m_CameraEmpty.get()
 				);
+                m_MuteButton = std::make_unique<MuteButton>(
+                    programIsMuted,
+                    m_CoordinateTransformer.get(),
+                    m_ProgramConfig,
+                    imageTextureLoader,
+                    muteUnmuteCallback,
+                    m_CameraEmpty.get()
+                );
 			};
 
 		const auto updatePlatformCollisionRect =
@@ -401,7 +411,7 @@ namespace BlastOff
 				initializeGUIBars();
 				initializeGUILabels();
 				initializeGameEndMenus();
-				initializeResetButton();
+				initializeGUIButtons();
 
 				updatePlatformCollisionRect();
 			};
@@ -503,6 +513,7 @@ namespace BlastOff
 				m_WinMenu->Update();
 				m_LoseMenu->Update();
 				m_TopRightResetButton->Update();
+                m_MuteButton->Update();
 			};
 
 		const auto playOutcomeSound =
@@ -695,6 +706,7 @@ namespace BlastOff
 				m_WinMenu->Draw();
 				m_LoseMenu->Draw();
 				m_TopRightResetButton->Draw();
+                m_MuteButton->Draw();
 			};
 
 		drawObjects();
