@@ -257,7 +257,7 @@ namespace BlastOff
                     SetMasterVolume(1);
             };
 
-		m_Game = std::make_unique<Game>(
+		m_Game = std::make_unique<PlayableGame>(
             &m_IsMuted,
 			&c_Config,
 			&m_ImageTextureLoader,

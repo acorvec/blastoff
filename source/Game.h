@@ -15,22 +15,19 @@ namespace BlastOff
 	struct Game
 	{
 		Game(
-            const bool* const programIsMuted,
             const ProgramConfiguration* const programConfig,
     		ImageTextureLoader* const imageTextureLoader,
 	    	TextTextureLoader* const textTextureLoader,
     		SoundLoader* const soundLoader,
-		    const Callback& resetCallback,
-            const Callback& muteUnmuteCallback,
 	    	const Font* const font,
 		    const Vector2i* const windowPosition,
     		const Vector2i* const windowSize		
         );
 
-		void Update();
-		void Draw() const;
+		virtual void Update();
+		virtual void Draw() const;
 
-	private:
+	protected:
 		using Constants = GameConstants;
 		using Outcome = GameOutcome;
 		using EndMenu = GameEndMenu;
@@ -54,15 +51,6 @@ namespace BlastOff
 		unique_ptr<GUIBar> m_SpeedupBar = nullptr;
 		unique_ptr<BarLabel> m_FuelBarLabel = nullptr;
 		unique_ptr<BarLabel> m_SpeedupBarLabel = nullptr;
-		unique_ptr<GameEndMenu> m_WinMenu = nullptr;
-		unique_ptr<GameEndMenu> m_LoseMenu = nullptr;
-		unique_ptr<TopRightResetButton> m_TopRightResetButton = nullptr;
-        unique_ptr<MuteButton> m_MuteButton = nullptr;
-
-		const Sound* m_WinSound = nullptr;
-		const Sound* m_LoseSound = nullptr;
-		const Sound* m_EasterEggSound1 = nullptr;
-		const Sound* m_EasterEggSound2 = nullptr;
 
 		vector<SpeedUpPowerup> m_SpeedUpPowerups = {};
 		vector<FuelUpPowerup> m_FuelUpPowerups = {};
@@ -74,7 +62,45 @@ namespace BlastOff
 		vector<Cloud*> m_AllClouds = {};
 
 		const ProgramConfiguration* m_ProgramConfig = nullptr;
+		const Font* m_Font = nullptr;
+
+		ImageTextureLoader* m_ImageTextureLoader = nullptr;
+		TextTextureLoader* m_TextTextureLoader = nullptr;
+
+		void FinishConstruction(unique_ptr<InputManager> inputManager);
 
 		float GetWorldEdge(const Direction side) const;
+	};
+
+	struct PlayableGame : public Game
+	{
+		PlayableGame(
+			const bool* const programIsMuted,
+			const ProgramConfiguration* const programConfig,
+			ImageTextureLoader* const imageTextureLoader,
+			TextTextureLoader* const textTextureLoader,
+			SoundLoader* const soundLoader,
+			const Callback& resetCallback,
+			const Callback& muteUnmuteCallback,
+			const Font* const font,
+			const Vector2i* const windowPosition,
+			const Vector2i* const windowSize
+		);
+
+		void Update() override;
+		void Draw() const override;
+
+	protected:
+		unique_ptr<GameEndMenu> m_WinMenu = nullptr;
+		unique_ptr<GameEndMenu> m_LoseMenu = nullptr;
+		unique_ptr<TopRightResetButton> m_TopRightResetButton = nullptr;
+		unique_ptr<MuteButton> m_MuteButton = nullptr;
+
+		const Sound* m_WinSound = nullptr;
+		const Sound* m_LoseSound = nullptr;
+		const Sound* m_EasterEggSound1 = nullptr;
+		const Sound* m_EasterEggSound2 = nullptr;
+
+		unique_ptr<InputManager> CreateInputManager();
 	};
 }

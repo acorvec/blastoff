@@ -6,18 +6,18 @@
 namespace BlastOff
 {
 	Game::Game(
-        const bool* const programIsMuted,
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
 		SoundLoader* const soundLoader,
-		const Callback& resetCallback,
-        const Callback& muteUnmuteCallback,
 		const Font* const font,
 		const Vector2i* const windowPosition,
 		const Vector2i* const windowSize
 	) :
-		m_ProgramConfig(programConfig)
+		m_ProgramConfig(programConfig),
+		m_Font(font),
+		m_ImageTextureLoader(imageTextureLoader),
+		m_TextTextureLoader(textTextureLoader)
 	{
 		const auto initializeGraphics =
 			[&, this]()
@@ -29,29 +29,6 @@ namespace BlastOff
 					&m_CameraPosition
 				);
 				m_CoordinateTransformer->Update();
-			};
-
-		const auto initializeSound =
-			[&, this]()
-			{
-				const bool isSoundEnabled = m_ProgramConfig->GetSoundEnabled();
-				if (!isSoundEnabled)
-					return;
-
-				m_WinSound = soundLoader->LazyLoadSound("win.wav");
-				m_LoseSound = soundLoader->LazyLoadSound("lose.wav");
-				m_EasterEggSound1 = soundLoader->LazyLoadSound("egg1.wav");
-				m_EasterEggSound2 = soundLoader->LazyLoadSound("egg2.wav");
-			};
-
-		const auto initializeInput =
-			[&, this]()
-			{
-				const auto coordTransformer = m_CoordinateTransformer.get();
-				m_InputManager =
-				{
-					std::make_unique<PlayableInputManager>(coordTransformer)
-				};
 			};
 
 		const auto initializeCameraEmpty =
@@ -116,140 +93,6 @@ namespace BlastOff
 					m_ProgramConfig,
 					imageTextureLoader
 				);
-			};
-
-		const auto initializePlayer =
-			[&, this]()
-			{
-				m_Player = std::make_unique<Player>(
-					&m_Outcome,
-					&m_WorldBounds,
-					m_Platform.get(),
-					m_CoordinateTransformer.get(),
-					&c_Constants,
-					m_ProgramConfig,
-					m_InputManager.get(),
-					imageTextureLoader
-				);
-			};
-
-		const auto calculateRandomOffset =
-			[this](const float randomYRange) -> Vector2f
-			{
-				return
-				{
-					(GetRandomFloat() - 0.5f) * m_WorldBounds.w,
-					GetRandomFloat() * randomYRange
-				};
-			};
-
-		const auto initializePowerup =
-			[&](
-				const size_t index,
-				const size_t length,
-				auto& vector
-			)
-			{
-				constexpr float randomness = 2;
-
-				const float marginMultiplier = 19 / 20.0f;
-				const float multiplier = marginMultiplier;
-
-				const float divisor = ((float)length) + randomness;
-				const float stride =
-				{
-					(m_WorldBounds.h * multiplier) / divisor
-				};
-				const float randomYRange =
-				{
-					stride * marginMultiplier * randomness
-				};
-				const Vector2f bottomOfRange = 
-				{ 
-					0, 
-					(index + 1) * (float)stride 
-				};
-
-				const Vector2f randomOffset =
-				{
-					calculateRandomOffset(randomYRange)
-				};
-				const Vector2f enginePosition = bottomOfRange + randomOffset;
-#if COMPILE_CONFIG_DEBUG
-				const float worldTop = GetWorldEdge(Direction::Up);
-				const float worldBottom = GetWorldEdge(Direction::Down);
-
-				if ((bottomOfRange.y + randomYRange) > worldTop)
-				{
-					Logging::Log("Powerup random range goes too high.");
-					BreakProgram();
-				}
-				if (bottomOfRange.y < worldBottom)
-				{
-					Logging::Log("Powerup random range goes too low.");
-					BreakProgram();
-				}
-#endif
-				vector.emplace_back(
-					m_CoordinateTransformer.get(),
-					m_ProgramConfig,
-					m_Player.get(),
-					imageTextureLoader,
-					enginePosition
-				);
-			};
-
-		const auto initializePowerupVector =
-			[&](const size_t length, auto& vector)
-			{
-				vector.reserve(length);
-
-				for (size_t index = 0; index < length; index++)
-					initializePowerup(index, length, vector);
-			};
-
-		const auto initializeSpeedupPowerups =
-			[&]()
-			{
-				const size_t length =
-				{
-					c_Constants.GetAmountOfSpeedPowerups()
-				};
-				initializePowerupVector(length, m_SpeedUpPowerups);
-			};
-
-		const auto initializeFuelUpPowerups =
-			[&]()
-			{
-				const size_t length =
-				{
-					c_Constants.GetAmountOfFuelPowerups()
-				};
-				initializePowerupVector(length, m_FuelUpPowerups);
-			};
-
-		const auto initializeAllPowerupsVector =
-			[this]()
-			{
-				const size_t totalLength =
-				{
-					m_SpeedUpPowerups.size() + m_FuelUpPowerups.size()
-				};
-				m_AllPowerups.reserve(totalLength);
-
-				for (Powerup& powerup : m_SpeedUpPowerups)
-					m_AllPowerups.push_back(&powerup);
-				for (Powerup& powerup : m_FuelUpPowerups)
-					m_AllPowerups.push_back(&powerup);
-			};
-
-		const auto initializePowerups =
-			[&]()
-			{
-				initializeSpeedupPowerups();
-				initializeFuelUpPowerups();
-
-				initializeAllPowerupsVector();
 			};
 
 		const auto initializeCloudDirection =
@@ -320,20 +163,179 @@ namespace BlastOff
 				initializeAllCloudsVector();	
 			};
 
+		const auto initializeObjects =
+			[&]()
+			{
+				initializeCameraEmpty();
+				initializeBackgroundSprite();
+				initializeCrag();
+				initializePlatform();
+				initializeClouds();
+			};
+
+		initializeGraphics();
+		initializeObjects();
+	}
+
+	void Game::FinishConstruction(unique_ptr<InputManager> inputManager)
+	{
+		const auto initializePlayer =
+			[&, this]()
+			{
+				m_Player = std::make_unique<Player>(
+					&m_Outcome,
+					&m_WorldBounds,
+					m_Platform.get(),
+					m_CoordinateTransformer.get(),
+					&c_Constants,
+					m_ProgramConfig,
+					m_InputManager.get(),
+					m_ImageTextureLoader
+				);
+			};
+
+		const auto updatePlatformCollisionRect =
+			[this]()
+			{
+				const Rect2f playerRect = m_Player->GetEngineRect();
+				const Vector2f playerSize = playerRect.GetSize();
+
+				m_Platform->UpdateCollisionRect(playerSize);
+			};
+
+		const auto calculateRandomOffset =
+			[this](const float randomYRange) -> Vector2f
+			{
+				return
+				{
+					(GetRandomFloat() - 0.5f) * m_WorldBounds.w,
+					GetRandomFloat() * randomYRange
+				};
+			};
+
+		const auto initializePowerup =
+			[&](
+				const size_t index,
+				const size_t length,
+				auto& vector
+			)
+			{
+				constexpr float randomness = 2;
+
+				const float marginMultiplier = 19 / 20.0f;
+				const float multiplier = marginMultiplier;
+
+				const float divisor = ((float)length) + randomness;
+				const float stride =
+				{
+					(m_WorldBounds.h * multiplier) / divisor
+				};
+				const float randomYRange =
+				{
+					stride * marginMultiplier * randomness
+				};
+				const Vector2f bottomOfRange =
+				{
+					0,
+					(index + 1) * (float)stride
+				};
+
+				const Vector2f randomOffset =
+				{
+					calculateRandomOffset(randomYRange)
+				};
+				const Vector2f enginePosition = bottomOfRange + randomOffset;
+#if COMPILE_CONFIG_DEBUG
+				const float worldTop = GetWorldEdge(Direction::Up);
+				const float worldBottom = GetWorldEdge(Direction::Down);
+
+				if ((bottomOfRange.y + randomYRange) > worldTop)
+				{
+					Logging::Log("Powerup random range goes too high.");
+					BreakProgram();
+				}
+				if (bottomOfRange.y < worldBottom)
+				{
+					Logging::Log("Powerup random range goes too low.");
+					BreakProgram();
+				}
+#endif
+				vector.emplace_back(
+					m_CoordinateTransformer.get(),
+					m_ProgramConfig,
+					m_Player.get(),
+					m_ImageTextureLoader,
+					enginePosition
+				);
+			};
+
+		const auto initializePowerupVector =
+			[&](const size_t length, auto& vector)
+			{
+				vector.reserve(length);
+
+				for (size_t index = 0; index < length; index++)
+					initializePowerup(index, length, vector);
+			};
+
+		const auto initializeSpeedupPowerups =
+			[&]()
+			{
+				const size_t length =
+				{
+					c_Constants.GetAmountOfSpeedPowerups()
+				};
+				initializePowerupVector(length, m_SpeedUpPowerups);
+			};
+
+		const auto initializeFuelUpPowerups =
+			[&]()
+			{
+				const size_t length =
+				{
+					c_Constants.GetAmountOfFuelPowerups()
+				};
+				initializePowerupVector(length, m_FuelUpPowerups);
+			};
+
+		const auto initializeAllPowerupsVector =
+			[this]()
+			{
+				const size_t totalLength =
+				{
+					m_SpeedUpPowerups.size() + m_FuelUpPowerups.size()
+				};
+				m_AllPowerups.reserve(totalLength);
+
+				for (Powerup& powerup : m_SpeedUpPowerups)
+					m_AllPowerups.push_back(&powerup);
+				for (Powerup& powerup : m_FuelUpPowerups)
+					m_AllPowerups.push_back(&powerup);
+			};
+
+		const auto initializePowerups =
+			[&]()
+			{
+				initializeSpeedupPowerups();
+				initializeFuelUpPowerups();
+
+				initializeAllPowerupsVector();
+			};
+
 		const auto initializeGUIBars =
 			[&, this]()
 			{
 				m_FuelBar = std::make_unique<FuelBar>(
 					m_CoordinateTransformer.get(),
 					m_ProgramConfig,
-					imageTextureLoader,
+					m_ImageTextureLoader,
 					m_CameraEmpty.get(),
 					m_Player.get()
 				);
 				m_SpeedupBar = std::make_unique<SpeedupBar>(
 					m_CoordinateTransformer.get(),
 					m_ProgramConfig,
-					imageTextureLoader,
+					m_ImageTextureLoader,
 					m_CameraEmpty.get(),
 					m_Player.get()
 				);
@@ -346,96 +348,25 @@ namespace BlastOff
 					m_FuelBar.get(),
 					m_CoordinateTransformer.get(),
 					m_ProgramConfig,
-					textTextureLoader,
-					font
+					m_TextTextureLoader,
+					m_Font
 				);
 				m_SpeedupBarLabel = std::make_unique<SpeedupBarLabel>(
 					m_SpeedupBar.get(),
 					m_CoordinateTransformer.get(),
 					m_ProgramConfig,
-					textTextureLoader,
-					font
+					m_TextTextureLoader,
+					m_Font
 				);
 			};
 
-		const auto initializeGameEndMenus =
-			[&, this]()
-			{
-				m_WinMenu = std::make_unique<WinMenu>(
-					resetCallback,
-					m_CoordinateTransformer.get(),
-					m_InputManager.get(),
-					m_ProgramConfig,
-					imageTextureLoader,
-					textTextureLoader,
-					m_CameraEmpty.get(),
-					font
-				);
-				m_LoseMenu = std::make_unique<LoseMenu>(
-					resetCallback,
-					m_CoordinateTransformer.get(),
-					m_InputManager.get(),
-					m_ProgramConfig,
-					imageTextureLoader,
-					textTextureLoader,
-					m_CameraEmpty.get(),
-					font
-				);
-			};
+		m_InputManager = std::move(inputManager);
 
-		const auto initializeGUIButtons =
-			[&, this]()
-			{
-				m_TopRightResetButton = std::make_unique<TopRightResetButton>(
-					m_CoordinateTransformer.get(),
-					m_InputManager.get(),
-					m_ProgramConfig,
-					imageTextureLoader,
-					resetCallback,
-					m_CameraEmpty.get()
-				);
-                m_MuteButton = std::make_unique<MuteButton>(
-					programIsMuted,
-					m_CoordinateTransformer.get(),
-					m_InputManager.get(),
-                    m_ProgramConfig,
-                    imageTextureLoader,
-                    muteUnmuteCallback,
-                    m_CameraEmpty.get()
-                );
-			};
-
-		const auto updatePlatformCollisionRect =
-			[this]()
-			{
-				const Rect2f playerRect = m_Player->GetEngineRect();
-				const Vector2f playerSize = playerRect.GetSize();
-
-				m_Platform->UpdateCollisionRect(playerSize);
-			};
-
-		const auto initializeObjects =
-			[&]()
-			{
-				initializeCameraEmpty();
-				initializeBackgroundSprite();
-				initializeCrag();
-				initializePlatform();
-				initializePlayer();
-				initializePowerups();
-				initializeClouds();
-				initializeGUIBars();
-				initializeGUILabels();
-				initializeGameEndMenus();
-				initializeGUIButtons();
-
-				updatePlatformCollisionRect();
-			};
-
-		initializeGraphics();
-		initializeSound();
-		initializeInput();
-		initializeObjects();
+		initializePlayer();
+		initializePowerups();
+		initializeGUIBars();
+		initializeGUILabels();
+		updatePlatformCollisionRect();
 	}
 
 	void Game::Update()
@@ -517,94 +448,6 @@ namespace BlastOff
 					cloud->Update();
 			};
 
-			const auto playOutcomeSound =
-			[this]()
-			{
-				const bool isSoundEnabled = m_ProgramConfig->GetSoundEnabled();
-				if (!isSoundEnabled)
-					return;
-
-				const float easterEggTest = GetRandomFloat();
-
-				if (easterEggTest < powf(10, -3))
-					PlaySound(*m_EasterEggSound2);
-				else if (easterEggTest < powf(10, -2))
-					PlaySound(*m_EasterEggSound1);
-
-				else if (m_Outcome == Outcome::Winner)
-					PlaySound(*m_WinSound);
-				else if (m_Outcome == Outcome::Loser)
-					PlaySound(*m_LoseSound);
-				else
-				{
-					throw std::runtime_error(
-						"Game::Update(): "
-						"Unable to determine which Sound to play "
-						"after getting the GameOutcome. "
-					);
-				}
-			};
-
-			const auto getRelevantEndMenu =
-			[this]() -> EndMenu*
-			{
-				switch (m_Outcome)
-				{
-					case Outcome::Winner:
-						return m_WinMenu.get();
-
-					case Outcome::Loser:
-						return m_LoseMenu.get();
-
-					case Outcome::None:
-					default:
-						return nullptr;
-				}
-			};
-
-			const auto chooseOutcome =
-			[&, this](const Outcome chosenOutcome)
-			{
-				m_Outcome = chosenOutcome;
-				playOutcomeSound();
-
-				EndMenu* const endMenu = getRelevantEndMenu();
-				if (endMenu)
-					endMenu->Enable();
-
-				m_TopRightResetButton->SlideOut();
-			};
-
-			const auto checkForOutcome =
-			[&, this]()
-			{
-				if (m_Outcome != Outcome::None)
-					return;
-
-				const float playerTop =
-				{
-					m_Player->GetEdgePosition(Direction::Up)
-				};
-				const float playerBottom =
-				{
-					m_Player->GetEdgePosition(Direction::Down)
-				};
-
-				if (playerBottom > GetWorldEdge(Direction::Up))
-					chooseOutcome(Outcome::Winner);
-
-				else if (playerTop < GetWorldEdge(Direction::Down))
-					chooseOutcome(Outcome::Loser);
-
-				// losing condition:
-				// if the player stays stationary for too long without fuel
-				const bool isStationary = m_Player->IsStationary();
-				const bool fuelIsEmpty = m_Player->IsOutOfFuel();
-
-				if (isStationary && fuelIsEmpty)
-					chooseOutcome(Outcome::Loser);
-			};
-
 		const auto updateMiscObjects =
 			[this]()
 			{
@@ -617,10 +460,6 @@ namespace BlastOff
 				m_SpeedupBar->Update();
 				m_FuelBarLabel->Update();
 				m_SpeedupBarLabel->Update();
-				m_WinMenu->Update();
-				m_LoseMenu->Update();
-				m_TopRightResetButton->Update();
-                m_MuteButton->Update();
 			};
 
 #if COMPILE_CONFIG_DEBUG
@@ -666,7 +505,6 @@ namespace BlastOff
 		updateCameraPosition();
 		updatePowerups();
 		updateClouds();
-		checkForOutcome();
 		updateMiscObjects();
 
 #if COMPILE_CONFIG_DEBUG
@@ -722,10 +560,6 @@ namespace BlastOff
 				m_SpeedupBar->Draw();
 				m_FuelBarLabel->Draw();
 				m_SpeedupBarLabel->Draw();
-				m_WinMenu->Draw();
-				m_LoseMenu->Draw();
-				m_TopRightResetButton->Draw();
-                m_MuteButton->Draw();
 			};
 
 		drawObjects();
