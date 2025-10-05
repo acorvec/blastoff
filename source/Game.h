@@ -37,12 +37,14 @@ namespace BlastOff
 
 		static const inline Constants c_Constants;
 
+		unique_ptr<CoordinateTransformer> m_CoordinateTransformer = nullptr;
+		unique_ptr<InputManager> m_InputManager = nullptr;
+
 		Outcome m_Outcome = Outcome::None;
 		Direction m_CloudMovementDirection = Direction::None;
 		Vector2f m_CameraPosition = Vector2f::Zero();
 		Rect2f m_WorldBounds = Rect2f::UnitRect();
 
-		unique_ptr<CoordinateTransformer> m_CoordinateTransformer = nullptr;
 		unique_ptr<CameraEmpty> m_CameraEmpty = nullptr;
 		unique_ptr<Background> m_Background = nullptr;
 		unique_ptr<Crag> m_Crag = nullptr;

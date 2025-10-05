@@ -1,12 +1,11 @@
 #pragma once
 
-#include <algorithm>
-
 #include "Utils.h"
 #include "Graphics.h"
 #include "Enums.h"
 #include "GameConstants.h"
 #include "Props.h"
+#include "InputManager.h"
 
 namespace BlastOff
 {
@@ -49,6 +48,7 @@ namespace BlastOff
 			const CoordinateTransformer* const coordTransformer,
 			const GameConstants* const gameConstants,
 			const ProgramConfiguration* const programConfig,
+			const InputManager* const inputManager,
 			ImageTextureLoader* const imageTextureLoader
 		);
 
@@ -107,6 +107,7 @@ namespace BlastOff
 		const CoordinateTransformer* m_CoordTransformer = nullptr;
 		const ProgramConfiguration* m_ProgramConfig = nullptr;
 		const GameConstants* m_GameConstants = nullptr;
+		const InputManager* m_InputManager = nullptr;
 
 		bool IsThrusting() const;
 		bool IsGoingTooFast() const;

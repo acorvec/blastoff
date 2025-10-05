@@ -1,4 +1,5 @@
 #include "GUI.h"
+#include "Player.h"
 
 namespace BlastOff
 {
@@ -524,24 +525,19 @@ namespace BlastOff
 		const auto updateSelection =
 			[this]()
 			{
-				const optional<CursorPosition> cursor = GetCursorPosition();
-				if (!cursor)
-					throw std::runtime_error("GetCursorPosition() failed.");
-
-				const Vector2i screenCoords(*cursor);
-				const Vector2f engineMouse =
+				const Vector2f mousePosition =
 				{
-					m_CoordTransformer->ToEngineCoordinates(screenCoords)
+					m_InputManager->CalculateMousePosition()
 				};
 				const Rect2f engineRect = m_Sprite->CalculateRealRect();
 
-				m_IsSelected = engineRect.CollideWithPoint(engineMouse);
+				m_IsSelected = engineRect.CollideWithPoint(mousePosition);
 			};
 
 		const auto checkForClick =
 			[this]()
 			{
-				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+				if (m_InputManager->GetMouseButtonPressed(MOUSE_BUTTON_LEFT))
 				{
 					m_IsClicked = true;
 					m_ClickCallback();
@@ -582,10 +578,12 @@ namespace BlastOff
 		const Vector2f engineSize,
 		const Sprite* const parent,
 		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
 		const ProgramConfiguration* const programConfig
 	) :
 		m_ClickCallback(clickCallback),
-		m_CoordTransformer(coordTransformer)
+		m_CoordTransformer(coordTransformer),
+		m_InputManager(inputManager)
 	{
 		const auto lazyLoadTextures =
 			[&, this]()
@@ -614,6 +612,7 @@ namespace BlastOff
 
 	ResetButton::ResetButton(
 		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& resetCallback,
@@ -629,6 +628,7 @@ namespace BlastOff
 			c_EngineSize,
 			parent,
 			coordTransformer,
+			inputManager,
 			programConfig
 		)
 	{
@@ -674,6 +674,7 @@ namespace BlastOff
 
 	TopRightResetButton::TopRightResetButton(
 		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& resetCallback,
@@ -681,6 +682,7 @@ namespace BlastOff
 	) :
 		ResetButton(
 			coordTransformer,
+			inputManager,
 			programConfig,
 			imageTextureLoader,
 			resetCallback,
@@ -750,6 +752,7 @@ namespace BlastOff
     MuteButton::MuteButton(
         const bool* const programIsMuted,
         const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
         const ProgramConfiguration* const programConfig,
         ImageTextureLoader* const imageTextureLoader,
         const Callback& muteCallback,
@@ -763,6 +766,7 @@ namespace BlastOff
         c_EngineSize,
         cameraEmpty,
         coordTransformer,
+		inputManager,
         programConfig
     ),
     m_IsActive(programIsMuted)
@@ -852,6 +856,7 @@ namespace BlastOff
 		const char* const messageText,
 		const Callback& resetCallback,
 		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
@@ -911,6 +916,7 @@ namespace BlastOff
 				constexpr Vector2f initialPosition = Vector2f::Zero();
 				m_ResetButton = std::make_unique<ResetButton>(
 					coordTransformer,
+					inputManager,
 					programConfig,
 					imageTextureLoader,
 					resetCallback,
@@ -1034,6 +1040,7 @@ namespace BlastOff
 	WinMenu::WinMenu(
 		const Callback& resetCallback,
 		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
@@ -1045,6 +1052,7 @@ namespace BlastOff
 			c_MessageText,
 			resetCallback,
 			coordTransformer,
+			inputManager,
 			programConfig,
 			imageTextureLoader,
 			textTextureLoader,
@@ -1062,6 +1070,7 @@ namespace BlastOff
 	LoseMenu::LoseMenu(
 		const Callback& resetCallback,
 		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
@@ -1073,6 +1082,7 @@ namespace BlastOff
 			c_MessageText,
 			resetCallback,
 			coordTransformer,
+			inputManager,
 			programConfig,
 			imageTextureLoader,
 			textTextureLoader,

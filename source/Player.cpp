@@ -74,6 +74,7 @@ namespace BlastOff
 		const CoordinateTransformer* const coordTransformer,
 		const GameConstants* const gameConstants,
 		const ProgramConfiguration* const programConfig,
+		const InputManager* const inputManager,
 		ImageTextureLoader* const imageTextureLoader
 	) :
 		m_MaximumFuel(10),
@@ -83,7 +84,8 @@ namespace BlastOff
 		m_Platform(platform),
 		m_CoordTransformer(coordTransformer),
 		m_GameConstants(gameConstants),
-		m_ProgramConfig(programConfig)
+		m_ProgramConfig(programConfig),
+		m_InputManager(inputManager)
 	{
 		const auto initializeConfig =
 			[&, this]()
@@ -188,17 +190,15 @@ namespace BlastOff
 		const auto calculateMouseOffset =
 			[this]() -> optional<Vector2f>
 			{
-				const optional<CursorPosition> cursor = GetCursorPosition();
-				if (!cursor)
-					throw std::runtime_error("GetCursorPosition() failed.");
-
-				const Vector2i screenCoords(*cursor);
-				const Vector2f engineMouse =
+				const Vector2f mousePosition =
 				{
-					m_CoordTransformer->ToEngineCoordinates(screenCoords)
+					m_InputManager->CalculateMousePosition()
 				};
-				const Vector2f enginePosition = m_Spaceship->CalculateRealPosition();
-				const Vector2f result = engineMouse - enginePosition;
+				const Vector2f enginePosition =
+				{
+					m_Spaceship->CalculateRealPosition()
+				};
+				const Vector2f result = mousePosition - enginePosition;
 				return result;
 			};
 
@@ -226,7 +226,10 @@ namespace BlastOff
 		const auto updateThrustAcceleration =
 			[&, this]()
 			{
-				const bool spaceNotPressed = !IsKeyDown(KEY_SPACE);
+				const bool spaceNotPressed =
+				{
+					!m_InputManager->GetKeyDown(KEY_SPACE)
+				};
 				const bool fuelIsEmpty = IsOutOfFuel();
 				const bool ignoreInput =
 				{

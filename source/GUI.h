@@ -239,6 +239,7 @@ namespace BlastOff
 		unique_ptr<ImageSprite> m_Sprite = nullptr;
 
 		const CoordinateTransformer* m_CoordTransformer = nullptr;
+		const InputManager* m_InputManager = nullptr;
 
 		Button(
 			const Callback& clickCallback,
@@ -249,6 +250,7 @@ namespace BlastOff
 			const Vector2f engineSize,
 			const Sprite* const parent,
 			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
 			const ProgramConfiguration* const programConfig
 		);
 		virtual ~Button()
@@ -265,6 +267,7 @@ namespace BlastOff
 	{
 		ResetButton(
 			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
 			const ProgramConfiguration* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			const Callback& resetCallback,
@@ -293,6 +296,7 @@ namespace BlastOff
 	{
 		TopRightResetButton(
 			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
 			const ProgramConfiguration* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			const Callback& resetCallback,
@@ -318,7 +322,8 @@ namespace BlastOff
     {
         MuteButton(
             const bool* const programIsMuted,
-            const CoordinateTransformer* const coordTransformer,
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
             const ProgramConfiguration* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
             const Callback& muteCallback,
@@ -356,6 +361,7 @@ namespace BlastOff
 			const char* const messageText,
 			const Callback& resetCallback,
 			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
 			const ProgramConfiguration* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
@@ -400,6 +406,7 @@ namespace BlastOff
 		WinMenu(
 			const Callback& resetCallback,
 			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
 			const ProgramConfiguration* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
@@ -417,6 +424,7 @@ namespace BlastOff
 		LoseMenu(
 			const Callback& resetCallback,
 			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
 			const ProgramConfiguration* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,

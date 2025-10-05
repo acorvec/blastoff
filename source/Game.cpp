@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Debug.h"
 #include "Logging.h"
+#include "Player.h"
 
 namespace BlastOff
 {
@@ -41,6 +42,16 @@ namespace BlastOff
 				m_LoseSound = soundLoader->LazyLoadSound("lose.wav");
 				m_EasterEggSound1 = soundLoader->LazyLoadSound("egg1.wav");
 				m_EasterEggSound2 = soundLoader->LazyLoadSound("egg2.wav");
+			};
+
+		const auto initializeInput =
+			[&, this]()
+			{
+				const auto coordTransformer = m_CoordinateTransformer.get();
+				m_InputManager =
+				{
+					std::make_unique<PlayableInputManager>(coordTransformer)
+				};
 			};
 
 		const auto initializeCameraEmpty =
@@ -117,6 +128,7 @@ namespace BlastOff
 					m_CoordinateTransformer.get(),
 					&c_Constants,
 					m_ProgramConfig,
+					m_InputManager.get(),
 					imageTextureLoader
 				);
 			};
@@ -352,6 +364,7 @@ namespace BlastOff
 				m_WinMenu = std::make_unique<WinMenu>(
 					resetCallback,
 					m_CoordinateTransformer.get(),
+					m_InputManager.get(),
 					m_ProgramConfig,
 					imageTextureLoader,
 					textTextureLoader,
@@ -361,6 +374,7 @@ namespace BlastOff
 				m_LoseMenu = std::make_unique<LoseMenu>(
 					resetCallback,
 					m_CoordinateTransformer.get(),
+					m_InputManager.get(),
 					m_ProgramConfig,
 					imageTextureLoader,
 					textTextureLoader,
@@ -374,14 +388,16 @@ namespace BlastOff
 			{
 				m_TopRightResetButton = std::make_unique<TopRightResetButton>(
 					m_CoordinateTransformer.get(),
+					m_InputManager.get(),
 					m_ProgramConfig,
 					imageTextureLoader,
 					resetCallback,
 					m_CameraEmpty.get()
 				);
                 m_MuteButton = std::make_unique<MuteButton>(
-                    programIsMuted,
-                    m_CoordinateTransformer.get(),
+					programIsMuted,
+					m_CoordinateTransformer.get(),
+					m_InputManager.get(),
                     m_ProgramConfig,
                     imageTextureLoader,
                     muteUnmuteCallback,
@@ -418,6 +434,7 @@ namespace BlastOff
 
 		initializeGraphics();
 		initializeSound();
+		initializeInput();
 		initializeObjects();
 	}
 
@@ -500,23 +517,7 @@ namespace BlastOff
 					cloud->Update();
 			};
 
-		const auto updateMiscObjects =
-			[this]()
-			{
-				m_CoordinateTransformer->Update();
-				m_Player->Update();
-				m_CameraEmpty->Update();
-				m_FuelBar->Update();
-				m_SpeedupBar->Update();
-				m_FuelBarLabel->Update();
-				m_SpeedupBarLabel->Update();
-				m_WinMenu->Update();
-				m_LoseMenu->Update();
-				m_TopRightResetButton->Update();
-                m_MuteButton->Update();
-			};
-
-		const auto playOutcomeSound =
+			const auto playOutcomeSound =
 			[this]()
 			{
 				const bool isSoundEnabled = m_ProgramConfig->GetSoundEnabled();
@@ -544,24 +545,24 @@ namespace BlastOff
 				}
 			};
 
-		const auto getRelevantEndMenu =
+			const auto getRelevantEndMenu =
 			[this]() -> EndMenu*
 			{
 				switch (m_Outcome)
 				{
-				case Outcome::Winner:
-					return m_WinMenu.get();
+					case Outcome::Winner:
+						return m_WinMenu.get();
 
-				case Outcome::Loser:
-					return m_LoseMenu.get();
+					case Outcome::Loser:
+						return m_LoseMenu.get();
 
-				case Outcome::None:
-				default:
-					return nullptr;
+					case Outcome::None:
+					default:
+						return nullptr;
 				}
 			};
 
-		const auto chooseOutcome =
+			const auto chooseOutcome =
 			[&, this](const Outcome chosenOutcome)
 			{
 				m_Outcome = chosenOutcome;
@@ -574,13 +575,13 @@ namespace BlastOff
 				m_TopRightResetButton->SlideOut();
 			};
 
-		const auto checkForOutcome =
+			const auto checkForOutcome =
 			[&, this]()
 			{
 				if (m_Outcome != Outcome::None)
 					return;
 
-				const float playerTop = 
+				const float playerTop =
 				{
 					m_Player->GetEdgePosition(Direction::Up)
 				};
@@ -595,7 +596,7 @@ namespace BlastOff
 				else if (playerTop < GetWorldEdge(Direction::Down))
 					chooseOutcome(Outcome::Loser);
 
-				// losing condition: 
+				// losing condition:
 				// if the player stays stationary for too long without fuel
 				const bool isStationary = m_Player->IsStationary();
 				const bool fuelIsEmpty = m_Player->IsOutOfFuel();
@@ -604,12 +605,30 @@ namespace BlastOff
 					chooseOutcome(Outcome::Loser);
 			};
 
+		const auto updateMiscObjects =
+			[this]()
+			{
+				m_CoordinateTransformer->Update();
+				m_InputManager->Update();
+
+				m_Player->Update();
+				m_CameraEmpty->Update();
+				m_FuelBar->Update();
+				m_SpeedupBar->Update();
+				m_FuelBarLabel->Update();
+				m_SpeedupBarLabel->Update();
+				m_WinMenu->Update();
+				m_LoseMenu->Update();
+				m_TopRightResetButton->Update();
+                m_MuteButton->Update();
+			};
+
 #if COMPILE_CONFIG_DEBUG
 		const auto checkForPlayerFreeze =
 			[this]()
 			{
 				const int key = c_Constants.GetPlayerFreezeKey();
-				const bool isFrozen = IsKeyDown(key);
+				const bool isFrozen = m_InputManager->GetKeyDown(key);
 				m_Player->SetFrozen(isFrozen);
 			};
 
@@ -618,7 +637,7 @@ namespace BlastOff
 			{
 				const int key = c_Constants.GetPlayerTeleportKey();
 
-				const bool shouldTeleport = IsKeyDown(key);
+				const bool shouldTeleport = m_InputManager->GetKeyDown(key);
 				if (shouldTeleport)
 				{
 					const float destinationY = m_WorldBounds.h * 9 / 10.0f;
