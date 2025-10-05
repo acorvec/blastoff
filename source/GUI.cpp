@@ -692,10 +692,11 @@ namespace BlastOff
 		m_ProgramConfig(programConfig)
 	{
 		const Vector2f viewportSize = coordTransformer->GetViewportSize();
-		const Vector2f enginePosition =
+		Vector2f enginePosition =
 		{
 			((viewportSize - c_EngineSize) / 2.0f) - c_Margins
 		};
+		enginePosition -= Vector2f{ 0, c_Margins.y + c_EngineSize.y };
 		m_Sprite->Move(enginePosition);
 	}
 
@@ -775,11 +776,10 @@ namespace BlastOff
             [&, this]()
         {
             const Vector2f viewportSize = coordTransformer->GetViewportSize();
-            Vector2f enginePosition = 
+            const Vector2f enginePosition =
             {
                 ((viewportSize - c_EngineSize) / 2.0f) - c_Margins
             };
-            enginePosition -= Vector2f{ 0, c_Margins.y + c_EngineSize.y };
             m_Sprite->Move(enginePosition);
         };
 
