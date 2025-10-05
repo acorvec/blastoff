@@ -1,5 +1,7 @@
 #include "GUI.h"
+#include "Graphics.h"
 #include "Player.h"
+#include "raylib.h"
 
 namespace BlastOff
 {
@@ -539,15 +541,23 @@ namespace BlastOff
 			{
 				if (m_InputManager->GetMouseButtonPressed(MOUSE_BUTTON_LEFT))
 				{
-					m_IsClicked = true;
 					m_ClickCallback();
 				}
+
+				m_ShouldShowClickedSprite =
+				{
+					m_InputManager->GetMouseButtonDown(MOUSE_BUTTON_LEFT)
+				};
+				if (m_ShouldShowClickedSprite)
+					printf("triggered");
 			};
 
 		const auto updateSprite =
 			[this]()
 			{
-				if (m_IsSelected)
+				if (m_ShouldShowClickedSprite)
+					m_Sprite->SetTexture(m_ClickedTexture);
+				else if (m_IsSelected)
 					m_Sprite->SetTexture(m_SelectedTexture);
 				else
 					m_Sprite->SetTexture(m_UnselectedTexture);
@@ -571,8 +581,9 @@ namespace BlastOff
 
 	Button::Button(
 		const Callback& clickCallback,
-		const GetTextureFunction& unselectedGetTextureFunction,
-		const GetTextureFunction& selectedGetTextureFunction,
+		const GetTextureFunction& unselectedTextureGetter,
+		const GetTextureFunction& selectedTextureGetter,
+		const GetTextureFunction& clickedTextureGetter,
 		ImageTextureLoader* const imageTextureLoader,
 		const Vector2f enginePosition,
 		const Vector2f engineSize,
@@ -588,8 +599,14 @@ namespace BlastOff
 		const auto lazyLoadTextures =
 			[&, this]()
 			{
-				m_UnselectedTexture = unselectedGetTextureFunction(imageTextureLoader);
-				m_SelectedTexture = selectedGetTextureFunction(imageTextureLoader);
+				m_UnselectedTexture =
+				{
+					unselectedTextureGetter(imageTextureLoader)
+				};
+				m_SelectedTexture =
+				{
+					selectedTextureGetter(imageTextureLoader)
+				};
 			};
 
 		const auto initializeBacking =
@@ -623,6 +640,7 @@ namespace BlastOff
 			resetCallback,
 			LazyLoadUnselectedTexture,
 			LazyLoadSelectedTexture,
+			LazyLoadClickedTexture,
 			imageTextureLoader,
 			enginePosition,
 			c_EngineSize,
@@ -651,6 +669,10 @@ namespace BlastOff
 	{
 		"SelectedReset.png"
 	};
+	const char* const ResetButton::c_ClickedTexturePath =
+	{
+		"ClickedReset.png"
+	};
 
 	const Texture* ResetButton::LazyLoadUnselectedTexture
 		(ImageTextureLoader* const imageTextureLoader)
@@ -662,11 +684,22 @@ namespace BlastOff
 		return result;
 	}
 
-	const Texture* ResetButton::LazyLoadSelectedTexture(ImageTextureLoader* const imageTextureLoader)
+	const Texture* ResetButton::LazyLoadSelectedTexture
+		(ImageTextureLoader* const imageTextureLoader)
 	{
 		const Texture* result =
 		{
 			imageTextureLoader->LazyLoadTexture(c_SelectedTexturePath)
+		};
+		return result;
+	}
+
+	const Texture* ResetButton::LazyLoadClickedTexture
+		(ImageTextureLoader* const imageTextureLoader)
+	{
+		const Texture* result =
+		{
+			imageTextureLoader->LazyLoadTexture(c_ClickedTexturePath)
 		};
 		return result;
 	}
@@ -762,6 +795,7 @@ namespace BlastOff
         muteCallback,
         LazyLoadUnselectedTexture,
         LazyLoadSelectedTexture,
+		LazyLoadClickedTexture,
         imageTextureLoader,
         Vector2f::Zero(),
         c_EngineSize,
@@ -826,6 +860,10 @@ namespace BlastOff
     {
         "SelectedMute.png"
     };
+	const char* const MuteButton::c_ClickedTexturePath =
+	{
+		"ClickedMute.png"
+	};
     const char* const MuteButton::c_ActiveBarTexturePath =
     {
         "MuteActiveBar.png"
@@ -841,11 +879,22 @@ namespace BlastOff
 		return result;
 	}
 
-	const Texture* MuteButton::LazyLoadSelectedTexture(ImageTextureLoader* const imageTextureLoader)
+	const Texture* MuteButton::LazyLoadSelectedTexture
+		(ImageTextureLoader* const imageTextureLoader)
 	{
 		const Texture* result =
 		{
 			imageTextureLoader->LazyLoadTexture(c_SelectedTexturePath)
+		};
+		return result;
+	}
+
+	const Texture* MuteButton::LazyLoadClickedTexture
+		(ImageTextureLoader* const imageTextureLoader)
+	{
+		const Texture* result =
+		{
+			imageTextureLoader->LazyLoadTexture(c_ClickedTexturePath)
 		};
 		return result;
 	}

@@ -92,7 +92,7 @@ namespace BlastOff
 		return m_PixelsPerUnit;
 	}
 
-	// TO-DO: try caching expensive method
+	// TODO: try caching expensive method
 	Rect2f CoordinateTransformer::
 		ToScreenCoordinates(const Rect2f engineRect) const
 	{
@@ -779,7 +779,7 @@ namespace BlastOff
 		return baseResult * cropMultiplier;
 	}
 
-	// TO-DO: try caching expensive method
+	// TODO: try caching expensive method
 	Vector2f ImageSprite::CalculateCropPositionOffset() const
 	{
 		const Rect2f rect = m_EngineRect;

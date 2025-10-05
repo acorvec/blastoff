@@ -213,7 +213,7 @@ namespace BlastOff
 
         // Oct. 5th, 2025:
         //
-        // TO-DO: if the PlayableGame class ever needs to draw something
+        // TODO: if the PlayableGame class ever needs to draw something
         // below ANYTHING in the Game class, this will literally not be
         // possible.
         // a fix may be needed eventually

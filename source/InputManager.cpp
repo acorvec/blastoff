@@ -30,7 +30,13 @@ namespace BlastOff
         return IsKeyDown(keyEnum);
     }
 
-    bool PlayableInputManager::GetMouseButtonPressed(const int buttonEnum) const
+    bool PlayableInputManager::GetMouseButtonDown(const int buttonEnum) const
+    {
+        return IsMouseButtonDown(buttonEnum);
+    }
+
+    bool PlayableInputManager::GetMouseButtonPressed
+        (const int buttonEnum) const
     {
         return IsMouseButtonPressed(buttonEnum);
     }
@@ -67,7 +73,14 @@ namespace BlastOff
         return keyEnum == KEY_SPACE;
     }
 
-    bool CutsceneInputManager::GetMouseButtonPressed(const int buttonEnum) const
+    bool CutsceneInputManager::GetMouseButtonDown(const int buttonEnum) const
+    {
+        (void)buttonEnum;
+        return false;
+    }
+
+    bool CutsceneInputManager::GetMouseButtonPressed
+        (const int buttonEnum) const
     {
         (void)buttonEnum;
         return false;

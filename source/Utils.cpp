@@ -421,7 +421,7 @@ namespace BlastOff
 	}
 
 
-	// TO-DO: try caching expensive method
+	// TODO: try caching expensive method
 	Rect2f Crop2f::CalculateSourceRect(const Vector2i textureSize) const
 	{
 		if ((*this) == Crop2f{ 0 })
