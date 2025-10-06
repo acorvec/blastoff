@@ -43,3 +43,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
     target_compile_definitions(${PROJECT_NAME} PRIVATE _DEBUG=0)
 endif()
+
+# fixes builds in vscode
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}")

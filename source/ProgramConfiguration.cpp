@@ -17,7 +17,7 @@ namespace BlastOff
 		m_FontFace("Ubuntu-Medium"),
 		m_FontRenderSize(192),
 		m_TopRightButtonMargins(1 / 10.0f, 1 / 10.0f),
-		m_DefaultWindowSize(854, 480),
+		m_DefaultWindowSize(480, 854),
 		m_Name("BlastOff++"),
 		m_Version("alpha 1.0.0"),
 		m_BackgroundMusicPath("rifftastic.ogg"),
