@@ -85,6 +85,20 @@ namespace BlastOff
 					SetExitKey(KEY_NULL);
 			};
 
+		const auto initializeMainMenu = 
+			[this]()
+			{
+				m_MainMenu = std::make_unique<MainMenu>(
+					&c_Config,
+					&m_ImageTextureLoader,
+					m_TextTextureLoader.get(),
+					&m_SoundLoader,
+					&m_Font,
+					m_Window->GetPosition(),
+					m_Window->GetSize()
+				);
+			};
+
 		Logging::Initialize(&c_Config);
 		logInitialMessage();
 		
@@ -92,7 +106,7 @@ namespace BlastOff
 		initializeSound();
 		initializeBackgroundMusic();
 		disableEscapeKey();
-		InitializeCutscene();
+		initializeMainMenu();
 		InitializeGame();
 
 		m_State = State::MainMenu;
@@ -122,11 +136,6 @@ namespace BlastOff
 		{
 			InitializeGame();
 			m_GameShouldReset = false;
-		}
-		if (m_CutsceneShouldReset)
-		{
-			InitializeCutscene();
-			m_CutsceneShouldReset = false;
 		}
 	}
 
@@ -183,7 +192,7 @@ namespace BlastOff
 		m_Window->Update();
 
 		if (m_State == State::MainMenu)
-			m_Cutscene->Update();
+			m_MainMenu->Update();
 		else if (m_State == State::Game)
 			m_Game->Update();
 		
@@ -209,7 +218,7 @@ namespace BlastOff
 		ClearBackground(voidColour.ToRayColour());
 
 		if (m_State == State::MainMenu)
-			m_Cutscene->Draw();
+			m_MainMenu->Draw();
 		else if (m_State == State::Game)
 			m_Game->Draw();
 
@@ -281,26 +290,6 @@ namespace BlastOff
 			&m_SoundLoader,
 			resetCallback,
             muteUnmuteCallback,
-			&m_Font,
-			m_Window->GetPosition(),
-			m_Window->GetSize()
-		);
-	}
-
-	void Program::InitializeCutscene()
-	{
-		const auto resetCallback =
-			[this]()
-			{
-				m_CutsceneShouldReset = true;
-			};
-
-		m_Cutscene = std::make_unique<Cutscene>(
-			&c_Config,
-			&m_ImageTextureLoader,
-			m_TextTextureLoader.get(),
-			&m_SoundLoader,
-			resetCallback,
 			&m_Font,
 			m_Window->GetPosition(),
 			m_Window->GetSize()

@@ -9,6 +9,7 @@
 #include "Game.h"
 #include "Sound.h"
 #include "Enums.h"
+#include "MainMenu.h"
 
 namespace BlastOff
 {
@@ -32,7 +33,6 @@ namespace BlastOff
 		bool m_IsRunning = true;
         bool m_IsMuted = false;
 		bool m_GameShouldReset = false;
-		bool m_CutsceneShouldReset = false;
 
 		Font m_Font = { 0 };
 		State m_State = State::None;
@@ -43,9 +43,9 @@ namespace BlastOff
 
 		unique_ptr<TextTextureLoader> m_TextTextureLoader = nullptr;
 		unique_ptr<RayWindow> m_Window = nullptr;
-		unique_ptr<Game> m_Game = nullptr;
-		unique_ptr<Cutscene> m_Cutscene = nullptr;
 		unique_ptr<MusicLoop> m_BackgroundMusicLoop = nullptr;
+		unique_ptr<Game> m_Game = nullptr;
+		unique_ptr<MainMenu> m_MainMenu = nullptr;
 
 #if COMPILE_CONFIG_DEBUG
 		int m_MostRecentFramerateSet = 0;
@@ -56,6 +56,5 @@ namespace BlastOff
 		void SetFramerate(const int framerate);
 
 		void InitializeGame();
-		void InitializeCutscene();
 	};
 }
