@@ -854,9 +854,36 @@ namespace BlastOff
 
 	void Cutscene::Update()
 	{
+		const auto updateResetTimer =
+			[this]()
+			{
+				m_ResetTick -= m_ProgramConfig->GetTargetFrametime();
+				if (!ResetTimerIsActive())
+					m_ResetCallback();
+			};
+
+		const auto checkForReset =
+			[this]()
+			{
+				const bool alreadyResetting = ResetTimerIsActive();
+				const bool shouldReset = LosingConditionsAreSatisfied();
+
+				if (LosingConditionsAreSatisfied())
+					m_ResetTick = c_MaxResetTick;
+			};
+
 		Game::Update();
 
-		if (LosingConditionsAreSatisfied())
-			m_ResetCallback();
+		if (ResetTimerIsActive())
+			updateResetTimer();
+		else
+			checkForReset();
+	}
+
+	const float Cutscene::c_MaxResetTick = 1;
+
+	bool Cutscene::ResetTimerIsActive() const
+	{
+		return m_ResetTick >= 0;
 	}
 }

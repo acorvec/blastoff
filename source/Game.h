@@ -122,6 +122,11 @@ namespace BlastOff
 		void Update() override;
 
 	protected:
+		static const float c_MaxResetTick;
+		float m_ResetTick = c_DeactivatedTick;
+
 		Callback m_ResetCallback;
+
+		bool ResetTimerIsActive() const;
 	};
 }
