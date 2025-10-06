@@ -21,9 +21,6 @@ namespace BlastOff
 		virtual void Draw() const;
 
 	protected:
-		using GetTextureFunction = function
-			<const Texture* (ImageTextureLoader* const)>;
-
 		static const char* const c_BackingTexturePath;
 
 		static const float c_Height;
@@ -50,13 +47,10 @@ namespace BlastOff
 			ImageTextureLoader* const imageTextureLoader,
 			const CameraEmpty* const cameraEmpty,
 			const float* const statisticValue,
-			const GetTextureFunction& energyGetTextureFunction
+			const char* const energyTexturePath
 		);
 
 		virtual void UpdateStatistic() = 0;
-
-		static const Texture* LazyLoadBackingTexture
-    		(ImageTextureLoader* const imageTextureLoader);
 	};
 
 	struct FuelBar : public GUIBar
@@ -71,9 +65,6 @@ namespace BlastOff
 
 	private:
 		static const char* const c_EnergyTexturePath;
-
-		static const Texture* LazyLoadEnergyTexture
-		(ImageTextureLoader* const imageTextureLoader);
 
 		float m_StatisticValue = 0;
 		const Player* m_Player = nullptr;
@@ -93,9 +84,6 @@ namespace BlastOff
 
 	private:
 		static const char* const c_EnergyTexturePath;
-
-		static const Texture* LazyLoadEnergyTexture
-			(ImageTextureLoader* const imageTextureLoader);
 
 		float m_StatisticValue = 0;
 		const Player* m_Player = nullptr;
@@ -227,9 +215,6 @@ namespace BlastOff
 		virtual void Draw() const;
 
 	protected:
-		using GetTextureFunction = function
-			<const Texture* (ImageTextureLoader* const)>;
-
 		bool m_IsSelected = false;
 		bool m_ShouldShowClickedSprite = false;
 		bool m_HasBeenClicked = false;
@@ -245,17 +230,11 @@ namespace BlastOff
 		const Texture* m_SelectedTexture = nullptr;
 		const Texture* m_ClickedTexture = nullptr;
 
-		// Oct. 5th, 2025
-		//
-		// TODO:
-		// should not be passing TextureGetters here;
-		// can be simplified to passing const char* const
-		// since the textures are now stored with the ImageTextureLoader instance.
 		Button(
 			const Callback& clickCallback,
-			const GetTextureFunction& unselectedTextureGetter,
-			const GetTextureFunction& selectedTextureGetter,
-			const GetTextureFunction& clickedTextureGetter,
+			const char* const unselectedTexturePath,
+			const char* const selectedTexturePath,
+			const char* const clickedTexturePath,
 			ImageTextureLoader* const imageTextureLoader,
 			const Vector2f enginePosition,
 			const Vector2f engineSize,
@@ -290,13 +269,6 @@ namespace BlastOff
 		static const char* const c_UnselectedTexturePath;
 		static const char* const c_SelectedTexturePath;
 		static const char* const c_ClickedTexturePath;
-
-		static const Texture* LazyLoadUnselectedTexture
-			(ImageTextureLoader* const imageTextureLoader);
-		static const Texture* LazyLoadSelectedTexture
-			(ImageTextureLoader* const imageTextureLoader);
-		static const Texture* LazyLoadClickedTexture
-			(ImageTextureLoader* const imageTextureLoader);
 	};
 
 	struct TopRightResetButton : public ResetButton
@@ -352,14 +324,7 @@ namespace BlastOff
 
         const bool* m_IsActive = nullptr;
         unique_ptr<ImageSprite> m_ActiveBar = nullptr;
-
-        static const Texture* LazyLoadUnselectedTexture
-            (ImageTextureLoader* const imageTextureLoader);
-        static const Texture* LazyLoadSelectedTexture
-            (ImageTextureLoader* const imageTextureLoader);
-		static const Texture* LazyLoadClickedTexture
-			(ImageTextureLoader* const imageTextureLoader);
-    };
+	};
 
 	struct GameEndMenu
 	{

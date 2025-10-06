@@ -17,9 +17,6 @@ namespace BlastOff
 		bool IsCollected() const;
 
 	protected:
-		using GetTextureFunction = function
-			<const Texture* (ImageTextureLoader* const)>;
-
 		bool m_IsCollected = false;
 
 		float m_CollectionTick = c_DeactivatedTick;
@@ -37,7 +34,7 @@ namespace BlastOff
 			Player* const player,
 			ImageTextureLoader* const imageTextureLoader,
 			const Vector2f enginePosition,
-			const GetTextureFunction& getTextureFunction,
+			const char* const texturePath,
 			const float maxCollectionTick,
 			const float oscillationScale,
 			const Vector2f defaultEngineSize
@@ -73,9 +70,6 @@ namespace BlastOff
 		static const float c_MaxCollectionTick;
 		static const float c_OscillationScale;
 		static const Vector2f c_DefaultEngineSize;
-
-		static const Texture* LazyLoadTexture
-			(ImageTextureLoader* const imageTextureLoader);
 	};
 
 	struct FuelUpPowerup : public Powerup
@@ -97,8 +91,5 @@ namespace BlastOff
 		static const float c_MaxCollectionTick;
 		static const float c_OscillationScale;
 		static const Vector2f c_DefaultEngineSize;
-
-		static const Texture* LazyLoadTexture
-			(ImageTextureLoader* const imageTextureLoader);
 	};
 }

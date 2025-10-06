@@ -73,7 +73,7 @@ namespace BlastOff
 		Player* const player,
 		ImageTextureLoader* const imageTextureLoader,
 		const Vector2f enginePosition,
-		const GetTextureFunction& getTextureFunction,
+		const char* const texturePath,
 		const float maxCollectionTick,
 		const float oscillationScale,
 		const Vector2f defaultEngineSize
@@ -87,7 +87,10 @@ namespace BlastOff
 		const auto initializeSprite =
 			[&, this]()
 			{
-				const Texture* const texture = getTextureFunction(imageTextureLoader);
+				const Texture* const texture =
+				{
+					imageTextureLoader->LazyLoadTexture(texturePath)
+				};
 				const Rect2f engineRect(
 					enginePosition,
 					defaultEngineSize
@@ -142,7 +145,7 @@ namespace BlastOff
 			player,
 			imageTextureLoader,
 			enginePosition,
-			LazyLoadTexture,
+			c_TexturePath,
 			c_MaxCollectionTick,
 			c_OscillationScale,
 			c_DefaultEngineSize
@@ -169,13 +172,6 @@ namespace BlastOff
 	const float SpeedUpPowerup::c_OscillationScale = 10;
 	const Vector2f SpeedUpPowerup::c_DefaultEngineSize = { 1, 1 };
 
-	const Texture* SpeedUpPowerup::LazyLoadTexture
-		(ImageTextureLoader* const imageTextureLoader)
-	{
-		const Texture* result = imageTextureLoader->LazyLoadTexture(c_TexturePath);
-		return result;
-	}
-
 
 	FuelUpPowerup::FuelUpPowerup(
 		const CoordinateTransformer* const coordTransformer,
@@ -190,7 +186,7 @@ namespace BlastOff
 			player,
 			imageTextureLoader,
 			enginePosition,
-			LazyLoadTexture,
+			c_TexturePath,
 			c_MaxCollectionTick,
 			c_OscillationScale,
 			c_DefaultEngineSize
@@ -216,11 +212,4 @@ namespace BlastOff
 	const float FuelUpPowerup::c_MaxCollectionTick = 0.5f;
 	const float FuelUpPowerup::c_OscillationScale = 10;
 	const Vector2f FuelUpPowerup::c_DefaultEngineSize = { 1, 1 };
-
-	const Texture* FuelUpPowerup::LazyLoadTexture
-		(ImageTextureLoader* const imageTextureLoader)
-	{
-		const Texture* result = imageTextureLoader->LazyLoadTexture(c_TexturePath);
-		return result;
-	}
 }

@@ -82,7 +82,7 @@ namespace BlastOff
 		ImageTextureLoader* const imageTextureLoader,
 		const CameraEmpty* const cameraEmpty,
 		const float* const statisticValue,
-		const GetTextureFunction& energyGetTextureFunction
+		const char* const energyTexturePath
 	) :
 		m_CameraEmpty(cameraEmpty),
 		m_ProgramConfig(programConfig),
@@ -93,7 +93,7 @@ namespace BlastOff
 			{
 				const Texture* backingTexture = 
 				{
-					LazyLoadBackingTexture(imageTextureLoader)
+					imageTextureLoader->LazyLoadTexture(c_BackingTexturePath)
 				};
 				m_BackingSprite = std::make_unique<ImageSprite>(
 					coordTransformer,
@@ -106,7 +106,10 @@ namespace BlastOff
 		const auto initializeEnergySprite =
 			[&, this]()
 			{
-				const Texture* texture = energyGetTextureFunction(imageTextureLoader);
+				const Texture* texture =
+				{
+					imageTextureLoader->LazyLoadTexture(energyTexturePath)
+				};
 				m_EnergySprite = std::make_unique<ImageSprite>(
 					coordTransformer,
 					programConfig,
@@ -164,16 +167,6 @@ namespace BlastOff
 		initializeEnergyEngineRect();
 	}
 
-	const Texture* GUIBar::LazyLoadBackingTexture
-		(ImageTextureLoader* const imageTextureLoader)
-	{
-		const Texture* result = 
-		{
-			imageTextureLoader->LazyLoadTexture(c_BackingTexturePath)
-		};
-		return result;
-	}
-
 
 	FuelBar::FuelBar(
 		const CoordinateTransformer* const coordTransformer,
@@ -188,7 +181,7 @@ namespace BlastOff
 			imageTextureLoader,
 			cameraEmpty,
 			&m_StatisticValue,
-			LazyLoadEnergyTexture
+			c_EnergyTexturePath
 		),
 		m_Player(player)
 	{
@@ -199,16 +192,6 @@ namespace BlastOff
 	{
 		"FuelBarEnergy.png"
 	};
-
-	const Texture* FuelBar::LazyLoadEnergyTexture
-		(ImageTextureLoader* const imageTextureLoader)
-	{
-		const Texture* result =
-		{
-			imageTextureLoader->LazyLoadTexture(c_EnergyTexturePath)
-		};
-		return result;
-	}
 
 	void FuelBar::UpdateStatistic()
 	{
@@ -229,7 +212,7 @@ namespace BlastOff
 			imageTextureLoader,
 			cameraEmpty,
 			&m_StatisticValue,
-			LazyLoadEnergyTexture
+			c_EnergyTexturePath
 		),
 		m_Player(player)
 	{
@@ -247,16 +230,6 @@ namespace BlastOff
 	{
 		"SpeedBarEnergy.png"
 	};
-
-	const Texture* SpeedupBar::LazyLoadEnergyTexture
-		(ImageTextureLoader* const imageTextureLoader)
-	{
-		const Texture* result =
-		{
-			imageTextureLoader->LazyLoadTexture(c_EnergyTexturePath)
-		};
-		return result;
-	}
 
 	void SpeedupBar::UpdateStatistic()
 	{
@@ -548,8 +521,6 @@ namespace BlastOff
 				{
 					m_InputManager->GetMouseButtonDown(MOUSE_BUTTON_LEFT)
 				};
-				if (m_ShouldShowClickedSprite)
-					printf("triggered");
 			};
 
 		const auto updateSprite =
@@ -581,9 +552,9 @@ namespace BlastOff
 
 	Button::Button(
 		const Callback& clickCallback,
-		const GetTextureFunction& unselectedTextureGetter,
-		const GetTextureFunction& selectedTextureGetter,
-		const GetTextureFunction& clickedTextureGetter,
+		const char* const unselectedTexturePath,
+		const char* const selectedTexturePath,
+		const char* const clickedTexturePath,
 		ImageTextureLoader* const imageTextureLoader,
 		const Vector2f enginePosition,
 		const Vector2f engineSize,
@@ -601,15 +572,15 @@ namespace BlastOff
 			{
 				m_UnselectedTexture =
 				{
-					unselectedTextureGetter(imageTextureLoader)
+					imageTextureLoader->LazyLoadTexture(unselectedTexturePath)
 				};
 				m_SelectedTexture =
 				{
-					selectedTextureGetter(imageTextureLoader)
+					imageTextureLoader->LazyLoadTexture(selectedTexturePath)
 				};
 				m_ClickedTexture =
 				{
-					clickedTextureGetter(imageTextureLoader)
+					imageTextureLoader->LazyLoadTexture(clickedTexturePath)
 				};
 			};
 
@@ -642,9 +613,9 @@ namespace BlastOff
 	) :
 		Button(
 			resetCallback,
-			LazyLoadUnselectedTexture,
-			LazyLoadSelectedTexture,
-			LazyLoadClickedTexture,
+			c_UnselectedTexturePath,
+			c_SelectedTexturePath,
+			c_ClickedTexturePath,
 			imageTextureLoader,
 			enginePosition,
 			c_EngineSize,
@@ -677,36 +648,6 @@ namespace BlastOff
 	{
 		"ClickedReset.png"
 	};
-
-	const Texture* ResetButton::LazyLoadUnselectedTexture
-		(ImageTextureLoader* const imageTextureLoader)
-	{
-		const Texture* result =
-		{
-			imageTextureLoader->LazyLoadTexture(c_UnselectedTexturePath)
-		};
-		return result;
-	}
-
-	const Texture* ResetButton::LazyLoadSelectedTexture
-		(ImageTextureLoader* const imageTextureLoader)
-	{
-		const Texture* result =
-		{
-			imageTextureLoader->LazyLoadTexture(c_SelectedTexturePath)
-		};
-		return result;
-	}
-
-	const Texture* ResetButton::LazyLoadClickedTexture
-		(ImageTextureLoader* const imageTextureLoader)
-	{
-		const Texture* result =
-		{
-			imageTextureLoader->LazyLoadTexture(c_ClickedTexturePath)
-		};
-		return result;
-	}
 
 
 	TopRightResetButton::TopRightResetButton(
@@ -797,9 +738,9 @@ namespace BlastOff
         const CameraEmpty* const cameraEmpty
     ) : Button(
         muteCallback,
-        LazyLoadUnselectedTexture,
-        LazyLoadSelectedTexture,
-		LazyLoadClickedTexture,
+        c_UnselectedTexturePath,
+        c_SelectedTexturePath,
+		c_ClickedTexturePath,
         imageTextureLoader,
         Vector2f::Zero(),
         c_EngineSize,
@@ -872,36 +813,6 @@ namespace BlastOff
     {
         "MuteActiveBar.png"
     };
-
-	const Texture* MuteButton::LazyLoadUnselectedTexture
-		(ImageTextureLoader* const imageTextureLoader)
-	{
-		const Texture* result =
-		{
-			imageTextureLoader->LazyLoadTexture(c_UnselectedTexturePath)
-		};
-		return result;
-	}
-
-	const Texture* MuteButton::LazyLoadSelectedTexture
-		(ImageTextureLoader* const imageTextureLoader)
-	{
-		const Texture* result =
-		{
-			imageTextureLoader->LazyLoadTexture(c_SelectedTexturePath)
-		};
-		return result;
-	}
-
-	const Texture* MuteButton::LazyLoadClickedTexture
-		(ImageTextureLoader* const imageTextureLoader)
-	{
-		const Texture* result =
-		{
-			imageTextureLoader->LazyLoadTexture(c_ClickedTexturePath)
-		};
-		return result;
-	}
 
 
 	GameEndMenu::GameEndMenu(

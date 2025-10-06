@@ -360,7 +360,7 @@ namespace BlastOff
 		ImageTextureLoader* const imageTextureLoader,
 		const Rect2f* const worldBounds,
 		const Direction* const movementDirection,
-		const GetTextureFunction& getTextureFunction,
+		const char* const texturePath,
 		const SpawningRange spawningRange,
 		const float speedMultiplier,
 		const float speedRandomness,
@@ -389,7 +389,10 @@ namespace BlastOff
 		const auto initializeSprite =
 			[&, this]()
 			{
-				const Texture* const texture = getTextureFunction(imageTextureLoader);
+				const Texture* const texture =
+				{
+					imageTextureLoader->LazyLoadTexture(texturePath)
+				};
 				m_Sprite = std::make_unique<ImageSprite>(
 					coordTransformer,
 					programConfig,
@@ -467,7 +470,7 @@ namespace BlastOff
 			imageTextureLoader,
 			worldBounds,
 			movementDirection,
-			LazyLoadTexture,
+			c_TexturePath,
 			c_SpawningRange,
 			c_SpeedMultiplier,
 			c_SpeedRandomness,
@@ -487,13 +490,6 @@ namespace BlastOff
 	const float LowCloud::c_SpeedRandomness = 2 / 10.0f;
 	const Vector2f LowCloud::c_EngineSize = { 2, 1 };
 
-	const Texture* LowCloud::LazyLoadTexture
-		(ImageTextureLoader* const imageTextureLoader)
-	{
-		const Texture* result = imageTextureLoader->LazyLoadTexture(c_TexturePath);
-		return result;
-	}
-
 
 	HighCloud::HighCloud(
 		const CoordinateTransformer* const coordTransformer,
@@ -508,7 +504,7 @@ namespace BlastOff
 			imageTextureLoader,
 			worldBounds,
 			movementDirection,
-			LazyLoadTexture,
+			c_TexturePath,
 			c_SpawningRange,
 			c_SpeedMultiplier,
 			c_SpeedRandomness,
@@ -531,11 +527,4 @@ namespace BlastOff
 	{
 		7.556392017f * 2 / 3.0f, 2 / 3.0f
 	};
-
-	const Texture* HighCloud::LazyLoadTexture
-		(ImageTextureLoader* const imageTextureLoader)
-	{
-		const Texture* result = imageTextureLoader->LazyLoadTexture(c_TexturePath);
-		return result;
-	}
 }

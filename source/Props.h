@@ -112,8 +112,6 @@ namespace BlastOff
 
 	protected:
 		using SpawningRange = CloudSpawningRange;
-		using GetTextureFunction = function
-			<const Texture* (ImageTextureLoader* const)>;
 
 		float m_RandomSpeedMultiplier = 0;
 		bool m_DrawsAbovePlayer = false;
@@ -130,7 +128,7 @@ namespace BlastOff
 			ImageTextureLoader* const imageTextureLoader,
 			const Rect2f* const worldBounds,
 			const Direction* const movementDirection,
-			const GetTextureFunction& getTextureFunction,
+			const char* const texturePath,
 			const SpawningRange spawningRange,
 			const float speedMultiplier,
 			const float speedRandomness,
@@ -165,11 +163,6 @@ namespace BlastOff
 		static const float c_SpeedRandomness;
 		static const Vector2f c_EngineSize;
 		static const SpawningRange c_SpawningRange;
-
-		static inline Texture m_Texture = { 0 };
-
-		static const Texture* LazyLoadTexture
-			(ImageTextureLoader* const imageTextureLoader);
 	};
 
 	struct HighCloud : public Cloud
@@ -189,8 +182,5 @@ namespace BlastOff
 		static const float c_SpeedRandomness;
 		static const Vector2f c_EngineSize;
 		static const SpawningRange c_SpawningRange;
-
-		static const Texture* LazyLoadTexture
-			(ImageTextureLoader* const imageTextureLoader);
 	};
 }
