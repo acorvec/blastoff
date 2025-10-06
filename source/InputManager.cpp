@@ -58,11 +58,11 @@ namespace BlastOff
 
     CutsceneInputManager::CutsceneInputManager(
         const CoordinateTransformer* const coordTransformer,
-        const Vector2f* const playerPosition,
+        const Vector2f* const cameraPosition,
         const ProgramConfiguration* const programConfig
     ) :
         InputManager(coordTransformer),
-        m_PlayerPosition(playerPosition),
+        m_CameraPosition(cameraPosition),
         m_ProgramConfig(programConfig)
     {
 
@@ -100,7 +100,7 @@ namespace BlastOff
 
         const Vector2f result =
         {
-            (*m_PlayerPosition) + oscillation + raiseAmount
+            (*m_CameraPosition) + oscillation + raiseAmount
         };
         return result;
     }

@@ -177,6 +177,226 @@ namespace BlastOff
 		initializeObjects();
 	}
 
+	void Game::Update()
+	{
+		const auto calculateCameraOffset =
+			[](const float x) -> float
+			{
+				return -(powf(x, 1 / 3.0f) / 3);
+			};
+
+		const auto updateCameraPosition =
+			[&, this]()
+			{
+				const Vector2f playerVelocity = m_Player->GetVelocity();
+				const Vector2f pV = playerVelocity;
+
+				float equationOffset = calculateCameraOffset(pV.y);
+				if (isnan(equationOffset))
+					equationOffset = calculateCameraOffset(-pV.y) * 2;
+
+				const float extraOffset = c_Constants.GetCameraYOffset();
+				const float totalOffset = equationOffset + extraOffset;
+
+				const Rect2f playerRect = m_Player->GetEngineRect();
+				const float playerY = playerRect.y;
+
+				const float unclampedResult = playerY + totalOffset;
+				const Vector2f viewportSize =
+				{
+					m_CoordinateTransformer->GetViewportSize()
+				};
+				const float viewportHeight = viewportSize.y;
+
+				const float maxY =
+				{
+					GetWorldEdge(Direction::Up) - (viewportHeight / 2)
+				};
+				const float minY =
+				{
+					GetWorldEdge(Direction::Down) + (viewportHeight / 2)
+				};
+
+				if (unclampedResult > maxY)
+					m_CameraPosition.y = maxY;
+				else if (unclampedResult < minY)
+					m_CameraPosition.y = minY;
+				else
+					m_CameraPosition.y = unclampedResult;
+			};
+
+		const auto handlePowerupCollision =
+			[](Powerup* const powerup)
+			{
+				if (!powerup->IsCollected())
+					powerup->OnCollection();
+			};
+
+		const auto updatePowerup =
+			[&](Powerup* const powerup)
+			{
+				powerup->Update();
+
+				const bool collision = powerup->CollideWithPlayer();
+				if (collision)
+					handlePowerupCollision(powerup);
+			};
+
+		const auto updatePowerups =
+			[&, this]()
+			{
+				for (Powerup* const powerup : m_AllPowerups)
+					updatePowerup(powerup);
+			};
+
+		const auto updateClouds =
+			[this]()
+			{
+				for (Cloud* const cloud : m_AllClouds)
+					cloud->Update();
+			};
+
+		const auto updateMiscObjects =
+			[this]()
+			{
+				m_CoordinateTransformer->Update();
+				m_InputManager->Update();
+
+				m_Player->Update();
+				m_CameraEmpty->Update();
+				m_FuelBar->Update();
+				m_SpeedupBar->Update();
+				m_FuelBarLabel->Update();
+				m_SpeedupBarLabel->Update();
+			};
+
+		const auto checkForOutcome =
+			[&, this]()
+			{
+				if (m_Outcome != Outcome::None)
+					return;
+
+				const float playerBottom =
+				{
+					m_Player->GetEdgePosition(Direction::Down)
+				};
+
+				if (playerBottom > GetWorldEdge(Direction::Up))
+					ChooseOutcome(Outcome::Winner);
+
+				if (LosingConditionsAreSatisfied())
+					ChooseOutcome(Outcome::Loser);
+			};
+
+#if COMPILE_CONFIG_DEBUG
+		const auto checkForPlayerFreeze =
+			[this]()
+			{
+				const int key = c_Constants.GetPlayerFreezeKey();
+				const bool isFrozen = m_InputManager->GetKeyDown(key);
+				m_Player->SetFrozen(isFrozen);
+			};
+
+		const auto checkForPlayerTeleport =
+			[this]()
+			{
+				const int key = c_Constants.GetPlayerTeleportKey();
+
+				const bool shouldTeleport = m_InputManager->GetKeyDown(key);
+				if (shouldTeleport)
+				{
+					const float destinationY = m_WorldBounds.h * 9 / 10.0f;
+					m_Player->TeleportToY(destinationY);
+				}
+			};
+
+		const auto checkForEmptyingPlayerFuel =
+			[this]()
+			{
+				const int key = c_Constants.GetEmptyPlayerFuelKey();
+				const bool shouldEmptyFuel = IsKeyDown(key);
+				if (shouldEmptyFuel)
+					m_Player->EmptyFuel();
+			};
+
+		const auto updateDebugTools =
+			[&]()
+			{
+				checkForPlayerFreeze();
+				checkForPlayerTeleport();
+				checkForEmptyingPlayerFuel();
+			};
+#endif
+
+		updateCameraPosition();
+		updatePowerups();
+		updateClouds();
+		checkForOutcome();
+		updateMiscObjects();
+
+#if COMPILE_CONFIG_DEBUG
+		if (m_ProgramConfig->GetDebugToolsEnabled())
+			updateDebugTools();
+#endif
+	}
+
+	void Game::Draw() const
+	{
+		const auto drawCloud =
+			[this](const Cloud* const cloud, const bool isDrawingAfterPlayer)
+			{
+				const bool drawsAbovePlayer = cloud->DrawsAbovePlayer();
+				if (drawsAbovePlayer == isDrawingAfterPlayer)
+					cloud->Draw();
+			};
+
+		const auto drawPowerups =
+			[this]()
+			{
+				for (const Powerup* const powerup : m_AllPowerups)
+					powerup->Draw();
+			};
+
+		const auto drawCloudsBelowPlayer =
+			[&, this]()
+			{
+				for (const Cloud* const cloud : m_AllClouds)
+					drawCloud(cloud, false);
+			};
+
+		const auto drawCloudsAbovePlayer =
+			[&, this]()
+			{
+				for (const Cloud* const cloud : m_AllClouds)
+					drawCloud(cloud, true);
+			};
+
+		const auto drawObjects =
+			[&, this]()
+			{
+				m_Background->Draw();
+				m_Crag->Draw();
+				m_Platform->Draw();
+
+				drawCloudsBelowPlayer();
+				drawPowerups();
+				m_Player->Draw();
+				drawCloudsAbovePlayer();
+
+				m_FuelBar->Draw();
+				m_SpeedupBar->Draw();
+				m_FuelBarLabel->Draw();
+				m_SpeedupBarLabel->Draw();
+			};
+
+		drawObjects();
+	}
+
+	void Game::ChooseOutcome(const Outcome outcome)
+	{
+		m_Outcome = outcome;
+	}
+
 	void Game::FinishConstruction(unique_ptr<InputManager> inputManager)
 	{
 		const auto initializePlayer =
@@ -369,202 +589,6 @@ namespace BlastOff
 		updatePlatformCollisionRect();
 	}
 
-	void Game::Update()
-	{
-		const auto calculateCameraOffset =
-			[](const float x) -> float
-			{
-				return -(powf(x, 1 / 3.0f) / 3);
-			};
-
-		const auto updateCameraPosition =
-			[&, this]()
-			{
-				const Vector2f playerVelocity = m_Player->GetVelocity();
-				const Vector2f pV = playerVelocity;
-
-				float equationOffset = calculateCameraOffset(pV.y);
-				if (isnan(equationOffset))
-					equationOffset = calculateCameraOffset(-pV.y) * 2;
-
-				const float extraOffset = c_Constants.GetCameraYOffset();
-				const float totalOffset = equationOffset + extraOffset;
-
-				const Rect2f playerRect = m_Player->GetEngineRect();
-				const float playerY = playerRect.y;
-
-				const float unclampedResult = playerY + totalOffset;
-				const Vector2f viewportSize =
-				{
-					m_CoordinateTransformer->GetViewportSize()
-				};
-				const float viewportHeight = viewportSize.y;
-
-				const float maxY =
-				{
-					GetWorldEdge(Direction::Up) - (viewportHeight / 2)
-				};
-				const float minY =
-				{
-					GetWorldEdge(Direction::Down) + (viewportHeight / 2)
-				};
-
-				if (unclampedResult > maxY)
-					m_CameraPosition.y = maxY;
-				else if (unclampedResult < minY)
-					m_CameraPosition.y = minY;
-				else
-					m_CameraPosition.y = unclampedResult;
-			};
-
-		const auto handlePowerupCollision =
-			[](Powerup* const powerup)
-			{
-				if (!powerup->IsCollected())
-					powerup->OnCollection();
-			};
-
-		const auto updatePowerup =
-			[&](Powerup* const powerup)
-			{
-				powerup->Update();
-
-				const bool collision = powerup->CollideWithPlayer();
-				if (collision)
-					handlePowerupCollision(powerup);
-			};
-
-		const auto updatePowerups =
-			[&, this]()
-			{
-				for (Powerup* const powerup : m_AllPowerups)
-					updatePowerup(powerup);
-			};
-
-		const auto updateClouds =
-			[this]()
-			{
-				for (Cloud* const cloud : m_AllClouds)
-					cloud->Update();
-			};
-
-		const auto updateMiscObjects =
-			[this]()
-			{
-				m_CoordinateTransformer->Update();
-				m_InputManager->Update();
-
-				m_Player->Update();
-				m_CameraEmpty->Update();
-				m_FuelBar->Update();
-				m_SpeedupBar->Update();
-				m_FuelBarLabel->Update();
-				m_SpeedupBarLabel->Update();
-			};
-
-#if COMPILE_CONFIG_DEBUG
-		const auto checkForPlayerFreeze =
-			[this]()
-			{
-				const int key = c_Constants.GetPlayerFreezeKey();
-				const bool isFrozen = m_InputManager->GetKeyDown(key);
-				m_Player->SetFrozen(isFrozen);
-			};
-
-		const auto checkForPlayerTeleport =
-			[this]()
-			{
-				const int key = c_Constants.GetPlayerTeleportKey();
-
-				const bool shouldTeleport = m_InputManager->GetKeyDown(key);
-				if (shouldTeleport)
-				{
-					const float destinationY = m_WorldBounds.h * 9 / 10.0f;
-					m_Player->TeleportToY(destinationY);
-				}
-			};
-
-		const auto checkForEmptyingPlayerFuel =
-			[this]()
-			{
-				const int key = c_Constants.GetEmptyPlayerFuelKey();
-				const bool shouldEmptyFuel = IsKeyDown(key);
-				if (shouldEmptyFuel)
-					m_Player->EmptyFuel();
-			};
-
-		const auto updateDebugTools =
-			[&]()
-			{
-				checkForPlayerFreeze();
-				checkForPlayerTeleport();
-				checkForEmptyingPlayerFuel();
-			};
-#endif
-
-		updateCameraPosition();
-		updatePowerups();
-		updateClouds();
-		updateMiscObjects();
-
-#if COMPILE_CONFIG_DEBUG
-		if (m_ProgramConfig->GetDebugToolsEnabled())
-			updateDebugTools();
-#endif
-	}
-
-	void Game::Draw() const
-	{
-		const auto drawCloud =
-			[this](const Cloud* const cloud, const bool isDrawingAfterPlayer)
-			{
-				const bool drawsAbovePlayer = cloud->DrawsAbovePlayer();
-				if (drawsAbovePlayer == isDrawingAfterPlayer)
-					cloud->Draw();
-			};
-
-		const auto drawPowerups =
-			[this]()
-			{
-				for (const Powerup* const powerup : m_AllPowerups)
-					powerup->Draw();
-			};
-
-		const auto drawCloudsBelowPlayer =
-			[&, this]()
-			{
-				for (const Cloud* const cloud : m_AllClouds)
-					drawCloud(cloud, false);
-			};
-
-		const auto drawCloudsAbovePlayer =
-			[&, this]()
-			{
-				for (const Cloud* const cloud : m_AllClouds)
-					drawCloud(cloud, true);
-			};
-
-		const auto drawObjects =
-			[&, this]()
-			{
-				m_Background->Draw();
-				m_Crag->Draw();
-				m_Platform->Draw();
-
-				drawCloudsBelowPlayer();
-				drawPowerups();
-				m_Player->Draw();
-				drawCloudsAbovePlayer();
-
-				m_FuelBar->Draw();
-				m_SpeedupBar->Draw();
-				m_FuelBarLabel->Draw();
-				m_SpeedupBarLabel->Draw();
-			};
-
-		drawObjects();
-	}
-
 	float Game::GetWorldEdge(const Direction side) const
 	{
 		const optional<float> value =
@@ -581,5 +605,258 @@ namespace BlastOff
 			throw std::runtime_error(message);
 		}
 		return *value;
+	}
+
+	bool Game::LosingConditionsAreSatisfied() const
+	{
+		const float playerTop = m_Player->GetEdgePosition(Direction::Up);
+		if (playerTop < GetWorldEdge(Direction::Down))
+			return true;
+
+		// losing condition:
+		// if the player stays stationary for too long without fuel OR
+		// while the outcome is chosen
+		const bool fuelIsEmpty = m_Player->IsOutOfFuel();
+		if (m_Player->IsStationary() && fuelIsEmpty)
+			return true;
+
+		const bool outcomeIsChosen = (m_Outcome != Outcome::None);
+		if (m_Player->IsStationary() && outcomeIsChosen)
+			return true;
+
+		return false;
+	}
+
+
+	PlayableGame::PlayableGame(
+        const bool* const programIsMuted,
+        const ProgramConfiguration* const programConfig,
+        ImageTextureLoader* const imageTextureLoader,
+        TextTextureLoader* const textTextureLoader,
+        SoundLoader* const soundLoader,
+        const Callback& resetCallback,
+        const Callback& muteUnmuteCallback,
+        const Font* const font,
+        const Vector2i* const windowPosition,
+        const Vector2i* const windowSize
+    ) :
+        Game(
+            programConfig,
+            imageTextureLoader,
+            textTextureLoader,
+            soundLoader,
+            font,
+            windowPosition,
+            windowSize
+        )
+    {
+        const auto initializeSound =
+            [&, this]()
+        {
+            const bool isSoundEnabled = m_ProgramConfig->GetSoundEnabled();
+            if (!isSoundEnabled)
+                return;
+
+            m_WinSound = soundLoader->LazyLoadSound("win.wav");
+            m_LoseSound = soundLoader->LazyLoadSound("lose.wav");
+            m_EasterEggSound1 = soundLoader->LazyLoadSound("egg1.wav");
+            m_EasterEggSound2 = soundLoader->LazyLoadSound("egg2.wav");
+        };
+
+        const auto initializeInput =
+            [&, this]()
+            {
+                const auto coordTransformer = m_CoordinateTransformer.get();
+                unique_ptr<InputManager> inputManager =
+                {
+                    std::make_unique<PlayableInputManager>(coordTransformer)
+                };
+                FinishConstruction(std::move(inputManager));
+            };
+
+		const auto initializeGameEndMenus =
+			[&, this]()
+			{
+				m_WinMenu = std::make_unique<WinMenu>(
+					resetCallback,
+					m_CoordinateTransformer.get(),
+					m_InputManager.get(),
+					m_ProgramConfig,
+					imageTextureLoader,
+					textTextureLoader,
+					m_CameraEmpty.get(),
+					font
+				);
+				m_LoseMenu = std::make_unique<LoseMenu>(
+					resetCallback,
+					m_CoordinateTransformer.get(),
+					m_InputManager.get(),
+					m_ProgramConfig,
+					imageTextureLoader,
+					textTextureLoader,
+					m_CameraEmpty.get(),
+					font
+				);
+			};
+
+		const auto initializeGUIButtons =
+			[&, this]()
+			{
+				m_TopRightResetButton = std::make_unique<TopRightResetButton>(
+					m_CoordinateTransformer.get(),
+					m_InputManager.get(),
+					m_ProgramConfig,
+					imageTextureLoader,
+					resetCallback,
+					m_CameraEmpty.get()
+				);
+                m_MuteButton = std::make_unique<MuteButton>(
+					programIsMuted,
+					m_CoordinateTransformer.get(),
+					m_InputManager.get(),
+                    m_ProgramConfig,
+                    imageTextureLoader,
+                    muteUnmuteCallback,
+                    m_CameraEmpty.get()
+                );
+			};
+
+        initializeSound();
+        initializeInput();
+        initializeGameEndMenus();
+        initializeGUIButtons();
+    }
+
+    void PlayableGame::ChooseOutcome(const Outcome outcome)
+	{
+		const auto playOutcomeSound =
+			[this]()
+			{
+				const bool isSoundEnabled = m_ProgramConfig->GetSoundEnabled();
+				if (!isSoundEnabled)
+					return;
+
+				const float easterEggTest = GetRandomFloat();
+
+				if (easterEggTest < powf(10, -3))
+					PlaySound(*m_EasterEggSound2);
+				else if (easterEggTest < powf(10, -2))
+					PlaySound(*m_EasterEggSound1);
+
+				else if (m_Outcome == Outcome::Winner)
+					PlaySound(*m_WinSound);
+				else if (m_Outcome == Outcome::Loser)
+					PlaySound(*m_LoseSound);
+				else
+				{
+					throw std::runtime_error(
+						"Game::Update(): "
+						"Unable to determine which Sound to play "
+						"after getting the GameOutcome. "
+					);
+				}
+			};
+
+		const auto getRelevantEndMenu =
+			[this]() -> EndMenu*
+			{
+				switch (m_Outcome)
+				{
+					case Outcome::Winner:
+						return m_WinMenu.get();
+
+					case Outcome::Loser:
+						return m_LoseMenu.get();
+
+					case Outcome::None:
+					default:
+						return nullptr;
+				}
+			};
+
+		Game::ChooseOutcome(outcome);
+		playOutcomeSound();
+
+		EndMenu* const endMenu = getRelevantEndMenu();
+		if (endMenu)
+			endMenu->Enable();
+
+		m_TopRightResetButton->SlideOut();
+	}
+
+    void PlayableGame::Update()
+    {
+        const auto updateMiscObjects =
+            [this]()
+            {
+                m_WinMenu->Update();
+                m_LoseMenu->Update();
+                m_TopRightResetButton->Update();
+                m_MuteButton->Update();
+            };
+
+        Game::Update();
+
+        updateMiscObjects();
+    }
+
+    void PlayableGame::Draw() const
+    {
+        Game::Draw();
+
+        // Oct. 5th, 2025:
+        //
+        // TODO: if the PlayableGame class ever needs to draw something
+        // below ANYTHING in the Game class, this will literally not be
+        // possible.
+        // a fix may be needed eventually
+        //
+        // - Andrew Corvec
+        m_WinMenu->Draw();
+        m_LoseMenu->Draw();
+        m_TopRightResetButton->Draw();
+        m_MuteButton->Draw();
+    }
+
+
+    Cutscene::Cutscene(
+		const ProgramConfiguration* const programConfig,
+		ImageTextureLoader* const imageTextureLoader,
+		TextTextureLoader* const textTextureLoader,
+		SoundLoader* const soundLoader,
+		const Callback& resetCallback,
+		const Font* const font,
+		const Vector2i* const windowPosition,
+		const Vector2i* const windowSize
+	) :
+		Game(
+			programConfig,
+			imageTextureLoader,
+			textTextureLoader,
+			soundLoader,
+			font,
+			windowPosition,
+			windowSize
+		),
+		m_ResetCallback(resetCallback)
+	{
+		const auto coordTransformer = m_CoordinateTransformer.get();
+		unique_ptr<InputManager> inputManager =
+		{
+			std::make_unique<CutsceneInputManager>(
+				coordTransformer,
+				&m_CameraPosition,
+				m_ProgramConfig
+			)
+		};
+		FinishConstruction(std::move(inputManager));
+	}
+
+	void Cutscene::Update()
+	{
+		Game::Update();
+
+		if (LosingConditionsAreSatisfied())
+			m_ResetCallback();
 	}
 }

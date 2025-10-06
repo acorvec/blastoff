@@ -1,4 +1,5 @@
 #include "Program.h"
+#include "Game.h"
 #include "Logging.h"
 
 namespace BlastOff
@@ -91,7 +92,10 @@ namespace BlastOff
 		initializeSound();
 		initializeBackgroundMusic();
 		disableEscapeKey();
+		InitializeCutscene();
 		InitializeGame();
+
+		m_State = State::MainMenu;
 	}
 
 	Program::~Program()
@@ -114,10 +118,15 @@ namespace BlastOff
 		Draw();
 		EndFrame();
 
-		if (m_ShouldReset)
+		if (m_GameShouldReset)
 		{
 			InitializeGame();
-			m_ShouldReset = false;
+			m_GameShouldReset = false;
+		}
+		if (m_CutsceneShouldReset)
+		{
+			InitializeCutscene();
+			m_CutsceneShouldReset = false;
 		}
 	}
 
@@ -172,7 +181,11 @@ namespace BlastOff
 #endif
 
 		m_Window->Update();
-		m_Game->Update();
+
+		if (m_State == State::MainMenu)
+			m_Cutscene->Update();
+		else if (m_State == State::Game)
+			m_Game->Update();
 		
 		const bool isSoundEnabled = c_Config.GetSoundEnabled();
 		if (isSoundEnabled)
@@ -190,13 +203,16 @@ namespace BlastOff
 
 	void Program::Draw() const
 	{
-
 		BeginDrawing();
 
 		const Colour4i voidColour = c_Config.GetVoidColour();
 		ClearBackground(voidColour.ToRayColour());
 
-		m_Game->Draw();
+		if (m_State == State::MainMenu)
+			m_Cutscene->Draw();
+		else if (m_State == State::Game)
+			m_Game->Draw();
+
 		EndDrawing();
 	}
 
@@ -243,7 +259,7 @@ namespace BlastOff
 		const auto resetCallback =
 			[this]()
 			{
-				m_ShouldReset = true;
+				m_GameShouldReset = true;
 			};
 
         const auto muteUnmuteCallback = 
@@ -265,6 +281,26 @@ namespace BlastOff
 			&m_SoundLoader,
 			resetCallback,
             muteUnmuteCallback,
+			&m_Font,
+			m_Window->GetPosition(),
+			m_Window->GetSize()
+		);
+	}
+
+	void Program::InitializeCutscene()
+	{
+		const auto resetCallback =
+			[this]()
+			{
+				m_CutsceneShouldReset = true;
+			};
+
+		m_Cutscene = std::make_unique<Cutscene>(
+			&c_Config,
+			&m_ImageTextureLoader,
+			m_TextTextureLoader.get(),
+			&m_SoundLoader,
+			resetCallback,
 			&m_Font,
 			m_Window->GetPosition(),
 			m_Window->GetSize()

@@ -67,9 +67,11 @@ namespace BlastOff
 		ImageTextureLoader* m_ImageTextureLoader = nullptr;
 		TextTextureLoader* m_TextTextureLoader = nullptr;
 
+		virtual void ChooseOutcome(const Outcome outcome);
 		void FinishConstruction(unique_ptr<InputManager> inputManager);
 
 		float GetWorldEdge(const Direction side) const;
+		bool LosingConditionsAreSatisfied() const;
 	};
 
 	struct PlayableGame : public Game
@@ -87,6 +89,8 @@ namespace BlastOff
 			const Vector2i* const windowSize
 		);
 
+		void ChooseOutcome(const Outcome outcome) override;
+
 		void Update() override;
 		void Draw() const override;
 
@@ -100,7 +104,24 @@ namespace BlastOff
 		const Sound* m_LoseSound = nullptr;
 		const Sound* m_EasterEggSound1 = nullptr;
 		const Sound* m_EasterEggSound2 = nullptr;
+	};
 
-		unique_ptr<InputManager> CreateInputManager();
+	struct Cutscene : public Game
+	{
+		Cutscene(
+			const ProgramConfiguration* const programConfig,
+    		ImageTextureLoader* const imageTextureLoader,
+	    	TextTextureLoader* const textTextureLoader,
+    		SoundLoader* const soundLoader,
+			const Callback& resetCallback,
+	    	const Font* const font,
+		    const Vector2i* const windowPosition,
+    		const Vector2i* const windowSize
+		);
+
+		void Update() override;
+
+	protected:
+		Callback m_ResetCallback;
 	};
 }

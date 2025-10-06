@@ -46,7 +46,7 @@ namespace BlastOff
     {
         CutsceneInputManager(
             const CoordinateTransformer* const coordTransformer,
-            const Vector2f* const playerPosition,
+            const Vector2f* const cameraPosition,
             const ProgramConfiguration* const programConfig
         );
 
@@ -60,7 +60,7 @@ namespace BlastOff
     protected:
         static const float c_MaxOscillationTick;
 
-        const Vector2f* m_PlayerPosition;
+        const Vector2f* m_CameraPosition;
         const ProgramConfiguration* m_ProgramConfig;
 
         float m_OscillationTick = 0;

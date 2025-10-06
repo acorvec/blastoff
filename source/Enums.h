@@ -8,4 +8,11 @@ namespace BlastOff
 		Winner,
 		Loser
 	};
+
+	enum class ProgramState
+	{
+		None,
+		Game,
+		MainMenu
+	};
 }
