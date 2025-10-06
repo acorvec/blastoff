@@ -1,6 +1,7 @@
 #include "InputManager.h"
 #include "OperatingSystem.h"
 
+#include "Utils.h"
 #include "raylib.h"
 
 namespace BlastOff
@@ -65,7 +66,7 @@ namespace BlastOff
         m_CameraPosition(cameraPosition),
         m_ProgramConfig(programConfig)
     {
-
+        m_OscillationTick = c_MaxOscillationTick * GetRandomFloat();
     }
 
     bool CutsceneInputManager::GetKeyDown(const int keyEnum) const
