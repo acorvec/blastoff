@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Debug.h"
+#include "Graphics.h"
 #include "Logging.h"
 #include "Player.h"
 
@@ -708,7 +709,8 @@ namespace BlastOff
 					m_ProgramConfig,
 					imageTextureLoader,
 					resetCallback,
-					m_CameraEmpty.get()
+					m_CameraEmpty.get(),
+					m_ProgramConfig->GetTopRightButtonMargins()
 				);
                 m_MuteButton = std::make_unique<MuteButton>(
 					programIsMuted,
@@ -717,7 +719,8 @@ namespace BlastOff
                     m_ProgramConfig,
                     imageTextureLoader,
                     muteUnmuteCallback,
-                    m_CameraEmpty.get()
+                    m_CameraEmpty.get(),
+					m_ProgramConfig->GetTopRightButtonMargins()
                 );
 			};
 
@@ -878,6 +881,16 @@ namespace BlastOff
 			updateResetTimer();
 		else
 			checkForReset();
+	}
+
+	const CoordinateTransformer* Cutscene::GetCoordinateTransformer() const
+	{
+		return m_CoordinateTransformer.get();
+	}
+ 
+	const CameraEmpty* Cutscene::GetCameraEmpty() const
+	{
+		return m_CameraEmpty.get();
 	}
 
 	const float Cutscene::c_MaxResetTick = 1;

@@ -1,6 +1,8 @@
 #include "Graphics.h"
+#include "Player.h"
 #include "Utils.h"
 #include "Game.h"
+#include <memory>
 
 namespace BlastOff
 {
@@ -11,6 +13,7 @@ namespace BlastOff
     		ImageTextureLoader* const imageTextureLoader,
 	    	TextTextureLoader* const textTextureLoader,
     		SoundLoader* const soundLoader,
+			const Callback& resetCallback,
 	    	const Font* const font,
 		    const Vector2i* const windowPosition,
     		const Vector2i* const windowSize
@@ -21,16 +24,20 @@ namespace BlastOff
 
     private:
         bool m_CutsceneShouldReset = false;
-        unique_ptr<Cutscene> m_Cutscene;
 
-        const ProgramConfiguration* m_ProgramConfig;
-        const Font* m_Font;
-        const Vector2i* m_WindowPosition;
-        const Vector2i* m_WindowSize;
+        unique_ptr<Cutscene> m_Cutscene = nullptr;
+        unique_ptr<Button> m_PlayButton = nullptr;
+        unique_ptr<Button> m_SettingsButton = nullptr;
+        unique_ptr<InputManager> m_InputManager = nullptr;
+
+        const ProgramConfiguration* m_ProgramConfig = nullptr;
+        const Font* m_Font = nullptr;
+        const Vector2i* m_WindowPosition = nullptr;
+        const Vector2i* m_WindowSize = nullptr;
         
-        ImageTextureLoader* m_ImageTextureLoader;
-        TextTextureLoader* m_TextTextureLoader;
-        SoundLoader* m_SoundLoader;
+        ImageTextureLoader* m_ImageTextureLoader = nullptr;
+        TextTextureLoader* m_TextTextureLoader = nullptr;
+        SoundLoader* m_SoundLoader = nullptr;
 
         void InitializeCutscene();
     };

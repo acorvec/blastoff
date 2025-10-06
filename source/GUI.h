@@ -209,6 +209,11 @@ namespace BlastOff
 
 	struct Button
 	{
+		virtual ~Button()
+		{
+
+		}
+
 		void Translate(const Vector2f translation);
 
 		virtual void Update();
@@ -243,10 +248,6 @@ namespace BlastOff
 			const InputManager* const inputManager,
 			const ProgramConfiguration* const programConfig
 		);
-		virtual ~Button()
-		{
-
-		}
 	};
 
 	struct ResetButton : public Button
@@ -279,7 +280,8 @@ namespace BlastOff
 			const ProgramConfiguration* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			const Callback& resetCallback,
-			const CameraEmpty* const cameraEmpty
+			const CameraEmpty* const cameraEmpty,
+			const Vector2f margins
 		);
 		
 		void SlideOut();
@@ -306,7 +308,8 @@ namespace BlastOff
             const ProgramConfiguration* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
             const Callback& muteCallback,
-            const CameraEmpty* const cameraEmpty
+            const CameraEmpty* const cameraEmpty,
+			const Vector2f margins
         );
 
         void SlideOut();
@@ -314,7 +317,6 @@ namespace BlastOff
         void Draw() const override;
 
     protected:
-        static const Vector2f c_Margins;
         static const Vector2f c_EngineSize;
         static const Vector2f c_ActiveBarSize;
         static const char* const c_UnselectedTexturePath;
@@ -324,6 +326,26 @@ namespace BlastOff
 
         const bool* m_IsActive = nullptr;
         unique_ptr<ImageSprite> m_ActiveBar = nullptr;
+	};
+
+	struct SettingsButton : public Button
+	{
+		SettingsButton(
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+            const ProgramConfiguration* const programConfig,
+            ImageTextureLoader* const imageTextureLoader,
+            const Callback& settingsCallback,
+            const CameraEmpty* const cameraEmpty,
+			const Vector2f margins
+		);
+
+	protected:
+		static const Vector2f c_EngineSize;
+
+		static const char* const c_UnselectedTexturePath;
+		static const char* const c_SelectedTexturePath;
+		static const char* const c_ClickedTexturePath;
 	};
 
 	struct GameEndMenu

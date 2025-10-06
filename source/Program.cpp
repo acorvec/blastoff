@@ -88,11 +88,18 @@ namespace BlastOff
 		const auto initializeMainMenu = 
 			[this]()
 			{
+				const auto settingsCallback = 
+					[this]()
+					{
+						// TODO: add settings menu functionality
+					};
+
 				m_MainMenu = std::make_unique<MainMenu>(
 					&c_Config,
 					&m_ImageTextureLoader,
 					m_TextTextureLoader.get(),
 					&m_SoundLoader,
+					settingsCallback,
 					&m_Font,
 					m_Window->GetPosition(),
 					m_Window->GetSize()

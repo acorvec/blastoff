@@ -13,8 +13,7 @@ namespace BlastOff
 		m_CragWidthMultiplier(2),
 		m_GravitationalAcceleration(5),
 		m_CollisionMultiplier(3 / 4.0f),
-		m_PlatformHeight(3 / 2.0f),
-		m_LoadingScreenTextMargins(5 / 100.0f, 5 / 100.0f)
+		m_PlatformHeight(3 / 2.0f)
 	{
 #if COMPILE_CONFIG_DEBUG
 		m_PlayerFreezeKey = KEY_F;
@@ -76,11 +75,6 @@ namespace BlastOff
 	size_t GameConstants::GetAmountOfSpeedPowerups() const
 	{
 		return m_AmountOfSpeedPowerups;
-	}
-
-	Vector2f GameConstants::GetLoadingScreenTextMargins() const
-	{
-		return m_LoadingScreenTextMargins;
 	}
 
 #if COMPILE_CONFIG_DEBUG

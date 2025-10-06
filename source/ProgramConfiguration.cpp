@@ -16,7 +16,8 @@ namespace BlastOff
 		m_SecondsBetweenSceneChange(1 / 2.0f),
 		m_FontFace("Ubuntu-Medium"),
 		m_FontRenderSize(192),
-		m_DefaultWindowSize(Vector2i{ 480, 854 }),
+		m_TopRightButtonMargins(1 / 10.0f, 1 / 10.0f),
+		m_DefaultWindowSize(854, 480),
 		m_Name("BlastOff++"),
 		m_Version("alpha 1.0.0"),
 		m_BackgroundMusicPath("rifftastic.ogg"),
@@ -99,6 +100,11 @@ namespace BlastOff
 	int ProgramConfiguration::GetFontRenderSize() const
 	{
 		return m_FontRenderSize;
+	}
+
+	Vector2f ProgramConfiguration::GetTopRightButtonMargins() const
+	{
+		return m_TopRightButtonMargins;
 	}
 
 	Vector2i ProgramConfiguration::GetDefaultWindowSize() const

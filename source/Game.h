@@ -121,6 +121,9 @@ namespace BlastOff
 
 		void Update() override;
 
+		const CoordinateTransformer* GetCoordinateTransformer() const;
+		const CameraEmpty* GetCameraEmpty() const;
+
 	protected:
 		static const float c_MaxResetTick;
 		float m_ResetTick = c_DeactivatedTick;

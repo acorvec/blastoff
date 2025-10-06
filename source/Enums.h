@@ -13,6 +13,7 @@ namespace BlastOff
 	{
 		None,
 		Game,
-		MainMenu
+		MainMenu,
+		SettingsMenu
 	};
 }

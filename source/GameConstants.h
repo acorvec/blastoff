@@ -23,8 +23,6 @@ namespace BlastOff
 		size_t GetAmountOfFuelPowerups() const;
 		size_t GetAmountOfSpeedPowerups() const;
 
-		Vector2f GetLoadingScreenTextMargins() const;
-
 #if COMPILE_CONFIG_DEBUG
 		int GetPlayerFreezeKey() const;
 		int GetPlayerTeleportKey() const;
@@ -44,8 +42,6 @@ namespace BlastOff
 		size_t m_AmountOfHighClouds;
 		size_t m_AmountOfFuelPowerups;
 		size_t m_AmountOfSpeedPowerups;
-
-		Vector2f m_LoadingScreenTextMargins;
 
 #if COMPILE_CONFIG_DEBUG
 		int m_PlayerFreezeKey = 0;

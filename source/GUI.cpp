@@ -656,7 +656,8 @@ namespace BlastOff
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& resetCallback,
-		const CameraEmpty* const cameraEmpty
+		const CameraEmpty* const cameraEmpty,
+		const Vector2f margins
 	) :
 		ResetButton(
 			coordTransformer,
@@ -672,9 +673,9 @@ namespace BlastOff
 		const Vector2f viewportSize = coordTransformer->GetViewportSize();
 		Vector2f enginePosition =
 		{
-			((viewportSize - c_EngineSize) / 2.0f) - c_Margins
+			((viewportSize - c_EngineSize) / 2.0f) - margins
 		};
-		enginePosition -= Vector2f{ 0, c_Margins.y + c_EngineSize.y };
+		enginePosition -= Vector2f{ 0, margins.y + c_EngineSize.y };
 		m_Sprite->Move(enginePosition);
 	}
 
@@ -735,7 +736,8 @@ namespace BlastOff
         const ProgramConfiguration* const programConfig,
         ImageTextureLoader* const imageTextureLoader,
         const Callback& muteCallback,
-        const CameraEmpty* const cameraEmpty
+        const CameraEmpty* const cameraEmpty,
+		const Vector2f	 margins
     ) : Button(
         muteCallback,
         c_UnselectedTexturePath,
@@ -757,7 +759,7 @@ namespace BlastOff
             const Vector2f viewportSize = coordTransformer->GetViewportSize();
             const Vector2f enginePosition =
             {
-                ((viewportSize - c_EngineSize) / 2.0f) - c_Margins
+                ((viewportSize - c_EngineSize) / 2.0f) - margins
             };
             m_Sprite->Move(enginePosition);
         };
@@ -793,7 +795,6 @@ namespace BlastOff
             m_ActiveBar->Draw();
     }
 
-    const Vector2f MuteButton::c_Margins = { 3 / 20.0f, 3 / 20.0f };
     const Vector2f MuteButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
     const Vector2f MuteButton::c_ActiveBarSize = { 21 / 40.0f, 21 / 40.0f };
 
@@ -813,6 +814,48 @@ namespace BlastOff
     {
         "MuteActiveBar.png"
     };
+
+
+	SettingsButton::SettingsButton(
+		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
+		const ProgramConfiguration* const programConfig,
+		ImageTextureLoader* const imageTextureLoader,
+		const Callback& settingsCallback,
+		const CameraEmpty* const cameraEmpty,
+		const Vector2f margins
+	) :
+		Button(
+			settingsCallback,
+			c_UnselectedTexturePath,
+			c_SelectedTexturePath,
+			c_ClickedTexturePath,
+			imageTextureLoader,
+			Vector2f::Zero(),
+			c_EngineSize,
+			cameraEmpty,
+			coordTransformer,
+			inputManager,
+			programConfig
+		)
+	{
+		
+	}
+
+	const Vector2f SettingsButton::c_EngineSize = { 2 / 3.0f, 2 / 3.0f };
+
+	const char* const SettingsButton::c_UnselectedTexturePath = 
+	{
+		"UnselectedSettings.png"
+	};
+	const char* const SettingsButton::c_SelectedTexturePath = 
+	{
+		"SelectedSettings.png"
+	};
+	const char* const SettingsButton::c_ClickedTexturePath =
+	{
+		"ClickedSettings.png"
+	};
 
 
 	GameEndMenu::GameEndMenu(
