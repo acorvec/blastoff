@@ -607,6 +607,10 @@ namespace BlastOff
 				{
 					selectedTextureGetter(imageTextureLoader)
 				};
+				m_ClickedTexture =
+				{
+					clickedTextureGetter(imageTextureLoader)
+				};
 			};
 
 		const auto initializeBacking =
