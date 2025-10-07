@@ -34,19 +34,24 @@ namespace BlastOff
 		bool m_ShouldCloseAfterFrame = false;
         bool m_IsMuted = false;
 		bool m_GameShouldReset = false;
+        bool m_CutsceneShouldReset = false;
 
 		Font m_Font = { 0 };
 		State m_State = State::None;
 		optional<State> m_PendingStateChange = std::nullopt;
+        Vector2f m_CameraPosition = Vector2f::Zero();
 
 		ImageTextureLoader m_ImageTextureLoader;
 		SoundLoader m_SoundLoader;
 		MusicLoader m_MusicLoader;
 
 		unique_ptr<TextTextureLoader> m_TextTextureLoader = nullptr;
+        unique_ptr<CoordinateTransformer> m_CoordinateTransformer = nullptr;
+        unique_ptr<CameraEmpty> m_CameraEmpty = nullptr;
 		unique_ptr<RayWindow> m_Window = nullptr;
 		unique_ptr<MusicLoop> m_BackgroundMusicLoop = nullptr;
 		unique_ptr<Game> m_Game = nullptr;
+        unique_ptr<Cutscene> m_Cutscene = nullptr;
 		unique_ptr<MainMenu> m_MainMenu = nullptr;
 
 #if COMPILE_CONFIG_DEBUG
@@ -59,5 +64,6 @@ namespace BlastOff
 
 		void InitializeGame();
 		void InitializeMainMenu();
+		void InitializeCutscene();
 	};
 }

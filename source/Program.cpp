@@ -41,6 +41,21 @@ namespace BlastOff
 				{
 					std::make_unique<TextTextureLoader>(&m_Font)
 				};
+				m_CoordinateTransformer = std::make_unique<CoordinateTransformer>(
+                    m_Window->GetSize(),
+                    m_Window->GetPosition(),
+                    &m_CameraPosition                    
+                );
+                m_CoordinateTransformer->Update();
+                const CoordinateTransformer* const coordTransformer = 
+                {
+                    m_CoordinateTransformer.get()
+                };
+                m_CameraEmpty = std::make_unique<CameraEmpty>(
+                    m_CoordinateTransformer.get(),
+                    &c_Config,
+                    &m_CameraPosition
+                );
 			};
 
 		const auto initializeSound =
@@ -96,6 +111,7 @@ namespace BlastOff
 		disableEscapeKey();
 		InitializeMainMenu();
 		InitializeGame();
+		InitializeCutscene();
 
 		m_State = State::MainMenu;
 	}
@@ -162,6 +178,12 @@ namespace BlastOff
 
 		if (m_ShouldCloseAfterFrame)
 			m_IsRunning = false;
+
+        if (m_CutsceneShouldReset)
+        {
+            InitializeCutscene();
+            m_CutsceneShouldReset = false;
+        }
 	}
 
 	void Program::Update()
@@ -214,7 +236,10 @@ namespace BlastOff
 			};
 #endif
 
+		m_CoordinateTransformer->Update();
+		m_CameraEmpty->Update();
 		m_Window->Update();
+		m_Cutscene->Update();
 
 		if (m_State == State::MainMenu)
 			m_MainMenu->Update();
@@ -241,6 +266,8 @@ namespace BlastOff
 
 		const Colour4i voidColour = c_Config.GetVoidColour();
 		ClearBackground(voidColour.ToRayColour());
+
+		m_Cutscene->Draw();
 
 		if (m_State == State::MainMenu)
 			m_MainMenu->Draw();
@@ -351,6 +378,8 @@ namespace BlastOff
 
 		m_MainMenu = std::make_unique<MainMenu>(
 			&c_Config,
+			m_CoordinateTransformer.get(),
+			m_CameraEmpty.get(),
 			&m_ImageTextureLoader,
 			m_TextTextureLoader.get(),
 			&m_SoundLoader,
@@ -362,4 +391,27 @@ namespace BlastOff
 			m_Window->GetSize()
 		);
 	}
+
+    void Program::InitializeCutscene()
+    {
+        const auto resetCallback = 
+            [this]()
+            {
+                m_CutsceneShouldReset = true;
+            };
+
+        m_Cutscene = std::make_unique<Cutscene>(
+            &c_Config,
+            m_CoordinateTransformer.get(),
+            m_CameraEmpty.get(),
+            &m_ImageTextureLoader,
+            m_TextTextureLoader.get(),
+            &m_SoundLoader,
+            &m_CameraPosition,
+            resetCallback,
+            &m_Font,
+            m_Window->GetPosition(),
+            m_Window->GetSize()
+        );       
+    }
 }
