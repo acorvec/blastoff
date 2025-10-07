@@ -215,6 +215,7 @@ namespace BlastOff
 		}
 
 		void Translate(const Vector2f translation);
+		void SetParent(const Sprite* const parent);
 
 		virtual void Update();
 		virtual void Draw() const;
@@ -250,6 +251,53 @@ namespace BlastOff
 		);
 	};
 
+	namespace TopRightButton
+	{
+		static constexpr Vector2f CalculateIndexOffset(
+			const int topRightIndex,
+			const Vector2f margins,
+			const Vector2f engineSize
+		)
+		{
+			const float offsetY = topRightIndex * (margins.y + engineSize.y);
+			return Vector2f{ 0, offsetY };
+		}
+	};
+
+    struct MuteButton : public Button
+    {
+        MuteButton(
+            const bool* const programIsMuted,
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+            const ProgramConfiguration* const programConfig,
+            ImageTextureLoader* const imageTextureLoader,
+            const Callback& muteCallback,
+            const CameraEmpty* const cameraEmpty,
+			const Vector2f margins
+        );
+
+        void SlideOut();
+        void Update() override;
+        void Draw() const override;
+
+    protected:
+		static const int c_ButtonIndex;
+
+        static const Vector2f c_EngineSize;
+        static const Vector2f c_ActiveBarSize;
+
+        static const char* const c_UnselectedTexturePath;
+        static const char* const c_SelectedTexturePath;
+		static const char* const c_ClickedTexturePath;
+        static const char* const c_ActiveBarTexturePath;
+
+		Vector2f m_Margins = Vector2f::Zero();
+
+        const bool* m_IsActive = nullptr;
+        unique_ptr<ImageSprite> m_ActiveBar = nullptr;
+	};
+
 	struct ResetButton : public Button
 	{
 		ResetButton(
@@ -265,8 +313,8 @@ namespace BlastOff
 		void SetParent(const Sprite* const parent);
 
 	protected:
-		static const Vector2f c_Margins;
 		static const Vector2f c_EngineSize;
+
 		static const char* const c_UnselectedTexturePath;
 		static const char* const c_SelectedTexturePath;
 		static const char* const c_ClickedTexturePath;
@@ -288,9 +336,11 @@ namespace BlastOff
 		void Update() override;
 
 	protected:
+		static const int c_ButtonIndex;
 		static const float c_MaxSlideOutTick;
 		float m_SlideOutTick = c_DeactivatedTick;
 
+		Vector2f m_Margins = Vector2f::Zero();
 		Vector2f m_StartingPosition = Vector2f::Zero();
 		Vector2f m_EndingPosition = Vector2f::Zero();
 
@@ -299,43 +349,40 @@ namespace BlastOff
 		bool IsSlidingOut() const;
 	};
 
-    struct MuteButton : public Button
-    {
-        MuteButton(
-            const bool* const programIsMuted,
+	// ExitButton adds no extra functionality to Button
+	using ExitButton = Button;
+
+	struct TopRightExitButton : public ExitButton
+	{
+		TopRightExitButton(
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
             const ProgramConfiguration* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
-            const Callback& muteCallback,
+            const Callback& exitCallback,
             const CameraEmpty* const cameraEmpty,
 			const Vector2f margins
-        );
+		);
 
-        void SlideOut();
-        void Update() override;
-        void Draw() const override;
-
-    protected:
-        static const Vector2f c_EngineSize;
-        static const Vector2f c_ActiveBarSize;
-        static const char* const c_UnselectedTexturePath;
-        static const char* const c_SelectedTexturePath;
+	protected:
+		static const Vector2f c_EngineSize;
+		static const int c_ButtonIndex;
+		
+		static const char* const c_UnselectedTexturePath;
+		static const char* const c_SelectedTexturePath;
 		static const char* const c_ClickedTexturePath;
-        static const char* const c_ActiveBarTexturePath;
 
-        const bool* m_IsActive = nullptr;
-        unique_ptr<ImageSprite> m_ActiveBar = nullptr;
+		Vector2f m_Margins = Vector2f::Zero();
 	};
 
-	struct SettingsButton : public Button
+	struct PlayButton : public Button
 	{
-		SettingsButton(
+		PlayButton(
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
             const ProgramConfiguration* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
-            const Callback& settingsCallback,
+            const Callback& playCallback,
             const CameraEmpty* const cameraEmpty,
 			const Vector2f margins
 		);
@@ -348,14 +395,14 @@ namespace BlastOff
 		static const char* const c_ClickedTexturePath;
 	};
 
-	struct PlayButton : public Button
+	struct SettingsButton : public Button
 	{
-		PlayButton(
+		SettingsButton(
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
             const ProgramConfiguration* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
-            const Callback& playCallback,
+            const Callback& settingsCallback,
             const CameraEmpty* const cameraEmpty,
 			const Vector2f margins
 		);

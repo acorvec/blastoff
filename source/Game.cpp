@@ -1,8 +1,10 @@
 #include "Game.h"
 #include "Debug.h"
+#include "GUI.h"
 #include "Graphics.h"
 #include "Logging.h"
 #include "Player.h"
+#include <memory>
 
 namespace BlastOff
 {
@@ -11,171 +13,18 @@ namespace BlastOff
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
 		SoundLoader* const soundLoader,
+		Vector2f* const cameraPosition,
 		const Font* const font,
 		const Vector2i* const windowPosition,
 		const Vector2i* const windowSize
 	) :
 		m_ProgramConfig(programConfig),
 		m_Font(font),
+		m_CameraPosition(cameraPosition),
 		m_ImageTextureLoader(imageTextureLoader),
 		m_TextTextureLoader(textTextureLoader)
 	{
-		const auto initializeGraphics =
-			[&, this]()
-			{
-				using CoordTransformer = CoordinateTransformer;
-				m_CoordinateTransformer = std::make_unique<CoordTransformer>(
-					windowSize,
-					windowPosition,
-					&m_CameraPosition
-				);
-				m_CoordinateTransformer->Update();
-			};
-
-		const auto initializeCameraEmpty =
-			[&, this]()
-			{
-				const Rect2f engineRect(
-					m_CameraPosition,
-					Vector2f::Zero()
-				);
-				m_CameraEmpty = std::make_unique<CameraEmpty>(
-					m_CoordinateTransformer.get(), 
-					m_ProgramConfig,
-					&m_CameraPosition
-				);
-			};
-
-		const auto initializeBackgroundSprite =
-			[&, this]()
-			{
-				const Vector2f viewportSize =
-				{
-					m_CoordinateTransformer->GetViewportSize()
-				};
-				const float worldBoundHeight =
-				{
-					c_Constants.GetWorldBoundHeight()
-				};
-				const float backgroundY =
-				{
-					(worldBoundHeight - viewportSize.y) / 2.0f
-				};
-
-				m_WorldBounds =
-				{
-					0, backgroundY,
-					viewportSize.x, worldBoundHeight
-				};
-				m_Background = std::make_unique<Background>(
-					&m_WorldBounds,
-					m_CoordinateTransformer.get(),
-					m_ProgramConfig
-				);
-			};
-
-		const auto initializeCrag =
-			[&, this]()
-			{
-				m_Crag = std::make_unique<Crag>(
-					m_CoordinateTransformer.get(),
-					m_ProgramConfig,
-					imageTextureLoader
-				);
-			};
-
-		const auto initializePlatform =
-			[&, this]()
-			{
-				const float platformHeight = c_Constants.GetPlatformHeight();
-				m_Platform = std::make_unique<Platform>(
-					platformHeight,
-					m_CoordinateTransformer.get(),
-					m_ProgramConfig,
-					imageTextureLoader
-				);
-			};
-
-		const auto initializeCloudDirection =
-			[this]()
-			{
-				const float x = GetRandomFloat();
-				if (x > 0.5f)
-					m_CloudMovementDirection = Direction::Right;
-				else
-					m_CloudMovementDirection = Direction::Left;
-			};
-
-		const auto initializeCloud =
-			[&, this](auto& vector)
-			{
-				vector.emplace_back(
-					m_CoordinateTransformer.get(),
-					m_ProgramConfig,
-					imageTextureLoader,
-					&m_WorldBounds,
-					&m_CloudMovementDirection
-				);
-			};
-
-		const auto initializeLowClouds =
-			[&, this]()
-			{
-				const size_t length = c_Constants.GetAmountOfLowClouds();
-				m_LowClouds.reserve(length);
-
-				for (size_t index = 0; index < length; index++)
-					initializeCloud(m_LowClouds);
-			};
-
-		const auto initializeHighClouds =
-			[&, this]()
-			{
-				const size_t length = c_Constants.GetAmountOfLowClouds();
-				m_HighClouds.reserve(length);
-
-				for (size_t index = 0; index < length; index++)
-					initializeCloud(m_HighClouds);
-			};
-
-		const auto initializeAllCloudsVector =
-			[this]()
-			{
-				const size_t totalLength =
-				{
-					m_LowClouds.size() + m_HighClouds.size()
-				};
-				m_AllClouds.reserve(totalLength);
-
-				for (Cloud& cloud : m_LowClouds)
-					m_AllClouds.push_back(&cloud);
-				for (Cloud& cloud : m_HighClouds)
-					m_AllClouds.push_back(&cloud);
-			};
-
-		const auto initializeClouds =
-			[&]()
-			{
-				initializeCloudDirection();
-
-				initializeLowClouds();
-				initializeHighClouds();
-
-				initializeAllCloudsVector();	
-			};
-
-		const auto initializeObjects =
-			[&]()
-			{
-				initializeCameraEmpty();
-				initializeBackgroundSprite();
-				initializeCrag();
-				initializePlatform();
-				initializeClouds();
-			};
-
-		initializeGraphics();
-		initializeObjects();
+		
 	}
 
 	void Game::Update()
@@ -205,7 +54,7 @@ namespace BlastOff
 				const float unclampedResult = playerY + totalOffset;
 				const Vector2f viewportSize =
 				{
-					m_CoordinateTransformer->GetViewportSize()
+					m_CoordTransformer->GetViewportSize()
 				};
 				const float viewportHeight = viewportSize.y;
 
@@ -219,11 +68,11 @@ namespace BlastOff
 				};
 
 				if (unclampedResult > maxY)
-					m_CameraPosition.y = maxY;
+					m_CameraPosition->y = maxY;
 				else if (unclampedResult < minY)
-					m_CameraPosition.y = minY;
+					m_CameraPosition->y = minY;
 				else
-					m_CameraPosition.y = unclampedResult;
+					m_CameraPosition->y = unclampedResult;
 			};
 
 		const auto handlePowerupCollision =
@@ -260,7 +109,7 @@ namespace BlastOff
 		const auto updateMiscObjects =
 			[this]()
 			{
-				m_CoordinateTransformer->Update();
+				m_CoordTransformer->Update();
 				m_InputManager->Update();
 
 				m_Player->Update();
@@ -398,8 +247,130 @@ namespace BlastOff
 		m_Outcome = outcome;
 	}
 
-	void Game::FinishConstruction(unique_ptr<InputManager> inputManager)
+	void Game::FinishConstruction(
+		CoordinateTransformer* const coordTransformer,
+		CameraEmpty* const cameraEmpty,
+		unique_ptr<InputManager> inputManager
+	)
 	{
+		const auto initializeBackgroundSprite =
+			[&, this]()
+			{
+				const Vector2f viewportSize =
+				{
+					m_CoordTransformer->GetViewportSize()
+				};
+				const float worldBoundHeight =
+				{
+					c_Constants.GetWorldBoundHeight()
+				};
+				const float backgroundY =
+				{
+					(worldBoundHeight - viewportSize.y) / 2.0f
+				};
+
+				m_WorldBounds =
+				{
+					0, backgroundY,
+					viewportSize.x, worldBoundHeight
+				};
+				m_Background = std::make_unique<Background>(
+					&m_WorldBounds,
+					m_CoordTransformer,
+					m_ProgramConfig
+				);
+			};
+
+		const auto initializeCrag =
+			[&, this]()
+			{
+				m_Crag = std::make_unique<Crag>(
+					m_CoordTransformer,
+					m_ProgramConfig,
+					m_ImageTextureLoader
+				);
+			};
+
+		const auto initializePlatform =
+			[&, this]()
+			{
+				const float platformHeight = c_Constants.GetPlatformHeight();
+				m_Platform = std::make_unique<Platform>(
+					platformHeight,
+					m_CoordTransformer,
+					m_ProgramConfig,
+					m_ImageTextureLoader
+				);
+			};
+
+		const auto initializeCloudDirection =
+			[this]()
+			{
+				const float x = GetRandomFloat();
+				if (x > 0.5f)
+					m_CloudMovementDirection = Direction::Right;
+				else
+					m_CloudMovementDirection = Direction::Left;
+			};
+
+		const auto initializeCloud =
+			[&, this](auto& vector)
+			{
+				vector.emplace_back(
+					m_CoordTransformer,
+					m_ProgramConfig,
+					m_ImageTextureLoader,
+					&m_WorldBounds,
+					&m_CloudMovementDirection
+				);
+			};
+
+		const auto initializeLowClouds =
+			[&, this]()
+			{
+				const size_t length = c_Constants.GetAmountOfLowClouds();
+				m_LowClouds.reserve(length);
+
+				for (size_t index = 0; index < length; index++)
+					initializeCloud(m_LowClouds);
+			};
+
+		const auto initializeHighClouds =
+			[&, this]()
+			{
+				const size_t length = c_Constants.GetAmountOfLowClouds();
+				m_HighClouds.reserve(length);
+
+				for (size_t index = 0; index < length; index++)
+					initializeCloud(m_HighClouds);
+			};
+
+		const auto initializeAllCloudsVector =
+			[this]()
+			{
+				const size_t totalLength =
+				{
+					m_LowClouds.size() + m_HighClouds.size()
+				};
+				m_AllClouds.reserve(totalLength);
+
+				for (Cloud& cloud : m_LowClouds)
+					m_AllClouds.push_back(&cloud);
+				for (Cloud& cloud : m_HighClouds)
+					m_AllClouds.push_back(&cloud);
+			};
+
+		const auto initializeClouds =
+			[&]()
+			{
+				initializeCloudDirection();
+
+				initializeLowClouds();
+				initializeHighClouds();
+
+				initializeAllCloudsVector();	
+			};
+
 		const auto initializePlayer =
 			[&, this]()
 			{
@@ -407,7 +378,7 @@ namespace BlastOff
 					&m_Outcome,
 					&m_WorldBounds,
 					m_Platform.get(),
-					m_CoordinateTransformer.get(),
+					m_CoordTransformer,
 					&c_Constants,
 					m_ProgramConfig,
 					m_InputManager.get(),
@@ -482,7 +453,7 @@ namespace BlastOff
 				}
 #endif
 				vector.emplace_back(
-					m_CoordinateTransformer.get(),
+					m_CoordTransformer,
 					m_ProgramConfig,
 					m_Player.get(),
 					m_ImageTextureLoader,
@@ -547,17 +518,17 @@ namespace BlastOff
 			[&, this]()
 			{
 				m_FuelBar = std::make_unique<FuelBar>(
-					m_CoordinateTransformer.get(),
+					m_CoordTransformer,
 					m_ProgramConfig,
 					m_ImageTextureLoader,
-					m_CameraEmpty.get(),
+					m_CameraEmpty,
 					m_Player.get()
 				);
 				m_SpeedupBar = std::make_unique<SpeedupBar>(
-					m_CoordinateTransformer.get(),
+					m_CoordTransformer,
 					m_ProgramConfig,
 					m_ImageTextureLoader,
-					m_CameraEmpty.get(),
+					m_CameraEmpty,
 					m_Player.get()
 				);
 			};
@@ -567,26 +538,38 @@ namespace BlastOff
 			{
 				m_FuelBarLabel = std::make_unique<FuelBarLabel>(
 					m_FuelBar.get(),
-					m_CoordinateTransformer.get(),
+					m_CoordTransformer,
 					m_ProgramConfig,
 					m_TextTextureLoader,
 					m_Font
 				);
 				m_SpeedupBarLabel = std::make_unique<SpeedupBarLabel>(
 					m_SpeedupBar.get(),
-					m_CoordinateTransformer.get(),
+					m_CoordTransformer,
 					m_ProgramConfig,
 					m_TextTextureLoader,
 					m_Font
 				);
 			};
 
+		const auto initializeObjects =
+			[&]()
+			{
+				initializeBackgroundSprite();
+				initializeCrag();
+				initializePlatform();
+				initializeClouds();
+				initializePlayer();
+				initializePowerups();
+				initializeGUIBars();
+				initializeGUILabels();
+			};
+
+		m_CoordTransformer = coordTransformer;
+		m_CameraEmpty = cameraEmpty;
 		m_InputManager = std::move(inputManager);
 
-		initializePlayer();
-		initializePowerups();
-		initializeGUIBars();
-		initializeGUILabels();
+		initializeObjects();
 		updatePlatformCollisionRect();
 	}
 
@@ -635,8 +618,9 @@ namespace BlastOff
         ImageTextureLoader* const imageTextureLoader,
         TextTextureLoader* const textTextureLoader,
         SoundLoader* const soundLoader,
-        const Callback& resetCallback,
         const Callback& muteUnmuteCallback,
+        const Callback& resetCallback,
+		const Callback& exitCallback,
         const Font* const font,
         const Vector2i* const windowPosition,
         const Vector2i* const windowSize
@@ -646,11 +630,28 @@ namespace BlastOff
             imageTextureLoader,
             textTextureLoader,
             soundLoader,
+			&m_CameraPosition,
             font,
             windowPosition,
             windowSize
         )
     {
+		const auto initializeGraphics =
+			[&, this]()
+			{
+				m_CoordinateTransformer = std::make_unique<CoordinateTransformer>(
+					windowSize,
+					windowPosition,
+					&m_CameraPosition
+				);
+                m_CoordinateTransformer->Update();
+				m_CameraEmpty = std::make_unique<CameraEmpty>(
+					m_CoordinateTransformer.get(),
+					m_ProgramConfig,
+					&m_CameraPosition
+				);
+			};
+
         const auto initializeSound =
             [&, this]()
         {
@@ -672,7 +673,11 @@ namespace BlastOff
                 {
                     std::make_unique<PlayableInputManager>(coordTransformer)
                 };
-                FinishConstruction(std::move(inputManager));
+                FinishConstruction(
+					m_CoordinateTransformer.get(),
+					m_CameraEmpty.get(),
+					std::move(inputManager)
+				);
             };
 
 		const auto initializeGameEndMenus =
@@ -703,15 +708,6 @@ namespace BlastOff
 		const auto initializeGUIButtons =
 			[&, this]()
 			{
-				m_TopRightResetButton = std::make_unique<TopRightResetButton>(
-					m_CoordinateTransformer.get(),
-					m_InputManager.get(),
-					m_ProgramConfig,
-					imageTextureLoader,
-					resetCallback,
-					m_CameraEmpty.get(),
-					m_ProgramConfig->GetTopRightButtonMargins()
-				);
                 m_MuteButton = std::make_unique<MuteButton>(
 					programIsMuted,
 					m_CoordinateTransformer.get(),
@@ -722,12 +718,67 @@ namespace BlastOff
                     m_CameraEmpty.get(),
 					m_ProgramConfig->GetTopRightButtonMargins()
                 );
+				m_ResetButton = std::make_unique<TopRightResetButton>(
+					m_CoordinateTransformer.get(),
+					m_InputManager.get(),
+					m_ProgramConfig,
+					imageTextureLoader,
+					resetCallback,
+					m_CameraEmpty.get(),
+					m_ProgramConfig->GetTopRightButtonMargins()
+				);
+				m_ExitButton = std::make_unique<TopRightExitButton>(
+					m_CoordinateTransformer.get(),
+					m_InputManager.get(),
+					m_ProgramConfig,
+					imageTextureLoader,
+					exitCallback,
+					m_CameraEmpty.get(),
+					m_ProgramConfig->GetTopRightButtonMargins()
+				);
 			};
 
+		initializeGraphics();
         initializeSound();
         initializeInput();
         initializeGameEndMenus();
         initializeGUIButtons();
+    }
+
+    void PlayableGame::Update()
+    {
+        const auto updateMiscObjects =
+            [this]()
+            {
+                m_WinMenu->Update();
+                m_LoseMenu->Update();
+                m_MuteButton->Update();
+                m_ResetButton->Update();
+				m_ExitButton->Update();
+            };
+
+        Game::Update();
+
+        updateMiscObjects();
+    }
+
+    void PlayableGame::Draw() const
+    {
+        Game::Draw();
+
+        // Oct. 5th, 2025:
+        //
+        // TODO: if the PlayableGame class ever needs to draw something
+        // below ANYTHING in the Game class, this will literally not be
+        // possible.
+        // a fix may be needed eventually
+        //
+        // - Andrew Corvec
+        m_WinMenu->Draw();
+        m_LoseMenu->Draw();
+        m_MuteButton->Draw();
+        m_ResetButton->Draw();
+		m_ExitButton->Draw();
     }
 
     void PlayableGame::ChooseOutcome(const Outcome outcome)
@@ -784,49 +835,18 @@ namespace BlastOff
 		if (endMenu)
 			endMenu->Enable();
 
-		m_TopRightResetButton->SlideOut();
+		m_ResetButton->SlideOut();
 	}
-
-    void PlayableGame::Update()
-    {
-        const auto updateMiscObjects =
-            [this]()
-            {
-                m_WinMenu->Update();
-                m_LoseMenu->Update();
-                m_TopRightResetButton->Update();
-                m_MuteButton->Update();
-            };
-
-        Game::Update();
-
-        updateMiscObjects();
-    }
-
-    void PlayableGame::Draw() const
-    {
-        Game::Draw();
-
-        // Oct. 5th, 2025:
-        //
-        // TODO: if the PlayableGame class ever needs to draw something
-        // below ANYTHING in the Game class, this will literally not be
-        // possible.
-        // a fix may be needed eventually
-        //
-        // - Andrew Corvec
-        m_WinMenu->Draw();
-        m_LoseMenu->Draw();
-        m_TopRightResetButton->Draw();
-        m_MuteButton->Draw();
-    }
 
 
     Cutscene::Cutscene(
 		const ProgramConfiguration* const programConfig,
+		CoordinateTransformer* const coordTransformer,
+		CameraEmpty* const cameraEmpty,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
 		SoundLoader* const soundLoader,
+		Vector2f* const cameraPosition,
 		const Callback& resetCallback,
 		const Font* const font,
 		const Vector2i* const windowPosition,
@@ -837,22 +857,26 @@ namespace BlastOff
 			imageTextureLoader,
 			textTextureLoader,
 			soundLoader,
+			cameraPosition,
 			font,
 			windowPosition,
 			windowSize
 		),
 		m_ResetCallback(resetCallback)
 	{
-		const auto coordTransformer = m_CoordinateTransformer.get();
 		unique_ptr<InputManager> inputManager =
 		{
 			std::make_unique<CutsceneInputManager>(
 				coordTransformer,
-				&m_CameraPosition,
+				cameraPosition,
 				m_ProgramConfig
 			)
 		};
-		FinishConstruction(std::move(inputManager));
+		FinishConstruction(
+			coordTransformer,
+			cameraEmpty,
+			std::move(inputManager)
+		);
 	}
 
 	void Cutscene::Update()
@@ -881,16 +905,6 @@ namespace BlastOff
 			updateResetTimer();
 		else
 			checkForReset();
-	}
-
-	const CoordinateTransformer* Cutscene::GetCoordinateTransformer() const
-	{
-		return m_CoordinateTransformer.get();
-	}
- 
-	const CameraEmpty* Cutscene::GetCameraEmpty() const
-	{
-		return m_CameraEmpty.get();
 	}
 
 	const float Cutscene::c_MaxResetTick = 1;

@@ -12,8 +12,8 @@ namespace BlastOff
     		ImageTextureLoader* const imageTextureLoader,
 	    	TextTextureLoader* const textTextureLoader,
     		SoundLoader* const soundLoader,
-			const Callback& resetCallback,
             const Callback& playCallback,
+			const Callback& settingsCallback,
 	    	const Font* const font,
 		    const Vector2i* const windowPosition,
     		const Vector2i* const windowSize
@@ -24,11 +24,14 @@ namespace BlastOff
 
     private:
         bool m_CutsceneShouldReset = false;
+        Vector2f m_CameraPosition = Vector2f::Zero();
 
         unique_ptr<Cutscene> m_Cutscene = nullptr;
         unique_ptr<Button> m_PlayButton = nullptr;
         unique_ptr<Button> m_SettingsButton = nullptr;
         unique_ptr<InputManager> m_InputManager = nullptr;
+        unique_ptr<CoordinateTransformer> m_CoordinateTransformer = nullptr;
+        unique_ptr<CameraEmpty> m_CameraEmpty = nullptr;
 
         const ProgramConfiguration* m_ProgramConfig = nullptr;
         const Font* m_Font = nullptr;

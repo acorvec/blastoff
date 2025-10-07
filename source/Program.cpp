@@ -304,14 +304,21 @@ namespace BlastOff
                     SetMasterVolume(1);
             };
 
+		const auto exitCallback = 
+			[this]()
+			{
+				m_PendingStateChange = State::MainMenu;
+			};
+
 		m_Game = std::make_unique<PlayableGame>(
             &m_IsMuted,
 			&c_Config,
 			&m_ImageTextureLoader,
 			m_TextTextureLoader.get(),
 			&m_SoundLoader,
-			resetCallback,
             muteUnmuteCallback,
+			resetCallback,
+			exitCallback,
 			&m_Font,
 			m_Window->GetPosition(),
 			m_Window->GetSize()
@@ -324,7 +331,7 @@ namespace BlastOff
 			[this]()
 			{
 				// TODO: add settings menu functionality
-				m_ShouldOpenSettingsMenu = true;
+				m_PendingStateChange = State::SettingsMenu;
 			};
 
 		const auto playCallback =
@@ -338,8 +345,8 @@ namespace BlastOff
 			&m_ImageTextureLoader,
 			m_TextTextureLoader.get(),
 			&m_SoundLoader,
-			settingsCallback,
 			playCallback,
+			settingsCallback,
 			&m_Font,
 			m_Window->GetPosition(),
 			m_Window->GetSize()

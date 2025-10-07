@@ -1,6 +1,7 @@
 #include "GUI.h"
 #include "Graphics.h"
 #include "Player.h"
+#include "Utils.h"
 #include "raylib.h"
 
 namespace BlastOff
@@ -495,6 +496,11 @@ namespace BlastOff
 		m_Sprite->Move(translation);
 	}
 
+	void Button::SetParent(const Sprite* const parent)
+	{
+		m_Sprite->SetParent(parent);
+	}
+
 	void Button::Update()
 	{
 		const auto updateSelection =
@@ -602,6 +608,103 @@ namespace BlastOff
 	}
 
 
+    MuteButton::MuteButton(
+        const bool* const programIsMuted,
+        const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
+        const ProgramConfiguration* const programConfig,
+        ImageTextureLoader* const imageTextureLoader,
+        const Callback& muteCallback,
+        const CameraEmpty* const cameraEmpty,
+		const Vector2f margins
+    ) :
+		Button(
+			muteCallback,
+			c_UnselectedTexturePath,
+			c_SelectedTexturePath,
+			c_ClickedTexturePath,
+			imageTextureLoader,
+			Vector2f::Zero(),
+			c_EngineSize,
+			cameraEmpty,
+			coordTransformer,
+			inputManager,
+			programConfig
+		),
+		m_IsActive(programIsMuted),
+		m_Margins(margins)
+    {
+        const auto initializePosition = 
+            [&, this]()
+        {
+            const Vector2f viewportSize = coordTransformer->GetViewportSize();
+            Vector2f enginePosition =
+            {
+                ((viewportSize - c_EngineSize) / 2.0f) - margins
+            };
+            const Vector2f indexOffset = TopRightButton::CalculateIndexOffset(
+				c_ButtonIndex,
+				m_Margins,
+				c_EngineSize
+			);
+			enginePosition -= indexOffset;
+			m_Sprite->Move(enginePosition);
+        };
+
+        const auto initializeActiveBar = 
+            [&, this]()
+        {
+            const Rect2f engineRect(Vector2f::Zero(), c_ActiveBarSize);
+            m_ActiveBar = ImageSprite::LoadFromPath(
+                engineRect,
+                c_ActiveBarTexturePath,
+                coordTransformer,
+                programConfig,
+                imageTextureLoader
+            );
+            m_ActiveBar->SetParent(m_Sprite.get());
+        };
+
+        initializePosition();
+        initializeActiveBar();
+    }
+
+    void MuteButton::Update()
+    {
+        Button::Update();
+    }
+
+    void MuteButton::Draw() const
+    {
+        Button::Draw();
+
+        if (*m_IsActive)
+            m_ActiveBar->Draw();
+    }
+
+	const int MuteButton::c_ButtonIndex = 0;
+
+    const Vector2f MuteButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
+    const Vector2f MuteButton::c_ActiveBarSize = { 21 / 40.0f, 21 / 40.0f };
+
+    const char* const MuteButton::c_UnselectedTexturePath =
+    {
+        "ui/button/UnselectedMute.png"
+    };
+    const char* const MuteButton::c_SelectedTexturePath =
+    {
+        "ui/button/SelectedMute.png"
+    };
+	const char* const MuteButton::c_ClickedTexturePath =
+	{
+		"ui/button/ClickedMute.png"
+	};
+    const char* const MuteButton::c_ActiveBarTexturePath =
+    {
+        "ui/button/MuteActiveBar.png"
+    };
+
+
 	ResetButton::ResetButton(
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
@@ -633,7 +736,6 @@ namespace BlastOff
 		m_Sprite->SetParent(parent);
 	}
 
-	const Vector2f ResetButton::c_Margins = { 3 / 20.0f, 3 / 20.0f };
 	const Vector2f ResetButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
 
 	const char* const ResetButton::c_UnselectedTexturePath =
@@ -668,14 +770,20 @@ namespace BlastOff
 			Vector2f::Zero(),
 			cameraEmpty
 		),
-		m_ProgramConfig(programConfig)
+		m_ProgramConfig(programConfig),
+		m_Margins(margins)
 	{
 		const Vector2f viewportSize = coordTransformer->GetViewportSize();
 		Vector2f enginePosition =
 		{
-			((viewportSize - c_EngineSize) / 2.0f) - margins
+			((viewportSize - c_EngineSize) / 2.0f) - m_Margins
 		};
-		enginePosition -= Vector2f{ 0, margins.y + c_EngineSize.y };
+		const Vector2f indexOffset = TopRightButton::CalculateIndexOffset(
+			c_ButtonIndex,
+			m_Margins,
+			c_EngineSize
+		);
+		enginePosition -= indexOffset;
 		m_Sprite->Move(enginePosition);
 	}
 
@@ -710,13 +818,14 @@ namespace BlastOff
 			updateSlidingOut();
 	}
 
+	const int TopRightResetButton::c_ButtonIndex = 1;
 	const float TopRightResetButton::c_MaxSlideOutTick = 1 / 4.0f;
 
 	void TopRightResetButton::SlideOut()
 	{
 		m_SlideOutTick = c_MaxSlideOutTick;
 
-		const float xOffset = c_EngineSize.x + c_Margins.x;
+		const float xOffset = c_EngineSize.x + m_Margins.x;
 		const Vector2f slideOffset = { xOffset, 0 };
 
 		m_StartingPosition = m_Sprite->GetLocalPosition();
@@ -729,104 +838,17 @@ namespace BlastOff
     }
 
 
-    MuteButton::MuteButton(
-        const bool* const programIsMuted,
-        const CoordinateTransformer* const coordTransformer,
-		const InputManager* const inputManager,
-        const ProgramConfiguration* const programConfig,
-        ImageTextureLoader* const imageTextureLoader,
-        const Callback& muteCallback,
-        const CameraEmpty* const cameraEmpty,
-		const Vector2f	 margins
-    ) : Button(
-        muteCallback,
-        c_UnselectedTexturePath,
-        c_SelectedTexturePath,
-		c_ClickedTexturePath,
-        imageTextureLoader,
-        Vector2f::Zero(),
-        c_EngineSize,
-        cameraEmpty,
-        coordTransformer,
-		inputManager,
-        programConfig
-    ),
-    m_IsActive(programIsMuted)
-    {
-        const auto initializePosition = 
-            [&, this]()
-        {
-            const Vector2f viewportSize = coordTransformer->GetViewportSize();
-            const Vector2f enginePosition =
-            {
-                ((viewportSize - c_EngineSize) / 2.0f) - margins
-            };
-            m_Sprite->Move(enginePosition);
-        };
-
-        const auto initializeActiveBar = 
-            [&, this]()
-        {
-            const Rect2f engineRect(Vector2f::Zero(), c_ActiveBarSize);
-            m_ActiveBar = ImageSprite::LoadFromPath(
-                engineRect,
-                c_ActiveBarTexturePath,
-                coordTransformer,
-                programConfig,
-                imageTextureLoader
-            );
-            m_ActiveBar->SetParent(m_Sprite.get());
-        };
-
-        initializePosition();
-        initializeActiveBar();
-    }
-
-    void MuteButton::Update()
-    {
-        Button::Update();
-    }
-
-    void MuteButton::Draw() const
-    {
-        Button::Draw();
-
-        if (*m_IsActive)
-            m_ActiveBar->Draw();
-    }
-
-    const Vector2f MuteButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
-    const Vector2f MuteButton::c_ActiveBarSize = { 21 / 40.0f, 21 / 40.0f };
-
-    const char* const MuteButton::c_UnselectedTexturePath =
-    {
-        "ui/button/UnselectedMute.png"
-    };
-    const char* const MuteButton::c_SelectedTexturePath =
-    {
-        "ui/button/SelectedMute.png"
-    };
-	const char* const MuteButton::c_ClickedTexturePath =
-	{
-		"ui/button/ClickedMute.png"
-	};
-    const char* const MuteButton::c_ActiveBarTexturePath =
-    {
-        "ui/button/MuteActiveBar.png"
-    };
-
-
-	SettingsButton::SettingsButton(
+	TopRightExitButton::TopRightExitButton(
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
-		const Callback& settingsCallback,
+		const Callback& exitCallback,
 		const CameraEmpty* const cameraEmpty,
 		const Vector2f margins
 	) :
-		Button(
-			settingsCallback,
+		ExitButton(
+			exitCallback,
 			c_UnselectedTexturePath,
 			c_SelectedTexturePath,
 			c_ClickedTexturePath,
@@ -837,25 +859,37 @@ namespace BlastOff
 			coordTransformer,
 			inputManager,
 			programConfig
-		)
+		),
+		m_Margins(margins)
 	{
-		const float engineX = (c_EngineSize.x + margins.x) / 2.0f;
-		Translate({ engineX, 0 });
+		const Vector2f viewportSize = coordTransformer->GetViewportSize();
+		Vector2f enginePosition =
+		{
+			((viewportSize - c_EngineSize) / 2.0f) - m_Margins
+		};
+		const Vector2f indexOffset = TopRightButton::CalculateIndexOffset(
+			c_ButtonIndex,
+			m_Margins,
+			c_EngineSize
+		);
+		enginePosition -= indexOffset;
+		m_Sprite->Move(enginePosition);
 	}
 
-	const Vector2f SettingsButton::c_EngineSize = { 5 / 4.0f, 5 / 4.0f };
+	const int TopRightExitButton::c_ButtonIndex = 2;
+	const Vector2f TopRightExitButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
 
-	const char* const SettingsButton::c_UnselectedTexturePath = 
+	const char* const TopRightExitButton::c_UnselectedTexturePath = 
 	{
-		"ui/button/UnselectedSettings.png"
+		"ui/button/UnselectedSmallExit.png"
 	};
-	const char* const SettingsButton::c_SelectedTexturePath = 
+	const char* const TopRightExitButton::c_SelectedTexturePath = 
 	{
-		"ui/button/SelectedSettings.png"
+		"ui/button/SelectedSmallExit.png"
 	};
-	const char* const SettingsButton::c_ClickedTexturePath =
+	const char* const TopRightExitButton::c_ClickedTexturePath = 
 	{
-		"ui/button/ClickedSettings.png"
+		"ui/button/ClickedSmallExit.png"
 	};
 
 
@@ -899,6 +933,49 @@ namespace BlastOff
 	const char* const PlayButton::c_ClickedTexturePath =
 	{
 		"ui/button/ClickedPlay.png"
+	};
+
+
+	SettingsButton::SettingsButton(
+		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
+		const ProgramConfiguration* const programConfig,
+		ImageTextureLoader* const imageTextureLoader,
+		const Callback& settingsCallback,
+		const CameraEmpty* const cameraEmpty,
+		const Vector2f margins
+	) :
+		Button(
+			settingsCallback,
+			c_UnselectedTexturePath,
+			c_SelectedTexturePath,
+			c_ClickedTexturePath,
+			imageTextureLoader,
+			Vector2f::Zero(),
+			c_EngineSize,
+			cameraEmpty,
+			coordTransformer,
+			inputManager,
+			programConfig
+		)
+	{
+		const float engineX = (c_EngineSize.x + margins.x) / 2.0f;
+		Translate({ engineX, 0 });
+	}
+
+	const Vector2f SettingsButton::c_EngineSize = { 5 / 4.0f, 5 / 4.0f };
+
+	const char* const SettingsButton::c_UnselectedTexturePath = 
+	{
+		"ui/button/UnselectedSettings.png"
+	};
+	const char* const SettingsButton::c_SelectedTexturePath = 
+	{
+		"ui/button/SelectedSettings.png"
+	};
+	const char* const SettingsButton::c_ClickedTexturePath =
+	{
+		"ui/button/ClickedSettings.png"
 	};
 
 

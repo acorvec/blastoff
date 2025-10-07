@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "Player.h"
 #include "Utils.h"
+#include "raylib.h"
 
 #include <memory>
 
@@ -13,8 +14,8 @@ namespace BlastOff
         ImageTextureLoader* const imageTextureLoader,
         TextTextureLoader* const textTextureLoader,
         SoundLoader* const soundLoader,
-        const Callback& settingsCallback,
         const Callback& playCallback,
+        const Callback& settingsCallback,
         const Font* const font,
         const Vector2i* const windowPosition,
         const Vector2i* const windowSize
@@ -27,12 +28,32 @@ namespace BlastOff
         m_WindowPosition(windowPosition),
         m_WindowSize(windowSize)
     {
+        const auto initializeGraphics = 
+            [this]()
+            {
+                m_CoordinateTransformer = std::make_unique<CoordinateTransformer>(
+                    m_WindowSize,
+                    m_WindowPosition,
+                    &m_CameraPosition                    
+                );
+                m_CoordinateTransformer->Update();
+                const CoordinateTransformer* const coordTransformer = 
+                {
+                    m_CoordinateTransformer.get()
+                };
+                m_CameraEmpty = std::make_unique<CameraEmpty>(
+                    m_CoordinateTransformer.get(),
+                    m_ProgramConfig,
+                    &m_CameraPosition
+                );
+            };
+
         const auto initializeInput = 
             [this]()
             {
                 const CoordinateTransformer* const coordTransformer = 
                 {
-                    m_Cutscene->GetCoordinateTransformer()
+                    m_CoordinateTransformer.get()
                 };
                 m_InputManager = 
                 {
@@ -44,27 +65,28 @@ namespace BlastOff
             [&, this]()
             {
                 m_SettingsButton = std::make_unique<SettingsButton>(
-                    m_Cutscene->GetCoordinateTransformer(),
+                    m_CoordinateTransformer.get(),
                     m_InputManager.get(),
                     m_ProgramConfig,
                     m_ImageTextureLoader,
                     settingsCallback,
-                    m_Cutscene->GetCameraEmpty(),
+                    m_CameraEmpty.get(),
                     m_ProgramConfig->GetTopRightButtonMargins()
                 );
                 m_PlayButton = std::make_unique<PlayButton>(
-                    m_Cutscene->GetCoordinateTransformer(),
+                    m_CoordinateTransformer.get(),
                     m_InputManager.get(),
                     m_ProgramConfig,
                     m_ImageTextureLoader,
                     playCallback,
-                    m_Cutscene->GetCameraEmpty(),
+                    m_CameraEmpty.get(),
                     m_ProgramConfig->GetTopRightButtonMargins()
                 );
             };
 
-        InitializeCutscene();
+        initializeGraphics();
         initializeInput();
+        InitializeCutscene();
         initializeButtons();
     }
     
@@ -98,9 +120,12 @@ namespace BlastOff
 
         m_Cutscene = std::make_unique<Cutscene>(
             m_ProgramConfig,
+            m_CoordinateTransformer.get(),
+            m_CameraEmpty.get(),
             m_ImageTextureLoader,
             m_TextTextureLoader,
             m_SoundLoader,
+            &m_CameraPosition,
             resetCallback,
             m_Font,
             m_WindowPosition,

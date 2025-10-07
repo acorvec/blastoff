@@ -16,16 +16,22 @@ namespace BlastOff
 	{
 		Game(
             const ProgramConfiguration* const programConfig,
-    		ImageTextureLoader* const imageTextureLoader,
-	    	TextTextureLoader* const textTextureLoader,
-    		SoundLoader* const soundLoader,
-	    	const Font* const font,
-		    const Vector2i* const windowPosition,
-    		const Vector2i* const windowSize		
+			ImageTextureLoader* const imageTextureLoader,
+			TextTextureLoader* const textTextureLoader,
+			SoundLoader* const soundLoader,
+			Vector2f* const cameraPosition,
+			const Font* const font,
+			const Vector2i* const windowPosition,
+			const Vector2i* const windowSize
         );
 
 		virtual void Update();
 		virtual void Draw() const;
+
+	private:		
+		CoordinateTransformer* m_CoordTransformer = nullptr;
+		CameraEmpty* m_CameraEmpty = nullptr;
+		Vector2f* m_CameraPosition = nullptr;
 
 	protected:
 		using Constants = GameConstants;
@@ -34,15 +40,12 @@ namespace BlastOff
 
 		static const inline Constants c_Constants;
 
-		unique_ptr<CoordinateTransformer> m_CoordinateTransformer = nullptr;
 		unique_ptr<InputManager> m_InputManager = nullptr;
 
 		Outcome m_Outcome = Outcome::None;
 		Direction m_CloudMovementDirection = Direction::None;
-		Vector2f m_CameraPosition = Vector2f::Zero();
 		Rect2f m_WorldBounds = Rect2f::UnitRect();
 
-		unique_ptr<CameraEmpty> m_CameraEmpty = nullptr;
 		unique_ptr<Background> m_Background = nullptr;
 		unique_ptr<Crag> m_Crag = nullptr;
 		unique_ptr<Platform> m_Platform = nullptr;
@@ -68,7 +71,11 @@ namespace BlastOff
 		TextTextureLoader* m_TextTextureLoader = nullptr;
 
 		virtual void ChooseOutcome(const Outcome outcome);
-		void FinishConstruction(unique_ptr<InputManager> inputManager);
+		void FinishConstruction(
+			CoordinateTransformer* const coordTransformer,
+			CameraEmpty* const cameraEmpty,
+			unique_ptr<InputManager> inputManager
+		);
 
 		float GetWorldEdge(const Direction side) const;
 		bool LosingConditionsAreSatisfied() const;
@@ -82,8 +89,9 @@ namespace BlastOff
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
 			SoundLoader* const soundLoader,
-			const Callback& resetCallback,
 			const Callback& muteUnmuteCallback,
+			const Callback& resetCallback,
+			const Callback& exitCallback,
 			const Font* const font,
 			const Vector2i* const windowPosition,
 			const Vector2i* const windowSize
@@ -95,10 +103,16 @@ namespace BlastOff
 		void Draw() const override;
 
 	protected:
+		Vector2f m_CameraPosition = Vector2f::Zero();
+
+		unique_ptr<CameraEmpty> m_CameraEmpty = nullptr;
+		unique_ptr<CoordinateTransformer> m_CoordinateTransformer = nullptr;
+
 		unique_ptr<GameEndMenu> m_WinMenu = nullptr;
 		unique_ptr<GameEndMenu> m_LoseMenu = nullptr;
-		unique_ptr<TopRightResetButton> m_TopRightResetButton = nullptr;
 		unique_ptr<MuteButton> m_MuteButton = nullptr;
+		unique_ptr<TopRightResetButton> m_ResetButton = nullptr;
+		unique_ptr<TopRightExitButton> m_ExitButton = nullptr;
 
 		const Sound* m_WinSound = nullptr;
 		const Sound* m_LoseSound = nullptr;
@@ -110,13 +124,16 @@ namespace BlastOff
 	{
 		Cutscene(
 			const ProgramConfiguration* const programConfig,
-    		ImageTextureLoader* const imageTextureLoader,
-	    	TextTextureLoader* const textTextureLoader,
-    		SoundLoader* const soundLoader,
+			CoordinateTransformer* const coordTransformer,
+			CameraEmpty* const cameraEmpty,
+			ImageTextureLoader* const imageTextureLoader,
+			TextTextureLoader* const textTextureLoader,
+			SoundLoader* const soundLoader,
+			Vector2f* const cameraPosition,
 			const Callback& resetCallback,
-	    	const Font* const font,
-		    const Vector2i* const windowPosition,
-    		const Vector2i* const windowSize
+			const Font* const font,
+			const Vector2i* const windowPosition,
+			const Vector2i* const windowSize
 		);
 
 		void Update() override;

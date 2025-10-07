@@ -33,7 +33,6 @@ namespace BlastOff
 		bool m_IsRunning = true;
         bool m_IsMuted = false;
 		bool m_GameShouldReset = false;
-		bool m_ShouldOpenSettingsMenu = false;
 
 		Font m_Font = { 0 };
 		State m_State = State::None;
