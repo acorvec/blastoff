@@ -196,6 +196,8 @@ namespace BlastOff
 		const Texture* LazyLoadTexture(const char* const resourcePath);
 
 	private:
+		static const int c_DefaultTextureFiltering;
+
 		unordered_map<string, Texture> m_CachedValues = {};
 		const Texture* LoadAndInsert(const char* const resourcePath);
 	};
@@ -278,7 +280,6 @@ namespace BlastOff
 
 	protected:
 		static constexpr Colour4i c_DefaultDrawTint = c_White;
-		static const int c_TextureFiltering;
 
 		const Texture* m_Texture = nullptr;
 		Crop2f m_Crop = { 0 };

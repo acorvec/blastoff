@@ -565,12 +565,18 @@ namespace BlastOff
 			return result;
 	}
 
+	const int ImageTextureLoader::c_DefaultTextureFiltering = 
+	{
+		TEXTURE_FILTER_POINT
+	};
+
 	const Texture* ImageTextureLoader::LoadAndInsert
 		(const char* const resourcePath)
 	{
 		const Texture result = LoadPNG(resourcePath);
 		m_CachedValues.insert({ resourcePath, result });
 
+		SetTextureFilter(result, c_DefaultTextureFiltering);
 		return &m_CachedValues.at(resourcePath);
 	}
 
@@ -726,8 +732,6 @@ namespace BlastOff
 	void ImageSprite::SetTexture(const Texture* const texture)
 	{
 		m_Texture = texture;
-		if (m_Texture)
-			SetTextureFilter(*m_Texture, c_TextureFiltering);
 	}
 
 	void ImageSprite::Draw() const
@@ -821,8 +825,6 @@ namespace BlastOff
 	{
 		m_Crop = crop;
 	}
-
-	const int ImageSprite::c_TextureFiltering = TEXTURE_FILTER_POINT;
 
 
 	TextSprite::TextSprite(
