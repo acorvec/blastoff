@@ -71,8 +71,7 @@ namespace BlastOff
                     m_ProgramConfig,
                     m_ImageTextureLoader,
                     settingsCallback,
-                    m_CameraEmpty.get(),
-                    m_ProgramConfig->GetMainMenuButtonMargins()
+                    m_CameraEmpty.get()
                 );
                 m_PlayButton = std::make_unique<PlayButton>(
                     m_CoordinateTransformer.get(),
@@ -80,8 +79,7 @@ namespace BlastOff
                     m_ProgramConfig,
                     m_ImageTextureLoader,
                     playCallback,
-                    m_CameraEmpty.get(),
-                    m_ProgramConfig->GetMainMenuButtonMargins()
+                    m_CameraEmpty.get()
                 );
                 m_ExitButton = std::make_unique<MainMenuExitButton>(
                     m_CoordinateTransformer.get(),
@@ -89,8 +87,7 @@ namespace BlastOff
                     m_ProgramConfig,
                     m_ImageTextureLoader,
                     exitCallback,
-                    m_CameraEmpty.get(),
-                    m_ProgramConfig->GetMainMenuButtonMargins()
+                    m_CameraEmpty.get()
                 );
             };
 

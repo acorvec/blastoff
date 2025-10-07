@@ -715,8 +715,7 @@ namespace BlastOff
                     m_ProgramConfig,
                     imageTextureLoader,
                     muteUnmuteCallback,
-                    m_CameraEmpty.get(),
-					m_ProgramConfig->GetTopRightButtonMargins()
+                    m_CameraEmpty.get()
                 );
 				m_ResetButton = std::make_unique<TopRightResetButton>(
 					m_CoordinateTransformer.get(),
@@ -724,8 +723,7 @@ namespace BlastOff
 					m_ProgramConfig,
 					imageTextureLoader,
 					resetCallback,
-					m_CameraEmpty.get(),
-					m_ProgramConfig->GetTopRightButtonMargins()
+					m_CameraEmpty.get()
 				);
 				m_ExitButton = std::make_unique<TopRightExitButton>(
 					m_CoordinateTransformer.get(),
@@ -733,8 +731,7 @@ namespace BlastOff
 					m_ProgramConfig,
 					imageTextureLoader,
 					exitCallback,
-					m_CameraEmpty.get(),
-					m_ProgramConfig->GetTopRightButtonMargins()
+					m_CameraEmpty.get()
 				);
 			};
 

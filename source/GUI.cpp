@@ -608,6 +608,13 @@ namespace BlastOff
 	}
 
 
+	const Vector2f TopRightButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
+	const Vector2f TopRightButton::c_Margins = { 1 / 10.0f, 1 / 10.0f };
+
+	const Vector2f MainMenuButton::c_EngineSize = { 5 / 4.0f, 5 / 4.0f };
+	const Vector2f MainMenuButton::c_Margins = { 1 / 10.0f, 1 / 10.0f };
+
+	
     MuteButton::MuteButton(
         const bool* const programIsMuted,
         const CoordinateTransformer* const coordTransformer,
@@ -615,8 +622,7 @@ namespace BlastOff
         const ProgramConfiguration* const programConfig,
         ImageTextureLoader* const imageTextureLoader,
         const Callback& muteCallback,
-        const CameraEmpty* const cameraEmpty,
-		const Vector2f margins
+        const CameraEmpty* const cameraEmpty
     ) :
 		Button(
 			muteCallback,
@@ -625,27 +631,29 @@ namespace BlastOff
 			c_ClickedTexturePath,
 			imageTextureLoader,
 			Vector2f::Zero(),
-			c_EngineSize,
+			TopRightButton::c_EngineSize,
 			cameraEmpty,
 			coordTransformer,
 			inputManager,
 			programConfig
 		),
-		m_IsActive(programIsMuted),
-		m_Margins(margins)
+		m_IsActive(programIsMuted)
     {
         const auto initializePosition = 
             [&, this]()
         {
+			const Vector2f engineSize = TopRightButton::c_EngineSize;
+			const Vector2f margins = TopRightButton::c_Margins;
+
             const Vector2f viewportSize = coordTransformer->GetViewportSize();
             Vector2f enginePosition =
             {
-                ((viewportSize - c_EngineSize) / 2.0f) - margins
+                ((viewportSize - engineSize) / 2.0f) - margins
             };
             const Vector2f indexOffset = TopRightButton::CalculateIndexOffset(
 				c_ButtonIndex,
-				m_Margins,
-				c_EngineSize
+				margins,
+				engineSize
 			);
 			enginePosition -= indexOffset;
 			Translate(enginePosition);
@@ -684,7 +692,6 @@ namespace BlastOff
 
 	const int MuteButton::c_ButtonIndex = 0;
 
-    const Vector2f MuteButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
     const Vector2f MuteButton::c_ActiveBarSize = { 21 / 40.0f, 21 / 40.0f };
 
     const char* const MuteButton::c_UnselectedTexturePath =
@@ -721,7 +728,7 @@ namespace BlastOff
 			c_ClickedTexturePath,
 			imageTextureLoader,
 			enginePosition,
-			c_EngineSize,
+			TopRightButton::c_EngineSize,
 			parent,
 			coordTransformer,
 			inputManager,
@@ -735,8 +742,6 @@ namespace BlastOff
 	{
 		m_Sprite->SetParent(parent);
 	}
-
-	const Vector2f ResetButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
 
 	const char* const ResetButton::c_UnselectedTexturePath =
 	{
@@ -758,8 +763,7 @@ namespace BlastOff
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& resetCallback,
-		const CameraEmpty* const cameraEmpty,
-		const Vector2f margins
+		const CameraEmpty* const cameraEmpty
 	) :
 		ResetButton(
 			coordTransformer,
@@ -770,18 +774,20 @@ namespace BlastOff
 			Vector2f::Zero(),
 			cameraEmpty
 		),
-		m_ProgramConfig(programConfig),
-		m_Margins(margins)
+		m_ProgramConfig(programConfig)
 	{
+		const Vector2f engineSize = TopRightButton::c_EngineSize;
+		const Vector2f margins = TopRightButton::c_Margins;
+
 		const Vector2f viewportSize = coordTransformer->GetViewportSize();
 		Vector2f enginePosition =
 		{
-			((viewportSize - c_EngineSize) / 2.0f) - m_Margins
+			((viewportSize - engineSize) / 2.0f) - margins
 		};
 		const Vector2f indexOffset = TopRightButton::CalculateIndexOffset(
 			c_ButtonIndex,
-			m_Margins,
-			c_EngineSize
+			margins,
+			engineSize
 		);
 		enginePosition -= indexOffset;
 		Translate(enginePosition);
@@ -825,7 +831,10 @@ namespace BlastOff
 	{
 		m_SlideOutTick = c_MaxSlideOutTick;
 
-		const float xOffset = c_EngineSize.x + m_Margins.x;
+		const Vector2f engineSize = TopRightButton::c_EngineSize;
+		const Vector2f margins = TopRightButton::c_Margins;
+
+		const float xOffset = engineSize.x + margins.x;
 		const Vector2f slideOffset = { xOffset, 0 };
 
 		m_StartingPosition = m_Sprite->GetLocalPosition();
@@ -844,8 +853,7 @@ namespace BlastOff
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& exitCallback,
-		const CameraEmpty* const cameraEmpty,
-		const Vector2f margins
+		const CameraEmpty* const cameraEmpty
 	) :
 		ExitButton(
 			exitCallback,
@@ -854,30 +862,31 @@ namespace BlastOff
 			c_ClickedTexturePath,
 			imageTextureLoader,
 			Vector2f::Zero(),
-			c_EngineSize,
+			TopRightButton::c_EngineSize,
 			cameraEmpty,
 			coordTransformer,
 			inputManager,
 			programConfig
-		),
-		m_Margins(margins)
+		)
 	{
+		const Vector2f engineSize = TopRightButton::c_EngineSize;
+		const Vector2f margins = TopRightButton::c_Margins;
+
 		const Vector2f viewportSize = coordTransformer->GetViewportSize();
 		Vector2f enginePosition =
 		{
-			((viewportSize - c_EngineSize) / 2.0f) - m_Margins
+			((viewportSize - engineSize) / 2.0f) - margins
 		};
 		const Vector2f indexOffset = TopRightButton::CalculateIndexOffset(
 			c_ButtonIndex,
-			m_Margins,
-			c_EngineSize
+			margins,
+			engineSize
 		);
 		enginePosition -= indexOffset;
 		Translate(enginePosition);
 	}
 
 	const int TopRightExitButton::c_ButtonIndex = 2;
-	const Vector2f TopRightExitButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
 
 	const char* const TopRightExitButton::c_UnselectedTexturePath = 
 	{
@@ -899,8 +908,7 @@ namespace BlastOff
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& playCallback,
-		const CameraEmpty* const cameraEmpty,
-		const Vector2f margins
+		const CameraEmpty* const cameraEmpty
 	) :
 		Button(
 			playCallback,
@@ -909,18 +917,19 @@ namespace BlastOff
 			c_ClickedTexturePath,
 			imageTextureLoader,
 			Vector2f::Zero(),
-			c_EngineSize,
+			MainMenuButton::c_EngineSize,
 			cameraEmpty,
 			coordTransformer,
 			inputManager,
 			programConfig
 		)
 	{
-		const Vector2f translation = (c_EngineSize + margins) / 2.0f;
+		const Vector2f engineSize = MainMenuButton::c_EngineSize;
+		const Vector2f margins = MainMenuButton::c_Margins;
+
+		const Vector2f translation = (engineSize + margins) / 2.0f;
 		Translate(translation.InvertX());
 	}
-
-	const Vector2f PlayButton::c_EngineSize = { 5 / 4.0f, 5 / 4.0f };
 
 	const char* const PlayButton::c_UnselectedTexturePath = 
 	{
@@ -942,8 +951,7 @@ namespace BlastOff
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& settingsCallback,
-		const CameraEmpty* const cameraEmpty,
-		const Vector2f margins
+		const CameraEmpty* const cameraEmpty
 	) :
 		Button(
 			settingsCallback,
@@ -952,18 +960,19 @@ namespace BlastOff
 			c_ClickedTexturePath,
 			imageTextureLoader,
 			Vector2f::Zero(),
-			c_EngineSize,
+			MainMenuButton::c_EngineSize,
 			cameraEmpty,
 			coordTransformer,
 			inputManager,
 			programConfig
 		)
 	{
-		const Vector2f translation = (c_EngineSize + margins) / 2.0f;
+		const Vector2f engineSize = MainMenuButton::c_EngineSize;
+		const Vector2f margins = MainMenuButton::c_Margins;
+
+		const Vector2f translation = (engineSize + margins) / 2.0f;
 		Translate(translation);
 	}
-
-	const Vector2f SettingsButton::c_EngineSize = { 5 / 4.0f, 5 / 4.0f };
 
 	const char* const SettingsButton::c_UnselectedTexturePath = 
 	{
@@ -985,8 +994,7 @@ namespace BlastOff
 		const ProgramConfiguration* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& exitCallback,
-		const CameraEmpty* const cameraEmpty,
-		const Vector2f margins		
+		const CameraEmpty* const cameraEmpty		
 	) :
 		ExitButton(
 			exitCallback,
@@ -995,19 +1003,20 @@ namespace BlastOff
 			c_ClickedTexturePath,
 			imageTextureLoader,
 			Vector2f::Zero(),
-			c_EngineSize,
+			MainMenuButton::c_EngineSize,
 			cameraEmpty,
 			coordTransformer,
 			inputManager,
 			programConfig
 		)
 	{
-		const float engineY = -(c_EngineSize.y + margins.y) / 2.0f;
+		const Vector2f engineSize = MainMenuButton::c_EngineSize;
+		const Vector2f margins = MainMenuButton::c_Margins;
+
+		const float engineY = -(engineSize.y + margins.y) / 2.0f;
 		const Vector2f enginePosition = { 0, engineY };
 		Translate(enginePosition);
 	}
-
-	const Vector2f MainMenuExitButton::c_EngineSize = { 5 / 4.0f, 5 / 4.0f };
 
 	const char* const MainMenuExitButton::c_UnselectedTexturePath = 
 	{
