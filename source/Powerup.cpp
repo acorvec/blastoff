@@ -166,7 +166,10 @@ namespace BlastOff
 		m_Player->RefillSpeedup();
 	}
 
-	const char* const SpeedUpPowerup::c_TexturePath = "SpeedUpPowerUp.png";
+	const char* const SpeedUpPowerup::c_TexturePath = 
+	{
+		"powerup/SpeedUpPowerUp.png"
+	};
 
 	const float SpeedUpPowerup::c_MaxCollectionTick = 0.5f;
 	const float SpeedUpPowerup::c_OscillationScale = 10;
@@ -207,7 +210,10 @@ namespace BlastOff
 		m_Player->Refuel();
 	}
 
-	const char* const FuelUpPowerup::c_TexturePath = "FuelUpPowerUp.png";
+	const char* const FuelUpPowerup::c_TexturePath = 
+	{
+		"powerup/FuelUpPowerUp.png"
+	};
 
 	const float FuelUpPowerup::c_MaxCollectionTick = 0.5f;
 	const float FuelUpPowerup::c_OscillationScale = 10;

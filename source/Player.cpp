@@ -719,8 +719,14 @@ namespace BlastOff
 		return m_Velocity;
 	}
 
-	const char* const Player::c_SpaceshipTexturePath = "Spaceship.png";
-	const char* const Player::c_FlameTexturePath = "SpaceshipFlames.png";
+	const char* const Player::c_SpaceshipTexturePath = 
+	{
+		"player/Spaceship.png"
+	};
+	const char* const Player::c_FlameTexturePath = 
+	{
+		"player/SpaceshipFlames.png"
+	};
 
 	bool Player::IsThrusting() const
 	{

@@ -39,7 +39,7 @@ namespace BlastOff
 		m_Sprite->Draw();
 	}
 
-	const char* const Crag::c_TexturePath = "Crag.png";
+	const char* const Crag::c_TexturePath = "props/Crag.png";
 
 
 	Platform::Platform(
@@ -108,7 +108,7 @@ namespace BlastOff
 		return m_Sprite->GetRightCollisionLine();
 	}
 
-	const char* const Platform::c_TexturePath = "Platform.png";
+	const char* const Platform::c_TexturePath = "props/Platform.png";
 
 
 	BackgroundConfiguration::BackgroundConfiguration() :
@@ -480,7 +480,7 @@ namespace BlastOff
 		
 	}
 
-	const char* const LowCloud::c_TexturePath = "LowCloud.png";
+	const char* const LowCloud::c_TexturePath = "props/LowCloud.png";
 	const CloudSpawningRange LowCloud::c_SpawningRange = 
 	{
 		5.4863021f, 
@@ -514,7 +514,7 @@ namespace BlastOff
 
 	}
 
-	const char* const HighCloud::c_TexturePath = "HighCloud.png";
+	const char* const HighCloud::c_TexturePath = "props/HighCloud.png";
 
 	const CloudSpawningRange HighCloud::c_SpawningRange =
 	{

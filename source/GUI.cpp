@@ -5,7 +5,7 @@
 
 namespace BlastOff
 {
-	const char* const GUIBar::c_BackingTexturePath = "BarBacking.png";
+	const char* const GUIBar::c_BackingTexturePath = "ui/BarBacking.png";
 
 	const float GUIBar::c_Height = 3 / 5.0f;
 	const float GUIBar::c_CornerMargin = 1 / 10.0f;
@@ -190,7 +190,7 @@ namespace BlastOff
 
 	const char* const FuelBar::c_EnergyTexturePath =
 	{
-		"FuelBarEnergy.png"
+		"ui/FuelBarEnergy.png"
 	};
 
 	void FuelBar::UpdateStatistic()
@@ -228,7 +228,7 @@ namespace BlastOff
 
 	const char* const SpeedupBar::c_EnergyTexturePath =
 	{
-		"SpeedBarEnergy.png"
+		"ui/SpeedBarEnergy.png"
 	};
 
 	void SpeedupBar::UpdateStatistic()
@@ -638,15 +638,15 @@ namespace BlastOff
 
 	const char* const ResetButton::c_UnselectedTexturePath =
 	{
-		"UnselectedReset.png"
+		"ui/button/UnselectedReset.png"
 	};
 	const char* const ResetButton::c_SelectedTexturePath =
 	{
-		"SelectedReset.png"
+		"ui/button/SelectedReset.png"
 	};
 	const char* const ResetButton::c_ClickedTexturePath =
 	{
-		"ClickedReset.png"
+		"ui/button/ClickedReset.png"
 	};
 
 
@@ -800,19 +800,19 @@ namespace BlastOff
 
     const char* const MuteButton::c_UnselectedTexturePath =
     {
-        "UnselectedMute.png"
+        "ui/button/UnselectedMute.png"
     };
     const char* const MuteButton::c_SelectedTexturePath =
     {
-        "SelectedMute.png"
+        "ui/button/SelectedMute.png"
     };
 	const char* const MuteButton::c_ClickedTexturePath =
 	{
-		"ClickedMute.png"
+		"ui/button/ClickedMute.png"
 	};
     const char* const MuteButton::c_ActiveBarTexturePath =
     {
-        "MuteActiveBar.png"
+        "ui/button/MuteActiveBar.png"
     };
 
 
@@ -847,15 +847,15 @@ namespace BlastOff
 
 	const char* const SettingsButton::c_UnselectedTexturePath = 
 	{
-		"UnselectedSettings.png"
+		"ui/button/UnselectedSettings.png"
 	};
 	const char* const SettingsButton::c_SelectedTexturePath = 
 	{
-		"SelectedSettings.png"
+		"ui/button/SelectedSettings.png"
 	};
 	const char* const SettingsButton::c_ClickedTexturePath =
 	{
-		"ClickedSettings.png"
+		"ui/button/ClickedSettings.png"
 	};
 
 
@@ -890,15 +890,15 @@ namespace BlastOff
 
 	const char* const PlayButton::c_UnselectedTexturePath = 
 	{
-		"UnselectedPlay.png"
+		"ui/button/UnselectedPlay.png"
 	};
 	const char* const PlayButton::c_SelectedTexturePath = 
 	{
-		"SelectedPlay.png"
+		"ui/button/SelectedPlay.png"
 	};
 	const char* const PlayButton::c_ClickedTexturePath =
 	{
-		"ClickedPlay.png"
+		"ui/button/ClickedPlay.png"
 	};
 
 
