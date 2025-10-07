@@ -14,6 +14,7 @@ namespace BlastOff
     		SoundLoader* const soundLoader,
             const Callback& playCallback,
 			const Callback& settingsCallback,
+            const Callback& exitCallback,
 	    	const Font* const font,
 		    const Vector2i* const windowPosition,
     		const Vector2i* const windowSize
@@ -29,6 +30,7 @@ namespace BlastOff
         unique_ptr<Cutscene> m_Cutscene = nullptr;
         unique_ptr<Button> m_PlayButton = nullptr;
         unique_ptr<Button> m_SettingsButton = nullptr;
+        unique_ptr<ExitButton> m_ExitButton = nullptr;
         unique_ptr<InputManager> m_InputManager = nullptr;
         unique_ptr<CoordinateTransformer> m_CoordinateTransformer = nullptr;
         unique_ptr<CameraEmpty> m_CameraEmpty = nullptr;

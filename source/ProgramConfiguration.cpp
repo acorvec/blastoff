@@ -17,6 +17,7 @@ namespace BlastOff
 		m_FontFace("Ubuntu-Medium"),
 		m_FontRenderSize(192),
 		m_TopRightButtonMargins(1 / 10.0f, 1 / 10.0f),
+		m_MainMenuButtonMargins(1 / 10.0f, 1 / 10.0f),
 		m_DefaultWindowSize(480, 854),
 		m_Name("BlastOff++"),
 		m_Version("alpha 1.0.0"),
@@ -105,6 +106,11 @@ namespace BlastOff
 	Vector2f ProgramConfiguration::GetTopRightButtonMargins() const
 	{
 		return m_TopRightButtonMargins;
+	}
+
+	Vector2f ProgramConfiguration::GetMainMenuButtonMargins() const
+	{
+		return m_MainMenuButtonMargins;
 	}
 
 	Vector2i ProgramConfiguration::GetDefaultWindowSize() const

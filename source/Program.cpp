@@ -1,7 +1,7 @@
 #include "Program.h"
 #include "Game.h"
 #include "Logging.h"
-#include <cstddef>
+
 #include <stdexcept>
 
 namespace BlastOff
@@ -159,6 +159,9 @@ namespace BlastOff
 			
 		if (m_PendingStateChange)
 			handleStateChange();
+
+		if (m_ShouldCloseAfterFrame)
+			m_IsRunning = false;
 	}
 
 	void Program::Update()
@@ -340,6 +343,12 @@ namespace BlastOff
 				m_PendingStateChange = State::Game;
 			};
 
+		const auto exitCallback = 
+			[this]()
+			{
+				m_ShouldCloseAfterFrame = true;
+			};
+
 		m_MainMenu = std::make_unique<MainMenu>(
 			&c_Config,
 			&m_ImageTextureLoader,
@@ -347,6 +356,7 @@ namespace BlastOff
 			&m_SoundLoader,
 			playCallback,
 			settingsCallback,
+			exitCallback,
 			&m_Font,
 			m_Window->GetPosition(),
 			m_Window->GetSize()

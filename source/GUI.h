@@ -415,6 +415,28 @@ namespace BlastOff
 		static const char* const c_ClickedTexturePath;
 	};
 
+	struct MainMenuExitButton : public ExitButton
+	{
+		MainMenuExitButton(
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+            const ProgramConfiguration* const programConfig,
+            ImageTextureLoader* const imageTextureLoader,
+            const Callback& exitCallback,
+            const CameraEmpty* const cameraEmpty,
+			const Vector2f margins			
+		);
+
+	protected:
+		static const Vector2f c_EngineSize;
+		
+		static const char* const c_UnselectedTexturePath;
+		static const char* const c_SelectedTexturePath;
+		static const char* const c_ClickedTexturePath;
+
+		Vector2f m_Margins = Vector2f::Zero();
+	};
+
 	struct GameEndMenu
 	{
 		GameEndMenu(

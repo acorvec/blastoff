@@ -648,7 +648,7 @@ namespace BlastOff
 				c_EngineSize
 			);
 			enginePosition -= indexOffset;
-			m_Sprite->Move(enginePosition);
+			Translate(enginePosition);
         };
 
         const auto initializeActiveBar = 
@@ -784,7 +784,7 @@ namespace BlastOff
 			c_EngineSize
 		);
 		enginePosition -= indexOffset;
-		m_Sprite->Move(enginePosition);
+		Translate(enginePosition);
 	}
 
 	void TopRightResetButton::Update()
@@ -873,7 +873,7 @@ namespace BlastOff
 			c_EngineSize
 		);
 		enginePosition -= indexOffset;
-		m_Sprite->Move(enginePosition);
+		Translate(enginePosition);
 	}
 
 	const int TopRightExitButton::c_ButtonIndex = 2;
@@ -916,8 +916,8 @@ namespace BlastOff
 			programConfig
 		)
 	{
-		const float engineX = -(c_EngineSize.x + margins.x) / 2.0f;
-		Translate({ engineX, 0 });
+		const Vector2f translation = (c_EngineSize + margins) / 2.0f;
+		Translate(translation.InvertX());
 	}
 
 	const Vector2f PlayButton::c_EngineSize = { 5 / 4.0f, 5 / 4.0f };
@@ -959,8 +959,8 @@ namespace BlastOff
 			programConfig
 		)
 	{
-		const float engineX = (c_EngineSize.x + margins.x) / 2.0f;
-		Translate({ engineX, 0 });
+		const Vector2f translation = (c_EngineSize + margins) / 2.0f;
+		Translate(translation);
 	}
 
 	const Vector2f SettingsButton::c_EngineSize = { 5 / 4.0f, 5 / 4.0f };
@@ -976,6 +976,50 @@ namespace BlastOff
 	const char* const SettingsButton::c_ClickedTexturePath =
 	{
 		"ui/button/ClickedSettings.png"
+	};
+
+
+	MainMenuExitButton::MainMenuExitButton(
+		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
+		const ProgramConfiguration* const programConfig,
+		ImageTextureLoader* const imageTextureLoader,
+		const Callback& exitCallback,
+		const CameraEmpty* const cameraEmpty,
+		const Vector2f margins		
+	) :
+		ExitButton(
+			exitCallback,
+			c_UnselectedTexturePath,
+			c_SelectedTexturePath,
+			c_ClickedTexturePath,
+			imageTextureLoader,
+			Vector2f::Zero(),
+			c_EngineSize,
+			cameraEmpty,
+			coordTransformer,
+			inputManager,
+			programConfig
+		)
+	{
+		const float engineY = -(c_EngineSize.y + margins.y) / 2.0f;
+		const Vector2f enginePosition = { 0, engineY };
+		Translate(enginePosition);
+	}
+
+	const Vector2f MainMenuExitButton::c_EngineSize = { 5 / 4.0f, 5 / 4.0f };
+
+	const char* const MainMenuExitButton::c_UnselectedTexturePath = 
+	{
+		"ui/button/UnselectedLargeExit.png"
+	};
+	const char* const MainMenuExitButton::c_SelectedTexturePath = 
+	{
+		"ui/button/SelectedLargeExit.png"
+	};
+	const char* const MainMenuExitButton::c_ClickedTexturePath =
+	{
+		"ui/button/ClickedLargeExit.png"
 	};
 
 

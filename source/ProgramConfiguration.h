@@ -29,6 +29,7 @@ namespace BlastOff
 		int GetFontRenderSize() const;
 
 		Vector2f GetTopRightButtonMargins() const;
+		Vector2f GetMainMenuButtonMargins() const;
 		Vector2i GetDefaultWindowSize() const;
 
 		const string& GetName() const;
@@ -71,6 +72,7 @@ namespace BlastOff
 		int m_FontRenderSize;
 
 		Vector2f m_TopRightButtonMargins;
+		Vector2f m_MainMenuButtonMargins;
 		Vector2i m_DefaultWindowSize;
 
 		string m_Name;

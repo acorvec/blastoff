@@ -31,6 +31,7 @@ namespace BlastOff
 		static const inline ProgramConfiguration c_Config;
 
 		bool m_IsRunning = true;
+		bool m_ShouldCloseAfterFrame = false;
         bool m_IsMuted = false;
 		bool m_GameShouldReset = false;
 
