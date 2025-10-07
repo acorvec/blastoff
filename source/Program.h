@@ -33,9 +33,11 @@ namespace BlastOff
 		bool m_IsRunning = true;
         bool m_IsMuted = false;
 		bool m_GameShouldReset = false;
+		bool m_ShouldOpenSettingsMenu = false;
 
 		Font m_Font = { 0 };
 		State m_State = State::None;
+		optional<State> m_PendingStateChange = std::nullopt;
 
 		ImageTextureLoader m_ImageTextureLoader;
 		SoundLoader m_SoundLoader;
@@ -56,5 +58,6 @@ namespace BlastOff
 		void SetFramerate(const int framerate);
 
 		void InitializeGame();
+		void InitializeMainMenu();
 	};
 }

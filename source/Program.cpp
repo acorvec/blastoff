@@ -1,6 +1,8 @@
 #include "Program.h"
 #include "Game.h"
 #include "Logging.h"
+#include <cstddef>
+#include <stdexcept>
 
 namespace BlastOff
 {
@@ -85,27 +87,6 @@ namespace BlastOff
 					SetExitKey(KEY_NULL);
 			};
 
-		const auto initializeMainMenu = 
-			[this]()
-			{
-				const auto settingsCallback = 
-					[this]()
-					{
-						// TODO: add settings menu functionality
-					};
-
-				m_MainMenu = std::make_unique<MainMenu>(
-					&c_Config,
-					&m_ImageTextureLoader,
-					m_TextTextureLoader.get(),
-					&m_SoundLoader,
-					settingsCallback,
-					&m_Font,
-					m_Window->GetPosition(),
-					m_Window->GetSize()
-				);
-			};
-
 		Logging::Initialize(&c_Config);
 		logInitialMessage();
 		
@@ -113,7 +94,7 @@ namespace BlastOff
 		initializeSound();
 		initializeBackgroundMusic();
 		disableEscapeKey();
-		initializeMainMenu();
+		InitializeMainMenu();
 		InitializeGame();
 
 		m_State = State::MainMenu;
@@ -144,6 +125,40 @@ namespace BlastOff
 			InitializeGame();
 			m_GameShouldReset = false;
 		}
+
+		const auto reinitializeRelevantObject = 
+			[this](const State state)
+			{
+				switch (state)
+				{
+					case State::Game:
+						InitializeGame();
+						break;
+
+					case State::MainMenu:
+						InitializeMainMenu();
+						break;
+
+					default:
+						throw std::runtime_error(
+							"Program::Update() failed: "
+							"Invalid value of ProgramState enum."
+						);
+				}
+			};
+
+		const auto handleStateChange = 
+			[&, this]()
+			{
+				reinitializeRelevantObject(m_State);
+				reinitializeRelevantObject(*m_PendingStateChange);
+				
+				m_State = *m_PendingStateChange;
+				m_PendingStateChange = std::nullopt;
+			};
+			
+		if (m_PendingStateChange)
+			handleStateChange();
 	}
 
 	void Program::Update()
@@ -297,6 +312,34 @@ namespace BlastOff
 			&m_SoundLoader,
 			resetCallback,
             muteUnmuteCallback,
+			&m_Font,
+			m_Window->GetPosition(),
+			m_Window->GetSize()
+		);
+	}
+
+	void Program::InitializeMainMenu()
+	{
+		const auto settingsCallback = 
+			[this]()
+			{
+				// TODO: add settings menu functionality
+				m_ShouldOpenSettingsMenu = true;
+			};
+
+		const auto playCallback =
+			[this]()
+			{
+				m_PendingStateChange = State::Game;
+			};
+
+		m_MainMenu = std::make_unique<MainMenu>(
+			&c_Config,
+			&m_ImageTextureLoader,
+			m_TextTextureLoader.get(),
+			&m_SoundLoader,
+			settingsCallback,
+			playCallback,
 			&m_Font,
 			m_Window->GetPosition(),
 			m_Window->GetSize()

@@ -14,6 +14,7 @@ namespace BlastOff
         TextTextureLoader* const textTextureLoader,
         SoundLoader* const soundLoader,
         const Callback& settingsCallback,
+        const Callback& playCallback,
         const Font* const font,
         const Vector2i* const windowPosition,
         const Vector2i* const windowSize
@@ -51,6 +52,15 @@ namespace BlastOff
                     m_Cutscene->GetCameraEmpty(),
                     m_ProgramConfig->GetTopRightButtonMargins()
                 );
+                m_PlayButton = std::make_unique<PlayButton>(
+                    m_Cutscene->GetCoordinateTransformer(),
+                    m_InputManager.get(),
+                    m_ProgramConfig,
+                    m_ImageTextureLoader,
+                    playCallback,
+                    m_Cutscene->GetCameraEmpty(),
+                    m_ProgramConfig->GetTopRightButtonMargins()
+                );
             };
 
         InitializeCutscene();
@@ -61,6 +71,8 @@ namespace BlastOff
     void MainMenu::Update()
     {
         m_Cutscene->Update();
+        m_SettingsButton->Update();
+        m_PlayButton->Update();
 
         if (m_CutsceneShouldReset)
         {
@@ -72,6 +84,8 @@ namespace BlastOff
     void MainMenu::Draw() const
     {
         m_Cutscene->Draw();
+        m_SettingsButton->Draw();
+        m_PlayButton->Draw();
     }
 
     void MainMenu::InitializeCutscene()

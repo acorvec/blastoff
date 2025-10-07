@@ -348,6 +348,26 @@ namespace BlastOff
 		static const char* const c_ClickedTexturePath;
 	};
 
+	struct PlayButton : public Button
+	{
+		PlayButton(
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+            const ProgramConfiguration* const programConfig,
+            ImageTextureLoader* const imageTextureLoader,
+            const Callback& playCallback,
+            const CameraEmpty* const cameraEmpty,
+			const Vector2f margins
+		);
+
+	protected:
+		static const Vector2f c_EngineSize;
+
+		static const char* const c_UnselectedTexturePath;
+		static const char* const c_SelectedTexturePath;
+		static const char* const c_ClickedTexturePath;
+	};
+
 	struct GameEndMenu
 	{
 		GameEndMenu(

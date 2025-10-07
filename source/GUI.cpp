@@ -839,10 +839,11 @@ namespace BlastOff
 			programConfig
 		)
 	{
-		
+		const float engineX = (c_EngineSize.x + margins.x) / 2.0f;
+		Translate({ engineX, 0 });
 	}
 
-	const Vector2f SettingsButton::c_EngineSize = { 2 / 3.0f, 2 / 3.0f };
+	const Vector2f SettingsButton::c_EngineSize = { 5 / 4.0f, 5 / 4.0f };
 
 	const char* const SettingsButton::c_UnselectedTexturePath = 
 	{
@@ -855,6 +856,49 @@ namespace BlastOff
 	const char* const SettingsButton::c_ClickedTexturePath =
 	{
 		"ClickedSettings.png"
+	};
+
+
+	PlayButton::PlayButton(
+		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
+		const ProgramConfiguration* const programConfig,
+		ImageTextureLoader* const imageTextureLoader,
+		const Callback& playCallback,
+		const CameraEmpty* const cameraEmpty,
+		const Vector2f margins
+	) :
+		Button(
+			playCallback,
+			c_UnselectedTexturePath,
+			c_SelectedTexturePath,
+			c_ClickedTexturePath,
+			imageTextureLoader,
+			Vector2f::Zero(),
+			c_EngineSize,
+			cameraEmpty,
+			coordTransformer,
+			inputManager,
+			programConfig
+		)
+	{
+		const float engineX = -(c_EngineSize.x + margins.x) / 2.0f;
+		Translate({ engineX, 0 });
+	}
+
+	const Vector2f PlayButton::c_EngineSize = { 5 / 4.0f, 5 / 4.0f };
+
+	const char* const PlayButton::c_UnselectedTexturePath = 
+	{
+		"UnselectedPlay.png"
+	};
+	const char* const PlayButton::c_SelectedTexturePath = 
+	{
+		"SelectedPlay.png"
+	};
+	const char* const PlayButton::c_ClickedTexturePath =
+	{
+		"ClickedPlay.png"
 	};
 
 

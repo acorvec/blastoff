@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "Utils.h"
 #include "Game.h"
-#include <memory>
 
 namespace BlastOff
 {
@@ -14,6 +13,7 @@ namespace BlastOff
 	    	TextTextureLoader* const textTextureLoader,
     		SoundLoader* const soundLoader,
 			const Callback& resetCallback,
+            const Callback& playCallback,
 	    	const Font* const font,
 		    const Vector2i* const windowPosition,
     		const Vector2i* const windowSize
