@@ -382,7 +382,6 @@ namespace BlastOff
 			m_CameraEmpty.get(),
 			&m_ImageTextureLoader,
 			m_TextTextureLoader.get(),
-			&m_SoundLoader,
 			playCallback,
 			settingsCallback,
 			exitCallback,
