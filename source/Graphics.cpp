@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include "raylib.h"
 
 namespace BlastOff
 {
@@ -532,6 +533,21 @@ namespace BlastOff
 	}
 
 
+	// possibly a nvidia issue, 
+	// but POINT filtering seems to be broken on Windows,
+	// so it's not used there (for the moment, at least)
+#if COMPILE_TARGET_WINDOWS
+	const int ImageTextureLoader::c_DefaultTextureFiltering = 
+	{
+		TEXTURE_FILTER_POINT
+	};
+#else
+	const int ImageTextureLoader::c_DefaultTextureFiltering = 
+	{
+		TEXTURE_FILTER_TRILINEAR
+	};
+#endif
+
 	ImageTextureLoader::~ImageTextureLoader()
 	{
 		for (const auto& [name, texture] : m_CachedValues)
@@ -564,11 +580,6 @@ namespace BlastOff
 		else
 			return result;
 	}
-
-	const int ImageTextureLoader::c_DefaultTextureFiltering = 
-	{
-		TEXTURE_FILTER_POINT
-	};
 
 	const Texture* ImageTextureLoader::LoadAndInsert
 		(const char* const resourcePath)
@@ -659,8 +670,12 @@ namespace BlastOff
 			parameters.colour.ToRayColour()
 		);
 		const Texture result = LoadTextureFromImage(image);
-		
 		m_CachedValues.insert({ parameters, result });
+
+		SetTextureFilter(
+			result, 
+			ImageTextureLoader::c_DefaultTextureFiltering
+		);
 		return &m_CachedValues.at(parameters);
 	}
 
