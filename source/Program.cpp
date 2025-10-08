@@ -413,6 +413,16 @@ namespace BlastOff
 			(m_State == State::SettingsMenu);
 	}
 
+	void Program::MuteOrUnmute()
+	{
+		m_IsMuted = !m_IsMuted;
+
+		if (m_IsMuted)
+			SetMasterVolume(0);
+		else
+			SetMasterVolume(1);
+	}
+
 	int Program::CalculateNormalFramerate() const
 	{
 #if COMPILE_CONFIG_DEBUG
@@ -456,12 +466,7 @@ namespace BlastOff
         const auto muteUnmuteCallback = 
             [this]()
             {
-                m_IsMuted = !m_IsMuted;
-
-                if (m_IsMuted)
-                    SetMasterVolume(0);
-                else
-                    SetMasterVolume(1);
+                MuteOrUnmute();
             };
 
 		const auto exitCallback = 
@@ -552,12 +557,20 @@ namespace BlastOff
 				m_PendingStateChange = State::MainMenu;
 			};
 
+        const auto muteUnmuteCallback = 
+            [this]()
+            {
+                MuteOrUnmute();
+            };
+
 		m_SettingsMenu = std::make_unique<SettingsMenu>(
+			&m_IsMuted,
 			m_CoordinateTransformer.get(),
 			m_InputManager.get(),
 			&c_Config,
 			&m_ImageTextureLoader,
 			m_Settings.get(),
+			muteUnmuteCallback,
 			exitCallback,
 			m_CameraEmpty.get()
 		);

@@ -1376,16 +1376,27 @@ namespace BlastOff
 
 
 	SettingsMenu::SettingsMenu(
+		const bool* const programIsMuted,
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
 		const ProgramConstants* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		Settings* const settings,
+		const Callback& muteCallback,
 		const Callback& exitCallback,
 		const CameraEmpty* const cameraEmpty
 	) :
 		m_Settings(settings)
 	{
+		m_MuteButton = std::make_unique<MuteButton>(
+			programIsMuted,
+			coordTransformer,
+			inputManager,
+			programConfig,
+			imageTextureLoader,
+			muteCallback,
+			cameraEmpty
+		);
 		m_ExitButton = std::make_unique<TopRightExitButton>(
 			coordTransformer,
 			inputManager,
@@ -1399,11 +1410,13 @@ namespace BlastOff
 
 	void SettingsMenu::Update()
 	{
+		m_MuteButton->Update();
 		m_ExitButton->Update();
 	}
 
 	void SettingsMenu::Draw() const
 	{
+		m_MuteButton->Draw();
 		m_ExitButton->Draw();
 	}
 

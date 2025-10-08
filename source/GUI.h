@@ -552,11 +552,13 @@ namespace BlastOff
 	struct SettingsMenu
 	{
 		SettingsMenu(
+			const bool* const programIsMuted,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
             const ProgramConstants* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
 			Settings* const settings,
+			const Callback& muteCallback,
             const Callback& exitCallback,
             const CameraEmpty* const cameraEmpty
 		);
@@ -568,6 +570,7 @@ namespace BlastOff
 		static const int c_WindowSizeStep;
 
 		Settings* m_Settings = nullptr;
+		unique_ptr<MuteButton> m_MuteButton = nullptr;
 		unique_ptr<ExitButton> m_ExitButton = nullptr;
 	};
 }

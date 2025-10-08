@@ -61,6 +61,7 @@ namespace BlastOff
 		int m_MostRecentFramerateSet = 0;
 #endif
 		bool ShouldShowCutscene() const;
+		void MuteOrUnmute();
 
 		int CalculateNormalFramerate() const;
 		int MultiplyFramerate(const float multiplier) const;
