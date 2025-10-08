@@ -8,6 +8,7 @@ namespace BlastOff
 		m_CommandLineLoggingEnabled(true),
 		m_ControlQEnabled(true),
 		m_TargetFramerate(60),
+		m_WindowSizeIncrement(60),
 		m_TargetFrametime(1 / (float)m_TargetFramerate),
 		m_InvalidColour1(0xFF, 0x00, 0xFF),
 		m_InvalidColour2(c_Black),
@@ -61,6 +62,21 @@ namespace BlastOff
 		return m_TargetFramerate;
 	}
 
+	int ProgramConstants::GetWindowSizeIncrement() const
+	{
+		return m_WindowSizeIncrement;
+	}
+
+	float ProgramConstants::GetTargetFrametime() const
+	{
+		return m_TargetFrametime;
+	}
+
+	float ProgramConstants::GetSecondsBetweenSceneChange() const
+	{
+		return m_SecondsBetweenSceneChange;
+	}
+
 	Colour4i ProgramConstants::GetInvalidColour1() const
 	{
 		return m_InvalidColour1;
@@ -79,16 +95,6 @@ namespace BlastOff
 	Colour4i ProgramConstants::GetInterSceneFadeColour() const
 	{
 		return m_InterSceneFadeColour;
-	}
-
-	float ProgramConstants::GetTargetFrametime() const
-	{
-		return m_TargetFrametime;
-	}
-
-	float ProgramConstants::GetSecondsBetweenSceneChange() const
-	{
-		return m_SecondsBetweenSceneChange;
 	}
 
 	const string& ProgramConstants::GetFontFace() const

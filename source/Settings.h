@@ -26,7 +26,10 @@ namespace BlastOff
     {
         using Reflectable = ReflectableSettings;
 
-        static unique_ptr<Settings> LoadOrDefault(const Vector2f aspectRatio);
+        static unique_ptr<Settings> LoadOrDefault(
+            const Vector2f aspectRatio,
+            const int windowSizeIncrement
+        );
 
         float GetAudioVolume() const;
         bool IsAudioMuted() const;
@@ -38,7 +41,10 @@ namespace BlastOff
         void UpdateWindowPosition(const Vector2i windowPosition);
         void SaveToDefaultPath() const;
 
-        Settings(const Vector2f aspectRatio);
+        Settings(
+            const Vector2f aspectRatio,
+            const int windowSizeIncrement
+        );
         Settings(const Reflectable& equivalent);
 
     private:

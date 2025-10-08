@@ -1,4 +1,5 @@
 #include "Settings.h"
+#include "Utils.h"
 
 #include <glaze/json/prettify.hpp>
 #include <raylib.h>
@@ -7,13 +8,21 @@
 
 namespace BlastOff
 {
-    unique_ptr<Settings> Settings::LoadOrDefault(const Vector2f aspectRatio)
+    unique_ptr<Settings> Settings::LoadOrDefault(
+        const Vector2f aspectRatio,
+        const int windowSizeIncrement
+    )
     {
         unique_ptr<Settings> attempt = LoadFromDefaultPath();
         if (attempt)
             return attempt;
         else
-            return std::make_unique<Settings>(aspectRatio);
+        {
+            return std::make_unique<Settings>(
+                aspectRatio, 
+                windowSizeIncrement
+            );
+        }
     }
 
     float Settings::GetAudioVolume() const
@@ -89,21 +98,23 @@ namespace BlastOff
 
     const char* const Settings::c_DefaultPath = "settings.json";
 
-    Settings::Settings(const Vector2f aspectRatio)
+    Settings::Settings(
+        const Vector2f aspectRatio, 
+        const int windowSizeIncrement
+    )
     {
         const auto calculateWindowSize = 
             [&, this]()
             {
                 const float scaledHeight = m_ScreenSize.y * 9 / 10.0f;
+                const auto inc = (float)windowSizeIncrement;
+                const float roundedY = RoundToFraction(scaledHeight, inc);
                 const float scaledWidth = 
                 {
-                    scaledHeight * aspectRatio.x / aspectRatio.y
+                    roundedY * aspectRatio.x / aspectRatio.y
                 };   
-                m_WindowSize = 
-                { 
-                    (int)roundf(scaledWidth), 
-                    (int)roundf(scaledHeight) 
-                };
+                const Vector2f result = { scaledWidth, roundedY };
+                m_WindowSize = result.ToVector2i();
             };
 
         const auto calculateWindowPosition =

@@ -1378,6 +1378,7 @@ namespace BlastOff
 	
 	WindowSizeSlideBar::WindowSizeSlideBar(
 		Settings* const settings,
+		const int windowSizeIncrement,
 		const CameraEmpty* const cameraEmpty,
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
@@ -1387,34 +1388,40 @@ namespace BlastOff
 			c_EnginePosition,
 			settings->GetWindowSize().y,
 			c_Minimum,
-			CalculateMaximum(settings),
+			CalculateMaximum(settings, windowSizeIncrement),
 			cameraEmpty,
 			settings,
 			coordTransformer,
 			inputManager,
 			programConstants,
-			c_StepSize
+			windowSizeIncrement
 		)
 	{
 
 	}
 
-	const int WindowSizeSlideBar::c_StepSize = 60;
 	const int WindowSizeSlideBar::c_Minimum = 420;
 	
 	const Vector2f WindowSizeSlideBar::c_EnginePosition = Vector2f::Zero();
 
-	int WindowSizeSlideBar::CalculateMaximum
-		(const Settings* const settings)
+	int WindowSizeSlideBar::CalculateMaximum(
+		const Settings* const settings,
+		const int windowSizeIncrement
+	) const
 	{
 		// the user can select up to 90% of the current screen height
 		const Vector2i screenSize = settings->GetScreenSize();
-		const float unrounded = screenSize.y * 9 / 10.0f;
+		const float unfloored = screenSize.y * 9 / 10.0f;
+		const float unrounded = FloorToFraction(
+			unfloored, 
+			windowSizeIncrement
+		);
 		return (int)roundf(unrounded);
 	}
 
 
 	SettingsMenu::SettingsMenu(
+		const int windowSizeIncrement,
 		const bool* const programIsMuted,
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
@@ -1455,6 +1462,7 @@ namespace BlastOff
 			{
 				m_SlideBar = std::make_unique<WindowSizeSlideBar>(
 					m_Settings,
+					windowSizeIncrement,
 					cameraEmpty,
 					coordTransformer,
 					inputManager,

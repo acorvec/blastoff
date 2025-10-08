@@ -23,6 +23,10 @@ namespace BlastOff
 		return roundf(num  / fraction) * fraction;
 	}
 
+	float FloorToFraction(const float num, const float fraction)
+	{
+		return floorf(num  / fraction) * fraction;
+	}
 
 	float SineInterpolation(const float number)
 	{
@@ -148,7 +152,7 @@ namespace BlastOff
 		return 
 		{ 
 			BlastOff::RoundToFraction(x, fraction), 
-			BlastOff::RoundToFraction(x, fraction) 
+			BlastOff::RoundToFraction(y, fraction) 
 		};
 	}
 

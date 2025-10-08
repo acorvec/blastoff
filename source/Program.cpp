@@ -25,7 +25,14 @@ namespace BlastOff
 			[this]()
 			{
 				const Vector2f aspectRatio = c_Config.GetDefaultAspectRatio();
-				m_Settings = Settings::LoadOrDefault(aspectRatio);
+				const int windowSizeIncrement = 
+				{
+					c_Config.GetWindowSizeIncrement()
+				};
+				m_Settings = Settings::LoadOrDefault(
+					aspectRatio, 
+					windowSizeIncrement
+				);
 
 				const Vector2i windowSize = m_Settings->GetWindowSize();
 				const Vector2i windowPosition = 
@@ -564,6 +571,7 @@ namespace BlastOff
             };
 
 		m_SettingsMenu = std::make_unique<SettingsMenu>(
+			c_Config.GetWindowSizeIncrement(),
 			&m_IsMuted,
 			m_CoordinateTransformer.get(),
 			m_InputManager.get(),

@@ -141,6 +141,7 @@ namespace BlastOff
 
 	float GetRandomFloat();
 	float RoundToFraction(const float num, const float fraction);
+	float FloorToFraction(const float num, const float fraction);
 	
 	float SineInterpolation(const float number);
 	float NthSineInterpolation(

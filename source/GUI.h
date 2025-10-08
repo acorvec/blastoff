@@ -596,32 +596,13 @@ namespace BlastOff
 			m_Colours(colours),
 			m_InputManager(inputManager)
 		{
-#if COMPILE_CONFIG_DEBUG
 			const auto checkBounds = 
 				[&]()
 				{
-					if (startValue < minimum)
-					{
-						throw std::runtime_error(
-							"Unable to create UI SlideBar: "
-							"startValue parameter " + 
-							std::to_string(startValue) + " "
-							"is less than (<) minimum parameter " + 
-							std::to_string(minimum) + "."
-						);
-					}
-					if (startValue > maximum)
-					{
-						throw std::runtime_error(
-							"Unable to create UI SlideBar: "
-							"startValue parameter " + 
-							std::to_string(startValue) + " "
-							"is greater than (>) maximum parameter " + 
-							std::to_string(maximum) + "."
-						);
-					}
+					m_Value = std::max(m_Value, m_Minimum);
+					m_Value = std::min(m_Value, m_Maximum);
 				};
-#endif
+				
 			const auto createBacking = 
 				[&, this]()
 				{
@@ -675,35 +656,10 @@ namespace BlastOff
 					m_HandleStroke->SetParent(m_HandleFill.get());
 				};
 
-			const auto initializeHandlePosition = 
-				[this]()
-				{
-					const float left = 
-					{
-						m_BackingFill->GetEdgePosition(Direction::Left)
-					};
-					const float right = 
-					{
-						m_BackingFill->GetEdgePosition(Direction::Right)
-					};
-					const float progress = 
-					{
-						(m_Value - m_Minimum) / (float)(m_Maximum - m_Minimum)
-					};
-
-					const float a = left, b = right, t = progress;
-					const float engineX = Lerp(left, right, progress);
-
-					Sprite* handleRoot = GetHandleRoot();
-					handleRoot->SetLocalPosition({ engineX, 0 });
-				};
-
-#if COMPILE_CONFIG_DEBUG
-			checkBounds();
-#endif
+			checkBounds();			
 			createBacking();
 			createHandle();
-			initializeHandlePosition();
+			InitializeHandlePosition();
 		}
 
 		void Update()
@@ -787,11 +743,15 @@ namespace BlastOff
 						return mouseX;
 				};
 
-			// const auto snapHandlePosition =
-			// 	[this](const Num beforeSnapping) -> Num
-			// 	{
-					
-			// 	};
+			const auto calculateSnappedValue =
+				[this](const Num beforeSnapping) -> Num
+				{
+					const float result = RoundToFraction(
+						(float)beforeSnapping, 
+						(float)(*m_StepSize)
+					);
+					return (Num)result;
+				};
 
 			const auto updateHandlePosition = 
 				[&, this]()
@@ -818,11 +778,9 @@ namespace BlastOff
 						beforeSnapping
 					);
 					m_Value = (progress * (m_Maximum - m_Minimum)) + m_Minimum;
-					const float engineX = beforeSnapping;
-
-					Sprite* handleRoot = GetHandleRoot();
-					const Rect2f localRect = handleRoot->GetEngineRect();
-					handleRoot->SetLocalPosition({ engineX, localRect.y });
+					if (m_StepSize)
+						m_Value = calculateSnappedValue(m_Value);
+					InitializeHandlePosition();
 				};
 
 			const auto updateHandle =
@@ -833,15 +791,15 @@ namespace BlastOff
 
 					if (m_HandleIsClicked)
 						updateHandlePosition();
+
+					m_HandleFill->Update();
+					m_HandleStroke->Update();
 				};
 
 			updateHandle();
 
 			m_BackingFill->Update();
 			m_BackingStroke->Update();
-
-			m_HandleFill->Update();
-			m_HandleStroke->Update();
 		}
 
 		void Draw() const
@@ -871,6 +829,29 @@ namespace BlastOff
 
 		unique_ptr<RoundedRectangleSprite> m_HandleFill = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_HandleStroke = nullptr;
+
+		void InitializeHandlePosition()
+		{
+			const float left = 
+			{
+				m_BackingFill->GetEdgePosition(Direction::Left)
+			};
+			const float right = 
+			{
+				m_BackingFill->GetEdgePosition(Direction::Right)
+			};
+			const float progress = 
+			{
+				(m_Value - m_Minimum) / (float)(m_Maximum - m_Minimum)
+			};
+
+			const float a = left, b = right, t = progress;
+			const float engineX = Lerp(left, right, progress);
+
+			Sprite* handleRoot = GetHandleRoot();
+			const Rect2f localRect = handleRoot->GetEngineRect();
+			handleRoot->SetLocalPosition({ engineX, localRect.y });
+		}
 
 		RoundedRectangleSprite* GetHandleRoot() const
 		{
@@ -949,6 +930,7 @@ namespace BlastOff
 	{
 		WindowSizeSlideBar(
 			Settings* const settings,
+			const int windowSizeIncrement,
 			const CameraEmpty* const cameraEmpty,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
@@ -957,16 +939,18 @@ namespace BlastOff
 
 	protected:
 		static const int c_Minimum;
-		static const int c_StepSize;
-
 		static const Vector2f c_EnginePosition;
 
-		static int CalculateMaximum(const Settings* const settings);
+		int CalculateMaximum(
+			const Settings* const settings, 
+			const int windowSizeIncrement
+		) const;
 	};
 
 	struct SettingsMenu
 	{
 		SettingsMenu(
+			const int windowSizeIncrement,
 			const bool* const programIsMuted,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,

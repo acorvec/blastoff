@@ -16,14 +16,15 @@ namespace BlastOff
 		bool GetControlQEnabled() const;
 
 		int GetTargetFramerate() const;
+		int GetWindowSizeIncrement() const;
+
+		float GetTargetFrametime() const;
+		float GetSecondsBetweenSceneChange() const;
 
 		Colour4i GetInvalidColour1() const;
 		Colour4i GetInvalidColour2() const;
 		Colour4i GetVoidColour() const;
 		Colour4i GetInterSceneFadeColour() const;
-
-		float GetTargetFrametime() const;
-		float GetSecondsBetweenSceneChange() const;
 
 		const string& GetFontFace() const;
 		int GetFontRenderSize() const;
@@ -57,6 +58,7 @@ namespace BlastOff
 		bool m_ControlQEnabled;
 
 		int m_TargetFramerate;
+		int m_WindowSizeIncrement;
 		float m_TargetFrametime;
 
 		Colour4i m_InvalidColour1;
