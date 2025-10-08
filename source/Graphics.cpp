@@ -1,5 +1,6 @@
 #include "Graphics.h"
 #include "raylib.h"
+#include <stdexcept>
 
 namespace BlastOff
 {
@@ -349,6 +350,15 @@ namespace BlastOff
 
 	void Sprite::SetParent(const Sprite* parent)
 	{
+#if COMPILE_CONFIG_DEBUG
+		if (parent == this)
+		{
+			throw std::runtime_error(
+				"Sprite::SetParent(const Sprite*) failed: "
+				"Unable to set this->m_Parent to self."
+			);
+		}
+#endif
 		m_Parent = parent;
 	}
 

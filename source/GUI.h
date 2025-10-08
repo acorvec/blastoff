@@ -573,9 +573,11 @@ namespace BlastOff
 
 		SlideBar(
 			const Vector2f enginePosition,
-			const Vector2f engineSize,
+			const Vector2f backingSize,
+			const Vector2f handleSize,
 			const float strokeWidth,
 			const float backingRoundness,
+			const float handleRoundness,
 			const Num startValue,
 			const Num minimum,
 			const Num maximum,
@@ -620,7 +622,16 @@ namespace BlastOff
 			const auto createBacking = 
 				[&, this]()
 				{
-					const Rect2f backingRect(enginePosition, engineSize);
+					const Rect2f backingRect(enginePosition, backingSize);
+					m_BackingFill = std::make_unique<RoundedRectangleSprite>(
+						backingRect,
+						colours.backing.fill,
+						backingRoundness,
+						coordTransformer,
+						programConfig
+					);
+					m_BackingFill->SetParent(cameraEmpty);
+
 					m_BackingStroke = std::make_unique<RoundedRectangleSprite>(
 						backingRect,
 						colours.backing.stroke,
@@ -629,7 +640,31 @@ namespace BlastOff
 						programConfig,
 						strokeWidth
 					);
-					m_BackingStroke->SetParent(cameraEmpty);
+					m_BackingStroke->SetParent(m_BackingFill.get());
+				};
+
+		const auto createHandle = 
+				[&, this]()
+				{
+					const Rect2f handleRect(Vector2f::Zero(), handleSize);
+					m_HandleFill = std::make_unique<RoundedRectangleSprite>(
+						handleRect,
+						colours.handle.unselected.fill,
+						handleRoundness,
+						coordTransformer,
+						programConfig
+					);
+					m_HandleFill->SetParent(m_BackingFill.get());
+
+					m_HandleStroke = std::make_unique<RoundedRectangleSprite>(
+						handleRect,
+						colours.handle.unselected.stroke,
+						handleRoundness,
+						coordTransformer,
+						programConfig,
+						strokeWidth
+					);
+					m_HandleStroke->SetParent(m_HandleFill.get());
 				};
 
 #if COMPILE_CONFIG_DEBUG
@@ -637,18 +672,25 @@ namespace BlastOff
 #endif
 
 			createBacking();
+			createHandle();
 		}
 
 		void Update()
 		{
+			m_BackingFill->Update();
 			m_BackingStroke->Update();
-			// m_HandleStroke->Update();
+
+			m_HandleFill->Draw();
+			m_HandleStroke->Update();
 		}
 
 		void Draw() const
 		{
+			m_BackingFill->Draw();
 			m_BackingStroke->Draw();
-			// m_HandleStroke->Draw();
+
+			m_HandleFill->Draw();
+			m_HandleStroke->Draw();
 		}
 
 	protected:
@@ -657,7 +699,10 @@ namespace BlastOff
 		Num m_Maximum = 0;
 		Num m_StepSize = 0;
 
+		unique_ptr<Sprite> m_BackingFill = nullptr;
 		unique_ptr<Sprite> m_BackingStroke = nullptr;
+
+		unique_ptr<Sprite> m_HandleFill = nullptr;
 		unique_ptr<Sprite> m_HandleStroke = nullptr;
 	};
 
@@ -684,8 +729,10 @@ namespace BlastOff
 			SlideBar<Num>(
 				enginePosition,
 				c_BackingSize,
+				c_HandleSize,
 				c_StrokeWidth,
 				c_BackingRoundness,
+				c_HandleRoundness,
 				startValue,
 				minimum,
 				maximum,
@@ -703,11 +750,13 @@ namespace BlastOff
 
 	protected:		
 		static constexpr float c_BackingRoundness = 1 / 10.0f;
+		static constexpr float c_HandleRoundness = 1 / 10.0f;
 		static constexpr float c_StrokeWidth = 2 / 44.0f;
 		static constexpr float c_Minimum = 480;
 		static constexpr float c_StepSize = 60;
 
-		static constexpr Vector2f c_BackingSize = { 1, 1 / 5.0f };
+		static constexpr Vector2f c_HandleSize = { 1 / 6.0f, 1 / 3.0f };
+		static constexpr Vector2f c_BackingSize = { 5 / 2.0f, 3 / 20.0f };
 		static constexpr SlideBarColours c_Colours = 
 		{
 			.handle = 
@@ -739,7 +788,7 @@ namespace BlastOff
 	protected:
 		static const int c_Minimum;
 		static const int c_StepSize;
-		
+
 		static const Vector2f c_EnginePosition;
 
 		static int CalculateMaximum(const Settings* const settings);
