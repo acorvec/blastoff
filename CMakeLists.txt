@@ -18,14 +18,15 @@ FetchContent_Declare(
     GIT_TAG "master"
     GIT_PROGRESS TRUE
 )
-FetchContent_MakeAvailable(raylib)
-
 FetchContent_Declare(
-    ubuntufonts
-    GIT_REPOSITORY "https://github.com/canonical/Ubuntu-Sans-fonts.git"
-    GIT_TAG "main"
-    GIT_PROGRESS TRUE
+  glaze
+  GIT_REPOSITORY https://github.com/stephenberry/glaze.git
+  GIT_TAG main
+  GIT_SHALLOW TRUE
 )
+
+FetchContent_MakeAvailable(raylib)
+FetchContent_MakeAvailable(glaze)
 
 file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/source/*.cpp")
 set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/sources/")
@@ -37,6 +38,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${X11_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 target_link_libraries(${PROJECT_NAME} PRIVATE stdc++) 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${X11_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PRIVATE glaze::glaze)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(${PROJECT_NAME} PRIVATE _DEBUG=1)
