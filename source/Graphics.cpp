@@ -543,20 +543,12 @@ namespace BlastOff
 	}
 
 
-	// possibly a nvidia issue, 
-	// but POINT filtering seems to be broken on Windows,
-	// so it's not used there (for the moment, at least)
-#if COMPILE_TARGET_WINDOWS
-	const int ImageTextureLoader::c_DefaultTextureFiltering = 
-	{
-		TEXTURE_FILTER_POINT
-	};
-#else
+	// TRILINEAR filtering seems to be broken, 
+	// but it looks too good to pass up
 	const int ImageTextureLoader::c_DefaultTextureFiltering = 
 	{
 		TEXTURE_FILTER_TRILINEAR
 	};
-#endif
 
 	ImageTextureLoader::~ImageTextureLoader()
 	{

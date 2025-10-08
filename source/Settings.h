@@ -31,6 +31,7 @@ namespace BlastOff
         float GetAudioVolume() const;
         bool IsAudioMuted() const;
 
+        Vector2i GetScreenSize() const;
         Vector2i GetWindowPosition() const;
         Vector2i GetWindowSize() const;
 
@@ -47,6 +48,7 @@ namespace BlastOff
         float m_AudioVolume = 1;
         bool m_AudioIsMuted = false;
         
+        Vector2i m_ScreenSize = Vector2i::Zero();
         Vector2i m_WindowPosition = Vector2i::Zero();
         Vector2i m_WindowSize = Vector2i::Zero();
 

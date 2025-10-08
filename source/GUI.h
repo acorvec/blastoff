@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Enums.h"
+#include "ProgramConstants.h"
 #include "Utils.h"
 #include "Graphics.h"
 #include "Player.h"
@@ -533,8 +534,8 @@ namespace BlastOff
         void Draw() const;
 
     private:
-        unique_ptr<Button> m_PlayButton = nullptr;
-        unique_ptr<Button> m_SettingsButton = nullptr;
+        unique_ptr<PlayButton> m_PlayButton = nullptr;
+        unique_ptr<SettingsButton> m_SettingsButton = nullptr;
         unique_ptr<ExitButton> m_ExitButton = nullptr;
 
         const ProgramConstants* m_ProgramConfig = nullptr;
@@ -548,6 +549,201 @@ namespace BlastOff
         ImageTextureLoader* m_ImageTextureLoader = nullptr;
         TextTextureLoader* m_TextTextureLoader = nullptr;
     };
+
+	struct SlideBarColours
+	{
+		struct HandleColours
+		{
+			ShapeColours unselected;
+			ShapeColours selected;
+			ShapeColours clicked;
+		};
+
+		HandleColours handle;
+		ShapeColours backing;
+	};
+
+	template<
+		typename Num,
+		typename = typename std::enable_if<std::is_arithmetic<Num>::value, Num>
+	>
+	struct SlideBar
+	{
+		using Colours = SlideBarColours;
+
+		SlideBar(
+			const Vector2f enginePosition,
+			const Vector2f engineSize,
+			const float strokeWidth,
+			const float backingRoundness,
+			const Num startValue,
+			const Num minimum,
+			const Num maximum,
+			const Num stepSize,
+			const Colours colours,
+			const CameraEmpty* const cameraEmpty,
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+			const ProgramConstants* const programConfig
+		) :
+			m_Value(startValue),
+			m_Minimum(minimum),
+			m_Maximum(maximum),
+			m_StepSize(stepSize)
+		{
+#if COMPILE_CONFIG_DEBUG
+			const auto checkBounds = 
+				[&]()
+				{
+					if (startValue < minimum)
+					{
+						throw std::runtime_error(
+							"Unable to create UI SlideBar: "
+							"startValue parameter " + 
+							std::to_string(startValue) + " "
+							"is less than (<) minimum parameter " + 
+							std::to_string(minimum) + "."
+						);
+					}
+					if (startValue > maximum)
+					{
+						throw std::runtime_error(
+							"Unable to create UI SlideBar: "
+							"startValue parameter " + 
+							std::to_string(startValue) + " "
+							"is greater than (>) maximum parameter " + 
+							std::to_string(maximum) + "."
+						);
+					}
+				};
+#endif
+			const auto createBacking = 
+				[&, this]()
+				{
+					const Rect2f backingRect(enginePosition, engineSize);
+					m_BackingStroke = std::make_unique<RoundedRectangleSprite>(
+						backingRect,
+						colours.backing.stroke,
+						backingRoundness,
+						coordTransformer,
+						programConfig,
+						strokeWidth
+					);
+					m_BackingStroke->SetParent(cameraEmpty);
+				};
+
+#if COMPILE_CONFIG_DEBUG
+			checkBounds();
+#endif
+
+			createBacking();
+		}
+
+		void Update()
+		{
+			m_BackingStroke->Update();
+			// m_HandleStroke->Update();
+		}
+
+		void Draw() const
+		{
+			m_BackingStroke->Draw();
+			// m_HandleStroke->Draw();
+		}
+
+	protected:
+		Num m_Value = 0;
+		Num m_Minimum = 0;
+		Num m_Maximum = 0;
+		Num m_StepSize = 0;
+
+		unique_ptr<Sprite> m_BackingStroke = nullptr;
+		unique_ptr<Sprite> m_HandleStroke = nullptr;
+	};
+
+	template<
+		typename Num,
+		typename = typename std::enable_if<std::is_arithmetic<Num>::value, Num>
+	>
+	struct SettingsMenuSlideBar : public SlideBar<Num>
+	{
+		using Colours = SlideBarColours;
+
+		SettingsMenuSlideBar(
+			const Vector2f enginePosition,
+			const Num startValue,
+			const Num minimum,
+			const Num maximum,
+			const Num stepSize,
+			const CameraEmpty* const cameraEmpty,
+			Settings* const settings,
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+			const ProgramConstants* const programConfig
+		) :
+			SlideBar<Num>(
+				enginePosition,
+				c_BackingSize,
+				c_StrokeWidth,
+				c_BackingRoundness,
+				startValue,
+				minimum,
+				maximum,
+				c_StepSize,
+				c_Colours,
+				cameraEmpty,
+				coordTransformer,
+				inputManager,
+				programConfig
+			),
+			m_Settings(settings)
+		{
+
+		}
+
+	protected:		
+		static constexpr float c_BackingRoundness = 1 / 10.0f;
+		static constexpr float c_StrokeWidth = 2 / 44.0f;
+		static constexpr float c_Minimum = 480;
+		static constexpr float c_StepSize = 60;
+
+		static constexpr Vector2f c_BackingSize = { 1, 1 / 5.0f };
+		static constexpr SlideBarColours c_Colours = 
+		{
+			.handle = 
+			{
+				.unselected = { .stroke = c_Black, .fill = c_White },
+				.selected =
+				{
+					.stroke = Colour4i(0xB0), 
+					.fill = c_White 
+				},
+				.clicked = { .stroke = c_Grey, .fill=c_White }
+			},
+			.backing = { .stroke = c_Black, .fill = c_White }
+		};
+
+		Settings* m_Settings;
+	};
+
+	struct WindowSizeSlideBar : public SettingsMenuSlideBar<int>
+	{
+		WindowSizeSlideBar(
+			Settings* const settings,
+			const CameraEmpty* const cameraEmpty,
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+			const ProgramConstants* const programConstants
+		);
+
+	protected:
+		static const int c_Minimum;
+		static const int c_StepSize;
+		
+		static const Vector2f c_EnginePosition;
+
+		static int CalculateMaximum(const Settings* const settings);
+	};
 
 	struct SettingsMenu
 	{
@@ -567,10 +763,9 @@ namespace BlastOff
 		void Draw() const;
 
 	private:
-		static const int c_WindowSizeStep;
-
 		Settings* m_Settings = nullptr;
 		unique_ptr<MuteButton> m_MuteButton = nullptr;
 		unique_ptr<ExitButton> m_ExitButton = nullptr;
+		unique_ptr<SlideBar<int>> m_SlideBar = nullptr;
 	};
 }

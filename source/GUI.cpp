@@ -2,6 +2,7 @@
 #include "Enums.h"
 #include "Graphics.h"
 #include "Player.h"
+#include "ProgramConstants.h"
 #include "Utils.h"
 #include "raylib.h"
 #include <memory>
@@ -1373,6 +1374,44 @@ namespace BlastOff
         m_PlayButton->Draw();
         m_ExitButton->Draw();
     }
+	
+	
+	WindowSizeSlideBar::WindowSizeSlideBar(
+		Settings* const settings,
+		const CameraEmpty* const cameraEmpty,
+		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
+		const ProgramConstants* const programConstants
+	) :
+		SettingsMenuSlideBar<int>(
+			c_EnginePosition,
+			settings->GetWindowSize().y,
+			c_Minimum,
+			CalculateMaximum(settings),
+			c_StepSize,
+			cameraEmpty,
+			settings,
+			coordTransformer,
+			inputManager,
+			programConstants
+		)
+	{
+
+	}
+
+	const int WindowSizeSlideBar::c_StepSize = 60;
+	const int WindowSizeSlideBar::c_Minimum = 420;
+	
+	const Vector2f WindowSizeSlideBar::c_EnginePosition = Vector2f::Zero();
+
+	int WindowSizeSlideBar::CalculateMaximum
+		(const Settings* const settings)
+	{
+		// the user can select up to 90% of the current screen height
+		const Vector2i screenSize = settings->GetScreenSize();
+		const float unrounded = screenSize.y * 9 / 10.0f;
+		return (int)roundf(unrounded);
+	}
 
 
 	SettingsMenu::SettingsMenu(
@@ -1388,37 +1427,56 @@ namespace BlastOff
 	) :
 		m_Settings(settings)
 	{
-		m_MuteButton = std::make_unique<MuteButton>(
-			programIsMuted,
-			coordTransformer,
-			inputManager,
-			programConfig,
-			imageTextureLoader,
-			muteCallback,
-			cameraEmpty
-		);
-		m_ExitButton = std::make_unique<TopRightExitButton>(
-			coordTransformer,
-			inputManager,
-			programConfig,
-			imageTextureLoader,
-			exitCallback,
-			cameraEmpty,
-			ProgramState::SettingsMenu
-		);
+		const auto createButtons = 
+			[&, this]()
+			{
+				m_MuteButton = std::make_unique<MuteButton>(
+					programIsMuted,
+					coordTransformer,
+					inputManager,
+					programConfig,
+					imageTextureLoader,
+					muteCallback,
+					cameraEmpty
+				);
+				m_ExitButton = std::make_unique<TopRightExitButton>(
+					coordTransformer,
+					inputManager,
+					programConfig,
+					imageTextureLoader,
+					exitCallback,
+					cameraEmpty,
+					ProgramState::SettingsMenu
+				);
+			};
+
+		const auto createSlideBar = 
+			[&, this]()
+			{
+				m_SlideBar = std::make_unique<WindowSizeSlideBar>(
+					m_Settings,
+					cameraEmpty,
+					coordTransformer,
+					inputManager,
+					programConfig
+				);
+			};
+
+		createButtons();
+		createSlideBar();
 	}
 
 	void SettingsMenu::Update()
 	{
 		m_MuteButton->Update();
 		m_ExitButton->Update();
+		m_SlideBar->Update();
 	}
 
 	void SettingsMenu::Draw() const
 	{
 		m_MuteButton->Draw();
 		m_ExitButton->Draw();
+		m_SlideBar->Draw();
 	}
-
-	const int SettingsMenu::c_WindowSizeStep = 50;
 }

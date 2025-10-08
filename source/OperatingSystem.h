@@ -14,6 +14,13 @@
 
 #define COMPILE_TARGET_LINUX __linux__
 
+#if COMPILE_TARGET_WINDOWS
+#define COMPILE_TARGET_DESKTOP 1
+#elif COMPILE_TARGET_LINUX
+#define COMPILE_TARGET_DESKTOP 1
+#else
+#define COMPILE_TARGET_DESKTOP 0 
+#endif
 
 namespace BlastOff
 {

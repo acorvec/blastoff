@@ -26,6 +26,11 @@ namespace BlastOff
         return m_AudioIsMuted;
     }
 
+    Vector2i Settings::GetScreenSize() const
+    {
+        return m_ScreenSize;
+    }
+
     Vector2i Settings::GetWindowPosition() const
     {
         return m_WindowPosition;
@@ -86,15 +91,10 @@ namespace BlastOff
 
     Settings::Settings(const Vector2f aspectRatio)
     {
-        const Vector2i screenSize = 
-        {
-            GetScreenWidth(), GetScreenHeight()
-        };
-
         const auto calculateWindowSize = 
             [&, this]()
             {
-                const float scaledHeight = screenSize.y * 9 / 10.0f;
+                const float scaledHeight = m_ScreenSize.y * 9 / 10.0f;
                 const float scaledWidth = 
                 {
                     scaledHeight * aspectRatio.x / aspectRatio.y
@@ -109,9 +109,14 @@ namespace BlastOff
         const auto calculateWindowPosition =
             [&, this]()
             {
-                const Vector2f unrounded = (screenSize - m_WindowSize) / 2.0f;
+                const Vector2f unrounded = (m_ScreenSize - m_WindowSize) / 2.0f;
                 m_WindowPosition = unrounded.ToVector2i();
             };
+
+        m_ScreenSize = 
+        {
+            GetScreenWidth(), GetScreenHeight()
+        };
 
         calculateWindowSize();
         calculateWindowPosition();
@@ -122,6 +127,10 @@ namespace BlastOff
         m_AudioVolume = equivalent.audioVolume;
         m_AudioIsMuted = equivalent.audioIsMuted;
 
+        m_ScreenSize = 
+        {
+            GetScreenWidth(), GetScreenHeight()
+        };
         m_WindowPosition = 
         {
             equivalent.windowPosition.x,
