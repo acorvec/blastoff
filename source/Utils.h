@@ -52,21 +52,6 @@ namespace BlastOff
 	static inline constexpr float c_ToDegreesMultiplier = 180 / c_Pi;
 	static inline constexpr float c_ToRadiansMultiplier = c_Pi / 180;
 
-	constexpr float ToRadians(const float degrees)
-	{
-		return degrees * c_ToRadiansMultiplier;
-	}
-
-	constexpr float ToDegrees(const float radians)
-	{
-		return radians * c_ToDegreesMultiplier;
-	}
-
-	string ByteToHexString(const byte value);
-	string BoolToString(const bool value);
-
-	float GetRandomFloat();
-	
 	enum class Direction
 	{
 		Up,
@@ -126,6 +111,43 @@ namespace BlastOff
 			return std::nullopt;
 		}
 	}
+
+	constexpr float ToRadians(const float degrees)
+	{
+		return degrees * c_ToRadiansMultiplier;
+	}
+
+	constexpr float ToDegrees(const float radians)
+	{
+		return radians * c_ToDegreesMultiplier;
+	}
+
+	constexpr float Lerp(const float a, const float b, const float t)
+	{
+		return ((1 - t) * a) + (t * b);
+	}
+
+	constexpr float ReverseLerp(
+		const float a, 
+		const float b, 
+		const float result
+	)
+	{
+		return (result - a) / (b - a);
+	}
+
+	string ByteToHexString(const byte value);
+	string BoolToString(const bool value);
+
+	float GetRandomFloat();
+	float RoundToFraction(const float num, const float fraction);
+	
+	float SineInterpolation(const float number);
+	float NthSineInterpolation(
+		const float number,
+		const float applications
+	);
+	float DoubleSineInterpolation(const float number);
 
 	struct Edge2f
 	{
@@ -881,11 +903,6 @@ namespace BlastOff
 		bool CollideWithRect(const Rect2f rect) const;
 	};
 
-	constexpr float Lerp(const float a, const float b, const float t)
-	{
-		return ((1 - t) * a) + (t * b);
-	}
-
 	constexpr Vector2f Lerp(const Vector2f a, const Vector2f b, const float t)
 	{
 		return { Lerp(a.x, b.x, t), Lerp(a.y, b.y, t) };
@@ -905,15 +922,6 @@ namespace BlastOff
 	{
 		return Lerp(a.ToVector2f(), b.ToVector2f(), t);
 	}
-
-	float SineInterpolation(const float number);
-
-	float NthSineInterpolation(
-		const float number,
-		const float applications
-	);
-
-	float DoubleSineInterpolation(const float number);
 
 	inline static constexpr Colour4i c_White = Colour4i(0xFF);
 	inline static constexpr Colour4i c_Black = Colour4i(0x00);

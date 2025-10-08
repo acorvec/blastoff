@@ -582,12 +582,12 @@ namespace BlastOff
 			const Num startValue,
 			const Num minimum,
 			const Num maximum,
-			const Num stepSize,
 			const Colours colours,
 			const CameraEmpty* const cameraEmpty,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-			const ProgramConstants* const programConfig
+			const ProgramConstants* const programConfig,
+			const optional<Num> stepSize = std::nullopt
 		) :
 			m_Value(startValue),
 			m_Minimum(minimum),
@@ -675,16 +675,7 @@ namespace BlastOff
 					m_HandleStroke->SetParent(m_HandleFill.get());
 				};
 
-#if COMPILE_CONFIG_DEBUG
-			checkBounds();
-#endif
-			createBacking();
-			createHandle();
-		}
-
-		void Update()
-		{
-			const auto updateHandlePosition = 
+			const auto initializeHandlePosition = 
 				[this]()
 				{
 					const float left = 
@@ -707,31 +698,26 @@ namespace BlastOff
 					handleRoot->SetLocalPosition({ engineX, 0 });
 				};
 
+#if COMPILE_CONFIG_DEBUG
+			checkBounds();
+#endif
+			createBacking();
+			createHandle();
+			initializeHandlePosition();
+		}
+
+		void Update()
+		{
 			const auto updateHandleColours =
 				[this]()
 				{
-					const Vector2f engineMouse = 
-					{
-						m_InputManager->CalculateMousePosition()
-					};
-					const Sprite* handleRoot = GetHandleRoot();
-					const Rect2f handleRect = handleRoot->CalculateRealRect();
-
-					const bool isSelected = 
-					{
-						handleRect.CollideWithPoint(engineMouse)
-					};
-					const bool mouseClicked = 
-					{
-						m_InputManager->GetMouseButtonDown(MOUSE_BUTTON_LEFT)
-					};
 					const auto& colours = m_Colours.handle;
-					if (isSelected && mouseClicked)
+					if (m_HandleIsClicked)
 					{
 						m_HandleFill->SetColour(colours.clicked.fill);
 						m_HandleStroke->SetColour(colours.clicked.stroke);
 					}
-					else if (isSelected)
+					else if (m_HandleIsSelected)
 					{
 						m_HandleFill->SetColour(colours.selected.fill);
 						m_HandleStroke->SetColour(colours.selected.stroke);
@@ -743,12 +729,89 @@ namespace BlastOff
 					}
 				};
 
-			if ((!m_MostRecentValue) || (m_Value != *m_MostRecentValue))
-			{
-				updateHandlePosition();
-				m_MostRecentValue = m_Value;
-			}
-			updateHandleColours();
+			const auto updateHandleFlags = 
+				[this]()
+				{
+					const Vector2f engineMouse = 
+					{
+						m_InputManager->CalculateMousePosition()
+					};
+					const Sprite* handleRoot = GetHandleRoot();
+					const Rect2f handleRect = handleRoot->CalculateRealRect();
+					const bool isSelected = 
+					{
+						handleRect.CollideWithPoint(engineMouse)
+					};
+
+					constexpr int buttonEnum = MOUSE_BUTTON_LEFT;
+					const bool mouseReleased =
+					{
+						m_InputManager->GetMouseButtonReleased(buttonEnum)
+					};
+					const bool mouseClicked = 
+					{
+						m_InputManager->GetMouseButtonPressed(buttonEnum)
+					};
+					if (mouseReleased)
+						m_HandleIsClicked = false;
+
+					m_HandleIsSelected = false;
+
+					if (isSelected && mouseClicked)
+						m_HandleIsClicked = true;
+					else if (isSelected)
+						m_HandleIsSelected = true;
+				};
+
+			const auto clampHandlePosition = 
+				[this](const float mouseX)
+				{
+					const float left = 
+					{
+						m_BackingFill->GetEdgePosition(Direction::Left)
+					};
+					const float right = 
+					{
+						m_BackingFill->GetEdgePosition(Direction::Right)
+					};
+					const float reverseLerpResult = ReverseLerp(
+						left, 
+						right, 
+						mouseX
+					);
+					if (reverseLerpResult < 0)
+						return left;
+					else if (reverseLerpResult > 1)
+						return right;
+					else
+						return mouseX;
+				};
+
+			const auto updateHandlePosition = 
+				[&, this]()
+				{
+					const Vector2f engineMouse = 
+					{
+						m_InputManager->CalculateMousePosition()
+					};
+					const float engineX = clampHandlePosition(engineMouse.x);
+
+					Sprite* handleRoot = GetHandleRoot();
+					const Rect2f localRect = handleRoot->GetEngineRect();
+					handleRoot->SetLocalPosition({ engineX, localRect.y });
+				};
+
+			const auto updateHandle =
+				[&, this]()
+				{
+					updateHandleFlags();
+					updateHandleColours();
+
+					if (m_HandleIsClicked)
+						updateHandlePosition();
+				};
+
+			updateHandle();
 
 			m_BackingFill->Update();
 			m_BackingStroke->Update();
@@ -767,12 +830,14 @@ namespace BlastOff
 		}
 
 	protected:
+		bool m_HandleIsClicked = false;
+		bool m_HandleIsSelected = false;
+
 		Num m_Value = 0;
 		Num m_Minimum = 0;
 		Num m_Maximum = 0;
-		Num m_StepSize = 0;
 
-		optional<Num> m_MostRecentValue = std::nullopt;
+		optional<Num> m_StepSize = 0;
 		Colours m_Colours = { 0 };
 
 		const InputManager* const m_InputManager = nullptr;
@@ -802,12 +867,12 @@ namespace BlastOff
 			const Num startValue,
 			const Num minimum,
 			const Num maximum,
-			const Num stepSize,
 			const CameraEmpty* const cameraEmpty,
 			Settings* const settings,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-			const ProgramConstants* const programConfig
+			const ProgramConstants* const programConfig,
+			const optional<Num> stepSize = std::nullopt
 		) :
 			SlideBar<Num>(
 				enginePosition,
@@ -819,12 +884,12 @@ namespace BlastOff
 				startValue,
 				minimum,
 				maximum,
-				c_StepSize,
 				c_Colours,
 				cameraEmpty,
 				coordTransformer,
 				inputManager,
-				programConfig
+				programConfig,
+				stepSize
 			),
 			m_Settings(settings)
 		{
@@ -835,8 +900,6 @@ namespace BlastOff
 		static constexpr float c_BackingRoundness = 1 / 10.0f;
 		static constexpr float c_HandleRoundness = 1 / 10.0f;
 		static constexpr float c_StrokeWidth = 2 / 44.0f;
-		static constexpr float c_Minimum = 480;
-		static constexpr float c_StepSize = 60;
 
 		static constexpr Vector2f c_HandleSize = { 1 / 6.0f, 1 / 3.0f };
 		static constexpr Vector2f c_BackingSize = { 5 / 2.0f, 3 / 20.0f };

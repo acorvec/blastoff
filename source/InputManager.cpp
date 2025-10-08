@@ -42,6 +42,12 @@ namespace BlastOff
         return IsMouseButtonPressed(buttonEnum);
     }
 
+    bool PlayableInputManager::GetMouseButtonReleased
+        (const int buttonEnum) const
+    {
+        return IsMouseButtonReleased(buttonEnum); 
+    }  
+
     Vector2f PlayableInputManager::CalculateMousePosition() const
     {
         const optional<CursorPosition> cursor = GetCursorPosition();
@@ -81,6 +87,13 @@ namespace BlastOff
     }
 
     bool CutsceneInputManager::GetMouseButtonPressed
+        (const int buttonEnum) const
+    {
+        (void)buttonEnum;
+        return false;
+    }
+
+    bool CutsceneInputManager::GetMouseButtonReleased
         (const int buttonEnum) const
     {
         (void)buttonEnum;

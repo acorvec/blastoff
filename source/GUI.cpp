@@ -1388,12 +1388,12 @@ namespace BlastOff
 			settings->GetWindowSize().y,
 			c_Minimum,
 			CalculateMaximum(settings),
-			c_StepSize,
 			cameraEmpty,
 			settings,
 			coordTransformer,
 			inputManager,
-			programConstants
+			programConstants,
+			c_StepSize
 		)
 	{
 

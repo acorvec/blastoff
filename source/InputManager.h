@@ -23,6 +23,8 @@ namespace BlastOff
         virtual bool GetKeyDown(const int keyEnum) const = 0;
         virtual bool GetMouseButtonDown(const int buttonEnum) const = 0;
         virtual bool GetMouseButtonPressed(const int buttonEnum) const = 0;
+        virtual bool GetMouseButtonReleased(const int buttonEnum) const = 0;
+
         virtual Vector2f CalculateMousePosition() const = 0;
 
         virtual void Update();
@@ -39,6 +41,8 @@ namespace BlastOff
         bool GetKeyDown(const int keyEnum) const override;
         bool GetMouseButtonDown(const int buttonEnum) const override;
         bool GetMouseButtonPressed(const int buttonEnum) const override;
+        bool GetMouseButtonReleased(const int buttonEnum) const override;
+
         Vector2f CalculateMousePosition() const override;
     };
 
@@ -53,6 +57,8 @@ namespace BlastOff
         bool GetKeyDown(const int keyEnum) const override;
         bool GetMouseButtonDown(const int buttonEnum) const override;
         bool GetMouseButtonPressed(const int buttonEnum) const override;
+        bool GetMouseButtonReleased(const int buttonEnum) const override;
+
         Vector2f CalculateMousePosition() const override;
 
         void Update() override;

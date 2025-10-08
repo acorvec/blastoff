@@ -1,7 +1,69 @@
 #include "Utils.h"
 
 namespace BlastOff
-{
+{	
+	string ByteToHexString(const byte value)
+	{
+		return std::format("{:#04x}", value);
+	}
+
+	string BoolToString(const bool value)
+	{
+		return value ? "true" : "false";
+	}
+
+	float GetRandomFloat()
+	{
+		constexpr int max = std::numeric_limits<int>::max();
+		return GetRandomValue(0, max) / (float)max;
+	}
+
+	float RoundToFraction(const float num, const float fraction)
+	{
+		return roundf(num  / fraction) * fraction;
+	}
+
+
+	float SineInterpolation(const float number)
+	{
+		// link to graph:
+		// https://www.desmos.com/calculator/ticikc609f
+		constexpr float A = -1 / 2.0;
+		constexpr float B = 3 / 2.0;
+
+		return A * (sinf(c_Pi * (number - B)) - 1);
+	}
+
+	float NthSineInterpolation(
+		const float number,
+		const float applications
+	)
+	{
+		const float last_index = floor(applications);
+		float result = number;
+
+		for (size_t index = 0; index < last_index; index++)
+			result = SineInterpolation(result);
+
+		// interpolate if 'applications' is a non-integer number
+		if ((applications - last_index) > 0)
+		{
+			const float next_application = SineInterpolation(result);
+			const float progress = 1 - (applications - last_index);
+			if (next_application > result)
+				result = Lerp(result, next_application, progress);
+			else
+				result = Lerp(next_application, result, progress);
+		}
+		return result;
+	}
+
+	float DoubleSineInterpolation(const float number)
+	{
+		return NthSineInterpolation(number, 2);
+	}
+
+
 	optional<float> Edge2f::GetSign() const
 	{
 		switch (side)
@@ -83,7 +145,11 @@ namespace BlastOff
 
 	Vector2f Vector2f::RoundToFraction(const float fraction) const
 	{
-		return ((*this) / fraction).ToVector2i() * fraction;
+		return 
+		{ 
+			BlastOff::RoundToFraction(x, fraction), 
+			BlastOff::RoundToFraction(x, fraction) 
+		};
 	}
 
 	Vector2f::operator string() const
@@ -404,23 +470,6 @@ namespace BlastOff
 	}
 
 
-	string ByteToHexString(const byte value)
-	{
-		return std::format("{:#04x}", value);
-	}
-
-	string BoolToString(const bool value)
-	{
-		return value ? "true" : "false";
-	}
-
-	float GetRandomFloat()
-	{
-		constexpr int max = std::numeric_limits<int>::max();
-		return GetRandomValue(0, max) / (float)max;
-	}
-
-
 	// TODO: try caching expensive method
 	Rect2f Crop2f::CalculateSourceRect(const Vector2i textureSize) const
 	{
@@ -435,45 +484,5 @@ namespace BlastOff
 
 			return Rect2f({ x, y }, { w, h });
 		}
-	}
-
-
-	float SineInterpolation(const float number)
-	{
-		// link to graph:
-		// https://www.desmos.com/calculator/ticikc609f
-		constexpr float A = -1 / 2.0;
-		constexpr float B = 3 / 2.0;
-
-		return A * (sinf(c_Pi * (number - B)) - 1);
-	}
-
-	float NthSineInterpolation(
-		const float number,
-		const float applications
-	)
-	{
-		const float last_index = floor(applications);
-		float result = number;
-
-		for (size_t index = 0; index < last_index; index++)
-			result = SineInterpolation(result);
-
-		// interpolate if 'applications' is a non-integer number
-		if ((applications - last_index) > 0)
-		{
-			const float next_application = SineInterpolation(result);
-			const float progress = 1 - (applications - last_index);
-			if (next_application > result)
-				result = Lerp(result, next_application, progress);
-			else
-				result = Lerp(next_application, result, progress);
-		}
-		return result;
-	}
-
-	float DoubleSineInterpolation(const float number)
-	{
-		return NthSineInterpolation(number, 2);
 	}
 }
