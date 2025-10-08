@@ -6,9 +6,9 @@
 
 namespace BlastOff
 {
-	struct ProgramConfiguration
+	struct ProgramConstants
 	{
-		ProgramConfiguration();
+		ProgramConstants();
 
 		bool GetSoundEnabled() const;
 		bool GetEscapeKeyEnabled() const;
@@ -28,9 +28,7 @@ namespace BlastOff
 		const string& GetFontFace() const;
 		int GetFontRenderSize() const;
 
-		Vector2f GetTopRightButtonMargins() const;
-		Vector2f GetMainMenuButtonMargins() const;
-		Vector2i GetDefaultWindowSize() const;
+		Vector2f GetDefaultAspectRatio() const;
 
 		const string& GetName() const;
 		const string& GetVersion() const;
@@ -71,9 +69,7 @@ namespace BlastOff
 		string m_FontFace;
 		int m_FontRenderSize;
 
-		Vector2f m_TopRightButtonMargins;
-		Vector2f m_MainMenuButtonMargins;
-		Vector2i m_DefaultWindowSize;
+		Vector2f m_DefaultAspectRatio;
 
 		string m_Name;
 		string m_Version;

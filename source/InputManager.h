@@ -1,5 +1,5 @@
 #include "Graphics.h"
-#include "ProgramConfiguration.h"
+#include "ProgramConstants.h"
 #include "Utils.h"
 
 namespace BlastOff
@@ -47,7 +47,7 @@ namespace BlastOff
         CutsceneInputManager(
             const CoordinateTransformer* const coordTransformer,
             const Vector2f* const cameraPosition,
-            const ProgramConfiguration* const programConfig
+            const ProgramConstants* const programConfig
         );
 
         bool GetKeyDown(const int keyEnum) const override;
@@ -61,7 +61,7 @@ namespace BlastOff
         static const float c_MaxOscillationTick;
 
         const Vector2f* m_CameraPosition;
-        const ProgramConfiguration* m_ProgramConfig;
+        const ProgramConstants* m_ProgramConfig;
 
         float m_OscillationTick = 0;
     };

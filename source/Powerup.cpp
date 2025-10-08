@@ -69,7 +69,7 @@ namespace BlastOff
 
 	Powerup::Powerup(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		Player* const player,
 		ImageTextureLoader* const imageTextureLoader,
 		const Vector2f enginePosition,
@@ -134,7 +134,7 @@ namespace BlastOff
 
 	SpeedUpPowerup::SpeedUpPowerup(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		Player* const player,
 		ImageTextureLoader* const imageTextureLoader,
 		const Vector2f enginePosition
@@ -178,7 +178,7 @@ namespace BlastOff
 
 	FuelUpPowerup::FuelUpPowerup(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		Player* const player,
 		ImageTextureLoader* const imageTextureLoader,
 		const Vector2f enginePosition

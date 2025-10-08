@@ -2,7 +2,7 @@
 
 namespace BlastOff
 {
-	void Logging::Initialize(const ProgramConfiguration* const programConfig)
+	void Logging::Initialize(const ProgramConstants* const programConfig)
 	{
 		m_ProgramConfig = programConfig;
 	}

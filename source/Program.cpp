@@ -1,7 +1,11 @@
 #include "Program.h"
 #include "Game.h"
 #include "Logging.h"
+#include "ProgramConstants.h"
+#include "Settings.h"
+#include "raylib.h"
 
+#include <memory>
 #include <stdexcept>
 
 namespace BlastOff
@@ -15,14 +19,44 @@ namespace BlastOff
 				Logging::Log(message);
 			};
 
+		const auto applySettings = 
+			[this]()
+			{
+				const Vector2f aspectRatio = c_Config.GetDefaultAspectRatio();
+				m_Settings = std::make_unique<Settings>(aspectRatio);
+
+				const Vector2i windowSize = m_Settings->GetWindowSize();
+				const Vector2i windowPosition = 
+				{
+					m_Settings->GetWindowPosition()
+				};
+				m_Window->SetSize(windowSize);
+				m_Window->SetPosition(windowPosition);
+			};
+
+		const auto pauseForOneFrame = 
+			[this]()
+			{
+				BeginDrawing();
+
+				const Colour4i voidColour = c_Config.GetVoidColour();
+				ClearBackground(voidColour.ToRayColour());
+
+				EndDrawing();
+			};
+
 		const auto initializeGraphics =
 			[&, this]()
 			{
-				const Vector2i windowSize = c_Config.GetDefaultWindowSize();
+				constexpr Vector2i dummyWindowSize = { 0, 0 };
 				const string windowName = c_Config.CalculateBuildString();
 
-				m_Window = std::make_unique<RayWindow>(windowSize, windowName);
-
+				m_Window = std::make_unique<RayWindow>(
+					dummyWindowSize, 
+					windowName
+				);
+				applySettings();
+				
 				const int normalFramerate = CalculateNormalFramerate();
 				SetFramerate(normalFramerate);
 
@@ -41,6 +75,27 @@ namespace BlastOff
 				{
 					std::make_unique<TextTextureLoader>(&m_Font)
 				};
+				m_CoordinateTransformer = std::make_unique<CoordinateTransformer>(
+                    m_Window->GetSize(),
+                    m_Window->GetPosition(),
+                    &m_CameraPosition                    
+                );
+
+				// pause for one frame because of 
+				// some weird bug with Raylib or GLFW
+				pauseForOneFrame();
+
+				m_Window->Update();
+                m_CoordinateTransformer->Update();
+                const CoordinateTransformer* const coordTransformer = 
+                {
+                    m_CoordinateTransformer.get()
+                };
+                m_CameraEmpty = std::make_unique<CameraEmpty>(
+                    m_CoordinateTransformer.get(),
+                    &c_Config,
+                    &m_CameraPosition
+                );
 			};
 
 		const auto initializeSound =
@@ -89,13 +144,14 @@ namespace BlastOff
 
 		Logging::Initialize(&c_Config);
 		logInitialMessage();
-		
+
 		initializeGraphics();
 		initializeSound();
 		initializeBackgroundMusic();
 		disableEscapeKey();
 		InitializeMainMenu();
 		InitializeGame();
+		InitializeCutscene();
 
 		m_State = State::MainMenu;
 	}
@@ -119,49 +175,6 @@ namespace BlastOff
 		Update();
 		Draw();
 		EndFrame();
-
-		if (m_GameShouldReset)
-		{
-			InitializeGame();
-			m_GameShouldReset = false;
-		}
-
-		const auto reinitializeRelevantObject = 
-			[this](const State state)
-			{
-				switch (state)
-				{
-					case State::Game:
-						InitializeGame();
-						break;
-
-					case State::MainMenu:
-						InitializeMainMenu();
-						break;
-
-					default:
-						throw std::runtime_error(
-							"Program::Update() failed: "
-							"Invalid value of ProgramState enum."
-						);
-				}
-			};
-
-		const auto handleStateChange = 
-			[&, this]()
-			{
-				reinitializeRelevantObject(m_State);
-				reinitializeRelevantObject(*m_PendingStateChange);
-				
-				m_State = *m_PendingStateChange;
-				m_PendingStateChange = std::nullopt;
-			};
-			
-		if (m_PendingStateChange)
-			handleStateChange();
-
-		if (m_ShouldCloseAfterFrame)
-			m_IsRunning = false;
 	}
 
 	void Program::Update()
@@ -214,7 +227,10 @@ namespace BlastOff
 			};
 #endif
 
+		m_CoordinateTransformer->Update();
+		m_CameraEmpty->Update();
 		m_Window->Update();
+		m_Cutscene->Update();
 
 		if (m_State == State::MainMenu)
 			m_MainMenu->Update();
@@ -242,6 +258,8 @@ namespace BlastOff
 		const Colour4i voidColour = c_Config.GetVoidColour();
 		ClearBackground(voidColour.ToRayColour());
 
+		m_Cutscene->Draw();
+
 		if (m_State == State::MainMenu)
 			m_MainMenu->Draw();
 		else if (m_State == State::Game)
@@ -252,6 +270,54 @@ namespace BlastOff
 
 	void Program::EndFrame()
 	{
+		const auto reinitializeRelevantObject = 
+			[&, this](const State state)
+			{
+				switch (state)
+				{
+					case State::Game:
+						InitializeGame();
+						break;
+
+					case State::MainMenu:
+						InitializeMainMenu();
+						break;
+
+					default:
+						throw std::runtime_error(
+							"Program::Update() failed: "
+							"Invalid value of ProgramState enum."
+						);
+				}
+			};
+
+		const auto handleStateChange = 
+			[&, this]()
+			{
+				reinitializeRelevantObject(m_State);
+				reinitializeRelevantObject(*m_PendingStateChange);
+				
+				m_State = *m_PendingStateChange;
+				m_PendingStateChange = std::nullopt;
+			};
+			
+		if (m_PendingStateChange)
+			handleStateChange();
+
+		if (m_ShouldCloseAfterFrame)
+			m_IsRunning = false;
+
+		if (m_GameShouldReset)
+		{
+			InitializeGame();
+			m_GameShouldReset = false;
+		}
+        if (m_CutsceneShouldReset)
+        {
+            InitializeCutscene();
+            m_CutsceneShouldReset = false;
+        }
+
 		if (WindowShouldClose())
 			m_IsRunning = false;
 	}
@@ -351,9 +417,10 @@ namespace BlastOff
 
 		m_MainMenu = std::make_unique<MainMenu>(
 			&c_Config,
+			m_CoordinateTransformer.get(),
+			m_CameraEmpty.get(),
 			&m_ImageTextureLoader,
 			m_TextTextureLoader.get(),
-			&m_SoundLoader,
 			playCallback,
 			settingsCallback,
 			exitCallback,
@@ -362,4 +429,27 @@ namespace BlastOff
 			m_Window->GetSize()
 		);
 	}
+
+    void Program::InitializeCutscene()
+    {
+        const auto resetCallback = 
+            [this]()
+            {
+                m_CutsceneShouldReset = true;
+            };
+
+        m_Cutscene = std::make_unique<Cutscene>(
+            &c_Config,
+            m_CoordinateTransformer.get(),
+            m_CameraEmpty.get(),
+            &m_ImageTextureLoader,
+            m_TextTextureLoader.get(),
+            &m_SoundLoader,
+            &m_CameraPosition,
+            resetCallback,
+            &m_Font,
+            m_Window->GetPosition(),
+            m_Window->GetSize()
+        );       
+    }
 }

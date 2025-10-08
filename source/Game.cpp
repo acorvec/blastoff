@@ -9,7 +9,7 @@
 namespace BlastOff
 {
 	Game::Game(
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
 		SoundLoader* const soundLoader,
@@ -614,7 +614,7 @@ namespace BlastOff
 
 	PlayableGame::PlayableGame(
         const bool* const programIsMuted,
-        const ProgramConfiguration* const programConfig,
+        const ProgramConstants* const programConfig,
         ImageTextureLoader* const imageTextureLoader,
         TextTextureLoader* const textTextureLoader,
         SoundLoader* const soundLoader,
@@ -837,7 +837,7 @@ namespace BlastOff
 
 
     Cutscene::Cutscene(
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		CoordinateTransformer* const coordTransformer,
 		CameraEmpty* const cameraEmpty,
 		ImageTextureLoader* const imageTextureLoader,

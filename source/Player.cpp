@@ -73,7 +73,7 @@ namespace BlastOff
 		const Platform* const platform, 
 		const CoordinateTransformer* const coordTransformer,
 		const GameConstants* const gameConstants,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		const InputManager* const inputManager,
 		ImageTextureLoader* const imageTextureLoader
 	) :

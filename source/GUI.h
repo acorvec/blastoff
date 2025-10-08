@@ -36,14 +36,14 @@ namespace BlastOff
 		unique_ptr<ImageSprite> m_EnergySprite = nullptr;
 
 		const CameraEmpty* m_CameraEmpty = nullptr;
-		const ProgramConfiguration* m_ProgramConfig = nullptr;
+		const ProgramConstants* m_ProgramConfig = nullptr;
 
 		const float* m_StatisticValue = nullptr;
 		float m_SmoothStatisticValue = 0;
 
 		GUIBar(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			const CameraEmpty* const cameraEmpty,
 			const float* const statisticValue,
@@ -57,7 +57,7 @@ namespace BlastOff
 	{
 		FuelBar(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			const CameraEmpty* const cameraEmpty,
 			const Player* const player
@@ -76,7 +76,7 @@ namespace BlastOff
 	{
 		SpeedupBar(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			const CameraEmpty* const cameraEmpty,
 			const Player* const player
@@ -110,7 +110,7 @@ namespace BlastOff
 			const float fontSize,
 			const char* const message,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			TextTextureLoader* const textTextureLoader,
 			const Font* const font
 		);
@@ -140,7 +140,7 @@ namespace BlastOff
 			const Colour4i colour,
 			const char* const message,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			TextTextureLoader* const textTextureLoader,
 			const Font* const font
 		);
@@ -164,7 +164,7 @@ namespace BlastOff
 			const Colours colours,
 			const char* const message,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			TextTextureLoader* const textTextureLoader,
 			const Font* const font
 		);
@@ -182,7 +182,7 @@ namespace BlastOff
 		FuelBarLabel(
 			const GUIBar* fuelBar,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			TextTextureLoader* const textTextureLoader,
 			const Font* const font
 		);
@@ -197,7 +197,7 @@ namespace BlastOff
 		SpeedupBarLabel(
 			const GUIBar* speedupLabel,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			TextTextureLoader* const textTextureLoader,
 			const Font* const font
 		);
@@ -247,7 +247,7 @@ namespace BlastOff
 			const Sprite* const parent,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-			const ProgramConfiguration* const programConfig
+			const ProgramConstants* const programConfig
 		);
 	};
 
@@ -279,7 +279,7 @@ namespace BlastOff
             const bool* const programIsMuted,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-            const ProgramConfiguration* const programConfig,
+            const ProgramConstants* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
             const Callback& muteCallback,
             const CameraEmpty* const cameraEmpty
@@ -308,7 +308,7 @@ namespace BlastOff
 		ResetButton(
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			const Callback& resetCallback,
 			const Vector2f enginePosition,
@@ -328,7 +328,7 @@ namespace BlastOff
 		TopRightResetButton(
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			const Callback& resetCallback,
 			const CameraEmpty* const cameraEmpty
@@ -345,7 +345,7 @@ namespace BlastOff
 		Vector2f m_StartingPosition = Vector2f::Zero();
 		Vector2f m_EndingPosition = Vector2f::Zero();
 
-		const ProgramConfiguration* m_ProgramConfig = nullptr;
+		const ProgramConstants* m_ProgramConfig = nullptr;
 
 		bool IsSlidingOut() const;
 	};
@@ -358,7 +358,7 @@ namespace BlastOff
 		TopRightExitButton(
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-            const ProgramConfiguration* const programConfig,
+            const ProgramConstants* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
             const Callback& exitCallback,
             const CameraEmpty* const cameraEmpty
@@ -377,7 +377,7 @@ namespace BlastOff
 		PlayButton(
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-            const ProgramConfiguration* const programConfig,
+            const ProgramConstants* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
             const Callback& playCallback,
             const CameraEmpty* const cameraEmpty
@@ -394,7 +394,7 @@ namespace BlastOff
 		SettingsButton(
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-            const ProgramConfiguration* const programConfig,
+            const ProgramConstants* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
             const Callback& settingsCallback,
             const CameraEmpty* const cameraEmpty
@@ -411,7 +411,7 @@ namespace BlastOff
 		MainMenuExitButton(
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-            const ProgramConfiguration* const programConfig,
+            const ProgramConstants* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
             const Callback& exitCallback,
             const CameraEmpty* const cameraEmpty
@@ -433,7 +433,7 @@ namespace BlastOff
 			const Callback& resetCallback,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
 			const CameraEmpty* const cameraEmpty,
@@ -464,7 +464,7 @@ namespace BlastOff
 		Vector2f m_SlideInStartPosition = Vector2f::Zero();
 		Vector2f m_SlideInEndPosition = Vector2f::Zero();
 
-		const ProgramConfiguration* m_ProgramConfig = nullptr;
+		const ProgramConstants* m_ProgramConfig = nullptr;
 
 		unique_ptr<RoundedRectangleSprite> m_BackingFill = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_BackingStroke = nullptr;
@@ -478,7 +478,7 @@ namespace BlastOff
 			const Callback& resetCallback,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
 			const CameraEmpty* const cameraEmpty,
@@ -496,7 +496,7 @@ namespace BlastOff
 			const Callback& resetCallback,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
 			const CameraEmpty* const cameraEmpty,
@@ -507,4 +507,45 @@ namespace BlastOff
 		static const Colour4i c_BackingColour;
 		static const char* const c_MessageText;
     };
+
+    struct MainMenu
+    {
+        MainMenu(
+            const ProgramConstants* const programConfig,
+            const CoordinateTransformer* const coordTransformer,
+            const CameraEmpty* const cameraEmpty,
+            ImageTextureLoader* const imageTextureLoader,
+            TextTextureLoader* const textTextureLoader,
+            const Callback& playCallback,
+            const Callback& settingsCallback,
+            const Callback& exitCallback,
+            const Font* const font,
+            const Vector2i* const windowPosition,
+            const Vector2i* const windowSize
+        );
+
+        void Update();
+        void Draw() const;
+
+    private:
+        unique_ptr<InputManager> m_InputManager = nullptr;
+        unique_ptr<Button> m_PlayButton = nullptr;
+        unique_ptr<Button> m_SettingsButton = nullptr;
+        unique_ptr<ExitButton> m_ExitButton = nullptr;
+
+        const ProgramConstants* m_ProgramConfig = nullptr;
+        const Font* m_Font = nullptr;
+        const CoordinateTransformer* m_CoordTransformer = nullptr;
+        const CameraEmpty* m_CameraEmpty = nullptr;
+        const Vector2i* m_WindowPosition = nullptr;
+        const Vector2i* m_WindowSize = nullptr;
+        
+        ImageTextureLoader* m_ImageTextureLoader = nullptr;
+        TextTextureLoader* m_TextTextureLoader = nullptr;
+    };
+
+	struct SettingsMenu
+	{
+	
+	};
 }
