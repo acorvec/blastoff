@@ -23,7 +23,7 @@ namespace BlastOff
 			[this]()
 			{
 				const Vector2f aspectRatio = c_Config.GetDefaultAspectRatio();
-				m_Settings = std::make_unique<Settings>(aspectRatio);
+				m_Settings = Settings::LoadOrDefault(aspectRatio);
 
 				const Vector2i windowSize = m_Settings->GetWindowSize();
 				const Vector2i windowPosition = 
@@ -158,11 +158,22 @@ namespace BlastOff
 
 	Program::~Program()
 	{
+		const auto writeSettingsFile = 
+			[this]()
+			{
+				const Vector2i* positionPtr = m_Window->GetPosition();
+				m_Settings->UpdateWindowPosition(*positionPtr);
+
+				m_Settings->SaveToDefaultPath();
+			};
+
 		if (IsAudioDeviceReady())
 			CloseAudioDevice();
 
 		if (m_Font.texture.id)
 			UnloadFont(m_Font);
+
+		writeSettingsFile();
 	}
 
 	bool Program::IsRunning() const

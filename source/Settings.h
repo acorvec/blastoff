@@ -1,39 +1,44 @@
 #pragma once
 
 #include "Utils.h"
-#include "Graphics.h"
 
+#include <glaze/core/common.hpp>
 #include <glaze/glaze.hpp>
 
 namespace BlastOff
 {
+    struct V2IntReflect
+    {
+        int x, y;
+    };
+    static_assert(glz::reflectable<V2IntReflect>);
+
     struct ReflectableSettings
     {
         float audioVolume = 0;
-        bool audioIsMuted = 0;
-        array<int, 2> windowSize = {};
-        array<int, 2> windowPosition = {};
+        bool audioIsMuted = false;
+        V2IntReflect windowPosition = {};
+        V2IntReflect windowSize = {};
     };
-
     static_assert(glz::reflectable<ReflectableSettings>);
 
     struct Settings
     {
         using Reflectable = ReflectableSettings;
 
-        static unique_ptr<Settings> LoadFromDefaultPath();
-
-        void SaveToDefaultPath() const;
+        static unique_ptr<Settings> LoadOrDefault(const Vector2f aspectRatio);
 
         float GetAudioVolume() const;
         bool IsAudioMuted() const;
 
-        Vector2i GetWindowSize() const;
         Vector2i GetWindowPosition() const;
+        Vector2i GetWindowSize() const;
+
+        void UpdateWindowPosition(const Vector2i windowPosition);
+        void SaveToDefaultPath() const;
 
         Settings(const Vector2f aspectRatio);
         Settings(const Reflectable& equivalent);
-        Settings(const char* const loadPath);
 
     private:
         static const char* const c_DefaultPath;
@@ -42,9 +47,10 @@ namespace BlastOff
         float m_AudioVolume = 1;
         bool m_AudioIsMuted = false;
         
-        Vector2i m_WindowSize = Vector2i::Zero();
         Vector2i m_WindowPosition = Vector2i::Zero();
+        Vector2i m_WindowSize = Vector2i::Zero();
 
-        Reflectable ToReflectable();
+        static unique_ptr<Settings> LoadFromDefaultPath();
+        Reflectable ToReflectable() const;
     };
 }

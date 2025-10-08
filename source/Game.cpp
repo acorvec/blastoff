@@ -763,14 +763,10 @@ namespace BlastOff
     {
         Game::Draw();
 
-        // Oct. 5th, 2025:
-        //
         // TODO: if the PlayableGame class ever needs to draw something
         // below ANYTHING in the Game class, this will literally not be
         // possible.
         // a fix may be needed eventually
-        //
-        // - Andrew Corvec
         m_WinMenu->Draw();
         m_LoseMenu->Draw();
         m_MuteButton->Draw();
