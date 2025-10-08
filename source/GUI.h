@@ -764,7 +764,7 @@ namespace BlastOff
 				};
 
 			const auto clampHandlePosition = 
-				[this](const float mouseX)
+				[this](const float mouseX) -> float
 				{
 					const float left = 
 					{
@@ -787,6 +787,12 @@ namespace BlastOff
 						return mouseX;
 				};
 
+			// const auto snapHandlePosition =
+			// 	[this](const Num beforeSnapping) -> Num
+			// 	{
+					
+			// 	};
+
 			const auto updateHandlePosition = 
 				[&, this]()
 				{
@@ -794,7 +800,25 @@ namespace BlastOff
 					{
 						m_InputManager->CalculateMousePosition()
 					};
-					const float engineX = clampHandlePosition(engineMouse.x);
+					const float beforeSnapping = 
+					{
+						clampHandlePosition(engineMouse.x)
+					};
+					const float left = 
+					{
+						m_BackingFill->GetEdgePosition(Direction::Left)
+					};
+					const float right = 
+					{
+						m_BackingFill->GetEdgePosition(Direction::Right)
+					};
+					const float progress = ReverseLerp(
+						left, 
+						right, 
+						beforeSnapping
+					);
+					m_Value = (progress * (m_Maximum - m_Minimum)) + m_Minimum;
+					const float engineX = beforeSnapping;
 
 					Sprite* handleRoot = GetHandleRoot();
 					const Rect2f localRect = handleRoot->GetEngineRect();
