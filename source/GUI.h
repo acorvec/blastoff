@@ -1,8 +1,10 @@
 #pragma once
 
+#include "Enums.h"
 #include "Utils.h"
 #include "Graphics.h"
 #include "Player.h"
+#include "Settings.h"
 
 namespace BlastOff
 {
@@ -361,11 +363,13 @@ namespace BlastOff
             const ProgramConstants* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
             const Callback& exitCallback,
-            const CameraEmpty* const cameraEmpty
+            const CameraEmpty* const cameraEmpty,
+			const ProgramState menuType
 		);
 
 	protected:
-		static const int c_ButtonIndex;
+		static const int c_ButtonIndexInGame;
+		static const int c_ButtonIndexInSettingsMenu;
 		
 		static const char* const c_UnselectedTexturePath;
 		static const char* const c_SelectedTexturePath;
@@ -513,6 +517,7 @@ namespace BlastOff
         MainMenu(
             const ProgramConstants* const programConfig,
             const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
             const CameraEmpty* const cameraEmpty,
             ImageTextureLoader* const imageTextureLoader,
             TextTextureLoader* const textTextureLoader,
@@ -528,12 +533,12 @@ namespace BlastOff
         void Draw() const;
 
     private:
-        unique_ptr<InputManager> m_InputManager = nullptr;
         unique_ptr<Button> m_PlayButton = nullptr;
         unique_ptr<Button> m_SettingsButton = nullptr;
         unique_ptr<ExitButton> m_ExitButton = nullptr;
 
         const ProgramConstants* m_ProgramConfig = nullptr;
+		const InputManager* m_InputManager = nullptr;
         const Font* m_Font = nullptr;
         const CoordinateTransformer* m_CoordTransformer = nullptr;
         const CameraEmpty* m_CameraEmpty = nullptr;
@@ -546,6 +551,23 @@ namespace BlastOff
 
 	struct SettingsMenu
 	{
-	
+		SettingsMenu(
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+            const ProgramConstants* const programConfig,
+            ImageTextureLoader* const imageTextureLoader,
+			Settings* const settings,
+            const Callback& exitCallback,
+            const CameraEmpty* const cameraEmpty
+		);
+
+		void Update();
+		void Draw() const;
+
+	private:
+		static const int c_WindowSizeStep;
+
+		Settings* m_Settings = nullptr;
+		unique_ptr<ExitButton> m_ExitButton = nullptr;
 	};
 }

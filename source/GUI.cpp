@@ -1,8 +1,11 @@
 #include "GUI.h"
+#include "Enums.h"
 #include "Graphics.h"
 #include "Player.h"
 #include "Utils.h"
 #include "raylib.h"
+#include <memory>
+#include <stdexcept>
 
 namespace BlastOff
 {
@@ -853,7 +856,8 @@ namespace BlastOff
 		const ProgramConstants* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& exitCallback,
-		const CameraEmpty* const cameraEmpty
+		const CameraEmpty* const cameraEmpty,
+		const ProgramState menuType
 	) :
 		ExitButton(
 			exitCallback,
@@ -869,6 +873,25 @@ namespace BlastOff
 			programConfig
 		)
 	{
+		const auto calculateButtonIndex = 
+			[&, this]()
+			{
+				switch (menuType)
+				{
+					case ProgramState::Game:
+						return c_ButtonIndexInGame;
+
+					case ProgramState::SettingsMenu:
+						return c_ButtonIndexInSettingsMenu;
+
+					default:
+						throw std::runtime_error(
+							"Unable to construct TopRightExitButton: "
+							"Invalid parameter \"menuType\"."
+						);
+				}
+			};
+
 		const Vector2f engineSize = TopRightButton::c_EngineSize;
 		const Vector2f margins = TopRightButton::c_Margins;
 
@@ -877,8 +900,10 @@ namespace BlastOff
 		{
 			((viewportSize - engineSize) / 2.0f) - margins
 		};
+
+		const int buttonIndex = calculateButtonIndex();
 		const Vector2f indexOffset = TopRightButton::CalculateIndexOffset(
-			c_ButtonIndex,
+			buttonIndex,
 			margins,
 			engineSize
 		);
@@ -886,7 +911,8 @@ namespace BlastOff
 		Translate(enginePosition);
 	}
 
-	const int TopRightExitButton::c_ButtonIndex = 2;
+	const int TopRightExitButton::c_ButtonIndexInGame = 2;
+	const int TopRightExitButton::c_ButtonIndexInSettingsMenu = 1;
 
 	const char* const TopRightExitButton::c_UnselectedTexturePath = 
 	{
@@ -1281,6 +1307,7 @@ namespace BlastOff
     MainMenu::MainMenu(
         const ProgramConstants* const programConfig,
         const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
         const CameraEmpty* const cameraEmpty,
         ImageTextureLoader* const imageTextureLoader,
         TextTextureLoader* const textTextureLoader,
@@ -1293,6 +1320,7 @@ namespace BlastOff
     ) :
         m_ProgramConfig(programConfig),
         m_CoordTransformer(coordTransformer),
+		m_InputManager(inputManager),
         m_CameraEmpty(cameraEmpty),
         m_ImageTextureLoader(imageTextureLoader),
         m_TextTextureLoader(textTextureLoader),
@@ -1300,21 +1328,12 @@ namespace BlastOff
         m_WindowPosition(windowPosition),
         m_WindowSize(windowSize)
     {
-        const auto initializeInput = 
-            [this]()
-            {
-                m_InputManager = 
-                {
-                    std::make_unique<PlayableInputManager>(m_CoordTransformer)
-                };
-            };
-
         const auto initializeButtons = 
             [&, this]()
             {
                 m_SettingsButton = std::make_unique<SettingsButton>(
                     m_CoordTransformer,
-                    m_InputManager.get(),
+                    m_InputManager,
                     m_ProgramConfig,
                     m_ImageTextureLoader,
                     settingsCallback,
@@ -1322,7 +1341,7 @@ namespace BlastOff
                 );
                 m_PlayButton = std::make_unique<PlayButton>(
                     m_CoordTransformer,
-                    m_InputManager.get(),
+                    m_InputManager,
                     m_ProgramConfig,
                     m_ImageTextureLoader,
                     playCallback,
@@ -1330,7 +1349,7 @@ namespace BlastOff
                 );
                 m_ExitButton = std::make_unique<MainMenuExitButton>(
                     m_CoordTransformer,
-                    m_InputManager.get(),
+                    m_InputManager,
                     m_ProgramConfig,
                     m_ImageTextureLoader,
                     exitCallback,
@@ -1338,7 +1357,6 @@ namespace BlastOff
                 );
             };
 
-        initializeInput();
         initializeButtons();
     }
     
@@ -1355,4 +1373,39 @@ namespace BlastOff
         m_PlayButton->Draw();
         m_ExitButton->Draw();
     }
+
+
+	SettingsMenu::SettingsMenu(
+		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
+		const ProgramConstants* const programConfig,
+		ImageTextureLoader* const imageTextureLoader,
+		Settings* const settings,
+		const Callback& exitCallback,
+		const CameraEmpty* const cameraEmpty
+	) :
+		m_Settings(settings)
+	{
+		m_ExitButton = std::make_unique<TopRightExitButton>(
+			coordTransformer,
+			inputManager,
+			programConfig,
+			imageTextureLoader,
+			exitCallback,
+			cameraEmpty,
+			ProgramState::SettingsMenu
+		);
+	}
+
+	void SettingsMenu::Update()
+	{
+		m_ExitButton->Update();
+	}
+
+	void SettingsMenu::Draw() const
+	{
+		m_ExitButton->Draw();
+	}
+
+	const int SettingsMenu::c_WindowSizeStep = 50;
 }

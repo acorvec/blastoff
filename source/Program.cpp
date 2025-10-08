@@ -1,5 +1,7 @@
 #include "Program.h"
+#include "GUI.h"
 #include "Game.h"
+#include "Graphics.h"
 #include "Logging.h"
 #include "ProgramConstants.h"
 #include "Settings.h"
@@ -98,6 +100,19 @@ namespace BlastOff
                 );
 			};
 
+        const auto initializeInput = 
+            [this]()
+            {
+				const CoordinateTransformer* const coordTransformer = 
+				{
+					m_CoordinateTransformer.get()
+				};
+                m_InputManager = 
+                {
+                    std::make_unique<PlayableInputManager>(coordTransformer)
+                };
+            };
+
 		const auto initializeSound =
 			[this]()
 			{
@@ -146,11 +161,11 @@ namespace BlastOff
 		logInitialMessage();
 
 		initializeGraphics();
+		initializeInput();
 		initializeSound();
 		initializeBackgroundMusic();
 		disableEscapeKey();
 		InitializeMainMenu();
-		InitializeGame();
 		InitializeCutscene();
 
 		m_State = State::MainMenu;
@@ -197,6 +212,35 @@ namespace BlastOff
 					m_IsRunning = false;
 			};
 
+		const auto updateStateObject = 
+			[this]()
+			{
+				switch (m_State)
+				{
+					case State::Game:
+						m_Game->Update();
+						break;
+
+					case State::MainMenu:
+						m_MainMenu->Update();
+						break;
+
+					case State::SettingsMenu:
+						m_SettingsMenu->Update();
+						break;
+
+					default:
+					{
+						const char* const message = 
+						{
+							"Program::Update() failed: "
+							"Invalid value of m_State enum."
+						};
+						throw std::runtime_error(message);
+					}
+				}
+			};
+
 #if COMPILE_CONFIG_DEBUG
 		const auto activateFastMode =
 			[&, this]()
@@ -241,12 +285,11 @@ namespace BlastOff
 		m_CoordinateTransformer->Update();
 		m_CameraEmpty->Update();
 		m_Window->Update();
-		m_Cutscene->Update();
 
-		if (m_State == State::MainMenu)
-			m_MainMenu->Update();
-		else if (m_State == State::Game)
-			m_Game->Update();
+		if (ShouldShowCutscene())
+			m_Cutscene->Update();
+
+		updateStateObject();
 		
 		const bool isSoundEnabled = c_Config.GetSoundEnabled();
 		if (isSoundEnabled)
@@ -264,18 +307,45 @@ namespace BlastOff
 
 	void Program::Draw() const
 	{
+		const auto drawStateObject = 
+			[this]()
+			{
+				switch (m_State)
+				{
+					case State::Game:
+						m_Game->Draw();
+						break;
+
+					case State::MainMenu:
+						m_MainMenu->Draw();
+						break;
+
+					case State::SettingsMenu:
+						m_SettingsMenu->Draw();
+						break;
+
+					default:
+					{
+						const char* const message = 
+						{
+							"Program::Draw() failed: "
+							"Invalid value of m_State enum."
+						};
+						throw std::runtime_error(message);
+					}
+				}
+			};
+
 		BeginDrawing();
 
 		const Colour4i voidColour = c_Config.GetVoidColour();
 		ClearBackground(voidColour.ToRayColour());
 
-		m_Cutscene->Draw();
+		if (ShouldShowCutscene())
+			m_Cutscene->Draw();
 
-		if (m_State == State::MainMenu)
-			m_MainMenu->Draw();
-		else if (m_State == State::Game)
-			m_Game->Draw();
-
+		drawStateObject();
+		
 		EndDrawing();
 	}
 
@@ -294,6 +364,10 @@ namespace BlastOff
 						InitializeMainMenu();
 						break;
 
+					case State::SettingsMenu:
+						InitializeSettingsMenu();
+						break;
+
 					default:
 						throw std::runtime_error(
 							"Program::Update() failed: "
@@ -305,7 +379,6 @@ namespace BlastOff
 		const auto handleStateChange = 
 			[&, this]()
 			{
-				reinitializeRelevantObject(m_State);
 				reinitializeRelevantObject(*m_PendingStateChange);
 				
 				m_State = *m_PendingStateChange;
@@ -331,6 +404,13 @@ namespace BlastOff
 
 		if (WindowShouldClose())
 			m_IsRunning = false;
+	}
+
+	bool Program::ShouldShowCutscene() const
+	{
+		return 
+			(m_State == State::MainMenu) || 
+			(m_State == State::SettingsMenu);
 	}
 
 	int Program::CalculateNormalFramerate() const
@@ -410,7 +490,6 @@ namespace BlastOff
 		const auto settingsCallback = 
 			[this]()
 			{
-				// TODO: add settings menu functionality
 				m_PendingStateChange = State::SettingsMenu;
 			};
 
@@ -429,6 +508,7 @@ namespace BlastOff
 		m_MainMenu = std::make_unique<MainMenu>(
 			&c_Config,
 			m_CoordinateTransformer.get(),
+			m_InputManager.get(),
 			m_CameraEmpty.get(),
 			&m_ImageTextureLoader,
 			m_TextTextureLoader.get(),
@@ -463,4 +543,23 @@ namespace BlastOff
             m_Window->GetSize()
         );       
     }
+
+	void Program::InitializeSettingsMenu()
+	{
+		const auto exitCallback = 
+			[this]()
+			{
+				m_PendingStateChange = State::MainMenu;
+			};
+
+		m_SettingsMenu = std::make_unique<SettingsMenu>(
+			m_CoordinateTransformer.get(),
+			m_InputManager.get(),
+			&c_Config,
+			&m_ImageTextureLoader,
+			m_Settings.get(),
+			exitCallback,
+			m_CameraEmpty.get()
+		);
+	}
 }

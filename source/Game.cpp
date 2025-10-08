@@ -4,6 +4,7 @@
 #include "Graphics.h"
 #include "Logging.h"
 #include "Player.h"
+
 #include <memory>
 
 namespace BlastOff
@@ -731,7 +732,8 @@ namespace BlastOff
 					m_ProgramConfig,
 					imageTextureLoader,
 					exitCallback,
-					m_CameraEmpty.get()
+					m_CameraEmpty.get(),
+					ProgramState::Game
 				);
 			};
 
