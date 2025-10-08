@@ -8,7 +8,7 @@ namespace BlastOff
 {
 	Crag::Crag(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		ImageTextureLoader* const imageTextureLoader
 	)
 	{
@@ -45,7 +45,7 @@ namespace BlastOff
 	Platform::Platform(
 		const float platformHeight,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		ImageTextureLoader* const imageTextureLoader
 	)
 	{
@@ -144,7 +144,7 @@ namespace BlastOff
 	Background::Background(
 		const Rect2f* const worldBounds,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig
+		const ProgramConstants* const programConfig
 	) :
 		m_WorldBounds(worldBounds),
 		m_CoordTransformer(coordTransformer),
@@ -356,7 +356,7 @@ namespace BlastOff
 
 	Cloud::Cloud(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		const Rect2f* const worldBounds,
 		const Direction* const movementDirection,
@@ -459,7 +459,7 @@ namespace BlastOff
 
 	LowCloud::LowCloud(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		const Rect2f* const worldBounds,
 		const Direction* const movementDirection
@@ -493,7 +493,7 @@ namespace BlastOff
 
 	HighCloud::HighCloud(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		ImageTextureLoader* const imageTextureLoader,
 		const Rect2f* const worldBounds,
 		const Direction* const movementDirection

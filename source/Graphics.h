@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Utils.h"
-#include "ProgramConfiguration.h"
+#include "ProgramConstants.h"
 
 #include "raylib.h"
 
@@ -31,6 +31,9 @@ namespace BlastOff
 
 		const Vector2i* GetPosition() const;
 		const Vector2i* GetSize() const;
+
+		void SetPosition(const Vector2i position);
+		void SetSize(const Vector2i size);
 
 	private:
 		Vector2i m_Position = Vector2i::Zero();
@@ -81,7 +84,7 @@ namespace BlastOff
 		Sprite(
 			const Rect2f engineRect,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig
+			const ProgramConstants* const programConfig
 		);
 		virtual ~Sprite()
 		{
@@ -140,7 +143,7 @@ namespace BlastOff
 		const Sprite* m_Parent = nullptr;
 
 		const CoordinateTransformer* m_CoordTransformer = nullptr;
-		const ProgramConfiguration* m_ProgramConfig = nullptr;
+		const ProgramConstants* m_ProgramConfig = nullptr;
 	};
 
 	struct Empty : public Sprite
@@ -148,7 +151,7 @@ namespace BlastOff
 		Empty(
 			const Vector2f enginePosition,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig
+			const ProgramConstants* const programConfig
 		);
 
 		void Draw() const override;
@@ -161,7 +164,7 @@ namespace BlastOff
 	{
 		CameraEmpty(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			const Vector2f* const cameraPosition
 		);
 
@@ -176,7 +179,7 @@ namespace BlastOff
 		GradientSprite(
 			const Rect2f engineRect,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			const Colour4i firstColour, 
 			const Colour4i secondColour, 
 			const Direction direction
@@ -241,26 +244,26 @@ namespace BlastOff
 		ImageSprite(
 			const Rect2f engineRect,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			const Texture* const texture
 		);
 		ImageSprite(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			const Texture* const texture
 		);
 
 		static unique_ptr<ImageSprite> LoadFromPath(
 			const char* const resourcePath,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* imageTextureLoader
 		);
 		static unique_ptr<ImageSprite> LoadFromPath(
 			const Rect2f engineRect,
 			const char* const resourcePath,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* imageTextureLoader
 		);
 
@@ -293,7 +296,7 @@ namespace BlastOff
 			const float fontSize,
 			const char* const message,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			TextTextureLoader* const textureLoader,
 			const Font* const font
 		);
@@ -338,7 +341,7 @@ namespace BlastOff
 			const Colour4i colour,
 			const float roundness,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			const optional<float> strokeWidth = std::nullopt
 		);
 

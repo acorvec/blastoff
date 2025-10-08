@@ -3,12 +3,13 @@
 #include "raylib.h"
 
 #include "Utils.h"
-#include "ProgramConfiguration.h"
+#include "ProgramConstants.h"
 #include "Debug.h"
 #include "Graphics.h"
 #include "Game.h"
 #include "Sound.h"
 #include "Enums.h"
+#include "Settings.h"
 
 namespace BlastOff
 {
@@ -27,7 +28,7 @@ namespace BlastOff
 	private:
 		using State = ProgramState;
 
-		static const inline ProgramConfiguration c_Config;
+		static const inline ProgramConstants c_Config;
 
 		bool m_IsRunning = true;
 		bool m_ShouldCloseAfterFrame = false;
@@ -44,6 +45,7 @@ namespace BlastOff
 		SoundLoader m_SoundLoader;
 		MusicLoader m_MusicLoader;
 
+		unique_ptr<Settings> m_Settings = nullptr;
 		unique_ptr<TextTextureLoader> m_TextTextureLoader = nullptr;
         unique_ptr<CoordinateTransformer> m_CoordinateTransformer = nullptr;
         unique_ptr<CameraEmpty> m_CameraEmpty = nullptr;

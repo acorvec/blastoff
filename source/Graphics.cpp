@@ -65,6 +65,16 @@ namespace BlastOff
 		return &m_Size;
 	}
 
+	void RayWindow::SetPosition(const Vector2i position)
+	{
+		SetWindowPosition(position.x, position.y);
+	}
+
+	void RayWindow::SetSize(const Vector2i size)
+	{
+		SetWindowSize(size.x, size.y);
+	}
+
 	void RayWindow::UpdatePosition()
 	{
 		const RayVector2f unconverted = GetWindowPosition();
@@ -183,7 +193,7 @@ namespace BlastOff
 	Sprite::Sprite(
 		const Rect2f engineRect,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig
+		const ProgramConstants* const programConfig
 	) : 
 		m_EngineRect(engineRect),
 		m_CoordTransformer(coordTransformer),
@@ -393,7 +403,7 @@ namespace BlastOff
 	Empty::Empty(
 		const Vector2f enginePosition,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig
+		const ProgramConstants* const programConfig
 	) :
 		Sprite(
 			SetEnginePosition(enginePosition), 
@@ -417,7 +427,7 @@ namespace BlastOff
 
 	CameraEmpty::CameraEmpty(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		const Vector2f* const cameraPosition
 	) :
 		Empty(
@@ -440,7 +450,7 @@ namespace BlastOff
 	GradientSprite::GradientSprite(
 		const Rect2f engineRect,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		const Colour4i firstColour,
 		const Colour4i secondColour,
 		const Direction direction
@@ -683,7 +693,7 @@ namespace BlastOff
 	ImageSprite::ImageSprite(
 		const Rect2f engineRect,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		const Texture* const texture
 	) :
 		Sprite(
@@ -697,7 +707,7 @@ namespace BlastOff
 
 	ImageSprite::ImageSprite(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		const Texture* const texture
 	) :
 		ImageSprite(
@@ -713,7 +723,7 @@ namespace BlastOff
 	unique_ptr<ImageSprite> ImageSprite::LoadFromPath(
 		const char* const resourcePath,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		ImageTextureLoader* imageTextureLoader
 	)
 	{
@@ -731,7 +741,7 @@ namespace BlastOff
 		const Rect2f engineRect,
 		const char* const resourcePath,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		ImageTextureLoader* imageTextureLoader
 	)
 	{
@@ -848,7 +858,7 @@ namespace BlastOff
 		const float fontSize,
 		const char* const message,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		TextTextureLoader* const textureLoader,
 		const Font* const font
 	) :
@@ -970,7 +980,7 @@ namespace BlastOff
 		const Colour4i colour,
 		const float roundness,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConfiguration* const programConfig,
+		const ProgramConstants* const programConfig,
 		const optional<float> strokeWidth
 	) :
 		Sprite(

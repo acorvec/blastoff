@@ -10,7 +10,7 @@ namespace BlastOff
 	{
 		Crag(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* const imageTextureLoader
 		);
 
@@ -27,7 +27,7 @@ namespace BlastOff
 		Platform(
 			const float platformHeight,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig, 
+			const ProgramConstants* const programConfig, 
 			ImageTextureLoader* const imageTextureLoader
 		);
 
@@ -69,7 +69,7 @@ namespace BlastOff
 		Background(
 			const Rect2f* const worldBounds,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig
+			const ProgramConstants* const programConfig
 		);
 
 		void Update();
@@ -85,7 +85,7 @@ namespace BlastOff
 
 		const Rect2f* m_WorldBounds = nullptr;
 		const CoordinateTransformer* m_CoordTransformer = nullptr;
-		const ProgramConfiguration* m_ProgramConfig = nullptr;
+		const ProgramConstants* m_ProgramConfig = nullptr;
 
 #if COMPILE_CONFIG_DEBUG
 		int m_SpriteInitializationCount = 0;
@@ -116,7 +116,7 @@ namespace BlastOff
 		float m_RandomSpeedMultiplier = 0;
 		bool m_DrawsAbovePlayer = false;
 
-		const ProgramConfiguration* m_ProgramConfig = nullptr;
+		const ProgramConstants* m_ProgramConfig = nullptr;
 		const Rect2f* m_WorldBounds = nullptr;
 		const Direction* m_MovementDirection = nullptr;
 
@@ -124,7 +124,7 @@ namespace BlastOff
 
 		Cloud(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			const Rect2f* const worldBounds,
 			const Direction* const movementDirection,
@@ -150,7 +150,7 @@ namespace BlastOff
 	{
 		LowCloud(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			const Rect2f* const worldBounds,
 			const Direction* const movementDirection
@@ -169,7 +169,7 @@ namespace BlastOff
 	{
 		HighCloud(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConfiguration* const programConfig,
+			const ProgramConstants* const programConfig,
 			ImageTextureLoader* const imageTextureLoader,
 			const Rect2f* const worldBounds,
 			const Direction* const movementDirection

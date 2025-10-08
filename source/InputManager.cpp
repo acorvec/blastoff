@@ -60,7 +60,7 @@ namespace BlastOff
     CutsceneInputManager::CutsceneInputManager(
         const CoordinateTransformer* const coordTransformer,
         const Vector2f* const cameraPosition,
-        const ProgramConfiguration* const programConfig
+        const ProgramConstants* const programConfig
     ) :
         InputManager(coordTransformer),
         m_CameraPosition(cameraPosition),
