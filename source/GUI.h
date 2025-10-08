@@ -677,10 +677,39 @@ namespace BlastOff
 
 		void Update()
 		{
+			const auto updateHandlePosition = 
+				[this]()
+				{
+					const float left = 
+					{
+						m_BackingFill->GetEdgePosition(Direction::Left)
+					};
+					const float right = 
+					{
+						m_BackingFill->GetEdgePosition(Direction::Right)
+					};
+					const float progress = 
+					{
+						(m_Value - m_Minimum) / (float)(m_Maximum - m_Minimum)
+					};
+
+					const float a = left, b = right, t = progress;
+					const float engineX = Lerp(left, right, progress);
+
+					Sprite* handleRoot = GetHandleRoot();
+					handleRoot->SetLocalPosition({ engineX, 0 });
+				};
+
+			if ((!m_MostRecentValue) || (m_Value != *m_MostRecentValue))
+			{
+				updateHandlePosition();
+				m_MostRecentValue = m_Value;
+			}
+
 			m_BackingFill->Update();
 			m_BackingStroke->Update();
 
-			m_HandleFill->Draw();
+			m_HandleFill->Update();
 			m_HandleStroke->Update();
 		}
 
@@ -699,11 +728,18 @@ namespace BlastOff
 		Num m_Maximum = 0;
 		Num m_StepSize = 0;
 
+		optional<Num> m_MostRecentValue = std::nullopt;
+
 		unique_ptr<Sprite> m_BackingFill = nullptr;
 		unique_ptr<Sprite> m_BackingStroke = nullptr;
 
 		unique_ptr<Sprite> m_HandleFill = nullptr;
 		unique_ptr<Sprite> m_HandleStroke = nullptr;
+
+		Sprite* GetHandleRoot() const
+		{
+			return m_HandleFill.get();
+		}
 	};
 
 	template<

@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include "Utils.h"
 #include "raylib.h"
 #include <stdexcept>
 
@@ -201,6 +202,20 @@ namespace BlastOff
 		m_ProgramConfig(programConfig)
 	{
 
+	}
+
+	float Sprite::GetEdgePosition(const Direction side) const
+	{
+		const optional<float> result = m_EngineRect.GetEdgePosition(side);
+		if (!result)
+		{
+			throw std::runtime_error(
+				"Sprite::GetEdgePosition(const Direction side) failed: "
+				"invalid enum value of side."
+			);
+		}
+		else
+			return *result;
 	}
 
 	Vector2f Sprite::CalculateRealPosition() const

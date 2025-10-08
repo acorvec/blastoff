@@ -91,6 +91,8 @@ namespace BlastOff
 
 		}
 
+		float GetEdgePosition(const Direction side) const;
+
 		virtual Vector2f CalculateRealPosition() const;
 		virtual Vector2f CalculateRealSize() const;
 		Rect2f CalculateRealRect() const;
