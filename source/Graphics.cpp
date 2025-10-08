@@ -1017,6 +1017,11 @@ namespace BlastOff
 			m_Type = Type::FillOnly;
 	}
 
+	void RoundedRectangleSprite::SetColour(const Colour4i colour) 
+	{
+		m_Colour = colour;
+	}
+
 	void RoundedRectangleSprite::Draw() const
 	{
 		const Rect2f realRect = CalculateRealRect();
@@ -1027,22 +1032,25 @@ namespace BlastOff
 
 		switch (m_Type)
 		{
-		case Type::FillOnly:
-			DrawRectangleRounded(
-				drawRect.ToRayRect2f(),
-				m_Roundness,
-				c_Resolution,
-				m_Colour.ToRayColour()
-			);
+			case Type::FillOnly:
+				DrawRectangleRounded(
+					drawRect.ToRayRect2f(),
+					m_Roundness,
+					c_Resolution,
+					m_Colour.ToRayColour()
+				);
 
-		case Type::StrokeOnly:
-			DrawRectangleRoundedLinesEx(
-				drawRect.ToRayRect2f(),
-				m_Roundness,
-				c_Resolution,
-				CalculateScreenStrokeWidth(),
-				m_Colour.ToRayColour()
-			);
+			case Type::StrokeOnly:
+				DrawRectangleRoundedLinesEx(
+					drawRect.ToRayRect2f(),
+					m_Roundness,
+					c_Resolution,
+					CalculateScreenStrokeWidth(),
+					m_Colour.ToRayColour()
+				);
+
+			default:
+				break;
 		}
 	}
 

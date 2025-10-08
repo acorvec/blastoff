@@ -6,6 +6,7 @@
 #include "Graphics.h"
 #include "Player.h"
 #include "Settings.h"
+#include "raylib.h"
 
 namespace BlastOff
 {
@@ -591,7 +592,9 @@ namespace BlastOff
 			m_Value(startValue),
 			m_Minimum(minimum),
 			m_Maximum(maximum),
-			m_StepSize(stepSize)
+			m_StepSize(stepSize),
+			m_Colours(colours),
+			m_InputManager(inputManager)
 		{
 #if COMPILE_CONFIG_DEBUG
 			const auto checkBounds = 
@@ -643,13 +646,18 @@ namespace BlastOff
 					m_BackingStroke->SetParent(m_BackingFill.get());
 				};
 
-		const auto createHandle = 
+			const auto createHandle = 
 				[&, this]()
 				{
 					const Rect2f handleRect(Vector2f::Zero(), handleSize);
+					const ShapeColours& defaultColourSet = 
+					{
+						m_Colours.handle.unselected
+					};
+
 					m_HandleFill = std::make_unique<RoundedRectangleSprite>(
 						handleRect,
-						colours.handle.unselected.fill,
+						defaultColourSet.fill,
 						handleRoundness,
 						coordTransformer,
 						programConfig
@@ -658,7 +666,7 @@ namespace BlastOff
 
 					m_HandleStroke = std::make_unique<RoundedRectangleSprite>(
 						handleRect,
-						colours.handle.unselected.stroke,
+						defaultColourSet.stroke,
 						handleRoundness,
 						coordTransformer,
 						programConfig,
@@ -670,7 +678,6 @@ namespace BlastOff
 #if COMPILE_CONFIG_DEBUG
 			checkBounds();
 #endif
-
 			createBacking();
 			createHandle();
 		}
@@ -700,11 +707,48 @@ namespace BlastOff
 					handleRoot->SetLocalPosition({ engineX, 0 });
 				};
 
+			const auto updateHandleColours =
+				[this]()
+				{
+					const Vector2f engineMouse = 
+					{
+						m_InputManager->CalculateMousePosition()
+					};
+					const Sprite* handleRoot = GetHandleRoot();
+					const Rect2f handleRect = handleRoot->CalculateRealRect();
+
+					const bool isSelected = 
+					{
+						handleRect.CollideWithPoint(engineMouse)
+					};
+					const bool mouseClicked = 
+					{
+						m_InputManager->GetMouseButtonDown(MOUSE_BUTTON_LEFT)
+					};
+					const auto& colours = m_Colours.handle;
+					if (isSelected && mouseClicked)
+					{
+						m_HandleFill->SetColour(colours.clicked.fill);
+						m_HandleStroke->SetColour(colours.clicked.stroke);
+					}
+					else if (isSelected)
+					{
+						m_HandleFill->SetColour(colours.selected.fill);
+						m_HandleStroke->SetColour(colours.selected.stroke);
+					}
+					else
+					{
+						m_HandleFill->SetColour(colours.unselected.fill);
+						m_HandleStroke->SetColour(colours.unselected.stroke);
+					}
+				};
+
 			if ((!m_MostRecentValue) || (m_Value != *m_MostRecentValue))
 			{
 				updateHandlePosition();
 				m_MostRecentValue = m_Value;
 			}
+			updateHandleColours();
 
 			m_BackingFill->Update();
 			m_BackingStroke->Update();
@@ -729,14 +773,17 @@ namespace BlastOff
 		Num m_StepSize = 0;
 
 		optional<Num> m_MostRecentValue = std::nullopt;
+		Colours m_Colours = { 0 };
 
-		unique_ptr<Sprite> m_BackingFill = nullptr;
-		unique_ptr<Sprite> m_BackingStroke = nullptr;
+		const InputManager* const m_InputManager = nullptr;
+		
+		unique_ptr<RoundedRectangleSprite> m_BackingFill = nullptr;
+		unique_ptr<RoundedRectangleSprite> m_BackingStroke = nullptr;
 
-		unique_ptr<Sprite> m_HandleFill = nullptr;
-		unique_ptr<Sprite> m_HandleStroke = nullptr;
+		unique_ptr<RoundedRectangleSprite> m_HandleFill = nullptr;
+		unique_ptr<RoundedRectangleSprite> m_HandleStroke = nullptr;
 
-		Sprite* GetHandleRoot() const
+		RoundedRectangleSprite* GetHandleRoot() const
 		{
 			return m_HandleFill.get();
 		}
@@ -797,13 +844,13 @@ namespace BlastOff
 		{
 			.handle = 
 			{
-				.unselected = { .stroke = c_Black, .fill = c_White },
+				.unselected = { .stroke = c_Black, .fill = Colour4i(0xA0) },
 				.selected =
 				{
-					.stroke = Colour4i(0xB0), 
-					.fill = c_White 
+					.stroke = c_Black, 
+					.fill = Colour4i(0xC0)
 				},
-				.clicked = { .stroke = c_Grey, .fill=c_White }
+				.clicked = { .stroke = c_Black, .fill=Colour4i(0xE0) }
 			},
 			.backing = { .stroke = c_Black, .fill = c_White }
 		};

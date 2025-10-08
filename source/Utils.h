@@ -795,7 +795,12 @@ namespace BlastOff
 
 	struct Colour4i
 	{
-		byte r, g, b, a;
+		byte r = 0x00, g = 0xFF, b = 0xFF, a = 0xFF;
+
+		constexpr Colour4i()
+		{
+			
+		}
 
 		constexpr Colour4i(
 			const byte red,

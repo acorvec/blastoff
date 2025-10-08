@@ -347,6 +347,8 @@ namespace BlastOff
 			const optional<float> strokeWidth = std::nullopt
 		);
 
+		void SetColour(const Colour4i colour);
+
 		void Draw() const override;
 
 	protected:
