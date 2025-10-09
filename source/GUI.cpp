@@ -5,6 +5,8 @@
 #include "ProgramConstants.h"
 #include "Utils.h"
 #include "raylib.h"
+
+#include <cmath>
 #include <format>
 #include <memory>
 #include <stdexcept>
@@ -1480,7 +1482,7 @@ namespace BlastOff
 
 	const float WindowSizeLabel::c_FontSize = 32;
 	const char* WindowSizeLabel::c_BeginningOfMessage = "Window Size";
-	const Colour4i WindowSizeLabel::c_Colour = c_Black;
+	const Colour4i WindowSizeLabel::c_Colour = c_White;
 	const Vector2f WindowSizeLabel::c_EnginePosition = { 0, 2 / 5.0f };
 
 
@@ -1498,23 +1500,23 @@ namespace BlastOff
 		const auto initializeObjects = 
 			[&, this]()
 			{
-				m_Empty = std::make_unique<Empty>(
+				m_ComponentsEmpty = std::make_unique<Empty>(
 					Vector2f::Zero(),
 					coordTransformer,
 					programConstants
 				);
-				m_Empty->SetParent(cameraEmpty);
+				m_ComponentsEmpty->SetParent(cameraEmpty);
 
 				m_SlideBar = std::make_unique<SlideBar>(
 					settings,
 					windowSizeIncrement,
-					m_Empty.get(),
+					m_ComponentsEmpty.get(),
 					coordTransformer,
 					inputManager,
 					programConstants
 				);
 				m_Label = std::make_unique<Label>(
-					m_Empty.get(),
+					m_ComponentsEmpty.get(),
 					m_SlideBar.get(),
 					coordTransformer,
 					programConstants,
@@ -1524,23 +1526,28 @@ namespace BlastOff
 			};
 
 		const auto calculateHeight = 
-			[this]() -> float
+			[this]() 
 			{
 				const float bottom = m_SlideBar->GetBottomEdgePosition();
 				const float top = m_Label->GetTopEdgePosition();
 
-				return top - bottom;
+				m_Height = top - bottom;
 			};
 
 		const auto updatePosition = 
 			[&, this]()
 			{
-				const float height = calculateHeight();
-				m_Empty->SetLocalPosition({ 0, -height / 2.0f });
+				m_ComponentsEmpty->SetLocalPosition({ 0, -m_Height / 4.0f });
 			};
 
 		initializeObjects();
+		calculateHeight();
 		updatePosition();
+	}
+	
+	Vector2f WindowSizeAdjuster::CalculateDimensions() const
+	{
+		return { m_SlideBar->GetWidth(), m_Height };
 	}
 
 	void WindowSizeAdjuster::Update()
@@ -1572,7 +1579,7 @@ namespace BlastOff
 	) :
 		m_Settings(settings)
 	{
-		const auto createButtons = 
+		const auto initializeButtons = 
 			[&, this]()
 			{
 				m_MuteButton = std::make_unique<MuteButton>(
@@ -1595,7 +1602,7 @@ namespace BlastOff
 				);
 			};
 
-		const auto createWindowSizeAdjuster = 
+		const auto initializeWindowSizeAdjuster = 
 			[&, this]()
 			{
 				m_WindowSizeAdjuster = std::make_unique<WindowSizeAdjuster>(
@@ -1610,12 +1617,103 @@ namespace BlastOff
 				);
 			};
 
-		createButtons();
-		createWindowSizeAdjuster();
+		const auto calculateSizeOfComponents = 
+			[this]()
+			{
+				// width = max width of every element
+				// height = sum of all components' sizes + margin
+				const array componentSizes = 
+				{
+					m_WindowSizeAdjuster->CalculateDimensions()
+				};
+				const float startHeight = 
+				{
+					c_OuterMargins.y * (componentSizes.size() - 1)
+				};
+				Vector2f result = { 0, startHeight };
+				for (const Vector2f size : componentSizes)
+				{
+					result.x = std::max(result.x, size.x);
+					result.y += size.y;
+				}
+				return result;
+			};
+
+		const auto initializeInnerBacking = 
+			[&, this]()
+			{
+				const Vector2f sizeOfComponents = calculateSizeOfComponents();
+				const Vector2f backingDimensions = 
+				{
+					sizeOfComponents + (c_InnerMargins * 2)
+				};
+				const Rect2f backingRect(Vector2f::Zero(), backingDimensions);
+
+				m_InnerBackingFill = std::make_unique<RoundedRectangleSprite>(
+					backingRect,
+					c_InnerBackingColours.fill,
+					c_InnerBackingRoundness,
+					coordTransformer,
+					programConfig
+				);
+				m_InnerBackingFill->SetParent(cameraEmpty);
+
+				m_InnerBackingStroke = std::make_unique<RoundedRectangleSprite>(
+					backingRect,
+					c_InnerBackingColours.stroke,
+					c_InnerBackingRoundness,
+					coordTransformer,
+					programConfig,
+					c_InnerBackingStrokeWidth
+				);
+				m_InnerBackingStroke->SetParent(m_InnerBackingFill.get());
+			};
+
+		const auto initializeOuterBacking = 
+			[&, this]()
+			{
+				const Vector2f innerSize = 
+				{
+					m_InnerBackingStroke->GetEngineSize()
+				};
+				const Vector2f backingDimensions = 
+				{
+					innerSize + (c_OuterMargins * 2)
+				};
+				const Rect2f backingRect(Vector2f::Zero(), backingDimensions);
+
+				m_OuterBackingFill = std::make_unique<RoundedRectangleSprite>(
+					backingRect,
+					c_OuterBackingColours.fill,
+					c_OuterBackingRoundness,
+					coordTransformer,
+					programConfig
+				);
+				m_OuterBackingFill->SetParent(cameraEmpty);
+
+				m_OuterBackingStroke = std::make_unique<RoundedRectangleSprite>(
+					backingRect,
+					c_OuterBackingColours.stroke,
+					c_OuterBackingRoundness,
+					coordTransformer,
+					programConfig,
+					c_OuterBackingStrokeWidth
+				);
+				m_OuterBackingStroke->SetParent(m_OuterBackingFill.get());
+			};
+
+		initializeButtons();
+		initializeWindowSizeAdjuster();
+		initializeInnerBacking();
+		initializeOuterBacking();
 	}
 
 	void SettingsMenu::Update()
 	{
+		m_OuterBackingFill->Update();
+		m_OuterBackingStroke->Update();
+		m_InnerBackingFill->Update();
+		m_InnerBackingStroke->Update();
 		m_MuteButton->Update();
 		m_ExitButton->Update();
 		m_WindowSizeAdjuster->Update();
@@ -1623,8 +1721,30 @@ namespace BlastOff
 
 	void SettingsMenu::Draw() const
 	{
+		m_OuterBackingFill->Draw();
+		m_OuterBackingStroke->Draw();
+		m_InnerBackingFill->Draw();
+		m_InnerBackingStroke->Draw();
 		m_MuteButton->Draw();
 		m_ExitButton->Draw();
 		m_WindowSizeAdjuster->Draw();
 	}
+
+	const float SettingsMenu::c_OuterBackingRoundness = 22 / 100.0f;
+	const float SettingsMenu::c_OuterBackingStrokeWidth = 2 / 44.0f;
+	const ShapeColours SettingsMenu::c_OuterBackingColours = 
+	{ 
+		.stroke = c_Black, 
+		.fill = Colour4i(0x30 / 2) 
+	};
+	const Vector2f SettingsMenu::c_OuterMargins = { 4 / 45.0f, 4 / 45.0f };
+
+	const float SettingsMenu::c_InnerBackingRoundness = 1 / 10.0f;
+	const float SettingsMenu::c_InnerBackingStrokeWidth = 2 / 44.0f;
+	const ShapeColours SettingsMenu::c_InnerBackingColours = 
+	{ 
+		.stroke = c_Black, 
+		.fill = Colour4i(0x30) 
+	};
+	const Vector2f SettingsMenu::c_InnerMargins = { 1 / 5.0f, 1 / 5.0f };
 }

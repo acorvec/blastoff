@@ -3,7 +3,7 @@
 #include "Utils.h"
 #include "ProgramConstants.h"
 
-#include <cstdio>
+#include <print>
 
 namespace BlastOff
 {

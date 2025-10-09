@@ -23,8 +23,8 @@ namespace BlastOff
 		{
 			const string banner = CalculateBanner();
 
-			printf("%s", banner.c_str());
-			printf("%s\n", value);
+			std::print("{}", banner);
+			std::println("{}", value);
 		}
 	}
 

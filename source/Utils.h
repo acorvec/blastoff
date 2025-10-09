@@ -46,6 +46,7 @@ namespace BlastOff
 	using RayRect2f = Rectangle;
 
 	static inline constexpr int c_DeactivatedTick = -1;
+	static inline constexpr int c_DeactivatedTracker = -1;
 
 	static inline constexpr float c_Pi = (float)M_PI;
 	

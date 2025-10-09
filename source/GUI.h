@@ -672,6 +672,12 @@ namespace BlastOff
 			return m_HandleStroke->GetEdgePosition(Direction::Down);
 		}
 
+		float GetWidth() const
+		{
+			const Rect2f engineRect = m_BackingStroke->GetEngineRect();
+			return engineRect.w;
+		}
+
 		void Update()
 		{
 			const auto updateHandleColours =
@@ -983,7 +989,7 @@ namespace BlastOff
 		static const Colour4i c_Colour;
 		static const Vector2f c_EnginePosition;
 
-		int m_MostRecentValue = -1;
+		int m_MostRecentValue = c_DeactivatedTracker;
 		const SlideBar* m_SlideBar = nullptr;
 		unique_ptr<TextSprite> m_Sprite = nullptr;
 	};
@@ -1004,11 +1010,15 @@ namespace BlastOff
 			const Font* const font
 		);
 
+		Vector2f CalculateDimensions() const;
+
 		void Update();
 		void Draw() const;
 
-	private:		
-		unique_ptr<Empty> m_Empty = nullptr;
+	private:
+		float m_Height = 0;
+	
+		unique_ptr<Empty> m_ComponentsEmpty = nullptr;
 		unique_ptr<SlideBar> m_SlideBar = nullptr;
 		unique_ptr<Label> m_Label = nullptr;
 	};
@@ -1034,10 +1044,24 @@ namespace BlastOff
 		void Draw() const;
 
 	private:
+		static const float c_OuterBackingRoundness;
+		static const float c_OuterBackingStrokeWidth;
+		static const ShapeColours c_OuterBackingColours;
+		static const Vector2f c_OuterMargins;
+
+		static const float c_InnerBackingRoundness;
+		static const float c_InnerBackingStrokeWidth;
+		static const ShapeColours c_InnerBackingColours;
+		static const Vector2f c_InnerMargins;
+
 		Settings* m_Settings = nullptr;
 
 		unique_ptr<MuteButton> m_MuteButton = nullptr;
 		unique_ptr<ExitButton> m_ExitButton = nullptr;
 		unique_ptr<WindowSizeAdjuster> m_WindowSizeAdjuster = nullptr;
+		unique_ptr<RoundedRectangleSprite> m_OuterBackingFill = nullptr;
+		unique_ptr<RoundedRectangleSprite> m_OuterBackingStroke = nullptr;
+		unique_ptr<RoundedRectangleSprite> m_InnerBackingFill = nullptr;
+		unique_ptr<RoundedRectangleSprite> m_InnerBackingStroke = nullptr;
 	};
 }
