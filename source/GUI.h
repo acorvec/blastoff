@@ -662,6 +662,11 @@ namespace BlastOff
 			InitializeHandlePosition();
 		}
 
+		const Sprite* GetRoot() const
+		{
+			return m_BackingFill.get();
+		}
+
 		void Update()
 		{
 			const auto updateHandleColours =
@@ -900,7 +905,7 @@ namespace BlastOff
 		{
 
 		}
-
+		
 	protected:		
 		static constexpr float c_BackingRoundness = 1 / 10.0f;
 		static constexpr float c_HandleRoundness = 1 / 10.0f;
@@ -947,6 +952,54 @@ namespace BlastOff
 		) const;
 	};
 
+	struct WindowSizeLabel 
+	{
+		using SlideBar = WindowSizeSlideBar;
+		
+		WindowSizeLabel(
+			const SlideBar* const slideBar,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			const Font* const font,
+			TextTextureLoader* const textureLoader
+		);
+
+		void Update();
+		void Draw() const;
+
+	private:
+		static const float c_FontSize;
+		static const char* c_Message;
+		static const Colour4i c_Colour;
+		static const Vector2f c_EnginePosition;
+	
+		unique_ptr<TextSprite> m_Sprite;
+	};
+
+	struct WindowSizeAdjuster
+	{
+		using SlideBar = WindowSizeSlideBar;
+		using Label = WindowSizeLabel;
+		
+		WindowSizeAdjuster(
+			Settings* const settings,
+			const int windowSizeIncrement,
+			const CameraEmpty* const cameraEmpty,
+			const CoordinateTransformer* const coordTransformer,
+			TextTextureLoader* const textTextureLoader,
+			const InputManager* const inputManager,
+			const ProgramConstants* const programConstants,
+			const Font* const font
+		);
+
+		void Update();
+		void Draw() const;
+
+	private:
+		unique_ptr<SlideBar> m_SlideBar = nullptr;
+		unique_ptr<Label> m_Label = nullptr;
+	};
+
 	struct SettingsMenu
 	{
 		SettingsMenu(
@@ -955,7 +1008,9 @@ namespace BlastOff
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
             const ProgramConstants* const programConfig,
+			const Font* const font,
             ImageTextureLoader* const imageTextureLoader,
+			TextTextureLoader* const textTextureLoader,
 			Settings* const settings,
 			const Callback& muteCallback,
             const Callback& exitCallback,
@@ -967,8 +1022,9 @@ namespace BlastOff
 
 	private:
 		Settings* m_Settings = nullptr;
+		
 		unique_ptr<MuteButton> m_MuteButton = nullptr;
 		unique_ptr<ExitButton> m_ExitButton = nullptr;
-		unique_ptr<SlideBar<int>> m_SlideBar = nullptr;
+		unique_ptr<WindowSizeAdjuster> m_WindowSizeAdjuster = nullptr;
 	};
 }

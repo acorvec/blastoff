@@ -1420,13 +1420,93 @@ namespace BlastOff
 	}
 
 
+	WindowSizeLabel::WindowSizeLabel(
+		const SlideBar* const slideBar,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		const Font* const font,
+		TextTextureLoader* const textureLoader
+	)
+	{
+		m_Sprite = std::make_unique<TextSprite>(
+			c_EnginePosition,
+			c_Colour,
+			c_FontSize,
+			c_Message,
+			coordTransformer,
+			programConstants,
+			textureLoader,
+			font
+		);
+		m_Sprite->SetParent(slideBar->GetRoot());
+	}
+
+	void WindowSizeLabel::Update() 
+	{
+		m_Sprite->Update();
+	}
+
+	void WindowSizeLabel::Draw() const
+	{
+		m_Sprite->Draw();
+	}
+
+	const float WindowSizeLabel::c_FontSize = 32;
+	const char* WindowSizeLabel::c_Message = "Window Size";
+	const Colour4i WindowSizeLabel::c_Colour = c_Black;
+	const Vector2f WindowSizeLabel::c_EnginePosition = { 0, 2 / 5.0f };
+
+
+	WindowSizeAdjuster::WindowSizeAdjuster(
+		Settings* const settings,
+		const int windowSizeIncrement,
+		const CameraEmpty* const cameraEmpty,
+		const CoordinateTransformer* const coordTransformer,
+		TextTextureLoader* const textTextureLoader,
+		const InputManager* const inputManager,
+		const ProgramConstants* const programConstants,
+		const Font* const font
+	)
+	{
+		m_SlideBar = std::make_unique<SlideBar>(
+			settings,
+			windowSizeIncrement,
+			cameraEmpty,
+			coordTransformer,
+			inputManager,
+			programConstants
+		);
+		m_Label = std::make_unique<Label>(
+			m_SlideBar.get(),
+			coordTransformer,
+			programConstants,
+			font,
+			textTextureLoader
+		);
+	}
+
+	void WindowSizeAdjuster::Update()
+	{
+		m_SlideBar->Update();
+		m_Label->Update();
+	}
+
+	void WindowSizeAdjuster::Draw() const
+	{
+		m_SlideBar->Draw();
+		m_Label->Draw();
+	}
+
+
 	SettingsMenu::SettingsMenu(
 		const int windowSizeIncrement,
 		const bool* const programIsMuted,
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
 		const ProgramConstants* const programConfig,
+		const Font* const font,
 		ImageTextureLoader* const imageTextureLoader,
+		TextTextureLoader* const textTextureLoader,
 		Settings* const settings,
 		const Callback& muteCallback,
 		const Callback& exitCallback,
@@ -1457,34 +1537,36 @@ namespace BlastOff
 				);
 			};
 
-		const auto createSlideBar = 
+		const auto createWindowSizeAdjuster = 
 			[&, this]()
 			{
-				m_SlideBar = std::make_unique<WindowSizeSlideBar>(
+				m_WindowSizeAdjuster = std::make_unique<WindowSizeAdjuster>(
 					m_Settings,
 					windowSizeIncrement,
 					cameraEmpty,
 					coordTransformer,
+					textTextureLoader,
 					inputManager,
-					programConfig
+					programConfig,
+					font
 				);
 			};
 
 		createButtons();
-		createSlideBar();
+		createWindowSizeAdjuster();
 	}
 
 	void SettingsMenu::Update()
 	{
 		m_MuteButton->Update();
 		m_ExitButton->Update();
-		m_SlideBar->Update();
+		m_WindowSizeAdjuster->Update();
 	}
 
 	void SettingsMenu::Draw() const
 	{
 		m_MuteButton->Draw();
 		m_ExitButton->Draw();
-		m_SlideBar->Draw();
+		m_WindowSizeAdjuster->Draw();
 	}
 }
