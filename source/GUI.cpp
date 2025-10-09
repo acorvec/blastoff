@@ -1379,7 +1379,7 @@ namespace BlastOff
 	WindowSizeSlideBar::WindowSizeSlideBar(
 		Settings* const settings,
 		const int windowSizeIncrement,
-		const CameraEmpty* const cameraEmpty,
+		const Sprite* const parent,
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
 		const ProgramConstants* const programConstants
@@ -1389,7 +1389,7 @@ namespace BlastOff
 			settings->GetWindowSize().y,
 			c_Minimum,
 			CalculateMaximum(settings, windowSizeIncrement),
-			cameraEmpty,
+			parent,
 			settings,
 			coordTransformer,
 			inputManager,
@@ -1421,7 +1421,7 @@ namespace BlastOff
 
 
 	WindowSizeLabel::WindowSizeLabel(
-		const SlideBar* const slideBar,
+		const Sprite* parent,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
 		const Font* const font,
@@ -1432,13 +1432,18 @@ namespace BlastOff
 			c_EnginePosition,
 			c_Colour,
 			c_FontSize,
-			c_Message,
+			c_MessageStart,
 			coordTransformer,
 			programConstants,
 			textureLoader,
 			font
 		);
-		m_Sprite->SetParent(slideBar->GetRoot());
+		m_Sprite->SetParent(parent);
+	}
+
+	float WindowSizeLabel::GetTopEdgePosition() const
+	{
+		return m_Sprite->GetEdgePosition(Direction::Up);
 	}
 
 	void WindowSizeLabel::Update() 
@@ -1452,7 +1457,7 @@ namespace BlastOff
 	}
 
 	const float WindowSizeLabel::c_FontSize = 32;
-	const char* WindowSizeLabel::c_Message = "Window Size";
+	const char* WindowSizeLabel::c_MessageStart = "Window Size";
 	const Colour4i WindowSizeLabel::c_Colour = c_Black;
 	const Vector2f WindowSizeLabel::c_EnginePosition = { 0, 2 / 5.0f };
 
@@ -1468,21 +1473,51 @@ namespace BlastOff
 		const Font* const font
 	)
 	{
-		m_SlideBar = std::make_unique<SlideBar>(
-			settings,
-			windowSizeIncrement,
-			cameraEmpty,
-			coordTransformer,
-			inputManager,
-			programConstants
-		);
-		m_Label = std::make_unique<Label>(
-			m_SlideBar.get(),
-			coordTransformer,
-			programConstants,
-			font,
-			textTextureLoader
-		);
+		const auto initializeObjects = 
+			[&, this]()
+			{
+				m_Empty = std::make_unique<Empty>(
+					Vector2f::Zero(),
+					coordTransformer,
+					programConstants
+				);
+				m_Empty->SetParent(cameraEmpty);
+
+				m_SlideBar = std::make_unique<SlideBar>(
+					settings,
+					windowSizeIncrement,
+					m_Empty.get(),
+					coordTransformer,
+					inputManager,
+					programConstants
+				);
+				m_Label = std::make_unique<Label>(
+					m_Empty.get(),
+					coordTransformer,
+					programConstants,
+					font,
+					textTextureLoader
+				);
+			};
+
+		const auto calculateHeight = 
+			[this]() -> float
+			{
+				const float bottom = m_SlideBar->GetBottomEdgePosition();
+				const float top = m_Label->GetTopEdgePosition();
+
+				return top - bottom;
+			};
+
+		const auto updatePosition = 
+			[&, this]()
+			{
+				const float height = calculateHeight();
+				m_Empty->SetLocalPosition({ 0, -height / 2.0f });
+			};
+
+		initializeObjects();
+		updatePosition();
 	}
 
 	void WindowSizeAdjuster::Update()

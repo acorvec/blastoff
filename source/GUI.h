@@ -583,7 +583,7 @@ namespace BlastOff
 			const Num minimum,
 			const Num maximum,
 			const Colours colours,
-			const CameraEmpty* const cameraEmpty,
+			const Sprite* const parent,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
 			const ProgramConstants* const programConfig,
@@ -614,7 +614,7 @@ namespace BlastOff
 						coordTransformer,
 						programConfig
 					);
-					m_BackingFill->SetParent(cameraEmpty);
+					m_BackingFill->SetParent(parent);
 
 					m_BackingStroke = std::make_unique<RoundedRectangleSprite>(
 						backingRect,
@@ -662,9 +662,9 @@ namespace BlastOff
 			InitializeHandlePosition();
 		}
 
-		const Sprite* GetRoot() const
+		float GetBottomEdgePosition() const
 		{
-			return m_BackingFill.get();
+			return m_HandleStroke->GetEdgePosition(Direction::Down);
 		}
 
 		void Update()
@@ -877,7 +877,7 @@ namespace BlastOff
 			const Num startValue,
 			const Num minimum,
 			const Num maximum,
-			const CameraEmpty* const cameraEmpty,
+			const Sprite* const parent,
 			Settings* const settings,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
@@ -895,7 +895,7 @@ namespace BlastOff
 				minimum,
 				maximum,
 				c_Colours,
-				cameraEmpty,
+				parent,
 				coordTransformer,
 				inputManager,
 				programConfig,
@@ -936,7 +936,7 @@ namespace BlastOff
 		WindowSizeSlideBar(
 			Settings* const settings,
 			const int windowSizeIncrement,
-			const CameraEmpty* const cameraEmpty,
+			const Sprite* const parent,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
 			const ProgramConstants* const programConstants
@@ -957,19 +957,21 @@ namespace BlastOff
 		using SlideBar = WindowSizeSlideBar;
 		
 		WindowSizeLabel(
-			const SlideBar* const slideBar,
+			const Sprite* parent,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
 			const Font* const font,
 			TextTextureLoader* const textureLoader
 		);
 
+		float GetTopEdgePosition() const;
+
 		void Update();
 		void Draw() const;
 
 	private:
 		static const float c_FontSize;
-		static const char* c_Message;
+		static const char* c_MessageStart;
 		static const Colour4i c_Colour;
 		static const Vector2f c_EnginePosition;
 	
@@ -996,6 +998,7 @@ namespace BlastOff
 		void Draw() const;
 
 	private:
+		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<SlideBar> m_SlideBar = nullptr;
 		unique_ptr<Label> m_Label = nullptr;
 	};
@@ -1022,7 +1025,7 @@ namespace BlastOff
 
 	private:
 		Settings* m_Settings = nullptr;
-		
+
 		unique_ptr<MuteButton> m_MuteButton = nullptr;
 		unique_ptr<ExitButton> m_ExitButton = nullptr;
 		unique_ptr<WindowSizeAdjuster> m_WindowSizeAdjuster = nullptr;
