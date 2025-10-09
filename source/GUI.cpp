@@ -5,6 +5,7 @@
 #include "ProgramConstants.h"
 #include "Utils.h"
 #include "raylib.h"
+#include <format>
 #include <memory>
 #include <stdexcept>
 
@@ -267,11 +268,11 @@ namespace BlastOff
 			enginePosition,
 			colour,
 			fontSize,
-			message,
 			coordTransformer,
 			programConfig,
 			textTextureLoader,
-			font
+			font,
+			message
 		);
 	}
 
@@ -1109,11 +1110,11 @@ namespace BlastOff
 					Vector2f::Zero(),
 					c_Black,
 					c_MessageFontSize,
-					messageText,
 					coordTransformer,
 					programConfig,
 					textTextureLoader,
-					font
+					font,
+					messageText
 				);
 				m_Message->SetParent(m_BackingFill.get());
 			};
@@ -1422,17 +1423,18 @@ namespace BlastOff
 
 	WindowSizeLabel::WindowSizeLabel(
 		const Sprite* parent,
+		const SlideBar* const slideBar,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
 		const Font* const font,
 		TextTextureLoader* const textureLoader
-	)
+	) :
+		m_SlideBar(slideBar)
 	{
 		m_Sprite = std::make_unique<TextSprite>(
 			c_EnginePosition,
 			c_Colour,
 			c_FontSize,
-			c_MessageStart,
 			coordTransformer,
 			programConstants,
 			textureLoader,
@@ -1448,6 +1450,20 @@ namespace BlastOff
 
 	void WindowSizeLabel::Update() 
 	{
+		const auto updateMessage = 
+			[this]()
+			{
+				const int value = m_SlideBar->GetValue();
+				if (value != m_MostRecentValue)
+				{
+					const string message = CalculateMessage();
+					m_Sprite->SetMessage(message);
+
+					m_MostRecentValue = value;
+				}
+			};
+
+		updateMessage();
 		m_Sprite->Update();
 	}
 
@@ -1456,8 +1472,14 @@ namespace BlastOff
 		m_Sprite->Draw();
 	}
 
+	string WindowSizeLabel::CalculateMessage() const
+	{
+		const float windowSize = m_SlideBar->GetValue();
+		return std::format("{}: {}", c_BeginningOfMessage, windowSize);
+	}
+
 	const float WindowSizeLabel::c_FontSize = 32;
-	const char* WindowSizeLabel::c_MessageStart = "Window Size";
+	const char* WindowSizeLabel::c_BeginningOfMessage = "Window Size";
 	const Colour4i WindowSizeLabel::c_Colour = c_Black;
 	const Vector2f WindowSizeLabel::c_EnginePosition = { 0, 2 / 5.0f };
 
@@ -1493,6 +1515,7 @@ namespace BlastOff
 				);
 				m_Label = std::make_unique<Label>(
 					m_Empty.get(),
+					m_SlideBar.get(),
 					coordTransformer,
 					programConstants,
 					font,

@@ -662,6 +662,11 @@ namespace BlastOff
 			InitializeHandlePosition();
 		}
 
+		float GetValue() const
+		{
+			return m_Value;
+		}
+
 		float GetBottomEdgePosition() const
 		{
 			return m_HandleStroke->GetEdgePosition(Direction::Down);
@@ -958,6 +963,7 @@ namespace BlastOff
 		
 		WindowSizeLabel(
 			const Sprite* parent,
+			const SlideBar* const slideBar,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
 			const Font* const font,
@@ -970,12 +976,16 @@ namespace BlastOff
 		void Draw() const;
 
 	private:
+		string CalculateMessage() const;
+		
 		static const float c_FontSize;
-		static const char* c_MessageStart;
+		static const char* c_BeginningOfMessage;
 		static const Colour4i c_Colour;
 		static const Vector2f c_EnginePosition;
-	
-		unique_ptr<TextSprite> m_Sprite;
+
+		int m_MostRecentValue = -1;
+		const SlideBar* m_SlideBar = nullptr;
+		unique_ptr<TextSprite> m_Sprite = nullptr;
 	};
 
 	struct WindowSizeAdjuster
@@ -997,7 +1007,7 @@ namespace BlastOff
 		void Update();
 		void Draw() const;
 
-	private:
+	private:		
 		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<SlideBar> m_SlideBar = nullptr;
 		unique_ptr<Label> m_Label = nullptr;

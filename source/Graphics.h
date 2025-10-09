@@ -296,14 +296,16 @@ namespace BlastOff
 			const Vector2f enginePosition,
 			const Colour4i colour,
 			const float fontSize,
-			const char* const message,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConfig,
 			TextTextureLoader* const textureLoader,
-			const Font* const font
+			const Font* const font,
+			const string& message = ""
 		);
 
 		Colour4i GetColour() const;
+
+		void SetMessage(const string& message);
 
 		void SetEngineRect(const Rect2f engineRect) override;
 
@@ -319,9 +321,9 @@ namespace BlastOff
 
 		bool m_ShouldRecacheTexture = true;
 
-		const Colour4i m_Colour = c_White;
-		const float m_FontSize = 0;
-		const char* m_Message = nullptr;
+		Colour4i m_Colour = c_White;
+		float m_FontSize = 0;
+		string m_Message = "";
 		const Font* m_Font = nullptr;
 		TextTextureLoader* m_TextureLoader = nullptr;
 

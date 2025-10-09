@@ -873,11 +873,11 @@ namespace BlastOff
 		const Vector2f enginePosition,
 		const Colour4i colour,
 		const float fontSize,
-		const char* const message,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConfig,
 		TextTextureLoader* const textureLoader,
-		const Font* const font
+		const Font* const font,
+		const string& message
 	) :
 		ImageSprite(
 			Rect2f(enginePosition, Vector2f::Zero()),
@@ -887,16 +887,23 @@ namespace BlastOff
 		),
 		m_Colour(colour),
 		m_FontSize(fontSize),
-		m_Message(message),
 		m_TextureLoader(textureLoader),
-		m_Font(font)
+		m_Font(font),
+		m_Message(message)
 	{
-
+		
 	}
 
 	Colour4i TextSprite::GetColour() const
 	{
 		return m_Colour;
+	}
+
+	void TextSprite::SetMessage(const string& message)
+	{
+		m_Message = message;
+
+		m_ShouldRecacheTexture = true;
 	}
 
 	void TextSprite::SetEngineRect(const Rect2f engineRect)
