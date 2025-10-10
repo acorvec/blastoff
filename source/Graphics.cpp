@@ -1,6 +1,8 @@
 #include "Graphics.h"
 #include "Utils.h"
+
 #include "raylib.h"
+
 #include <stdexcept>
 
 namespace BlastOff

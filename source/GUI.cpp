@@ -521,6 +521,12 @@ namespace BlastOff
 				const Rect2f engineRect = m_Sprite->CalculateRealRect();
 
 				m_IsSelected = engineRect.CollideWithPoint(mousePosition);
+
+				const bool leftButtonDown =
+				{
+					m_InputManager->GetMouseButtonDown(MOUSE_BUTTON_LEFT)
+				};
+				m_ShouldShowClickedSprite = leftButtonDown && m_IsSelected;
 			};
 
 		const auto checkForClick =
@@ -530,11 +536,6 @@ namespace BlastOff
 				{
 					m_ClickCallback();
 				}
-
-				m_ShouldShowClickedSprite =
-				{
-					m_InputManager->GetMouseButtonDown(MOUSE_BUTTON_LEFT)
-				};
 			};
 
 		const auto updateSprite =
@@ -1717,7 +1718,7 @@ namespace BlastOff
 		)
 	{
 		const auto initializePosition = 
-			[this]()
+			[&, this]()
 			{
 				const Vector2f offset1 = CenterMenuButton::c_AdditionalOffset;
 				const Vector2f offset2 = 
