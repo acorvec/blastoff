@@ -692,6 +692,48 @@ namespace BlastOff
 
 		void Update()
 		{
+			const auto updateHandleFlags = 
+				[this]()
+				{
+					const Vector2f engineMouse = 
+					{
+						m_InputManager->CalculateMousePosition()
+					};
+					const Sprite* handleRoot = GetHandleRoot();
+					const Rect2f handleRect = handleRoot->CalculateRealRect();
+					m_HandleIsSelected = 
+					{
+						handleRect.CollideWithPoint(engineMouse)
+					};
+
+					constexpr int buttonEnum = MOUSE_BUTTON_LEFT;
+					const bool mouseReleased =
+					{
+						m_InputManager->GetMouseButtonReleased(buttonEnum)
+					};
+					const bool mouseClicked = 
+					{
+						m_InputManager->GetMouseButtonPressed(buttonEnum)
+					};
+					if (mouseReleased)
+						m_HandleIsClicked = false;
+
+					m_HandleIsSelected = false;
+
+					if (m_HandleIsSelected && mouseClicked)
+						m_HandleIsClicked = true;
+					else if (mouseClicked)
+					{
+						// seek if the player clicks on the backing instead
+						const Sprite* backingRoot = GetBackingRoot();
+						const Rect2f backingRect = backingRoot->CalculateRealRect();
+						m_HandleIsClicked = 
+						{
+							backingRect.CollideWithPoint(engineMouse)
+						};
+					}
+				};
+
 			const auto updateHandleColours =
 				[this]()
 				{
@@ -711,40 +753,6 @@ namespace BlastOff
 						m_HandleFill->SetColour(colours.unselected.fill);
 						m_HandleStroke->SetColour(colours.unselected.stroke);
 					}
-				};
-
-			const auto updateHandleFlags = 
-				[this]()
-				{
-					const Vector2f engineMouse = 
-					{
-						m_InputManager->CalculateMousePosition()
-					};
-					const Sprite* handleRoot = GetHandleRoot();
-					const Rect2f handleRect = handleRoot->CalculateRealRect();
-					const bool isSelected = 
-					{
-						handleRect.CollideWithPoint(engineMouse)
-					};
-
-					constexpr int buttonEnum = MOUSE_BUTTON_LEFT;
-					const bool mouseReleased =
-					{
-						m_InputManager->GetMouseButtonReleased(buttonEnum)
-					};
-					const bool mouseClicked = 
-					{
-						m_InputManager->GetMouseButtonPressed(buttonEnum)
-					};
-					if (mouseReleased)
-						m_HandleIsClicked = false;
-
-					m_HandleIsSelected = false;
-
-					if (isSelected && mouseClicked)
-						m_HandleIsClicked = true;
-					else if (isSelected)
-						m_HandleIsSelected = true;
 				};
 
 			const auto clampHandlePosition = 
@@ -884,6 +892,11 @@ namespace BlastOff
 		RoundedRectangleSprite* GetHandleRoot() const
 		{
 			return m_HandleFill.get();
+		}
+
+		RoundedRectangleSprite* GetBackingRoot() const
+		{
+			return m_BackingFill.get();
 		}
 	};
 
