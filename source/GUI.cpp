@@ -1550,6 +1550,11 @@ namespace BlastOff
 		updatePosition();
 	}
 	
+	float WindowSizeAdjuster::GetValue() const
+	{
+		return m_SlideBar->GetValue();
+	}
+
 	Vector2f WindowSizeAdjuster::CalculateDimensions() const
 	{
 		return { m_SlideBar->GetWidth(), m_Height };
@@ -1676,7 +1681,6 @@ namespace BlastOff
 		Settings* const settings,
 		const Callback& muteCallback,
 		const Callback& exitCallback,
-		const Callback& saveCallback,
 		const CameraEmpty* const cameraEmpty
 	) :
 		m_Settings(settings)
@@ -1804,6 +1808,12 @@ namespace BlastOff
 				m_OuterBackingStroke->SetParent(m_OuterBackingFill.get());
 			};
 
+		const auto applyCallback = 
+			[this]()
+			{
+				Apply();
+			};
+
 		const auto initializeCenterButtons = 
 			[&, this]()
 			{
@@ -1821,7 +1831,7 @@ namespace BlastOff
 					inputManager,
 					programConfig,
 					imageTextureLoader,
-					saveCallback,
+					applyCallback,
 					cameraEmpty,
 					bottomRightCorner
 				);
@@ -1867,6 +1877,12 @@ namespace BlastOff
 		m_WindowSizeAdjuster->Draw();
 		m_CenterSaveButton->Draw();
 		m_CenterExitButton->Draw();
+	}
+
+	void SettingsMenu::Apply()
+	{
+		const int windowHeight = m_WindowSizeAdjuster->GetValue();
+		m_Settings->ChangeWindowHeight(windowHeight);
 	}
 
 	const float SettingsMenu::c_OuterBackingRoundness = 22 / 100.0f;

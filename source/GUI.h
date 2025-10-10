@@ -1022,6 +1022,8 @@ namespace BlastOff
 			const Font* const font
 		);
 
+		float GetValue() const;
+
 		Vector2f CalculateDimensions() const;
 
 		void Update();
@@ -1089,7 +1091,6 @@ namespace BlastOff
 			Settings* const settings,
 			const Callback& muteCallback,
             const Callback& exitCallback,
-			const Callback& saveCallback,
             const CameraEmpty* const cameraEmpty
 		);
 
@@ -1097,6 +1098,8 @@ namespace BlastOff
 		void Draw() const;
 
 	private:
+		void Apply();
+
 		static const float c_OuterBackingRoundness;
 		static const float c_OuterBackingStrokeWidth;
 		static const ShapeColours c_OuterBackingColours;

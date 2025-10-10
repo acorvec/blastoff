@@ -50,6 +50,7 @@ namespace BlastOff
 			const Vector2f* const cameraPosition
 		);
 
+		float GetFontPixelsPerUnit() const;
 		float GetPixelsPerUnit() const;
 
 		Rect2f ToScreenCoordinates(const Rect2f engineRect) const;
@@ -57,13 +58,18 @@ namespace BlastOff
 		Vector2f ToEngineCoordinates(const Vector2f screenCoordinates) const;
 		Vector2f ToEngineCoordinates(const Vector2i screenCoordinates) const;
 
-		float ScaleFontSize(const float fontSize) const;
+		float ScaleTextureFontSize(const float fontSize) const;
 
 		Vector2f GetViewportSize() const;
 
 		void Update();
 
 	private:
+		// if dynamic window sizing is true, 
+		// all text textures should be scaled as if they're on a large screen
+		// to avoid lazy-loaded textures being low quality
+		static constexpr bool c_DynamicWindowSizing = true;
+
 		static const float c_DevelopmentWindowHeight;
 
 		const Vector2i* m_WindowSize = nullptr;

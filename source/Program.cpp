@@ -570,12 +570,6 @@ namespace BlastOff
                 MuteOrUnmute();
             };
 
-		const auto saveCallback = 
-			[this]()
-			{
-				// TODO
-			};
-
 		m_SettingsMenu = std::make_unique<SettingsMenu>(
 			c_Config.GetWindowSizeIncrement(),
 			&m_IsMuted,
@@ -588,7 +582,6 @@ namespace BlastOff
 			m_Settings.get(),
 			muteUnmuteCallback,
 			exitCallback,
-			saveCallback,
 			m_CameraEmpty.get()
 		);
 	}

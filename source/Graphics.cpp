@@ -105,6 +105,13 @@ namespace BlastOff
 		return m_PixelsPerUnit;
 	}
 
+	float CoordinateTransformer::GetFontPixelsPerUnit() const
+	{
+		const float realPPU = GetPixelsPerUnit();
+		const float ratio = c_DevelopmentWindowHeight / m_WindowSize->y;
+		return realPPU * ratio;
+	}
+
 	// TODO: try caching expensive method
 	Rect2f CoordinateTransformer::
 		ToScreenCoordinates(const Rect2f engineRect) const
@@ -158,9 +165,16 @@ namespace BlastOff
 		return resultingPosition;
 	}
 
-	float CoordinateTransformer::ScaleFontSize(const float fontSize) const
+	float CoordinateTransformer::ScaleTextureFontSize
+		(const float fontSize) const
 	{
-		return fontSize * m_WindowSize->y / c_DevelopmentWindowHeight;
+		// if dynamic window sizing is true, 
+		// all text textures should be scaled as if they're on a large screen
+		// to avoid lazy-loaded textures being low quality
+		if constexpr (c_DynamicWindowSizing)
+			return fontSize;
+		else
+		 	return fontSize * m_WindowSize->y / c_DevelopmentWindowHeight;
 	}
 
 	Vector2f CoordinateTransformer::GetViewportSize() const
@@ -940,7 +954,7 @@ namespace BlastOff
 					parameters.spacing
 				);
 
-				const float ppu = m_CoordTransformer->GetPixelsPerUnit();
+				const float ppu = m_CoordTransformer->GetFontPixelsPerUnit();
 				Vector2f convertedMeasurement =
 				{
 					Vector2f::FromRayVector2f(measurement)
@@ -976,12 +990,12 @@ namespace BlastOff
 	{
 		const float scaledFontSize =
 		{
-			m_CoordTransformer->ScaleFontSize(m_FontSize)
+			m_CoordTransformer->ScaleTextureFontSize(m_FontSize)
 		};
 		const float unscaledSpacing = CalculateSpacing();
 		const float scaledSpacing =
 		{
-			m_CoordTransformer->ScaleFontSize(unscaledSpacing)
+			m_CoordTransformer->ScaleTextureFontSize(unscaledSpacing)
 		};
 		const TextTextureParameters parameters =
 		{

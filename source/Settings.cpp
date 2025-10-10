@@ -13,7 +13,7 @@ namespace BlastOff
         const int windowSizeIncrement
     )
     {
-        unique_ptr<Settings> attempt = LoadFromDefaultPath();
+        unique_ptr<Settings> attempt = LoadFromDefaultPath(aspectRatio);
         if (attempt)
             return attempt;
         else
@@ -48,6 +48,20 @@ namespace BlastOff
     Vector2i Settings::GetWindowSize() const
     {
         return m_WindowSize;
+    }
+
+    void Settings::ChangeWindowHeight(const int windowHeight)
+    {
+        if (windowHeight != m_WindowSize.y)
+        {
+            const float newWidth = 
+            {
+                windowHeight * m_AspectRatio.x / m_AspectRatio.y
+            };
+            m_WindowSize = { (int)roundf(newWidth), windowHeight };
+
+            SetWindowSize(m_WindowSize.x, m_WindowSize.y);
+        }
     }
 
     void Settings::UpdateWindowPosition(const Vector2i windowPosition)
@@ -101,7 +115,8 @@ namespace BlastOff
     Settings::Settings(
         const Vector2f aspectRatio, 
         const int windowSizeIncrement
-    )
+    ) :
+        m_AspectRatio(aspectRatio)
     {
         const auto calculateWindowSize = 
             [&, this]()
@@ -111,7 +126,7 @@ namespace BlastOff
                 const float roundedY = RoundToFraction(scaledHeight, inc);
                 const float scaledWidth = 
                 {
-                    roundedY * aspectRatio.x / aspectRatio.y
+                    roundedY * m_AspectRatio.x / m_AspectRatio.y
                 };   
                 const Vector2f result = { scaledWidth, roundedY };
                 m_WindowSize = result.ToVector2i();
@@ -133,7 +148,11 @@ namespace BlastOff
         calculateWindowPosition();
     }
 
-    Settings::Settings(const Reflectable& equivalent)
+    Settings::Settings(
+        const Reflectable& equivalent, 
+        const Vector2f aspectRatio
+    ) :
+        m_AspectRatio(aspectRatio)
     {
         m_AudioVolume = equivalent.audioVolume;
         m_AudioIsMuted = equivalent.audioIsMuted;
@@ -154,7 +173,8 @@ namespace BlastOff
         };
     }
 
-    unique_ptr<Settings> Settings::LoadFromDefaultPath()
+    unique_ptr<Settings> Settings::LoadFromDefaultPath
+        (const Vector2f aspectRatio)
     {
         std::ifstream reader(c_DefaultPath);
         if (!reader)
@@ -181,7 +201,7 @@ namespace BlastOff
         }
 
         const Reflectable reflectable = parseResult.value();
-        return std::make_unique<Settings>(reflectable);
+        return std::make_unique<Settings>(reflectable, aspectRatio);
     }
 
     ReflectableSettings Settings::ToReflectable() const

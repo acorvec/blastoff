@@ -38,6 +38,8 @@ namespace BlastOff
         Vector2i GetWindowPosition() const;
         Vector2i GetWindowSize() const;
 
+        void ChangeWindowHeight(const int windowHeight);
+
         void UpdateWindowPosition(const Vector2i windowPosition);
         void SaveToDefaultPath() const;
 
@@ -45,11 +47,16 @@ namespace BlastOff
             const Vector2f aspectRatio,
             const int windowSizeIncrement
         );
-        Settings(const Reflectable& equivalent);
+        Settings(
+            const Reflectable& equivalent, 
+            const Vector2f aspectRatio
+        );
 
     private:
         static const char* const c_DefaultPath;
         static const Vector2i c_MinWindowSize;
+
+        Vector2f m_AspectRatio = Vector2f::Zero();
 
         float m_AudioVolume = 1;
         bool m_AudioIsMuted = false;
@@ -58,7 +65,8 @@ namespace BlastOff
         Vector2i m_WindowPosition = Vector2i::Zero();
         Vector2i m_WindowSize = Vector2i::Zero();
 
-        static unique_ptr<Settings> LoadFromDefaultPath();
+        static unique_ptr<Settings> LoadFromDefaultPath
+            (const Vector2f aspectRatio);
         Reflectable ToReflectable() const;
     };
 }
