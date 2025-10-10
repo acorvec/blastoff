@@ -255,6 +255,32 @@ namespace BlastOff
 		);
 	};
 
+	struct SlideState
+	{
+		SlideState(
+			Sprite* sprite,
+			const ProgramConstants* const programConfig
+		);
+
+		void SlideOut(const float waitInSeconds = 0);
+		void Update();
+
+	protected:
+		static const float c_MaxSlideOutTick;
+		
+		float m_SlideOutTick = c_DeactivatedTick;
+		float m_WaitTick = c_DeactivatedTick;
+
+		Vector2f m_StartingPosition = Vector2f::Zero();
+		Vector2f m_EndingPosition = Vector2f::Zero();
+
+		const ProgramConstants* m_ProgramConfig;
+		Sprite* m_Sprite = nullptr;
+
+		bool IsWaiting() const;
+		bool IsSlidingOut() const;
+	};
+
 	struct TopRightButton
 	{
 		static const Vector2f c_Margins;
@@ -349,21 +375,15 @@ namespace BlastOff
 			const Callback& resetCallback,
 			const CameraEmpty* const cameraEmpty
 		);
-		
+
 		void SlideOut();
 		void Update() override;
-
+	
 	protected:
 		static const int c_ButtonIndex;
-		static const float c_MaxSlideOutTick;
-		float m_SlideOutTick = c_DeactivatedTick;
+		static const float c_SlideOutWait;
 
-		Vector2f m_StartingPosition = Vector2f::Zero();
-		Vector2f m_EndingPosition = Vector2f::Zero();
-
-		const ProgramConstants* m_ProgramConfig = nullptr;
-
-		bool IsSlidingOut() const;
+		unique_ptr<SlideState> m_SlideState = nullptr;
 	};
 
 	// ExitButton adds no extra functionality to Button
@@ -380,14 +400,20 @@ namespace BlastOff
             const CameraEmpty* const cameraEmpty,
 			const ProgramState menuType
 		);
+		
+		void SlideOut();
+		void Update() override;
 
 	protected:
 		static const int c_ButtonIndexInGame;
 		static const int c_ButtonIndexInSettingsMenu;
+		static const float c_SlideOutWait;
 		
 		static const char* const c_UnselectedTexturePath;
 		static const char* const c_SelectedTexturePath;
 		static const char* const c_ClickedTexturePath;
+
+		unique_ptr<SlideState> m_SlideState = nullptr;
 	};
 
 	struct PlayButton : public Button

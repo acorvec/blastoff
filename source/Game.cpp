@@ -831,6 +831,7 @@ namespace BlastOff
 			endMenu->Enable();
 
 		m_ResetButton->SlideOut();
+		m_ExitButton->SlideOut();
 	}
 
 

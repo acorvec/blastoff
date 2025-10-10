@@ -615,6 +615,88 @@ namespace BlastOff
 		initializeBacking();
 	}
 
+	
+	SlideState::SlideState(
+		Sprite* sprite,
+		const ProgramConstants* const programConfig
+	) :
+		m_Sprite(sprite),
+		m_ProgramConfig(programConfig)
+	{
+
+	}
+
+	void SlideState::Update()
+	{
+		const auto updateSlidingOut =
+			[this]()
+			{
+				float progress = 
+				{
+					1 - (m_SlideOutTick / c_MaxSlideOutTick)
+				};
+				progress = DoubleSineInterpolation(progress);
+
+				const Vector2f enginePosition = Lerp(
+					m_StartingPosition, 
+					m_EndingPosition, 
+					progress
+				);
+				m_Sprite->SetLocalPosition(enginePosition);
+
+				const float targetFrametime =
+				{
+					m_ProgramConfig->GetTargetFrametime()
+				};
+				m_SlideOutTick -= targetFrametime;
+			};
+
+		const auto updateWaiting = 
+			[this]()
+			{
+				m_WaitTick -= m_ProgramConfig->GetTargetFrametime();
+				if (!IsWaiting())
+					SlideOut();
+			};
+
+		if (IsWaiting())
+			updateWaiting();
+
+		if (IsSlidingOut())
+			updateSlidingOut();
+	}
+
+	void SlideState::SlideOut(const float waitInSeconds)
+	{
+		if (waitInSeconds <= 0)
+		{
+			m_SlideOutTick = c_MaxSlideOutTick;
+
+			const Vector2f engineSize = TopRightButton::c_EngineSize;
+			const Vector2f margins = TopRightButton::c_Margins;
+
+			const float xOffset = engineSize.x + margins.x;
+			const Vector2f slideOffset = { xOffset, 0 };
+
+			m_StartingPosition = m_Sprite->GetLocalPosition();
+			m_EndingPosition = m_StartingPosition + slideOffset;
+		}
+		else
+			m_WaitTick = waitInSeconds;
+	}
+
+	const float SlideState::c_MaxSlideOutTick = 1 / 4.0f;
+
+	bool SlideState::IsWaiting() const
+	{
+		return m_WaitTick >= 0;
+	}
+
+	bool SlideState::IsSlidingOut() const
+	{
+		return m_SlideOutTick >= 0;
+    }
+
 
 	const Vector2f TopRightButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
 	const Vector2f TopRightButton::c_Margins = { 1 / 10.0f, 1 / 10.0f };
@@ -787,77 +869,49 @@ namespace BlastOff
 			resetCallback,
 			Vector2f::Zero(),
 			cameraEmpty
-		),
-		m_ProgramConfig(programConfig)
+		)
 	{
-		const Vector2f engineSize = TopRightButton::c_EngineSize;
-		const Vector2f margins = TopRightButton::c_Margins;
+		const auto initializePosition = 
+			[&, this]()
+			{
+				const Vector2f engineSize = TopRightButton::c_EngineSize;
+				const Vector2f margins = TopRightButton::c_Margins;
 
-		const Vector2f viewportSize = coordTransformer->GetViewportSize();
-		Vector2f enginePosition =
-		{
-			((viewportSize - engineSize) / 2.0f) - margins
-		};
-		const Vector2f indexOffset = 
-		{
-			TopRightButton::CalculateOffsetByIndex(c_ButtonIndex)
-		};
-		enginePosition -= indexOffset;
-		Translate(enginePosition);
+				const Vector2f viewportSize = coordTransformer->GetViewportSize();
+				Vector2f enginePosition =
+				{
+					((viewportSize - engineSize) / 2.0f) - margins
+				};
+				const Vector2f indexOffset = 
+				{
+					TopRightButton::CalculateOffsetByIndex(c_ButtonIndex)
+				};
+				enginePosition -= indexOffset;
+				Translate(enginePosition);
+			};
+
+		initializePosition();
+
+		m_SlideState = std::make_unique<SlideState>(
+			m_Sprite.get(), 
+			programConfig
+		);
+	}
+
+	void TopRightResetButton::SlideOut()
+	{
+		m_SlideState->SlideOut(c_SlideOutWait);
 	}
 
 	void TopRightResetButton::Update()
 	{
-		const auto updateSlidingOut =
-			[this]()
-			{
-				float progress = 
-				{
-					1 - (m_SlideOutTick / c_MaxSlideOutTick)
-				};
-				progress = DoubleSineInterpolation(progress);
-
-				const Vector2f enginePosition = Lerp(
-					m_StartingPosition, 
-					m_EndingPosition, 
-					progress
-				);
-				m_Sprite->SetLocalPosition(enginePosition);
-
-				const float targetFrametime =
-				{
-					m_ProgramConfig->GetTargetFrametime()
-				};
-				m_SlideOutTick -= targetFrametime;
-			};
-
 		ResetButton::Update();
 
-		if (IsSlidingOut())
-			updateSlidingOut();
+		m_SlideState->Update();
 	}
 
+	const float TopRightResetButton::c_SlideOutWait = 1 / 12.0f;
 	const int TopRightResetButton::c_ButtonIndex = 1;
-	const float TopRightResetButton::c_MaxSlideOutTick = 1 / 4.0f;
-
-	void TopRightResetButton::SlideOut()
-	{
-		m_SlideOutTick = c_MaxSlideOutTick;
-
-		const Vector2f engineSize = TopRightButton::c_EngineSize;
-		const Vector2f margins = TopRightButton::c_Margins;
-
-		const float xOffset = engineSize.x + margins.x;
-		const Vector2f slideOffset = { xOffset, 0 };
-
-		m_StartingPosition = m_Sprite->GetLocalPosition();
-		m_EndingPosition = m_StartingPosition + slideOffset;
-	}
-
-	bool TopRightResetButton::IsSlidingOut() const
-	{
-		return m_SlideOutTick >= 0;
-    }
 
 
 	TopRightExitButton::TopRightExitButton(
@@ -902,26 +956,53 @@ namespace BlastOff
 				}
 			};
 
-		const Vector2f engineSize = TopRightButton::c_EngineSize;
-		const Vector2f margins = TopRightButton::c_Margins;
+		const auto initializePosition = 
+			[&, this]()
+			{				
+				const Vector2f engineSize = TopRightButton::c_EngineSize;
+				const Vector2f margins = TopRightButton::c_Margins;
 
-		const Vector2f viewportSize = coordTransformer->GetViewportSize();
-		Vector2f enginePosition =
-		{
-			((viewportSize - engineSize) / 2.0f) - margins
-		};
+				const Vector2f viewportSize = 
+				{
+					coordTransformer->GetViewportSize()
+				};
+				Vector2f enginePosition =
+				{
+					((viewportSize - engineSize) / 2.0f) - margins
+				};
 
-		const int buttonIndex = calculateButtonIndex();
-		const Vector2f indexOffset = 
-		{
-			TopRightButton::CalculateOffsetByIndex(buttonIndex)
-		};
-		enginePosition -= indexOffset;
-		Translate(enginePosition);
+				const int buttonIndex = calculateButtonIndex();
+				const Vector2f indexOffset = 
+				{
+					TopRightButton::CalculateOffsetByIndex(buttonIndex)
+				};
+				enginePosition -= indexOffset;
+				Translate(enginePosition);
+			};
+
+		initializePosition();
+
+		m_SlideState = std::make_unique<SlideState>(
+			m_Sprite.get(), 
+			programConfig
+		);
+	}
+
+	void TopRightExitButton::SlideOut()
+	{
+		m_SlideState->SlideOut(c_SlideOutWait);
+	}
+
+	void TopRightExitButton::Update()
+	{
+		ExitButton::Update();
+
+		m_SlideState->Update();
 	}
 
 	const int TopRightExitButton::c_ButtonIndexInGame = 2;
 	const int TopRightExitButton::c_ButtonIndexInSettingsMenu = 1;
+	const float TopRightExitButton::c_SlideOutWait = 0;
 
 	const char* const TopRightExitButton::c_UnselectedTexturePath = 
 	{
