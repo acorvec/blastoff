@@ -258,6 +258,9 @@ namespace BlastOff
 	struct SlideState
 	{
 		SlideState(
+			const Vector2f startingPosition,
+			const Vector2f endingPosition,
+			const float maxTick,
 			Sprite* sprite,
 			const ProgramConstants* const programConfig
 		);
@@ -266,8 +269,7 @@ namespace BlastOff
 		void Update();
 
 	protected:
-		static const float c_MaxSlideOutTick;
-		
+		float m_MaxTick = 0;
 		float m_SlideOutTick = c_DeactivatedTick;
 		float m_WaitTick = c_DeactivatedTick;
 
@@ -382,7 +384,8 @@ namespace BlastOff
 	protected:
 		static const int c_ButtonIndex;
 		static const float c_SlideOutWait;
-
+		static const float c_MaxSlideOutTick;
+		
 		unique_ptr<SlideState> m_SlideState = nullptr;
 	};
 
@@ -408,6 +411,7 @@ namespace BlastOff
 		static const int c_ButtonIndexInGame;
 		static const int c_ButtonIndexInSettingsMenu;
 		static const float c_SlideOutWait;
+		static const float c_MaxSlideOutTick;
 		
 		static const char* const c_UnselectedTexturePath;
 		static const char* const c_SelectedTexturePath;
@@ -497,23 +501,19 @@ namespace BlastOff
 		static const float c_Roundness;
 		static const float c_StrokeWidth;
 		static const float c_MessageFontSize;
+		static const float c_SlideInWait;
 		static const float c_MaxSlideInTick;
 
 		static const Vector2f c_Margins;
 		static const Vector2f c_ResetButtonAdditionalOffset;
 
 		bool m_IsEnabled = false;
-		float m_SlideInTick = c_DeactivatedTick;
-
-		Vector2f m_SlideInStartPosition = Vector2f::Zero();
-		Vector2f m_SlideInEndPosition = Vector2f::Zero();
-
-		const ProgramConstants* m_ProgramConfig = nullptr;
 
 		unique_ptr<RoundedRectangleSprite> m_BackingFill = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_BackingStroke = nullptr;
 		unique_ptr<TextSprite> m_Message = nullptr;
 		unique_ptr<ResetButton> m_ResetButton = nullptr;
+		unique_ptr<SlideState> m_SlideState = nullptr;
 	};
 
 	struct WinMenu : public GameEndMenu

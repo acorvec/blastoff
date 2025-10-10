@@ -617,9 +617,15 @@ namespace BlastOff
 
 	
 	SlideState::SlideState(
+		const Vector2f startingPosition,
+		const Vector2f endingPosition,
+		const float maxTick,
 		Sprite* sprite,
 		const ProgramConstants* const programConfig
 	) :
+		m_StartingPosition(startingPosition),
+		m_EndingPosition(endingPosition),
+		m_MaxTick(maxTick),
 		m_Sprite(sprite),
 		m_ProgramConfig(programConfig)
 	{
@@ -633,7 +639,7 @@ namespace BlastOff
 			{
 				float progress = 
 				{
-					1 - (m_SlideOutTick / c_MaxSlideOutTick)
+					1 - (m_SlideOutTick / m_MaxTick)
 				};
 				progress = DoubleSineInterpolation(progress);
 
@@ -669,23 +675,10 @@ namespace BlastOff
 	void SlideState::SlideOut(const float waitInSeconds)
 	{
 		if (waitInSeconds <= 0)
-		{
-			m_SlideOutTick = c_MaxSlideOutTick;
-
-			const Vector2f engineSize = TopRightButton::c_EngineSize;
-			const Vector2f margins = TopRightButton::c_Margins;
-
-			const float xOffset = engineSize.x + margins.x;
-			const Vector2f slideOffset = { xOffset, 0 };
-
-			m_StartingPosition = m_Sprite->GetLocalPosition();
-			m_EndingPosition = m_StartingPosition + slideOffset;
-		}
+			m_SlideOutTick = m_MaxTick;
 		else
 			m_WaitTick = waitInSeconds;
 	}
-
-	const float SlideState::c_MaxSlideOutTick = 1 / 4.0f;
 
 	bool SlideState::IsWaiting() const
 	{
@@ -890,12 +883,29 @@ namespace BlastOff
 				Translate(enginePosition);
 			};
 
-		initializePosition();
+		const auto initializeSlideState = 
+			[&, this]()
+			{
+				const Vector2f engineSize = TopRightButton::c_EngineSize;
+				const Vector2f margins = TopRightButton::c_Margins;
 
-		m_SlideState = std::make_unique<SlideState>(
-			m_Sprite.get(), 
-			programConfig
-		);
+				const float xOffset = engineSize.x + margins.x;
+				const Vector2f slideOffset = { xOffset, 0 };
+
+				const Vector2f startingPosition = m_Sprite->GetLocalPosition();
+				const Vector2f endingPosition = startingPosition + slideOffset;
+
+				m_SlideState = std::make_unique<SlideState>(
+					startingPosition,
+					endingPosition,
+					c_MaxSlideOutTick,
+					m_Sprite.get(), 
+					programConfig
+				);
+			};
+
+		initializePosition();
+		initializeSlideState();
 	}
 
 	void TopRightResetButton::SlideOut()
@@ -911,6 +921,7 @@ namespace BlastOff
 	}
 
 	const float TopRightResetButton::c_SlideOutWait = 1 / 12.0f;
+	const float TopRightResetButton::c_MaxSlideOutTick = 1 / 4.0f;
 	const int TopRightResetButton::c_ButtonIndex = 1;
 
 
@@ -980,12 +991,29 @@ namespace BlastOff
 				Translate(enginePosition);
 			};
 
-		initializePosition();
+		const auto initializeSlideState = 
+			[&, this]()
+			{
+				const Vector2f engineSize = TopRightButton::c_EngineSize;
+				const Vector2f margins = TopRightButton::c_Margins;
 
-		m_SlideState = std::make_unique<SlideState>(
-			m_Sprite.get(), 
-			programConfig
-		);
+				const float xOffset = engineSize.x + margins.x;
+				const Vector2f slideOffset = { xOffset, 0 };
+
+				const Vector2f startingPosition = m_Sprite->GetLocalPosition();
+				const Vector2f endingPosition = startingPosition + slideOffset;
+
+				m_SlideState = std::make_unique<SlideState>(
+					startingPosition,
+					endingPosition,
+					c_MaxSlideOutTick,
+					m_Sprite.get(), 
+					programConfig
+				);
+			};
+
+		initializePosition();
+		initializeSlideState();
 	}
 
 	void TopRightExitButton::SlideOut()
@@ -1003,6 +1031,7 @@ namespace BlastOff
 	const int TopRightExitButton::c_ButtonIndexInGame = 2;
 	const int TopRightExitButton::c_ButtonIndexInSettingsMenu = 1;
 	const float TopRightExitButton::c_SlideOutWait = 0;
+	const float TopRightExitButton::c_MaxSlideOutTick = 1 / 4.0f;
 
 	const char* const TopRightExitButton::c_UnselectedTexturePath = 
 	{
@@ -1159,10 +1188,9 @@ namespace BlastOff
 		TextTextureLoader* const textTextureLoader,
 		const CameraEmpty* const cameraEmpty,
 		const Font* const font
-	) :
-		m_ProgramConfig(programConfig)
+	) 
 	{
-		const auto createBackingFill =
+		const auto initializeBackingFill =
 			[&, this]()
 			{
 				constexpr Rect2f defaultEngineRect(Vector2f::Zero(), { 1, 1 });
@@ -1176,7 +1204,7 @@ namespace BlastOff
 				m_BackingFill->SetParent(cameraEmpty);
 			};
 
-		const auto createBackingStroke =
+		const auto initializeBackingStroke =
 			[&, this]()
 			{
 				constexpr Rect2f defaultEngineRect(Vector2f::Zero(), { 1, 1 });
@@ -1191,7 +1219,7 @@ namespace BlastOff
 				m_BackingStroke->SetParent(m_BackingFill.get());
 			};
 
-		const auto createMainMessage =
+		const auto initializeMainMessage =
 			[&, this]()
 			{
 				m_Message = std::make_unique<TextSprite>(
@@ -1207,7 +1235,7 @@ namespace BlastOff
 				m_Message->SetParent(m_BackingFill.get());
 			};
 
-		const auto createResetButton =
+		const auto initializeResetButton =
 			[&, this]()
 			{
 				constexpr Vector2f initialPosition = Vector2f::Zero();
@@ -1233,22 +1261,6 @@ namespace BlastOff
 				m_BackingStroke->SetEngineSize(newSize);
 			};
 
-		const auto calculateSlideInStartPosition =
-			[&, this]()
-			{
-				const Vector2f viewportSize =
-				{
-					coordTransformer->GetViewportSize()
-				};
-				const Vector2f engineSize = m_BackingFill->GetEngineSize();
-
-				const float xPosition =
-				{
-					-(viewportSize.x + engineSize.x) / 2.0f
-				};
-				m_SlideInStartPosition = { xPosition, 0 };
-			};
-
 		const auto updateResetButtonPosition =
 			[this]()
 			{
@@ -1263,51 +1275,59 @@ namespace BlastOff
 				m_ResetButton->Translate(translation);
 			};
 
-		createBackingFill();
-		createBackingStroke();
-		createMainMessage();
-		createResetButton();
+		const auto calculateSlideInStartPosition =
+			[&, this]() -> Vector2f
+			{
+				const Vector2f viewportSize =
+				{
+					coordTransformer->GetViewportSize()
+				};
+				const Vector2f engineSize = m_BackingFill->GetEngineSize();
+
+				const float xPosition =
+				{
+					-(viewportSize.x + engineSize.x) / 2.0f
+				};
+				return { xPosition, 0 };
+			};
+
+		const auto initializeSlideState = 
+			[&, this]()
+			{
+				const Vector2f startPosition = calculateSlideInStartPosition();
+				constexpr Vector2f endPosition = Vector2f::Zero();
+				m_SlideState = std::make_unique<SlideState>(
+					startPosition,
+					endPosition,
+					c_MaxSlideInTick,
+					m_BackingFill.get(),
+					programConfig
+				);
+			};
+
+		initializeBackingFill();
+		initializeBackingStroke();
+		initializeMainMessage();
+		initializeResetButton();
 
 		updateEngineSize();
-		calculateSlideInStartPosition();
 		updateResetButtonPosition();
+		initializeSlideState();
 	}
 
 	void GameEndMenu::Enable()
 	{
 		m_IsEnabled = true;
-		m_SlideInTick = c_MaxSlideInTick;
+		m_SlideState->SlideOut(c_SlideInWait);
 	}
 
 	void GameEndMenu::Update()
 	{
-		const auto updateSlidingIn =
-			[this]()
-			{
-				float progress = 1 - (m_SlideInTick / c_MaxSlideInTick);
-				progress = SineInterpolation(progress);
-
-				const Vector2f enginePosition = Lerp(
-					m_SlideInStartPosition,
-					m_SlideInEndPosition,
-					progress
-				);
-				m_BackingFill->SetLocalPosition(enginePosition);
-
-				const float targetFrametime =
-				{
-					m_ProgramConfig->GetTargetFrametime()
-				};
-				m_SlideInTick -= targetFrametime;
-			};
-
 		if (m_IsEnabled)
 		{
 			m_Message->Update();
 			m_ResetButton->Update();
-
-			if (m_SlideInTick > 0)
-				updateSlidingIn();
+			m_SlideState->Update();
 		}
 	}
 
@@ -1325,6 +1345,7 @@ namespace BlastOff
 	const float GameEndMenu::c_Roundness = 1 / 4.0f;
 	const float GameEndMenu::c_StrokeWidth = 2 / 44.0f;
 	const float GameEndMenu::c_MessageFontSize = 96;
+	const float GameEndMenu::c_SlideInWait = 0;
 	const float GameEndMenu::c_MaxSlideInTick = 1 / 4.0f;
 
 	const Vector2f GameEndMenu::c_Margins = { 3 / 10.0f, 1 / 10.0f };
