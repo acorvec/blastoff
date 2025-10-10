@@ -686,6 +686,7 @@ namespace BlastOff
 			{
 				m_WinMenu = std::make_unique<WinMenu>(
 					resetCallback,
+					exitCallback,
 					m_CoordinateTransformer.get(),
 					m_InputManager.get(),
 					m_ProgramConfig,
@@ -696,6 +697,7 @@ namespace BlastOff
 				);
 				m_LoseMenu = std::make_unique<LoseMenu>(
 					resetCallback,
+					exitCallback,
 					m_CoordinateTransformer.get(),
 					m_InputManager.get(),
 					m_ProgramConfig,

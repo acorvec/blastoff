@@ -326,7 +326,7 @@ namespace BlastOff
             const ProgramConstants* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
             const Callback& muteCallback,
-            const CameraEmpty* const cameraEmpty
+            const Sprite* const parent
         );
 
         void SlideOut();
@@ -400,7 +400,7 @@ namespace BlastOff
             const ProgramConstants* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
             const Callback& exitCallback,
-            const CameraEmpty* const cameraEmpty,
+            const Sprite* const parent,
 			const ProgramState menuType
 		);
 		
@@ -479,6 +479,7 @@ namespace BlastOff
 			const Colour4i backingColour,
 			const char* const messageText,
 			const Callback& resetCallback,
+			const Callback& exitCallback,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
 			const ProgramConstants* const programConfig,
@@ -509,10 +510,12 @@ namespace BlastOff
 
 		bool m_IsEnabled = false;
 
+		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_BackingFill = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_BackingStroke = nullptr;
 		unique_ptr<TextSprite> m_Message = nullptr;
 		unique_ptr<ResetButton> m_ResetButton = nullptr;
+		unique_ptr<ExitButton> m_ExitButton = nullptr;
 		unique_ptr<SlideState> m_SlideState = nullptr;
 	};
 
@@ -520,6 +523,7 @@ namespace BlastOff
 	{
 		WinMenu(
 			const Callback& resetCallback,
+			const Callback& exitCallback,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
 			const ProgramConstants* const programConfig,
@@ -538,6 +542,7 @@ namespace BlastOff
 	{
 		LoseMenu(
 			const Callback& resetCallback,
+			const Callback& exitCallback,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
 			const ProgramConstants* const programConfig,
@@ -1053,7 +1058,7 @@ namespace BlastOff
 		WindowSizeAdjuster(
 			Settings* const settings,
 			const int windowSizeIncrement,
-			const CameraEmpty* const cameraEmpty,
+			const Sprite* const parent,
 			const CoordinateTransformer* const coordTransformer,
 			TextTextureLoader* const textTextureLoader,
 			const InputManager* const inputManager,
@@ -1071,7 +1076,7 @@ namespace BlastOff
 	private:
 		float m_Height = 0;
 	
-		unique_ptr<Empty> m_ComponentsEmpty = nullptr;
+		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<SlideBar> m_SlideBar = nullptr;
 		unique_ptr<Label> m_Label = nullptr;
 	};
@@ -1084,7 +1089,7 @@ namespace BlastOff
             const ProgramConstants* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
             const Callback& saveCallback,
-            const CameraEmpty* const cameraEmpty,
+            const Sprite* const parent,
 			const Vector2f enginePosition
 		);
 
@@ -1096,6 +1101,22 @@ namespace BlastOff
 		static const char* const c_ClickedTexturePath;
 	};
 
+	struct CenterMenuResetButton : ResetButton
+	{
+		CenterMenuResetButton(
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+            const ProgramConstants* const programConfig,
+            ImageTextureLoader* const imageTextureLoader,
+            const Callback& resetCallback,
+            const Sprite* const parent,
+			const Vector2f bottomRightCorner
+		);
+
+	private:
+		static const int c_ButtonIndex;
+	};
+
 	struct CenterMenuExitButton : ExitButton
 	{
 		CenterMenuExitButton(
@@ -1104,7 +1125,7 @@ namespace BlastOff
             const ProgramConstants* const programConfig,
             ImageTextureLoader* const imageTextureLoader,
             const Callback& exitCallback,
-            const CameraEmpty* const cameraEmpty,
+            const Sprite* const parent,
 			const Vector2f bottomRightCorner
 		);
 
@@ -1151,6 +1172,7 @@ namespace BlastOff
 
 		Settings* m_Settings = nullptr;
 
+		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<MuteButton> m_MuteButton = nullptr;
 		unique_ptr<ExitButton> m_TopRightExitButton = nullptr;
 		unique_ptr<WindowSizeAdjuster> m_WindowSizeAdjuster = nullptr;
