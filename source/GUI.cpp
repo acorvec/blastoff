@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "ProgramConstants.h"
 #include "Utils.h"
+
 #include "raylib.h"
 
 #include <cmath>
@@ -618,6 +619,13 @@ namespace BlastOff
 	const Vector2f TopRightButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
 	const Vector2f TopRightButton::c_Margins = { 1 / 10.0f, 1 / 10.0f };
 
+	const Vector2f CenterMenuButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
+	const Vector2f CenterMenuButton::c_Margins = { 1 / 10.0f, 1 / 10.0f };
+	const Vector2f CenterMenuButton::c_AdditionalOffset = 
+	{ 
+		- 3 / 20.0f, -3 / 30.0f
+	};
+
 	const Vector2f MainMenuButton::c_EngineSize = { 5 / 4.0f, 5 / 4.0f };
 	const Vector2f MainMenuButton::c_Margins = { 1 / 10.0f, 1 / 10.0f };
 
@@ -657,11 +665,10 @@ namespace BlastOff
             {
                 ((viewportSize - engineSize) / 2.0f) - margins
             };
-            const Vector2f indexOffset = TopRightButton::CalculateIndexOffset(
-				c_ButtonIndex,
-				margins,
-				engineSize
-			);
+            const Vector2f indexOffset = 
+			{
+				TopRightButton::CalculateOffsetByIndex(c_ButtonIndex)
+			};
 			enginePosition -= indexOffset;
 			Translate(enginePosition);
         };
@@ -791,11 +798,10 @@ namespace BlastOff
 		{
 			((viewportSize - engineSize) / 2.0f) - margins
 		};
-		const Vector2f indexOffset = TopRightButton::CalculateIndexOffset(
-			c_ButtonIndex,
-			margins,
-			engineSize
-		);
+		const Vector2f indexOffset = 
+		{
+			TopRightButton::CalculateOffsetByIndex(c_ButtonIndex)
+		};
 		enginePosition -= indexOffset;
 		Translate(enginePosition);
 	}
@@ -906,11 +912,10 @@ namespace BlastOff
 		};
 
 		const int buttonIndex = calculateButtonIndex();
-		const Vector2f indexOffset = TopRightButton::CalculateIndexOffset(
-			buttonIndex,
-			margins,
-			engineSize
-		);
+		const Vector2f indexOffset = 
+		{
+			TopRightButton::CalculateOffsetByIndex(buttonIndex)
+		};
 		enginePosition -= indexOffset;
 		Translate(enginePosition);
 	}
@@ -1563,6 +1568,102 @@ namespace BlastOff
 	}
 
 
+	SaveButton::SaveButton(
+		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
+		const ProgramConstants* const programConfig,
+		ImageTextureLoader* const imageTextureLoader,
+		const Callback& saveCallback,
+		const CameraEmpty* const cameraEmpty,
+		const Vector2f bottomRightCorner
+	) : 
+		Button(
+			saveCallback,
+			c_UnselectedTexturePath,
+			c_SelectedTexturePath,
+			c_ClickedTexturePath,
+			imageTextureLoader,
+			Vector2f::Zero(),
+			CenterMenuButton::c_EngineSize,
+			cameraEmpty,
+			coordTransformer,
+			inputManager,
+			programConfig
+		)
+	{
+		const Vector2f offset1 = CenterMenuButton::c_AdditionalOffset;
+		const Vector2f offset2 = 
+		{
+			CenterMenuButton::CalculateOffsetByIndex(c_ButtonIndex)
+		};
+		const Vector2f position = bottomRightCorner + offset1 + offset2;
+		m_Sprite->Move(position);
+	}
+
+	const int SaveButton::c_ButtonIndex = 0;
+
+	const char* const SaveButton::c_UnselectedTexturePath = 
+	{
+		"ui/button/UnselectedSave.png"
+	};
+	const char* const SaveButton::c_SelectedTexturePath = 
+	{
+		"ui/button/SelectedSave.png"
+	};
+	const char* const SaveButton::c_ClickedTexturePath = 
+	{
+		"ui/button/ClickedSave.png"
+	};
+
+
+	CenterMenuExitButton::CenterMenuExitButton(
+		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
+		const ProgramConstants* const programConfig,
+		ImageTextureLoader* const imageTextureLoader,
+		const Callback& exitCallback,
+		const CameraEmpty* const cameraEmpty,
+		const Vector2f bottomRightCorner
+	) :
+		Button(
+			exitCallback,
+			c_UnselectedTexturePath,
+			c_SelectedTexturePath,
+			c_ClickedTexturePath,
+			imageTextureLoader,
+			Vector2f::Zero(),
+			CenterMenuButton::c_EngineSize,
+			cameraEmpty,
+			coordTransformer,
+			inputManager,
+			programConfig
+		)
+	{
+		const Vector2f offset1 = CenterMenuButton::c_AdditionalOffset;
+		const Vector2f offset2 = 
+		{
+			CenterMenuButton::CalculateOffsetByIndex(c_ButtonIndex)
+		};
+		const Vector2f position = bottomRightCorner + offset1 + offset2;
+		m_Sprite->Move(position);
+	}
+
+	const int CenterMenuExitButton::c_ButtonIndex = 1;
+
+	const char* const CenterMenuExitButton::c_UnselectedTexturePath = 
+	{
+		"ui/button/UnselectedSmallExit.png"
+	};
+	const char* const CenterMenuExitButton::c_SelectedTexturePath = 
+	{
+		"ui/button/SelectedSmallExit.png"
+	};
+	const char* const CenterMenuExitButton::c_ClickedTexturePath = 
+	{
+		"ui/button/ClickedSmallExit.png"
+	};
+
+
 	SettingsMenu::SettingsMenu(
 		const int windowSizeIncrement,
 		const bool* const programIsMuted,
@@ -1575,6 +1676,7 @@ namespace BlastOff
 		Settings* const settings,
 		const Callback& muteCallback,
 		const Callback& exitCallback,
+		const Callback& saveCallback,
 		const CameraEmpty* const cameraEmpty
 	) :
 		m_Settings(settings)
@@ -1591,7 +1693,7 @@ namespace BlastOff
 					muteCallback,
 					cameraEmpty
 				);
-				m_ExitButton = std::make_unique<TopRightExitButton>(
+				m_TopRightExitButton = std::make_unique<TopRightExitButton>(
 					coordTransformer,
 					inputManager,
 					programConfig,
@@ -1702,10 +1804,43 @@ namespace BlastOff
 				m_OuterBackingStroke->SetParent(m_OuterBackingFill.get());
 			};
 
+		const auto initializeCenterButtons = 
+			[&, this]()
+			{
+				const Vector2f backingSize = 
+				{
+					m_OuterBackingStroke->GetEngineSize()
+				};
+				const Vector2f bottomRightCorner = 
+				{
+					(backingSize / 2.0f).InvertY()
+				};
+
+				m_CenterSaveButton = std::make_unique<SaveButton>(
+					coordTransformer,
+					inputManager,
+					programConfig,
+					imageTextureLoader,
+					saveCallback,
+					cameraEmpty,
+					bottomRightCorner
+				);
+				m_CenterExitButton = std::make_unique<CenterMenuExitButton>(
+					coordTransformer,
+					inputManager,
+					programConfig,
+					imageTextureLoader,
+					exitCallback,
+					cameraEmpty,
+					bottomRightCorner
+				);
+			};
+
 		initializeButtons();
 		initializeWindowSizeAdjuster();
 		initializeInnerBacking();
 		initializeOuterBacking();
+		initializeCenterButtons();
 	}
 
 	void SettingsMenu::Update()
@@ -1715,8 +1850,10 @@ namespace BlastOff
 		m_InnerBackingFill->Update();
 		m_InnerBackingStroke->Update();
 		m_MuteButton->Update();
-		m_ExitButton->Update();
+		m_TopRightExitButton->Update();
 		m_WindowSizeAdjuster->Update();
+		m_CenterSaveButton->Update();
+		m_CenterExitButton->Update();
 	}
 
 	void SettingsMenu::Draw() const
@@ -1726,8 +1863,10 @@ namespace BlastOff
 		m_InnerBackingFill->Draw();
 		m_InnerBackingStroke->Draw();
 		m_MuteButton->Draw();
-		m_ExitButton->Draw();
+		m_TopRightExitButton->Draw();
 		m_WindowSizeAdjuster->Draw();
+		m_CenterSaveButton->Draw();
+		m_CenterExitButton->Draw();
 	}
 
 	const float SettingsMenu::c_OuterBackingRoundness = 22 / 100.0f;

@@ -260,14 +260,26 @@ namespace BlastOff
 		static const Vector2f c_Margins;
 		static const Vector2f c_EngineSize;
 
-		static constexpr Vector2f CalculateIndexOffset(
-			const int topRightIndex,
-			const Vector2f margins,
-			const Vector2f engineSize
-		)
+		static constexpr Vector2f CalculateOffsetByIndex(const int buttonIndex)
 		{
-			const float offsetY = topRightIndex * (margins.y + engineSize.y);
+			const float offsetY = buttonIndex * (c_Margins.y + c_EngineSize.y);
 			return Vector2f{ 0, offsetY };
+		}
+	};
+
+	struct CenterMenuButton
+	{
+		static const Vector2f c_Margins;
+		static const Vector2f c_EngineSize;
+		static const Vector2f c_AdditionalOffset;
+
+		static constexpr Vector2f CalculateOffsetByIndex(const int buttonIndex)
+		{
+			const float offsetX = 
+			{
+				-buttonIndex * (c_Margins.y + c_EngineSize.y)
+			};
+			return Vector2f{ offsetX, 0 };
 		}
 	};
 
@@ -1023,6 +1035,46 @@ namespace BlastOff
 		unique_ptr<Label> m_Label = nullptr;
 	};
 
+	struct SaveButton : public Button
+	{
+		SaveButton(
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+            const ProgramConstants* const programConfig,
+            ImageTextureLoader* const imageTextureLoader,
+            const Callback& saveCallback,
+            const CameraEmpty* const cameraEmpty,
+			const Vector2f enginePosition
+		);
+
+	private:
+		static const int c_ButtonIndex;
+
+		static const char* const c_UnselectedTexturePath;
+		static const char* const c_SelectedTexturePath;
+		static const char* const c_ClickedTexturePath;
+	};
+
+	struct CenterMenuExitButton : ExitButton
+	{
+		CenterMenuExitButton(
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+            const ProgramConstants* const programConfig,
+            ImageTextureLoader* const imageTextureLoader,
+            const Callback& exitCallback,
+            const CameraEmpty* const cameraEmpty,
+			const Vector2f bottomRightCorner
+		);
+
+	private:
+		static const int c_ButtonIndex;
+		
+		static const char* const c_UnselectedTexturePath;
+		static const char* const c_SelectedTexturePath;
+		static const char* const c_ClickedTexturePath;		
+	};
+
 	struct SettingsMenu
 	{
 		SettingsMenu(
@@ -1037,6 +1089,7 @@ namespace BlastOff
 			Settings* const settings,
 			const Callback& muteCallback,
             const Callback& exitCallback,
+			const Callback& saveCallback,
             const CameraEmpty* const cameraEmpty
 		);
 
@@ -1057,11 +1110,13 @@ namespace BlastOff
 		Settings* m_Settings = nullptr;
 
 		unique_ptr<MuteButton> m_MuteButton = nullptr;
-		unique_ptr<ExitButton> m_ExitButton = nullptr;
+		unique_ptr<ExitButton> m_TopRightExitButton = nullptr;
 		unique_ptr<WindowSizeAdjuster> m_WindowSizeAdjuster = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_OuterBackingFill = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_OuterBackingStroke = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_InnerBackingFill = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_InnerBackingStroke = nullptr;
+		unique_ptr<SaveButton> m_CenterSaveButton = nullptr;
+		unique_ptr<ExitButton> m_CenterExitButton = nullptr;
 	};
 }
