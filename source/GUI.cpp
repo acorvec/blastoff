@@ -55,7 +55,7 @@ namespace BlastOff
 
 				const int targetFramerate =
 				{
-					m_ProgramConfig->GetTargetFramerate()
+					m_ProgramConstants->GetTargetFramerate()
 				};
 				const float smoothingFrames = c_SmoothingPeriod * targetFramerate;
 
@@ -87,14 +87,14 @@ namespace BlastOff
 
 	GUIBar::GUIBar(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const CameraEmpty* const cameraEmpty,
 		const float* const statisticValue,
 		const char* const energyTexturePath
 	) :
 		m_CameraEmpty(cameraEmpty),
-		m_ProgramConfig(programConfig),
+		m_ProgramConstants(programConstants),
 		m_StatisticValue(statisticValue)
 	{
 		const auto initializeBackingSprite =
@@ -106,7 +106,7 @@ namespace BlastOff
 				};
 				m_BackingSprite = std::make_unique<ImageSprite>(
 					coordTransformer,
-					programConfig,
+					programConstants,
 					backingTexture
 				);
 				m_BackingSprite->SetParent(m_CameraEmpty);
@@ -121,7 +121,7 @@ namespace BlastOff
 				};
 				m_EnergySprite = std::make_unique<ImageSprite>(
 					coordTransformer,
-					programConfig,
+					programConstants,
 					texture
 				);
 				m_EnergySprite->SetParent(m_BackingSprite.get());
@@ -179,14 +179,14 @@ namespace BlastOff
 
 	FuelBar::FuelBar(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const CameraEmpty* const cameraEmpty,
 		const Player* const player
 	) :
 		GUIBar(
 			coordTransformer,
-			programConfig,
+			programConstants,
 			imageTextureLoader,
 			cameraEmpty,
 			&m_StatisticValue,
@@ -210,14 +210,14 @@ namespace BlastOff
 
 	SpeedupBar::SpeedupBar(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const CameraEmpty* const cameraEmpty,
 		const Player* const player
 	) :
 		GUIBar(
 			coordTransformer,
-			programConfig,
+			programConstants,
 			imageTextureLoader,
 			cameraEmpty,
 			&m_StatisticValue,
@@ -262,7 +262,7 @@ namespace BlastOff
 		const float fontSize,
 		const char* const message,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		TextTextureLoader* const textTextureLoader,
 		const Font* const font
 	)
@@ -272,7 +272,7 @@ namespace BlastOff
 			colour,
 			fontSize,
 			coordTransformer,
-			programConfig,
+			programConstants,
 			textTextureLoader,
 			font,
 			message
@@ -286,7 +286,7 @@ namespace BlastOff
 		const Colour4i colour,
 		const char* const message,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		TextTextureLoader* const textTextureLoader,
 		const Font* const font
 	) :
@@ -296,7 +296,7 @@ namespace BlastOff
 			c_FontSize,
 			message,
 			coordTransformer,
-			programConfig,
+			programConstants,
 			textTextureLoader,
 			font
 		),
@@ -401,7 +401,7 @@ namespace BlastOff
 		const Colours colours,
 		const char* const message,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		TextTextureLoader* const textTextureLoader,
 		const Font* const font
 	)
@@ -413,7 +413,7 @@ namespace BlastOff
 			colours.aboveBacking,
 			message,
 			coordTransformer,
-			programConfig,
+			programConstants,
 			textTextureLoader,
 			font
 		);
@@ -423,7 +423,7 @@ namespace BlastOff
 			colours.aboveEnergy,
 			message,
 			coordTransformer,
-			programConfig,
+			programConstants,
 			textTextureLoader,
 			font
 		);
@@ -452,7 +452,7 @@ namespace BlastOff
 	FuelBarLabel::FuelBarLabel(
 		const GUIBar* fuelBar,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		TextTextureLoader* const textTextureLoader,
 		const Font* const font
 	) :
@@ -461,7 +461,7 @@ namespace BlastOff
 			c_Colours,
 			c_Message,
 			coordTransformer,
-			programConfig,
+			programConstants,
 			textTextureLoader,
 			font
 		)
@@ -481,7 +481,7 @@ namespace BlastOff
 	SpeedupBarLabel::SpeedupBarLabel(
 		const GUIBar* speedupBar,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		TextTextureLoader* const textTextureLoader,
 		const Font* const font
 	) :
@@ -490,7 +490,7 @@ namespace BlastOff
 			c_Colours,
 			c_Message,
 			coordTransformer,
-			programConfig,
+			programConstants,
 			textTextureLoader,
 			font
 		)
@@ -575,7 +575,7 @@ namespace BlastOff
 		const Sprite* const parent,
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig
+		const ProgramConstants* const programConstants
 	) :
 		m_ClickCallback(clickCallback),
 		m_CoordTransformer(coordTransformer),
@@ -605,7 +605,7 @@ namespace BlastOff
 				m_Sprite = std::make_unique<ImageSprite>(
 					engineRect,
 					coordTransformer,
-					programConfig,
+					programConstants,
 					m_UnselectedTexture
 				);
 				m_Sprite->SetParent(parent);
@@ -621,13 +621,13 @@ namespace BlastOff
 		const Vector2f endingPosition,
 		const float maxTick,
 		Sprite* sprite,
-		const ProgramConstants* const programConfig
+		const ProgramConstants* const programConstants
 	) :
 		m_StartingPosition(startingPosition),
 		m_EndingPosition(endingPosition),
 		m_MaxTick(maxTick),
 		m_Sprite(sprite),
-		m_ProgramConfig(programConfig)
+		m_ProgramConstants(programConstants)
 	{
 
 	}
@@ -652,7 +652,7 @@ namespace BlastOff
 
 				const float targetFrametime =
 				{
-					m_ProgramConfig->GetTargetFrametime()
+					m_ProgramConstants->GetTargetFrametime()
 				};
 				m_SlideOutTick -= targetFrametime;
 			};
@@ -660,7 +660,7 @@ namespace BlastOff
 		const auto updateWaiting = 
 			[this]()
 			{
-				m_WaitTick -= m_ProgramConfig->GetTargetFrametime();
+				m_WaitTick -= m_ProgramConstants->GetTargetFrametime();
 				if (!IsWaiting())
 					SlideOut();
 			};
@@ -709,13 +709,13 @@ namespace BlastOff
         const bool* const programIsMuted,
         const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-        const ProgramConstants* const programConfig,
+        const ProgramConstants* const programConstants,
         ImageTextureLoader* const imageTextureLoader,
-        const Callback& muteCallback,
+        const Callback& muteUnmuteCallback,
         const Sprite* const parent
     ) :
 		Button(
-			muteCallback,
+			muteUnmuteCallback,
 			c_UnselectedTexturePath,
 			c_SelectedTexturePath,
 			c_ClickedTexturePath,
@@ -725,7 +725,7 @@ namespace BlastOff
 			parent,
 			coordTransformer,
 			inputManager,
-			programConfig
+			programConstants
 		),
 		m_IsActive(programIsMuted)
     {
@@ -756,7 +756,7 @@ namespace BlastOff
                 engineRect,
                 c_ActiveBarTexturePath,
                 coordTransformer,
-                programConfig,
+                programConstants,
                 imageTextureLoader
             );
             m_ActiveBar->SetParent(m_Sprite.get());
@@ -804,7 +804,7 @@ namespace BlastOff
 	ResetButton::ResetButton(
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& resetCallback,
 		const Vector2f enginePosition,
@@ -821,7 +821,7 @@ namespace BlastOff
 			parent,
 			coordTransformer,
 			inputManager,
-			programConfig
+			programConstants
 		)
 	{
 
@@ -849,7 +849,7 @@ namespace BlastOff
 	TopRightResetButton::TopRightResetButton(
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& resetCallback,
 		const CameraEmpty* const cameraEmpty
@@ -857,7 +857,7 @@ namespace BlastOff
 		ResetButton(
 			coordTransformer,
 			inputManager,
-			programConfig,
+			programConstants,
 			imageTextureLoader,
 			resetCallback,
 			Vector2f::Zero(),
@@ -900,7 +900,7 @@ namespace BlastOff
 					endingPosition,
 					c_MaxSlideOutTick,
 					m_Sprite.get(), 
-					programConfig
+					programConstants
 				);
 			};
 
@@ -928,7 +928,7 @@ namespace BlastOff
 	TopRightExitButton::TopRightExitButton(
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& exitCallback,
 		const Sprite* const parent,
@@ -945,7 +945,7 @@ namespace BlastOff
 			parent,
 			coordTransformer,
 			inputManager,
-			programConfig
+			programConstants
 		)
 	{
 		const auto calculateButtonIndex = 
@@ -1008,7 +1008,7 @@ namespace BlastOff
 					endingPosition,
 					c_MaxSlideOutTick,
 					m_Sprite.get(), 
-					programConfig
+					programConstants
 				);
 			};
 
@@ -1050,7 +1050,7 @@ namespace BlastOff
 	PlayButton::PlayButton(
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& playCallback,
 		const CameraEmpty* const cameraEmpty
@@ -1066,7 +1066,7 @@ namespace BlastOff
 			cameraEmpty,
 			coordTransformer,
 			inputManager,
-			programConfig
+			programConstants
 		)
 	{
 		const Vector2f engineSize = MainMenuButton::c_EngineSize;
@@ -1093,7 +1093,7 @@ namespace BlastOff
 	SettingsButton::SettingsButton(
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& settingsCallback,
 		const CameraEmpty* const cameraEmpty
@@ -1109,7 +1109,7 @@ namespace BlastOff
 			cameraEmpty,
 			coordTransformer,
 			inputManager,
-			programConfig
+			programConstants
 		)
 	{
 		const Vector2f engineSize = MainMenuButton::c_EngineSize;
@@ -1136,7 +1136,7 @@ namespace BlastOff
 	MainMenuExitButton::MainMenuExitButton(
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& exitCallback,
 		const CameraEmpty* const cameraEmpty		
@@ -1152,7 +1152,7 @@ namespace BlastOff
 			cameraEmpty,
 			coordTransformer,
 			inputManager,
-			programConfig
+			programConstants
 		)
 	{
 		const Vector2f engineSize = MainMenuButton::c_EngineSize;
@@ -1184,7 +1184,7 @@ namespace BlastOff
 		const Callback& exitCallback,
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
 		const CameraEmpty* const cameraEmpty,
@@ -1198,7 +1198,7 @@ namespace BlastOff
 				m_Empty = std::make_unique<Empty>(
 					enginePosition,
 					coordTransformer,
-					programConfig
+					programConstants
 				);
 				m_Empty->SetParent(cameraEmpty);
 			};
@@ -1212,7 +1212,7 @@ namespace BlastOff
 					backingColour,
 					c_Roundness,
 					coordTransformer,
-					programConfig
+					programConstants
 				);
 				m_BackingFill->SetParent(m_Empty.get());
 			};
@@ -1226,7 +1226,7 @@ namespace BlastOff
 					c_Black,
 					c_Roundness,
 					coordTransformer,
-					programConfig,
+					programConstants,
 					c_StrokeWidth
 				);
 				m_BackingStroke->SetParent(m_Empty.get());
@@ -1240,7 +1240,7 @@ namespace BlastOff
 					c_Black,
 					c_MessageFontSize,
 					coordTransformer,
-					programConfig,
+					programConstants,
 					textTextureLoader,
 					font,
 					messageText
@@ -1274,7 +1274,7 @@ namespace BlastOff
 					endPosition,
 					c_MaxSlideInTick,
 					m_Empty.get(),
-					programConfig
+					programConstants
 				);
 			};
 
@@ -1300,7 +1300,7 @@ namespace BlastOff
 				m_ResetButton = std::make_unique<CenterMenuResetButton>(
 					coordTransformer,
 					inputManager,
-					programConfig,
+					programConstants,
 					imageTextureLoader,
 					resetCallback,
 					m_Empty.get(),
@@ -1309,7 +1309,7 @@ namespace BlastOff
 				m_ExitButton = std::make_unique<CenterMenuExitButton>(
 					coordTransformer,
 					inputManager,
-					programConfig,
+					programConstants,
 					imageTextureLoader,
 					exitCallback,
 					m_Empty.get(),
@@ -1373,7 +1373,7 @@ namespace BlastOff
 		const Callback& exitCallback,
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
 		const CameraEmpty* const cameraEmpty,
@@ -1386,7 +1386,7 @@ namespace BlastOff
 			exitCallback,
 			coordTransformer,
 			inputManager,
-			programConfig,
+			programConstants,
 			imageTextureLoader,
 			textTextureLoader,
 			cameraEmpty,
@@ -1405,7 +1405,7 @@ namespace BlastOff
 		const Callback& exitCallback,
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
 		const CameraEmpty* const cameraEmpty,
@@ -1418,7 +1418,7 @@ namespace BlastOff
 			exitCallback,
 			coordTransformer,
 			inputManager,
-			programConfig,
+			programConstants,
 			imageTextureLoader,
 			textTextureLoader,
 			cameraEmpty,
@@ -1433,7 +1433,7 @@ namespace BlastOff
 
 
     MainMenu::MainMenu(
-        const ProgramConstants* const programConfig,
+        const ProgramConstants* const programConstants,
         const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
         const CameraEmpty* const cameraEmpty,
@@ -1446,7 +1446,7 @@ namespace BlastOff
         const Vector2i* const windowPosition,
         const Vector2i* const windowSize
     ) :
-        m_ProgramConfig(programConfig),
+        m_ProgramConstants(programConstants),
         m_CoordTransformer(coordTransformer),
 		m_InputManager(inputManager),
         m_CameraEmpty(cameraEmpty),
@@ -1462,7 +1462,7 @@ namespace BlastOff
                 m_SettingsButton = std::make_unique<SettingsButton>(
                     m_CoordTransformer,
                     m_InputManager,
-                    m_ProgramConfig,
+                    m_ProgramConstants,
                     m_ImageTextureLoader,
                     settingsCallback,
                     m_CameraEmpty
@@ -1470,7 +1470,7 @@ namespace BlastOff
                 m_PlayButton = std::make_unique<PlayButton>(
                     m_CoordTransformer,
                     m_InputManager,
-                    m_ProgramConfig,
+                    m_ProgramConstants,
                     m_ImageTextureLoader,
                     playCallback,
                     m_CameraEmpty
@@ -1478,7 +1478,7 @@ namespace BlastOff
                 m_ExitButton = std::make_unique<MainMenuExitButton>(
                     m_CoordTransformer,
                     m_InputManager,
-                    m_ProgramConfig,
+                    m_ProgramConstants,
                     m_ImageTextureLoader,
                     exitCallback,
                     m_CameraEmpty
@@ -1696,7 +1696,7 @@ namespace BlastOff
 	SaveButton::SaveButton(
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& saveCallback,
 		const Sprite* const parent,
@@ -1713,7 +1713,7 @@ namespace BlastOff
 			parent,
 			coordTransformer,
 			inputManager,
-			programConfig
+			programConstants
 		)
 	{
 		const Vector2f offset1 = CenterMenuButton::c_AdditionalOffset;
@@ -1744,7 +1744,7 @@ namespace BlastOff
 	CenterMenuResetButton::CenterMenuResetButton(
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& resetCallback,
 		const Sprite* const parent,
@@ -1753,7 +1753,7 @@ namespace BlastOff
 		ResetButton(
 			coordTransformer,
 			inputManager,
-			programConfig,
+			programConstants,
 			imageTextureLoader,
 			resetCallback,
 			Vector2f::Zero(),
@@ -1781,7 +1781,7 @@ namespace BlastOff
 	CenterMenuExitButton::CenterMenuExitButton(
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& exitCallback,
 		const Sprite* const parent,
@@ -1798,7 +1798,7 @@ namespace BlastOff
 			parent,
 			coordTransformer,
 			inputManager,
-			programConfig
+			programConstants
 		)
 	{
 		const auto initializePosition = 
@@ -1837,12 +1837,12 @@ namespace BlastOff
 		const bool* const programIsMuted,
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		const Font* const font,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
 		Settings* const settings,
-		const Callback& muteCallback,
+		const Callback& muteUnmuteCallback,
 		const Callback& exitCallback,
 		const CameraEmpty* const cameraEmpty
 	) :
@@ -1855,7 +1855,7 @@ namespace BlastOff
 				m_Empty = std::make_unique<Empty>(
 					enginePosition,
 					coordTransformer,
-					programConfig
+					programConstants
 				);
 				m_Empty->SetParent(cameraEmpty);
 			};
@@ -1867,15 +1867,15 @@ namespace BlastOff
 					programIsMuted,
 					coordTransformer,
 					inputManager,
-					programConfig,
+					programConstants,
 					imageTextureLoader,
-					muteCallback,
+					muteUnmuteCallback,
 					m_Empty.get()
 				);
 				m_TopRightExitButton = std::make_unique<TopRightExitButton>(
 					coordTransformer,
 					inputManager,
-					programConfig,
+					programConstants,
 					imageTextureLoader,
 					exitCallback,
 					m_Empty.get(),
@@ -1893,7 +1893,7 @@ namespace BlastOff
 					coordTransformer,
 					textTextureLoader,
 					inputManager,
-					programConfig,
+					programConstants,
 					font
 				);
 			};
@@ -1935,7 +1935,7 @@ namespace BlastOff
 					c_InnerBackingColours.fill,
 					c_InnerBackingRoundness,
 					coordTransformer,
-					programConfig
+					programConstants
 				);
 				m_InnerBackingFill->SetParent(m_Empty.get());
 
@@ -1944,7 +1944,7 @@ namespace BlastOff
 					c_InnerBackingColours.stroke,
 					c_InnerBackingRoundness,
 					coordTransformer,
-					programConfig,
+					programConstants,
 					c_InnerBackingStrokeWidth
 				);
 				m_InnerBackingStroke->SetParent(m_InnerBackingFill.get());
@@ -1968,7 +1968,7 @@ namespace BlastOff
 					c_OuterBackingColours.fill,
 					c_OuterBackingRoundness,
 					coordTransformer,
-					programConfig
+					programConstants
 				);
 				m_OuterBackingFill->SetParent(m_Empty.get());
 
@@ -1977,7 +1977,7 @@ namespace BlastOff
 					c_OuterBackingColours.stroke,
 					c_OuterBackingRoundness,
 					coordTransformer,
-					programConfig,
+					programConstants,
 					c_OuterBackingStrokeWidth
 				);
 				m_OuterBackingStroke->SetParent(m_OuterBackingFill.get());
@@ -2004,7 +2004,7 @@ namespace BlastOff
 				m_CenterSaveButton = std::make_unique<SaveButton>(
 					coordTransformer,
 					inputManager,
-					programConfig,
+					programConstants,
 					imageTextureLoader,
 					applyCallback,
 					m_Empty.get(),
@@ -2013,7 +2013,7 @@ namespace BlastOff
 				m_CenterExitButton = std::make_unique<CenterMenuExitButton>(
 					coordTransformer,
 					inputManager,
-					programConfig,
+					programConstants,
 					imageTextureLoader,
 					exitCallback,
 					m_Empty.get(),

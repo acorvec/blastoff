@@ -10,7 +10,7 @@
 namespace BlastOff
 {
 	Game::Game(
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
 		SoundLoader* const soundLoader,
@@ -19,7 +19,7 @@ namespace BlastOff
 		const Vector2i* const windowPosition,
 		const Vector2i* const windowSize
 	) :
-		m_ProgramConfig(programConfig),
+		m_ProgramConstants(programConstants),
 		m_Font(font),
 		m_CameraPosition(cameraPosition),
 		m_ImageTextureLoader(imageTextureLoader),
@@ -186,7 +186,7 @@ namespace BlastOff
 		updateMiscObjects();
 
 #if COMPILE_CONFIG_DEBUG
-		if (m_ProgramConfig->GetDebugToolsEnabled())
+		if (m_ProgramConstants->GetDebugToolsEnabled())
 			updateDebugTools();
 #endif
 	}
@@ -278,7 +278,7 @@ namespace BlastOff
 				m_Background = std::make_unique<Background>(
 					&m_WorldBounds,
 					m_CoordTransformer,
-					m_ProgramConfig
+					m_ProgramConstants
 				);
 			};
 
@@ -287,7 +287,7 @@ namespace BlastOff
 			{
 				m_Crag = std::make_unique<Crag>(
 					m_CoordTransformer,
-					m_ProgramConfig,
+					m_ProgramConstants,
 					m_ImageTextureLoader
 				);
 			};
@@ -299,7 +299,7 @@ namespace BlastOff
 				m_Platform = std::make_unique<Platform>(
 					platformHeight,
 					m_CoordTransformer,
-					m_ProgramConfig,
+					m_ProgramConstants,
 					m_ImageTextureLoader
 				);
 			};
@@ -319,7 +319,7 @@ namespace BlastOff
 			{
 				vector.emplace_back(
 					m_CoordTransformer,
-					m_ProgramConfig,
+					m_ProgramConstants,
 					m_ImageTextureLoader,
 					&m_WorldBounds,
 					&m_CloudMovementDirection
@@ -381,7 +381,7 @@ namespace BlastOff
 					m_Platform.get(),
 					m_CoordTransformer,
 					&c_Constants,
-					m_ProgramConfig,
+					m_ProgramConstants,
 					m_InputManager.get(),
 					m_ImageTextureLoader
 				);
@@ -455,7 +455,7 @@ namespace BlastOff
 #endif
 				vector.emplace_back(
 					m_CoordTransformer,
-					m_ProgramConfig,
+					m_ProgramConstants,
 					m_Player.get(),
 					m_ImageTextureLoader,
 					enginePosition
@@ -520,14 +520,14 @@ namespace BlastOff
 			{
 				m_FuelBar = std::make_unique<FuelBar>(
 					m_CoordTransformer,
-					m_ProgramConfig,
+					m_ProgramConstants,
 					m_ImageTextureLoader,
 					m_CameraEmpty,
 					m_Player.get()
 				);
 				m_SpeedupBar = std::make_unique<SpeedupBar>(
 					m_CoordTransformer,
-					m_ProgramConfig,
+					m_ProgramConstants,
 					m_ImageTextureLoader,
 					m_CameraEmpty,
 					m_Player.get()
@@ -540,14 +540,14 @@ namespace BlastOff
 				m_FuelBarLabel = std::make_unique<FuelBarLabel>(
 					m_FuelBar.get(),
 					m_CoordTransformer,
-					m_ProgramConfig,
+					m_ProgramConstants,
 					m_TextTextureLoader,
 					m_Font
 				);
 				m_SpeedupBarLabel = std::make_unique<SpeedupBarLabel>(
 					m_SpeedupBar.get(),
 					m_CoordTransformer,
-					m_ProgramConfig,
+					m_ProgramConstants,
 					m_TextTextureLoader,
 					m_Font
 				);
@@ -615,11 +615,11 @@ namespace BlastOff
 
 	PlayableGame::PlayableGame(
         const bool* const programIsMuted,
-        const ProgramConstants* const programConfig,
+        const ProgramConstants* const programConstants,
         ImageTextureLoader* const imageTextureLoader,
         TextTextureLoader* const textTextureLoader,
         SoundLoader* const soundLoader,
-        const Callback& muteUnmuteCallback,
+        const Callback& muteUnmuteUnmuteCallback,
         const Callback& resetCallback,
 		const Callback& exitCallback,
         const Font* const font,
@@ -627,7 +627,7 @@ namespace BlastOff
         const Vector2i* const windowSize
     ) :
         Game(
-            programConfig,
+            programConstants,
             imageTextureLoader,
             textTextureLoader,
             soundLoader,
@@ -648,7 +648,7 @@ namespace BlastOff
                 m_CoordinateTransformer->Update();
 				m_CameraEmpty = std::make_unique<CameraEmpty>(
 					m_CoordinateTransformer.get(),
-					m_ProgramConfig,
+					m_ProgramConstants,
 					&m_CameraPosition
 				);
 			};
@@ -656,7 +656,7 @@ namespace BlastOff
         const auto initializeSound =
             [&, this]()
         {
-            const bool isSoundEnabled = m_ProgramConfig->GetSoundEnabled();
+            const bool isSoundEnabled = m_ProgramConstants->GetSoundEnabled();
             if (!isSoundEnabled)
                 return;
 
@@ -689,7 +689,7 @@ namespace BlastOff
 					exitCallback,
 					m_CoordinateTransformer.get(),
 					m_InputManager.get(),
-					m_ProgramConfig,
+					m_ProgramConstants,
 					imageTextureLoader,
 					textTextureLoader,
 					m_CameraEmpty.get(),
@@ -700,7 +700,7 @@ namespace BlastOff
 					exitCallback,
 					m_CoordinateTransformer.get(),
 					m_InputManager.get(),
-					m_ProgramConfig,
+					m_ProgramConstants,
 					imageTextureLoader,
 					textTextureLoader,
 					m_CameraEmpty.get(),
@@ -715,15 +715,15 @@ namespace BlastOff
 					programIsMuted,
 					m_CoordinateTransformer.get(),
 					m_InputManager.get(),
-                    m_ProgramConfig,
+                    m_ProgramConstants,
                     imageTextureLoader,
-                    muteUnmuteCallback,
+                    muteUnmuteUnmuteCallback,
                     m_CameraEmpty.get()
                 );
 				m_ResetButton = std::make_unique<TopRightResetButton>(
 					m_CoordinateTransformer.get(),
 					m_InputManager.get(),
-					m_ProgramConfig,
+					m_ProgramConstants,
 					imageTextureLoader,
 					resetCallback,
 					m_CameraEmpty.get()
@@ -731,7 +731,7 @@ namespace BlastOff
 				m_ExitButton = std::make_unique<TopRightExitButton>(
 					m_CoordinateTransformer.get(),
 					m_InputManager.get(),
-					m_ProgramConfig,
+					m_ProgramConstants,
 					imageTextureLoader,
 					exitCallback,
 					m_CameraEmpty.get(),
@@ -783,7 +783,7 @@ namespace BlastOff
 		const auto playOutcomeSound =
 			[this]()
 			{
-				const bool isSoundEnabled = m_ProgramConfig->GetSoundEnabled();
+				const bool isSoundEnabled = m_ProgramConstants->GetSoundEnabled();
 				if (!isSoundEnabled)
 					return;
 
@@ -838,7 +838,7 @@ namespace BlastOff
 
 
     Cutscene::Cutscene(
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		CoordinateTransformer* const coordTransformer,
 		CameraEmpty* const cameraEmpty,
 		ImageTextureLoader* const imageTextureLoader,
@@ -851,7 +851,7 @@ namespace BlastOff
 		const Vector2i* const windowSize
 	) :
 		Game(
-			programConfig,
+			programConstants,
 			imageTextureLoader,
 			textTextureLoader,
 			soundLoader,
@@ -867,7 +867,7 @@ namespace BlastOff
 			std::make_unique<CutsceneInputManager>(
 				coordTransformer,
 				cameraPosition,
-				m_ProgramConfig
+				m_ProgramConstants
 			)
 		};
 		FinishConstruction(
@@ -882,7 +882,7 @@ namespace BlastOff
 		const auto updateResetTimer =
 			[this]()
 			{
-				m_ResetTick -= m_ProgramConfig->GetTargetFrametime();
+				m_ResetTick -= m_ProgramConstants->GetTargetFrametime();
 				if (!ResetTimerIsActive())
 					m_ResetCallback();
 			};

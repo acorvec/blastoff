@@ -9,13 +9,13 @@ namespace BlastOff
 {
 	struct Logging
 	{
-		static void Initialize(const ProgramConstants* const programConfig);
+		static void Initialize(const ProgramConstants* const programConstants);
 
 		static void Log(const char* const value);
 		static void Log(const string& value);
 
 	private:
-		static const inline ProgramConstants* m_ProgramConfig = nullptr;
+		static const inline ProgramConstants* m_ProgramConstants = nullptr;
 
 		static string CalculateBanner();
 	};

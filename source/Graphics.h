@@ -90,7 +90,7 @@ namespace BlastOff
 		Sprite(
 			const Rect2f engineRect,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConfig
+			const ProgramConstants* const programConstants
 		);
 		virtual ~Sprite()
 		{
@@ -151,7 +151,7 @@ namespace BlastOff
 		const Sprite* m_Parent = nullptr;
 
 		const CoordinateTransformer* m_CoordTransformer = nullptr;
-		const ProgramConstants* m_ProgramConfig = nullptr;
+		const ProgramConstants* m_ProgramConstants = nullptr;
 	};
 
 	struct Empty : public Sprite
@@ -159,7 +159,7 @@ namespace BlastOff
 		Empty(
 			const Vector2f enginePosition,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConfig
+			const ProgramConstants* const programConstants
 		);
 
 		void Draw() const override;
@@ -172,7 +172,7 @@ namespace BlastOff
 	{
 		CameraEmpty(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			const Vector2f* const cameraPosition
 		);
 
@@ -187,7 +187,7 @@ namespace BlastOff
 		GradientSprite(
 			const Rect2f engineRect,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			const Colour4i firstColour, 
 			const Colour4i secondColour, 
 			const Direction direction
@@ -252,26 +252,26 @@ namespace BlastOff
 		ImageSprite(
 			const Rect2f engineRect,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			const Texture* const texture
 		);
 		ImageSprite(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			const Texture* const texture
 		);
 
 		static unique_ptr<ImageSprite> LoadFromPath(
 			const char* const resourcePath,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			ImageTextureLoader* imageTextureLoader
 		);
 		static unique_ptr<ImageSprite> LoadFromPath(
 			const Rect2f engineRect,
 			const char* const resourcePath,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			ImageTextureLoader* imageTextureLoader
 		);
 
@@ -303,7 +303,7 @@ namespace BlastOff
 			const Colour4i colour,
 			const float fontSize,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			TextTextureLoader* const textureLoader,
 			const Font* const font,
 			const string& message = ""
@@ -351,7 +351,7 @@ namespace BlastOff
 			const Colour4i colour,
 			const float roundness,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			const optional<float> strokeWidth = std::nullopt
 		);
 

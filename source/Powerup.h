@@ -22,7 +22,7 @@ namespace BlastOff
 		float m_CollectionTick = c_DeactivatedTick;
 		float m_RotationTick = 0;
 		
-		const ProgramConstants* m_ProgramConfig = nullptr;
+		const ProgramConstants* m_ProgramConstants = nullptr;
 
 		Player* m_Player = nullptr;
 
@@ -30,7 +30,7 @@ namespace BlastOff
 
 		Powerup(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			Player* const player,
 			ImageTextureLoader* const imageTextureLoader,
 			const Vector2f enginePosition,
@@ -55,7 +55,7 @@ namespace BlastOff
 	{
 		SpeedUpPowerup(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			Player* const player,
 			ImageTextureLoader* const imageTextureLoader,
 			const Vector2f enginePosition
@@ -76,7 +76,7 @@ namespace BlastOff
 	{
 		FuelUpPowerup(
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			Player* const player,
 			ImageTextureLoader* const imageTextureLoader,
 			const Vector2f enginePosition

@@ -15,7 +15,7 @@ namespace BlastOff
 	struct Game
 	{
 		Game(
-            const ProgramConstants* const programConfig,
+            const ProgramConstants* const programConstants,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
 			SoundLoader* const soundLoader,
@@ -64,7 +64,7 @@ namespace BlastOff
 		vector<Powerup*> m_AllPowerups = {};
 		vector<Cloud*> m_AllClouds = {};
 
-		const ProgramConstants* m_ProgramConfig = nullptr;
+		const ProgramConstants* m_ProgramConstants = nullptr;
 		const Font* m_Font = nullptr;
 
 		ImageTextureLoader* m_ImageTextureLoader = nullptr;
@@ -85,11 +85,11 @@ namespace BlastOff
 	{
 		PlayableGame(
 			const bool* const programIsMuted,
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
 			SoundLoader* const soundLoader,
-			const Callback& muteUnmuteCallback,
+			const Callback& muteUnmuteUnmuteCallback,
 			const Callback& resetCallback,
 			const Callback& exitCallback,
 			const Font* const font,
@@ -123,7 +123,7 @@ namespace BlastOff
 	struct Cutscene : public Game
 	{
 		Cutscene(
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			CoordinateTransformer* const coordTransformer,
 			CameraEmpty* const cameraEmpty,
 			ImageTextureLoader* const imageTextureLoader,

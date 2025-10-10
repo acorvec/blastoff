@@ -66,11 +66,11 @@ namespace BlastOff
     CutsceneInputManager::CutsceneInputManager(
         const CoordinateTransformer* const coordTransformer,
         const Vector2f* const cameraPosition,
-        const ProgramConstants* const programConfig
+        const ProgramConstants* const programConstants
     ) :
         InputManager(coordTransformer),
         m_CameraPosition(cameraPosition),
-        m_ProgramConfig(programConfig)
+        m_ProgramConstants(programConstants)
     {
         m_OscillationTick = c_MaxOscillationTick * GetRandomFloat();
     }
@@ -121,7 +121,7 @@ namespace BlastOff
 
     void CutsceneInputManager::Update()
     {
-        m_OscillationTick += m_ProgramConfig->GetTargetFrametime();
+        m_OscillationTick += m_ProgramConstants->GetTargetFrametime();
 
         const float max = c_MaxOscillationTick;
         if (m_OscillationTick > max)

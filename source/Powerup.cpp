@@ -9,7 +9,7 @@ namespace BlastOff
 			{
 				const float targetFrametime =
 				{
-					m_ProgramConfig->GetTargetFrametime()
+					m_ProgramConstants->GetTargetFrametime()
 				};
 				m_RotationTick += 180.0f * targetFrametime;
 
@@ -32,7 +32,7 @@ namespace BlastOff
 				m_Sprite->SetOpacity(opacity);
 				m_Sprite->SetScale(scale);
 
-				const float frametime = m_ProgramConfig->GetTargetFrametime();
+				const float frametime = m_ProgramConstants->GetTargetFrametime();
 				m_CollectionTick -= frametime;
 			};
 
@@ -69,7 +69,7 @@ namespace BlastOff
 
 	Powerup::Powerup(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		Player* const player,
 		ImageTextureLoader* const imageTextureLoader,
 		const Vector2f enginePosition,
@@ -79,7 +79,7 @@ namespace BlastOff
 		const Vector2f defaultEngineSize
 	) :
 		m_Player(player),
-		m_ProgramConfig(programConfig),
+		m_ProgramConstants(programConstants),
 		m_MaxCollectionTick(maxCollectionTick),
 		m_OscillationScale(oscillationScale),
 		m_DefaultEngineSize(defaultEngineSize)
@@ -98,7 +98,7 @@ namespace BlastOff
 				m_Sprite = std::make_unique<ImageSprite>(
 					engineRect,
 					coordTransformer,
-					programConfig,
+					programConstants,
 					texture
 				);
 			};
@@ -134,14 +134,14 @@ namespace BlastOff
 
 	SpeedUpPowerup::SpeedUpPowerup(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		Player* const player,
 		ImageTextureLoader* const imageTextureLoader,
 		const Vector2f enginePosition
 	) :
 		Powerup(
 			coordTransformer,
-			programConfig,
+			programConstants,
 			player,
 			imageTextureLoader,
 			enginePosition,
@@ -178,14 +178,14 @@ namespace BlastOff
 
 	FuelUpPowerup::FuelUpPowerup(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		Player* const player,
 		ImageTextureLoader* const imageTextureLoader,
 		const Vector2f enginePosition
 	) :
 		Powerup(
 			coordTransformer,
-			programConfig,
+			programConstants,
 			player,
 			imageTextureLoader,
 			enginePosition,

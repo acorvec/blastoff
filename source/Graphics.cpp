@@ -209,11 +209,11 @@ namespace BlastOff
 	Sprite::Sprite(
 		const Rect2f engineRect,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig
+		const ProgramConstants* const programConstants
 	) : 
 		m_EngineRect(engineRect),
 		m_CoordTransformer(coordTransformer),
-		m_ProgramConfig(programConfig)
+		m_ProgramConstants(programConstants)
 	{
 
 	}
@@ -442,12 +442,12 @@ namespace BlastOff
 	Empty::Empty(
 		const Vector2f enginePosition,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig
+		const ProgramConstants* const programConstants
 	) :
 		Sprite(
 			SetEnginePosition(enginePosition), 
 			coordTransformer, 
-			programConfig
+			programConstants
 		)
 	{
 
@@ -466,13 +466,13 @@ namespace BlastOff
 
 	CameraEmpty::CameraEmpty(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		const Vector2f* const cameraPosition
 	) :
 		Empty(
 			*cameraPosition,
 			coordTransformer, 
-			programConfig
+			programConstants
 		),
 		m_CameraPosition(cameraPosition)
 	{
@@ -489,12 +489,12 @@ namespace BlastOff
 	GradientSprite::GradientSprite(
 		const Rect2f engineRect,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		const Colour4i firstColour,
 		const Colour4i secondColour,
 		const Direction direction
 	) :
-		Sprite(engineRect, coordTransformer, programConfig),
+		Sprite(engineRect, coordTransformer, programConstants),
 		m_FirstColour(firstColour),
 		m_SecondColour(secondColour),
 		m_Direction(direction)
@@ -556,10 +556,10 @@ namespace BlastOff
 				default:
 					return CornerColours
 					{
-						.topLeft = m_ProgramConfig->GetInvalidColour1(),
-						.topRight = m_ProgramConfig->GetInvalidColour1(),
-						.bottomLeft = m_ProgramConfig->GetInvalidColour1(),
-						.bottomRight = m_ProgramConfig->GetInvalidColour1()
+						.topLeft = m_ProgramConstants->GetInvalidColour1(),
+						.topRight = m_ProgramConstants->GetInvalidColour1(),
+						.bottomLeft = m_ProgramConstants->GetInvalidColour1(),
+						.bottomRight = m_ProgramConstants->GetInvalidColour1()
 					};
 				}
 			};
@@ -724,13 +724,13 @@ namespace BlastOff
 	ImageSprite::ImageSprite(
 		const Rect2f engineRect,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		const Texture* const texture
 	) :
 		Sprite(
 			engineRect, 
 			coordTransformer, 
-			programConfig
+			programConstants
 		)
 	{
 		SetTexture(texture);
@@ -738,13 +738,13 @@ namespace BlastOff
 
 	ImageSprite::ImageSprite(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		const Texture* const texture
 	) :
 		ImageSprite(
 			Rect2f::UnitRect(),
 			coordTransformer,
-			programConfig,
+			programConstants,
 			texture
 		)
 	{
@@ -754,7 +754,7 @@ namespace BlastOff
 	unique_ptr<ImageSprite> ImageSprite::LoadFromPath(
 		const char* const resourcePath,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* imageTextureLoader
 	)
 	{
@@ -763,7 +763,7 @@ namespace BlastOff
 			engineRect,
 			resourcePath,
 			coordTransformer,
-			programConfig,
+			programConstants,
 			imageTextureLoader
 		);
 	}
@@ -772,7 +772,7 @@ namespace BlastOff
 		const Rect2f engineRect,
 		const char* const resourcePath,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* imageTextureLoader
 	)
 	{
@@ -780,7 +780,7 @@ namespace BlastOff
 		return std::make_unique<ImageSprite>(
 			engineRect,
 			coordTransformer,
-			programConfig,
+			programConstants,
 			texture
 		);
 	}
@@ -888,7 +888,7 @@ namespace BlastOff
 		const Colour4i colour,
 		const float fontSize,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		TextTextureLoader* const textureLoader,
 		const Font* const font,
 		const string& message
@@ -896,7 +896,7 @@ namespace BlastOff
 		ImageSprite(
 			Rect2f(enginePosition, Vector2f::Zero()),
 			coordTransformer,
-			programConfig,
+			programConstants,
 			nullptr
 		),
 		m_Colour(colour),
@@ -1018,13 +1018,13 @@ namespace BlastOff
 		const Colour4i colour,
 		const float roundness,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		const optional<float> strokeWidth
 	) :
 		Sprite(
 			engineRect,
 			coordTransformer,
-			programConfig
+			programConstants
 		),
 		m_Colour(colour),
 		m_Roundness(roundness)

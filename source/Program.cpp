@@ -470,7 +470,7 @@ namespace BlastOff
 				m_GameShouldReset = true;
 			};
 
-        const auto muteUnmuteCallback = 
+        const auto muteUnmuteUnmuteCallback = 
             [this]()
             {
                 MuteOrUnmute();
@@ -488,7 +488,7 @@ namespace BlastOff
 			&m_ImageTextureLoader,
 			m_TextTextureLoader.get(),
 			&m_SoundLoader,
-            muteUnmuteCallback,
+            muteUnmuteUnmuteCallback,
 			resetCallback,
 			exitCallback,
 			&m_Font,
@@ -564,7 +564,7 @@ namespace BlastOff
 				m_PendingStateChange = State::MainMenu;
 			};
 
-        const auto muteUnmuteCallback = 
+        const auto muteUnmuteUnmuteCallback = 
             [this]()
             {
                 MuteOrUnmute();
@@ -580,7 +580,7 @@ namespace BlastOff
 			&m_ImageTextureLoader,
 			m_TextTextureLoader.get(),
 			m_Settings.get(),
-			muteUnmuteCallback,
+			muteUnmuteUnmuteCallback,
 			exitCallback,
 			m_CameraEmpty.get()
 		);

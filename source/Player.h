@@ -47,7 +47,7 @@ namespace BlastOff
 			const Platform* const platform,
 			const CoordinateTransformer* const coordTransformer,
 			const GameConstants* const gameConstants,
-			const ProgramConstants* const programConfig,
+			const ProgramConstants* const programConstants,
 			const InputManager* const inputManager,
 			ImageTextureLoader* const imageTextureLoader
 		);
@@ -105,7 +105,7 @@ namespace BlastOff
 		const GameOutcome* m_GameOutcome = nullptr;
 		const Platform* m_Platform = nullptr;
 		const CoordinateTransformer* m_CoordTransformer = nullptr;
-		const ProgramConstants* m_ProgramConfig = nullptr;
+		const ProgramConstants* m_ProgramConstants = nullptr;
 		const GameConstants* m_GameConstants = nullptr;
 		const InputManager* m_InputManager = nullptr;
 

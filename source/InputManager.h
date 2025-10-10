@@ -51,7 +51,7 @@ namespace BlastOff
         CutsceneInputManager(
             const CoordinateTransformer* const coordTransformer,
             const Vector2f* const cameraPosition,
-            const ProgramConstants* const programConfig
+            const ProgramConstants* const programConstants
         );
 
         bool GetKeyDown(const int keyEnum) const override;
@@ -67,7 +67,7 @@ namespace BlastOff
         static const float c_MaxOscillationTick;
 
         const Vector2f* m_CameraPosition;
-        const ProgramConstants* m_ProgramConfig;
+        const ProgramConstants* m_ProgramConstants;
 
         float m_OscillationTick = 0;
     };

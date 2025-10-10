@@ -73,7 +73,7 @@ namespace BlastOff
 		const Platform* const platform, 
 		const CoordinateTransformer* const coordTransformer,
 		const GameConstants* const gameConstants,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		const InputManager* const inputManager,
 		ImageTextureLoader* const imageTextureLoader
 	) :
@@ -84,7 +84,7 @@ namespace BlastOff
 		m_Platform(platform),
 		m_CoordTransformer(coordTransformer),
 		m_GameConstants(gameConstants),
-		m_ProgramConfig(programConfig),
+		m_ProgramConstants(programConstants),
 		m_InputManager(inputManager)
 	{
 		const auto initializeConfig =
@@ -92,7 +92,7 @@ namespace BlastOff
 			{
 				const float targetFramerate = 
 				{
-					(float)m_ProgramConfig->GetTargetFramerate()
+					(float)m_ProgramConstants->GetTargetFramerate()
 				};
 				m_Config = 
 				{
@@ -112,7 +112,7 @@ namespace BlastOff
 				m_Spaceship = ImageSprite::LoadFromPath(
 					c_SpaceshipTexturePath,
 					coordTransformer,
-					programConfig,
+					programConstants,
 					imageTextureLoader
 				);
 
@@ -151,7 +151,7 @@ namespace BlastOff
 					engineRect,
 					c_FlameTexturePath,
 					coordTransformer,
-					programConfig,
+					programConstants,
 					imageTextureLoader
 				);
 				m_SpaceshipFlame->SetParent(m_Spaceship.get());
@@ -249,7 +249,7 @@ namespace BlastOff
 				{
 					const float targetFrametime = 
 					{
-						m_ProgramConfig->GetTargetFrametime()
+						m_ProgramConstants->GetTargetFrametime()
 					};
 					m_CurrentFuel -= targetFrametime;
 				}
@@ -264,7 +264,7 @@ namespace BlastOff
 
 					const float frametime =
 					{
-						m_ProgramConfig->GetTargetFrametime()
+						m_ProgramConstants->GetTargetFrametime()
 					};
 					m_SpeedupTick -= frametime;
 				}
@@ -284,7 +284,7 @@ namespace BlastOff
 				{
 					const float frametime =
 					{
-						m_ProgramConfig->GetTargetFrametime()
+						m_ProgramConstants->GetTargetFrametime()
 					};
 					m_Velocity += m_ThrustAcceleration * frametime;
 				}
@@ -299,7 +299,7 @@ namespace BlastOff
 				};
 				const Vector2f gravityVector = Vector2f::Down() * acceleration;
 
-				const float frametime = m_ProgramConfig->GetTargetFrametime();
+				const float frametime = m_ProgramConstants->GetTargetFrametime();
 				m_Velocity += gravityVector * frametime;
 			};
 
@@ -583,7 +583,7 @@ namespace BlastOff
 				{
 					const int programFramerate = 
 					{
-						m_ProgramConfig->GetTargetFramerate()
+						m_ProgramConstants->GetTargetFramerate()
 					};
 					const float animationFramerate = 
 					{
@@ -616,7 +616,7 @@ namespace BlastOff
 		const auto applyVelocity =
 			[this]()
 			{
-				const float frametime = m_ProgramConfig->GetTargetFrametime();
+				const float frametime = m_ProgramConstants->GetTargetFrametime();
 				m_Spaceship->Move(m_Velocity * frametime);
 			};
 

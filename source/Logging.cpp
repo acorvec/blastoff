@@ -2,9 +2,9 @@
 
 namespace BlastOff
 {
-	void Logging::Initialize(const ProgramConstants* const programConfig)
+	void Logging::Initialize(const ProgramConstants* const programConstants)
 	{
-		m_ProgramConfig = programConfig;
+		m_ProgramConstants = programConstants;
 	}
 
 	void Logging::Log(const string& value) 
@@ -16,7 +16,7 @@ namespace BlastOff
 	{
 		const bool loggingEnabled = 
 		{
-			m_ProgramConfig->GetCommandLineLoggingEnabled()
+			m_ProgramConstants->GetCommandLineLoggingEnabled()
 		};
 
 		if (loggingEnabled)
@@ -30,6 +30,6 @@ namespace BlastOff
 
 	string Logging::CalculateBanner() 
 	{
-		return m_ProgramConfig->CalculateBuildString() + ": ";
+		return m_ProgramConstants->CalculateBuildString() + ": ";
 	}
 }

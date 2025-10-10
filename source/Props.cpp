@@ -8,14 +8,14 @@ namespace BlastOff
 {
 	Crag::Crag(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader
 	)
 	{
 		m_Sprite = ImageSprite::LoadFromPath(
 			c_TexturePath,
 			coordTransformer,
-			programConfig,
+			programConstants,
 			imageTextureLoader
 		);
 
@@ -45,14 +45,14 @@ namespace BlastOff
 	Platform::Platform(
 		const float platformHeight,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader
 	)
 	{
 		m_Sprite = ImageSprite::LoadFromPath(
 			c_TexturePath,
 			coordTransformer,
-			programConfig,
+			programConstants,
 			imageTextureLoader
 		);
 
@@ -144,11 +144,11 @@ namespace BlastOff
 	Background::Background(
 		const Rect2f* const worldBounds,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig
+		const ProgramConstants* const programConstants
 	) :
 		m_WorldBounds(worldBounds),
 		m_CoordTransformer(coordTransformer),
-		m_ProgramConfig(programConfig),
+		m_ProgramConstants(programConstants),
 		m_MostRecentWorldBounds(*worldBounds)
 	{
 		InitializeSprites();
@@ -214,7 +214,7 @@ namespace BlastOff
 		m_LowerAtmosphereSprite = std::make_unique<GradientSprite>(
 			engineRect,
 			m_CoordTransformer,
-			m_ProgramConfig,
+			m_ProgramConstants,
 			c_Config.GetLowerAtmosphereColour(),
 			c_Config.GetMiddleAtmosphereColour(),
 			Direction::Up
@@ -244,7 +244,7 @@ namespace BlastOff
 		m_UpperAtmosphereSprite = std::make_unique<GradientSprite>(
 			engineRect,
 			m_CoordTransformer,
-			m_ProgramConfig,
+			m_ProgramConstants,
 			c_Config.GetMiddleAtmosphereColour(),
 			c_Config.GetUpperAtmosphereColour(),
 			Direction::Up
@@ -259,7 +259,7 @@ namespace BlastOff
 			{
 				const float targetFrametime = 
 				{
-					m_ProgramConfig->GetTargetFrametime()
+					m_ProgramConstants->GetTargetFrametime()
 				};
 				const float xMovement = CalculateSpeed() * targetFrametime;
 				const Vector2f translation = { xMovement, 0 };
@@ -356,7 +356,7 @@ namespace BlastOff
 
 	Cloud::Cloud(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const Rect2f* const worldBounds,
 		const Direction* const movementDirection,
@@ -366,7 +366,7 @@ namespace BlastOff
 		const float speedRandomness,
 		const Vector2f engineSize
 	) :
-		m_ProgramConfig(programConfig),
+		m_ProgramConstants(programConstants),
 		m_WorldBounds(worldBounds),
 		m_MovementDirection(movementDirection),
 		m_SpawningRange(spawningRange),
@@ -395,7 +395,7 @@ namespace BlastOff
 				};
 				m_Sprite = std::make_unique<ImageSprite>(
 					coordTransformer,
-					programConfig,
+					programConstants,
 					texture
 				);
 			};
@@ -459,14 +459,14 @@ namespace BlastOff
 
 	LowCloud::LowCloud(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const Rect2f* const worldBounds,
 		const Direction* const movementDirection
 	) :
 		Cloud(
 			coordTransformer,
-			programConfig,
+			programConstants,
 			imageTextureLoader,
 			worldBounds,
 			movementDirection,
@@ -493,14 +493,14 @@ namespace BlastOff
 
 	HighCloud::HighCloud(
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConfig,
+		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		const Rect2f* const worldBounds,
 		const Direction* const movementDirection
 	) :
 		Cloud(
 			coordTransformer,
-			programConfig,
+			programConstants,
 			imageTextureLoader,
 			worldBounds,
 			movementDirection,
