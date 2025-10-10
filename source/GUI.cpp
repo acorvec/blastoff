@@ -1716,13 +1716,19 @@ namespace BlastOff
 			programConstants
 		)
 	{
-		const Vector2f offset1 = CenterMenuButton::c_AdditionalOffset;
-		const Vector2f offset2 = 
-		{
-			CenterMenuButton::CalculateOffsetByIndex(c_ButtonIndex)
-		};
-		const Vector2f position = bottomRightCorner + offset1 + offset2;
-		m_Sprite->Move(position);
+		const auto initializePosition = 
+			[this]()
+			{
+				const Vector2f offset1 = CenterMenuButton::c_AdditionalOffset;
+				const Vector2f offset2 = 
+				{
+					CenterMenuButton::CalculateOffsetByIndex(c_ButtonIndex)
+				};
+				const Vector2f position = bottomRightCorner + offset1 + offset2;
+				m_Sprite->Move(position);
+			};
+
+		initializePosition();
 	}
 
 	const int SaveButton::c_ButtonIndex = 0;
