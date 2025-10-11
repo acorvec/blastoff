@@ -106,7 +106,7 @@ namespace BlastOff
 		virtual void Draw() const;
 
 	protected:
-		unique_ptr<TextSprite> m_Sprite;
+		unique_ptr<TextLineSprite> m_Sprite;
 
 		GUILabel(
 			const Vector2f enginePosition,
@@ -302,6 +302,7 @@ namespace BlastOff
 
 	protected:
 		static const float c_FontSize;
+		static const float c_LineSpacing;
 		
 		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<ThemedBacking> m_Backing = nullptr;
@@ -597,7 +598,7 @@ namespace BlastOff
 		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_BackingFill = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_BackingStroke = nullptr;
-		unique_ptr<TextSprite> m_Message = nullptr;
+		unique_ptr<TextLineSprite> m_Message = nullptr;
 		unique_ptr<ResetButton> m_ResetButton = nullptr;
 		unique_ptr<ExitButton> m_ExitButton = nullptr;
 		unique_ptr<SlideState> m_SlideState = nullptr;
@@ -1131,7 +1132,7 @@ namespace BlastOff
 
 		int m_MostRecentValue = c_DeactivatedTracker;
 		const SlideBar* m_SlideBar = nullptr;
-		unique_ptr<TextSprite> m_Sprite = nullptr;
+		unique_ptr<TextLineSprite> m_Sprite = nullptr;
 	};
 
 	struct WindowSizeAdjuster

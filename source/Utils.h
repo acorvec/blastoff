@@ -15,6 +15,14 @@
 #include <math.h>
 
 #include "OperatingSystem.h"
+#include "Debug.h"
+
+#if COMPILE_CONFIG_DEBUG
+// includes used for debugging only
+#include <csignal>
+#include <print>
+#include <cstdio>
+#endif
 
 #include "raylib.h"
 
@@ -139,6 +147,8 @@ namespace BlastOff
 
 	string ByteToHexString(const byte value);
 	string BoolToString(const bool value);
+
+	vector<string> SplitString(const char* const value, const char delim);
 
 	bool StringContains(const char* const string, const char value);
 

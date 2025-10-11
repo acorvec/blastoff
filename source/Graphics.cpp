@@ -1,9 +1,11 @@
 #include "Graphics.h"
 #include "Logging.h"
+#include "ProgramConstants.h"
 #include "Utils.h"
 
 #include "raylib.h"
 
+#include <memory>
 #include <stdexcept>
 
 namespace BlastOff
@@ -907,7 +909,7 @@ namespace BlastOff
 	}
 
 
-	TextSprite::TextSprite(
+	TextLineSprite::TextLineSprite(
 		const Vector2f enginePosition,
 		const Colour4i colour,
 		const float fontSize,
@@ -932,40 +934,40 @@ namespace BlastOff
 		
 	}
 
-	Colour4i TextSprite::GetColour() const
+	Colour4i TextLineSprite::GetColour() const
 	{
 		return m_Colour;
 	}
 
-	void TextSprite::SetMessage(const string& message)
+	void TextLineSprite::SetMessage(const string& message)
 	{
 		m_Message = message;
 
 		m_ShouldRecacheTexture = true;
 	}
 
-	void TextSprite::SetEngineRect(const Rect2f engineRect)
+	void TextLineSprite::SetEngineRect(const Rect2f engineRect)
 	{
 		Sprite::SetEngineRect(engineRect);
 
 		m_ShouldRecacheTexture = true;
 	}
 
-	void TextSprite::SetScale(const float scale)
+	void TextLineSprite::SetScale(const float scale)
 	{
 		Sprite::SetScale(scale);
 
 		m_ShouldRecacheTexture = true;
 	}
 
-	void TextSprite::SetScale(const Vector2f scale)
+	void TextLineSprite::SetScale(const Vector2f scale)
 	{
 		Sprite::SetScale(scale);
 
 		m_ShouldRecacheTexture = true;
 	}
 
-	void TextSprite::Update()
+	void TextLineSprite::Update()
 	{
 		const auto recalculateEngineSize =
 			[this]()
@@ -1008,9 +1010,9 @@ namespace BlastOff
 		}
 	}
 
-	const float TextSprite::c_SpacingPer24 = 2;
+	const float TextLineSprite::c_SpacingPer24 = 2;
 
-	TextTextureParameters TextSprite::CalculateParameters() const
+	TextTextureParameters TextLineSprite::CalculateParameters() const
 	{
 		const float scaledFontSize =
 		{
@@ -1031,9 +1033,148 @@ namespace BlastOff
 		return parameters;
 	}
 
-	float TextSprite::CalculateSpacing() const
+	float TextLineSprite::CalculateSpacing() const
 	{
 		return m_FontSize * c_SpacingPer24 / 24;
+	}
+
+
+	TextSprite::TextSprite(
+		const Vector2f enginePosition,
+		const Colour4i colour,
+		const float fontSize,
+		const float lineSpacing,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		TextTextureLoader* const textureLoader,
+		const Font* const font,
+		const string& message,
+		const Sprite* const parent
+	) :
+		m_EnginePosition(enginePosition),
+		m_Colour(colour),
+		m_FontSize(fontSize),
+		m_LineSpacing(lineSpacing),
+		m_CoordTransformer(coordTransformer),
+		m_ProgramConstants(programConstants),
+		m_TextureLoader(textureLoader),
+		m_Font(font)
+	{
+		const auto createEmpty = 
+			[&, this]()
+			{
+				m_Empty = std::make_unique<Empty>(
+					enginePosition,
+					coordTransformer,
+					programConstants
+				);
+				m_Empty->SetParent(parent);
+			};
+
+		createEmpty();
+		InitializeLineSprites(message);
+	}
+
+	void TextSprite::Update() 
+	{
+		for (TextLineSprite& lineSprite : m_LineSprites)
+			lineSprite.Update();
+
+		m_Empty->Update();
+	}
+
+	void TextSprite::Draw() const
+	{
+		for (const TextLineSprite& lineSprite : m_LineSprites)
+			lineSprite.Draw();
+	}
+
+	void TextSprite::InitializeLineSprites(const string& message)
+	{
+		const auto createLineSprite = 
+			[this](const string& line)
+			{
+				constexpr Vector2f enginePosition = Vector2f::Zero();
+				m_LineSprites.emplace_back(
+					enginePosition,
+					m_Colour,
+					m_FontSize,
+					m_CoordTransformer,
+					m_ProgramConstants,
+					m_TextureLoader,
+					m_Font,
+					line.c_str()
+				);
+				LineSprite& back = m_LineSprites.back();
+				back.SetParent(m_Empty.get());
+				
+				// need to update the LineSprite
+				// to make sure that its engine rect is updated
+				back.Update();
+			};
+
+		const auto initializeVector = 
+			[&, this]()
+			{
+				m_LineSprites.clear();
+
+				const vector<string> lines = 
+				{
+					SplitString(message.c_str(), '\n')
+				};
+				m_LineSprites.reserve(lines.size());
+
+				for (const string& line : lines)
+					createLineSprite(line);
+
+				m_LineSprites.shrink_to_fit();
+			};
+
+		const auto calculateLineHeight = 
+			[this]() -> float
+			{
+				float result = 0;
+				for (const LineSprite& lineSprite : m_LineSprites) 
+				{
+					const Rect2f engineRect = lineSprite.GetEngineRect();
+					const float height = engineRect.h;
+					result = std::max(result, height);
+				}
+				return result;
+			};
+
+		const auto applyLineSpacing = 
+			[&, this]()
+			{
+				const float lineHeight = calculateLineHeight();
+				const float lineSpacing = lineHeight * m_LineSpacing;
+
+				for (size_t index = 0; index < m_LineSprites.size(); index++)
+				{
+					LineSprite& lineSprite = m_LineSprites.at(index);
+					const float yPosition = (-lineSpacing) * (float)index;
+					lineSprite.SetLocalPosition({ 0, yPosition });
+				}
+			};
+
+		const auto centerLines = 
+			[this]()
+			{
+				const LineSprite& topLine = m_LineSprites.front();
+				const LineSprite& bottomLine = m_LineSprites.back();
+
+				const float top = topLine.GetEngineRect().y;
+				const float bottom = bottomLine.GetEngineRect().y;
+
+				const float height = top - bottom;
+				const float yTranslation = height / 2.0f;
+				for (LineSprite& lineSprite : m_LineSprites)
+					lineSprite.Move({ 0, yTranslation });
+			};
+
+		initializeVector();
+		applyLineSpacing();
+		centerLines();
 	}
 
 

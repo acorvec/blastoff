@@ -1,5 +1,7 @@
 #include "Utils.h"
 
+#include <string.h>
+
 namespace BlastOff
 {	
 	string ByteToHexString(const byte value)
@@ -10,6 +12,40 @@ namespace BlastOff
 	string BoolToString(const bool value)
 	{
 		return value ? "true" : "false";
+	}
+
+	vector<string> SplitString(const char* const str, const char delim)
+	{
+		// tests: https://godbolt.org/z/aexW5azWW
+
+		if (!str)
+			return {};
+
+		if (!strlen(str))
+			return { str };
+
+		if (!delim)
+			return { str };
+
+		const size_t length = strlen(str);
+		auto alloc = std::make_unique<char[]>(length + 1);
+		strcpy(alloc.get(), str);
+
+		const char delimStr[] = { delim, '\0' };
+		vector<string> result = {};
+		char* toProcess = alloc.get();
+		char* token = nullptr;
+		do
+		{
+			token = strtok(toProcess, delimStr);
+			toProcess = nullptr;
+
+			if (token)
+				result.push_back(token);
+		}
+		while(token);
+		
+		return result;
 	}
 
 	bool StringContains(const char* const string, const char value)

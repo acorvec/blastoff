@@ -296,9 +296,9 @@ namespace BlastOff
 		Crop2f m_Crop = { 0 };
 	};
 
-	struct TextSprite : public ImageSprite
+	struct TextLineSprite : public ImageSprite
 	{
-		TextSprite(
+		TextLineSprite(
 			const Vector2f enginePosition,
 			const Colour4i colour,
 			const float fontSize,
@@ -335,6 +335,45 @@ namespace BlastOff
 
 		Parameters CalculateParameters() const;
 		float CalculateSpacing() const;
+	};
+
+	// raylib is broken, so we need to draw one sprite per line
+	struct TextSprite
+	{
+		TextSprite(
+			const Vector2f enginePosition,
+			const Colour4i colour,
+			const float fontSize,
+			const float lineSpacing,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			TextTextureLoader* const textureLoader,
+			const Font* const font,
+			const string& message = "",
+			const Sprite* const parent = nullptr
+		);
+
+		void Update();
+		void Draw() const;
+
+	protected:
+		using LineSprite = TextLineSprite;
+
+		Vector2f m_EnginePosition;
+		Colour4i m_Colour;
+		float m_FontSize;
+		float m_LineSpacing;
+
+		const CoordinateTransformer* m_CoordTransformer;
+		const ProgramConstants* m_ProgramConstants;
+		const Font* m_Font;
+
+		unique_ptr<Empty> m_Empty = nullptr;
+		vector<LineSprite> m_LineSprites = {};
+
+		TextTextureLoader* m_TextureLoader;
+
+		void InitializeLineSprites(const string& message);
 	};
 
 	enum class ShapeSpriteType

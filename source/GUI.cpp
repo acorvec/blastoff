@@ -267,7 +267,7 @@ namespace BlastOff
 		const Font* const font
 	)
 	{
-		m_Sprite = std::make_unique<TextSprite>(
+		m_Sprite = std::make_unique<TextLineSprite>(
 			enginePosition,
 			colour,
 			fontSize,
@@ -755,6 +755,7 @@ namespace BlastOff
 	}
 
 	const float ConfirmationDialogue::c_FontSize = 32;
+	const float ConfirmationDialogue::c_LineSpacing = 3 / 2.0f;
 
 	ConfirmationDialogue::ConfirmationDialogue(
 		const char* const message,
@@ -788,13 +789,14 @@ namespace BlastOff
 					enginePosition,
 					theme->textColour,
 					c_FontSize,
+					c_LineSpacing,
 					coordTransformer,
 					programConstants,
 					textTextureLoader,
 					font,
-					message
+					message,
+					m_Empty.get()
 				);
-				m_Message->SetParent(m_Empty.get());
 			};
 
 		const auto initializeBacking = 
@@ -1472,7 +1474,7 @@ namespace BlastOff
 		const auto initializeMainMessage =
 			[&, this]()
 			{
-				m_Message = std::make_unique<TextSprite>(
+				m_Message = std::make_unique<TextLineSprite>(
 					Vector2f::Zero(),
 					c_Black,
 					c_MessageFontSize,
@@ -1795,7 +1797,7 @@ namespace BlastOff
 	) :
 		m_SlideBar(slideBar)
 	{
-		m_Sprite = std::make_unique<TextSprite>(
+		m_Sprite = std::make_unique<TextLineSprite>(
 			c_EnginePosition,
 			theme->textColour,
 			c_FontSize,
