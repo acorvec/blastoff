@@ -353,6 +353,8 @@ namespace BlastOff
 			const Sprite* const parent = nullptr
 		);
 
+		Vector2f CalculateEngineSize() const;
+
 		void Update();
 		void Draw() const;
 

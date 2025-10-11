@@ -1089,6 +1089,37 @@ namespace BlastOff
 			lineSprite.Draw();
 	}
 
+	Vector2f TextSprite::CalculateEngineSize() const
+	{
+		const auto calculateWidth = 
+			[this]() -> float
+			{
+				float width = 0;
+				for (const LineSprite& lineSprite : m_LineSprites)
+				{
+					const Vector2f lineSize = lineSprite.GetEngineSize();
+					width = std::max(width, lineSize.x);
+				}
+				return width;
+			};
+
+		const auto calculateHeight = 
+			[this]()
+			{
+				const LineSprite& topLine = m_LineSprites.front();
+				const LineSprite& bottomLine = m_LineSprites.back();
+
+				const float top = topLine.GetEdgePosition(Direction::Up);
+				const float bottom = 
+				{
+					bottomLine.GetEdgePosition(Direction::Down)
+				};
+				return top - bottom;
+			};
+
+		return{ calculateWidth(), calculateHeight() };
+	}
+
 	void TextSprite::InitializeLineSprites(const string& message)
 	{
 		const auto createLineSprite = 

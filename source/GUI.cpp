@@ -802,8 +802,9 @@ namespace BlastOff
 		const auto initializeBacking = 
 			[&, this]()
 			{
+				const Vector2f messageSize = m_Message->CalculateEngineSize();
 				m_Backing = std::make_unique<ThemedBacking>(
-					Vector2f{ 1, 1 },
+					messageSize,
 					theme,
 					m_Empty.get(),
 					coordTransformer,
@@ -813,8 +814,8 @@ namespace BlastOff
 			};
 
 		initializeEmpty();
-		initializeBacking();
 		initializeMessage();
+		initializeBacking();
 	}
 
 
