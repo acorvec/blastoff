@@ -3,8 +3,6 @@
 #include "Utils.h"
 #include "ProgramConstants.h"
 
-#include <print>
-
 namespace BlastOff
 {
 	struct Logging
@@ -12,7 +10,7 @@ namespace BlastOff
 		static void Initialize(const ProgramConstants* const programConstants);
 
 		static void Log(const char* const value);
-		static void Log(const string& value);
+		static void LogWarning(const char* const value);
 
 	private:
 		static const inline ProgramConstants* m_ProgramConstants = nullptr;

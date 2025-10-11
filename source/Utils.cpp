@@ -12,6 +12,19 @@ namespace BlastOff
 		return value ? "true" : "false";
 	}
 
+	bool StringContains(const char* const string, const char value)
+	{
+		size_t index = 0;
+		char ch = string[0];
+		while (ch)
+		{
+			if (ch == value)
+				return true;
+			ch = string[++index];
+		}
+		return false;
+	}
+
 	float GetRandomFloat()
 	{
 		constexpr int max = std::numeric_limits<int>::max();

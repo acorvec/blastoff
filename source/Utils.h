@@ -140,6 +140,8 @@ namespace BlastOff
 	string ByteToHexString(const byte value);
 	string BoolToString(const bool value);
 
+	bool StringContains(const char* const string, const char value);
+
 	float GetRandomFloat();
 	float RoundToFraction(const float num, const float fraction);
 	float FloorToFraction(const float num, const float fraction);

@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include "Logging.h"
 #include "Utils.h"
 
 #include "raylib.h"
@@ -705,9 +706,12 @@ namespace BlastOff
 	const Texture* TextTextureLoader::LoadAndInsert
 		(const Parameters& parameters)
 	{
+		const char* cString = parameters.message.c_str();
+		CheckMessage(cString);
+		
 		const Image image = ImageTextEx(
 			*m_Font,
-			parameters.message.c_str(),
+			cString,
 			parameters.fontSize,
 			parameters.spacing,
 			parameters.colour.ToRayColour()
@@ -720,6 +724,24 @@ namespace BlastOff
 			ImageTextureLoader::c_DefaultTextureFiltering
 		);
 		return &m_CachedValues.at(parameters);
+	}
+
+	void TextTextureLoader::CheckMessage(const char* const message)
+	{
+		const bool containsNewline = 
+		{
+			StringContains(message, '\n')
+		};
+		if (containsNewline)
+		{
+			const char* const message = 
+			{
+				"TextSprites should not contain "
+				"newline characters in their message. "
+				"Please use multiple TextSprites instead."
+			};
+			Logging::LogWarning(message);
+		}
 	}
 
 

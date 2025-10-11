@@ -615,6 +615,242 @@ namespace BlastOff
 		lazyLoadTextures();
 		initializeBacking();
 	}
+	
+
+	const Theme Theme::c_DarkTheme = 
+	{
+		.outerBackingRoundness = 22 / 100.0f,
+		.outerBackingStrokeWidth = 2 / 44.0f,
+		.outerBackingColours = 
+		{ 
+			.stroke = c_Black, 
+			.fill = Colour4i(0x30 / 2) 
+		},
+		.outerMargins = { 4 / 45.0f, 4 / 45.0f },
+
+		.innerBackingRoundness = 1 / 10.0f,
+		.innerBackingStrokeWidth = 2 / 44.0f,
+		.innerBackingColours = 
+		{ 
+			.stroke = c_Black, 
+			.fill = Colour4i(0x30) 
+		},
+		.innerMargins = { 1 / 5.0f, 1 / 5.0f },
+
+		.textColour = c_White
+	};
+
+
+	ThemedBacking::ThemedBacking(
+		const Vector2f innerSize,
+		const Theme* const theme,
+		const Sprite* const parent,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		ImageTextureLoader* const imageTextureLoader
+	)
+	{
+		const auto initializeInnerBacking = 
+			[&, this]()
+			{
+				const Vector2f backingDimensions = 
+				{
+					innerSize + (theme->innerMargins * 2)
+				};
+				const Rect2f backingRect(Vector2f::Zero(), backingDimensions);
+
+				m_InnerBackingFill = std::make_unique<RoundedRectangleSprite>(
+					backingRect,
+					theme->innerBackingColours.fill,
+					theme->innerBackingRoundness,
+					coordTransformer,
+					programConstants
+				);
+				m_InnerBackingFill->SetParent(parent);
+
+				m_InnerBackingStroke = std::make_unique<RoundedRectangleSprite>(
+					backingRect,
+					theme->innerBackingColours.stroke,
+					theme->innerBackingRoundness,
+					coordTransformer,
+					programConstants,
+					theme->innerBackingStrokeWidth
+				);
+				m_InnerBackingStroke->SetParent(m_InnerBackingFill.get());
+			};
+
+		const auto initializeOuterBacking = 
+			[&, this]()
+			{
+				const Vector2f middleSize = 
+				{
+					m_InnerBackingStroke->GetEngineSize()
+				};
+				const Vector2f backingDimensions = 
+				{
+					middleSize + (theme->outerMargins * 2)
+				};
+				const Rect2f backingRect(Vector2f::Zero(), backingDimensions);
+
+				m_OuterBackingFill = std::make_unique<RoundedRectangleSprite>(
+					backingRect,
+					theme->outerBackingColours.fill,
+					theme->outerBackingRoundness,
+					coordTransformer,
+					programConstants
+				);
+				m_OuterBackingFill->SetParent(parent);
+
+				m_OuterBackingStroke = std::make_unique<RoundedRectangleSprite>(
+					backingRect,
+					theme->outerBackingColours.stroke,
+					theme->outerBackingRoundness,
+					coordTransformer,
+					programConstants,
+					theme->outerBackingStrokeWidth
+				);
+				m_OuterBackingStroke->SetParent(m_OuterBackingFill.get());
+			};
+
+		initializeInnerBacking();
+		initializeOuterBacking();
+	}
+
+	Vector2f ThemedBacking::CalculateBottomRightCorner() const
+	{
+		const Vector2f backingSize = 
+		{
+			m_OuterBackingStroke->GetEngineSize()
+		};
+		return (backingSize / 2.0f).InvertY();
+	}
+
+	void ThemedBacking::Update()
+	{
+		m_OuterBackingFill->Update();
+		m_OuterBackingStroke->Update();
+		m_InnerBackingFill->Update();
+		m_InnerBackingStroke->Update();
+	}
+
+	void ThemedBacking::Draw() const
+	{
+		m_OuterBackingFill->Draw();
+		m_OuterBackingStroke->Draw();
+		m_InnerBackingFill->Draw();
+		m_InnerBackingStroke->Draw();
+	}
+
+
+	void ConfirmationDialogue::Update()
+	{
+		m_Backing->Update();
+		m_Message->Update();
+	}
+
+	void ConfirmationDialogue::Draw() const
+	{
+		m_Backing->Draw();
+		m_Message->Draw();
+	}
+
+	const float ConfirmationDialogue::c_FontSize = 32;
+
+	ConfirmationDialogue::ConfirmationDialogue(
+		const char* const message,
+		const Vector2f enginePosition,
+		const Sprite* const parent,
+		const Theme* const theme,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		const InputManager* const inputManager,
+		const Font* const font,
+		TextTextureLoader* const textTextureLoader,
+		ImageTextureLoader* const imageTextureLoader
+	)
+	{
+		const auto initializeEmpty = 
+			[&, this]()
+			{
+				m_Empty = std::make_unique<Empty>(
+					enginePosition,
+					coordTransformer,
+					programConstants
+				);
+				m_Empty->SetParent(parent);
+			};
+
+		const auto initializeMessage = 
+			[&, this]()
+			{
+				constexpr Vector2f enginePosition = Vector2f::Zero();
+				m_Message = std::make_unique<TextSprite>(
+					enginePosition,
+					theme->textColour,
+					c_FontSize,
+					coordTransformer,
+					programConstants,
+					textTextureLoader,
+					font,
+					message
+				);
+				m_Message->SetParent(m_Empty.get());
+			};
+
+		const auto initializeBacking = 
+			[&, this]()
+			{
+				m_Backing = std::make_unique<ThemedBacking>(
+					Vector2f{ 1, 1 },
+					theme,
+					m_Empty.get(),
+					coordTransformer,
+					programConstants,
+					imageTextureLoader
+				);
+			};
+
+		initializeEmpty();
+		initializeBacking();
+		initializeMessage();
+	}
+
+
+	SettingsMenuConfirmationDialogue::SettingsMenuConfirmationDialogue(
+		const Sprite* const parent,
+		const Theme* const theme,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		const InputManager* const inputManager,
+		const Font* const font,
+		TextTextureLoader* const textTextureLoader,
+		ImageTextureLoader* const imageTextureLoader
+	) :
+		ConfirmationDialogue(
+			c_Message,
+			c_EnginePosition,
+			parent,
+			theme,
+			coordTransformer,
+			programConstants,
+			inputManager,
+			font,
+			textTextureLoader,
+			imageTextureLoader
+		)
+	{
+
+	}
+
+	const char* const SettingsMenuConfirmationDialogue::c_Message = 
+	{
+		"You haven't saved yet!\n"
+		"Would you like to save?"
+	};
+	const Vector2f SettingsMenuConfirmationDialogue::c_EnginePosition = 
+	{
+		Vector2f::Zero()
+	};
 
 	
 	SlideState::SlideState(
@@ -1551,6 +1787,7 @@ namespace BlastOff
 	WindowSizeLabel::WindowSizeLabel(
 		const Sprite* parent,
 		const SlideBar* const slideBar,
+		const Theme* const theme,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
 		const Font* const font,
@@ -1560,7 +1797,7 @@ namespace BlastOff
 	{
 		m_Sprite = std::make_unique<TextSprite>(
 			c_EnginePosition,
-			c_Colour,
+			theme->textColour,
 			c_FontSize,
 			coordTransformer,
 			programConstants,
@@ -1607,13 +1844,13 @@ namespace BlastOff
 
 	const float WindowSizeLabel::c_FontSize = 32;
 	const char* WindowSizeLabel::c_BeginningOfMessage = "Window Size";
-	const Colour4i WindowSizeLabel::c_Colour = c_White;
 	const Vector2f WindowSizeLabel::c_EnginePosition = { 0, 2 / 5.0f };
 
 
 	WindowSizeAdjuster::WindowSizeAdjuster(
 		Settings* const settings,
 		const int windowSizeIncrement,
+		const Theme* const theme,
 		const Sprite* const parent,
 		const CoordinateTransformer* const coordTransformer,
 		TextTextureLoader* const textTextureLoader,
@@ -1643,6 +1880,7 @@ namespace BlastOff
 				m_Label = std::make_unique<Label>(
 					m_Empty.get(),
 					m_SlideBar.get(),
+					theme,
 					coordTransformer,
 					programConstants,
 					font,
@@ -1896,6 +2134,7 @@ namespace BlastOff
 				m_WindowSizeAdjuster = std::make_unique<WindowSizeAdjuster>(
 					m_Settings,
 					windowSizeIncrement,
+					&Theme::c_DarkTheme,
 					m_Empty.get(),
 					coordTransformer,
 					textTextureLoader,
@@ -1914,9 +2153,10 @@ namespace BlastOff
 				{
 					m_WindowSizeAdjuster->CalculateDimensions()
 				};
+				const Theme& backingTheme = Theme::c_DarkTheme;
 				const float startHeight = 
 				{
-					c_OuterMargins.y * (componentSizes.size() - 1)
+					backingTheme.outerMargins.y * (componentSizes.size() - 1)
 				};
 				Vector2f result = { 0, startHeight };
 				for (const Vector2f size : componentSizes)
@@ -1927,67 +2167,18 @@ namespace BlastOff
 				return result;
 			};
 
-		const auto initializeInnerBacking = 
+		const auto initializeBacking = 
 			[&, this]()
 			{
-				const Vector2f sizeOfComponents = calculateSizeOfComponents();
-				const Vector2f backingDimensions = 
-				{
-					sizeOfComponents + (c_InnerMargins * 2)
-				};
-				const Rect2f backingRect(Vector2f::Zero(), backingDimensions);
-
-				m_InnerBackingFill = std::make_unique<RoundedRectangleSprite>(
-					backingRect,
-					c_InnerBackingColours.fill,
-					c_InnerBackingRoundness,
-					coordTransformer,
-					programConstants
-				);
-				m_InnerBackingFill->SetParent(m_Empty.get());
-
-				m_InnerBackingStroke = std::make_unique<RoundedRectangleSprite>(
-					backingRect,
-					c_InnerBackingColours.stroke,
-					c_InnerBackingRoundness,
+				const Vector2f innerSize = calculateSizeOfComponents();
+				m_Backing = std::make_unique<ThemedBacking>(
+					innerSize,
+					&Theme::c_DarkTheme,
+					m_Empty.get(),
 					coordTransformer,
 					programConstants,
-					c_InnerBackingStrokeWidth
+					imageTextureLoader
 				);
-				m_InnerBackingStroke->SetParent(m_InnerBackingFill.get());
-			};
-
-		const auto initializeOuterBacking = 
-			[&, this]()
-			{
-				const Vector2f innerSize = 
-				{
-					m_InnerBackingStroke->GetEngineSize()
-				};
-				const Vector2f backingDimensions = 
-				{
-					innerSize + (c_OuterMargins * 2)
-				};
-				const Rect2f backingRect(Vector2f::Zero(), backingDimensions);
-
-				m_OuterBackingFill = std::make_unique<RoundedRectangleSprite>(
-					backingRect,
-					c_OuterBackingColours.fill,
-					c_OuterBackingRoundness,
-					coordTransformer,
-					programConstants
-				);
-				m_OuterBackingFill->SetParent(m_Empty.get());
-
-				m_OuterBackingStroke = std::make_unique<RoundedRectangleSprite>(
-					backingRect,
-					c_OuterBackingColours.stroke,
-					c_OuterBackingRoundness,
-					coordTransformer,
-					programConstants,
-					c_OuterBackingStrokeWidth
-				);
-				m_OuterBackingStroke->SetParent(m_OuterBackingFill.get());
 			};
 
 		const auto applyCallback = 
@@ -1999,14 +2190,7 @@ namespace BlastOff
 		const auto initializeCenterButtons = 
 			[&, this]()
 			{
-				const Vector2f backingSize = 
-				{
-					m_OuterBackingStroke->GetEngineSize()
-				};
-				const Vector2f bottomRightCorner = 
-				{
-					(backingSize / 2.0f).InvertY()
-				};
+				const Vector2f bottomRightCorner = m_Backing->CalculateBottomRightCorner();
 
 				m_CenterSaveButton = std::make_unique<SaveButton>(
 					coordTransformer,
@@ -2028,39 +2212,50 @@ namespace BlastOff
 				);
 			};
 
+		const auto initializeConfirmationDialogue = 
+			[&, this]()
+			{
+				m_ConfirmationDialogue = std::make_unique<ConfirmationDialogue>(
+					m_Empty.get(),
+					&Theme::c_DarkTheme,
+					coordTransformer,
+					programConstants,
+					inputManager,
+					font,
+					textTextureLoader,
+					imageTextureLoader
+				);
+			};
+
 		initializeEmpty();
 		initializeTopRightButtons();
 		initializeWindowSizeAdjuster();
-		initializeInnerBacking();
-		initializeOuterBacking();
+		initializeBacking();
 		initializeCenterButtons();
+		initializeConfirmationDialogue();
 	}
 
 	void SettingsMenu::Update()
 	{
 		m_Empty->Update();
-		m_OuterBackingFill->Update();
-		m_OuterBackingStroke->Update();
-		m_InnerBackingFill->Update();
-		m_InnerBackingStroke->Update();
+		m_Backing->Update();
 		m_MuteButton->Update();
 		m_TopRightExitButton->Update();
 		m_WindowSizeAdjuster->Update();
 		m_CenterSaveButton->Update();
 		m_CenterExitButton->Update();
+		m_ConfirmationDialogue->Update();
 	}
 
 	void SettingsMenu::Draw() const
 	{
-		m_OuterBackingFill->Draw();
-		m_OuterBackingStroke->Draw();
-		m_InnerBackingFill->Draw();
-		m_InnerBackingStroke->Draw();
+		m_Backing->Draw();
 		m_MuteButton->Draw();
 		m_TopRightExitButton->Draw();
 		m_WindowSizeAdjuster->Draw();
 		m_CenterSaveButton->Draw();
 		m_CenterExitButton->Draw();
+		m_ConfirmationDialogue->Draw();
 	}
 
 	void SettingsMenu::Apply()
@@ -2068,22 +2263,4 @@ namespace BlastOff
 		const int windowHeight = m_WindowSizeAdjuster->GetValue();
 		m_Settings->ChangeWindowHeight(windowHeight);
 	}
-
-	const float SettingsMenu::c_OuterBackingRoundness = 22 / 100.0f;
-	const float SettingsMenu::c_OuterBackingStrokeWidth = 2 / 44.0f;
-	const ShapeColours SettingsMenu::c_OuterBackingColours = 
-	{ 
-		.stroke = c_Black, 
-		.fill = Colour4i(0x30 / 2) 
-	};
-	const Vector2f SettingsMenu::c_OuterMargins = { 4 / 45.0f, 4 / 45.0f };
-
-	const float SettingsMenu::c_InnerBackingRoundness = 1 / 10.0f;
-	const float SettingsMenu::c_InnerBackingStrokeWidth = 2 / 44.0f;
-	const ShapeColours SettingsMenu::c_InnerBackingColours = 
-	{ 
-		.stroke = c_Black, 
-		.fill = Colour4i(0x30) 
-	};
-	const Vector2f SettingsMenu::c_InnerMargins = { 1 / 5.0f, 1 / 5.0f };
 }

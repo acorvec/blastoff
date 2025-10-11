@@ -241,10 +241,10 @@ namespace BlastOff
 		using CacheMap = unordered_map<Parameters, Texture, Parameters::Hasher>;
 
 		CacheMap m_CachedValues = {};
-		
 		const Font* m_Font;
 
 		const Texture* LoadAndInsert(const Parameters& parameters);
+		void CheckMessage(const char* const message);
 	};
 
 	struct ImageSprite : public Sprite

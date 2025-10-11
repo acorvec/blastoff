@@ -255,6 +255,90 @@ namespace BlastOff
 		);
 	};
 
+	struct Theme
+	{
+		static const Theme c_DarkTheme;
+
+		float outerBackingRoundness;
+		float outerBackingStrokeWidth;
+		ShapeColours outerBackingColours;
+		Vector2f outerMargins;
+
+		float innerBackingRoundness;
+		float innerBackingStrokeWidth;
+		ShapeColours innerBackingColours;
+		Vector2f innerMargins;
+
+		Colour4i textColour;
+	};
+
+	struct ThemedBacking
+	{
+		ThemedBacking(
+			const Vector2f innerSize,
+			const Theme* const theme,
+			const Sprite* const parent,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			ImageTextureLoader* const imageTextureLoader
+		);
+
+		Vector2f CalculateBottomRightCorner() const;
+
+		void Update();
+		void Draw() const;
+
+	private:
+		unique_ptr<RoundedRectangleSprite> m_OuterBackingFill = nullptr;
+		unique_ptr<RoundedRectangleSprite> m_OuterBackingStroke = nullptr;
+		unique_ptr<RoundedRectangleSprite> m_InnerBackingFill = nullptr;
+		unique_ptr<RoundedRectangleSprite> m_InnerBackingStroke = nullptr;
+	};
+
+	struct ConfirmationDialogue
+	{
+		void Update();
+		void Draw() const;
+
+	protected:
+		static const float c_FontSize;
+		
+		unique_ptr<Empty> m_Empty = nullptr;
+		unique_ptr<ThemedBacking> m_Backing = nullptr;
+		unique_ptr<TextSprite> m_Message = nullptr;
+
+		ConfirmationDialogue(
+			const char* const message,
+			const Vector2f enginePosition,
+			const Sprite* const parent,
+			const Theme* const backingTheme,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			const InputManager* const inputManager,
+			const Font* const font,
+			TextTextureLoader* const textTextureLoader,
+			ImageTextureLoader* const imageTextureLoader
+		);
+	};
+
+	struct SettingsMenuConfirmationDialogue : public ConfirmationDialogue
+	{
+		SettingsMenuConfirmationDialogue(
+			const Sprite* const parent,
+			const Theme* const backingTheme,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			const InputManager* const inputManager,
+			const Font* const font,
+			TextTextureLoader* const textTextureLoader,
+			ImageTextureLoader* const imageTextureLoader
+		);
+
+	protected:
+		static const Vector2f c_EnginePosition;
+		static const char* const c_Message;
+	};
+
 	struct SlideState
 	{
 		SlideState(
@@ -1026,6 +1110,7 @@ namespace BlastOff
 		WindowSizeLabel(
 			const Sprite* parent,
 			const SlideBar* const slideBar,
+			const Theme* const theme,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
 			const Font* const font,
@@ -1042,7 +1127,6 @@ namespace BlastOff
 		
 		static const float c_FontSize;
 		static const char* c_BeginningOfMessage;
-		static const Colour4i c_Colour;
 		static const Vector2f c_EnginePosition;
 
 		int m_MostRecentValue = c_DeactivatedTracker;
@@ -1058,6 +1142,7 @@ namespace BlastOff
 		WindowSizeAdjuster(
 			Settings* const settings,
 			const int windowSizeIncrement,
+			const Theme* const theme,
 			const Sprite* const parent,
 			const CoordinateTransformer* const coordTransformer,
 			TextTextureLoader* const textTextureLoader,
@@ -1139,6 +1224,8 @@ namespace BlastOff
 
 	struct SettingsMenu
 	{
+		using ConfirmationDialogue = SettingsMenuConfirmationDialogue;
+
 		SettingsMenu(
 			const int windowSizeIncrement,
 			const bool* const programIsMuted,
@@ -1160,27 +1247,15 @@ namespace BlastOff
 	private:
 		void Apply();
 
-		static const float c_OuterBackingRoundness;
-		static const float c_OuterBackingStrokeWidth;
-		static const ShapeColours c_OuterBackingColours;
-		static const Vector2f c_OuterMargins;
-
-		static const float c_InnerBackingRoundness;
-		static const float c_InnerBackingStrokeWidth;
-		static const ShapeColours c_InnerBackingColours;
-		static const Vector2f c_InnerMargins;
-
 		Settings* m_Settings = nullptr;
 
 		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<MuteButton> m_MuteButton = nullptr;
 		unique_ptr<ExitButton> m_TopRightExitButton = nullptr;
 		unique_ptr<WindowSizeAdjuster> m_WindowSizeAdjuster = nullptr;
-		unique_ptr<RoundedRectangleSprite> m_OuterBackingFill = nullptr;
-		unique_ptr<RoundedRectangleSprite> m_OuterBackingStroke = nullptr;
-		unique_ptr<RoundedRectangleSprite> m_InnerBackingFill = nullptr;
-		unique_ptr<RoundedRectangleSprite> m_InnerBackingStroke = nullptr;
 		unique_ptr<SaveButton> m_CenterSaveButton = nullptr;
 		unique_ptr<ExitButton> m_CenterExitButton = nullptr;
+		unique_ptr<ThemedBacking> m_Backing = nullptr;
+		unique_ptr<ConfirmationDialogue> m_ConfirmationDialogue = nullptr;
 	};
 }
