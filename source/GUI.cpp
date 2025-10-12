@@ -509,6 +509,11 @@ namespace BlastOff
 		m_Sprite->SetParent(parent);
 	}
 
+	void Button::UseUnselectedTexture()
+	{
+		m_Sprite->SetTexture(m_UnselectedTexture);
+	}
+
 	void Button::Update()
 	{
 		const auto updateSelection =
@@ -746,6 +751,11 @@ namespace BlastOff
 		m_InnerBackingStroke->Draw();
 	}
 
+
+	bool ConfirmationDialogue::IsEnabled() const
+	{
+		return m_IsEnabled;
+	}
 
 	void ConfirmationDialogue::Enable()
 	{
@@ -2297,10 +2307,17 @@ namespace BlastOff
 				);
 			};
 
-		const auto initializeAdjustersList = 	
+		const auto initializeLists = 	
 			[this]()
 			{
 				m_Adjusters = { m_WindowSizeAdjuster.get() };
+				m_Buttons = 
+				{
+					m_MuteButton.get(),
+					m_TopRightExitButton.get(),
+					m_CenterSaveButton.get(),
+					m_CenterExitButton.get()
+				};
 			};
 
 		initializeEmpty();
@@ -2309,19 +2326,28 @@ namespace BlastOff
 		initializeBacking();
 		initializeCenterButtons();
 		initializeConfirmationDialogue();
-		initializeAdjustersList();
+		initializeLists();
 	}
 
 	void SettingsMenu::Update()
 	{
-		m_Empty->Update();
-		m_Backing->Update();
-		m_MuteButton->Update();
-		m_TopRightExitButton->Update();
-		m_WindowSizeAdjuster->Update();
-		m_CenterSaveButton->Update();
-		m_CenterExitButton->Update();
-		m_ConfirmationDialogue->Update();
+		if (m_ConfirmationDialogue->IsEnabled())
+		{
+			m_ConfirmationDialogue->Update();
+
+			for (Button* button : m_Buttons)
+				button->UseUnselectedTexture();
+		}
+		else
+		{
+			m_Empty->Update();
+			m_Backing->Update();
+			m_MuteButton->Update();
+			m_TopRightExitButton->Update();
+			m_WindowSizeAdjuster->Update();
+			m_CenterSaveButton->Update();
+			m_CenterExitButton->Update();
+		}
 	}
 
 	void SettingsMenu::Draw() const

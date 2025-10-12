@@ -220,6 +220,7 @@ namespace BlastOff
 
 		void Translate(const Vector2f translation);
 		void SetParent(const Sprite* const parent);
+		void UseUnselectedTexture();
 
 		virtual void Update();
 		virtual void Draw() const;
@@ -294,37 +295,6 @@ namespace BlastOff
 		unique_ptr<RoundedRectangleSprite> m_OuterBackingStroke = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_InnerBackingFill = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_InnerBackingStroke = nullptr;
-	};
-
-	struct ConfirmationDialogue
-	{
-		virtual void Enable();
-
-		virtual void Update();
-		void Draw() const;
-
-	protected:
-		static const float c_FontSize;
-		static const float c_LineSpacing;
-
-		bool m_IsEnabled = false;
-		
-		unique_ptr<Empty> m_Empty = nullptr;
-		unique_ptr<ThemedBacking> m_Backing = nullptr;
-		unique_ptr<TextSprite> m_Message = nullptr;
-
-		ConfirmationDialogue(
-			const char* const message,
-			const Vector2f enginePosition,
-			const Sprite* const parent,
-			const Theme* const backingTheme,
-			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConstants,
-			const InputManager* const inputManager,
-			const Font* const font,
-			TextTextureLoader* const textTextureLoader,
-			ImageTextureLoader* const imageTextureLoader
-		);
 	};
 
 	struct SlideState
@@ -543,6 +513,74 @@ namespace BlastOff
 		static const char* const c_ClickedTexturePath;
 
 		Vector2f m_Margins = Vector2f::Zero();
+	};
+
+	struct CenterMenuResetButton : ResetButton
+	{
+		CenterMenuResetButton(
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+            const ProgramConstants* const programConstants,
+            ImageTextureLoader* const imageTextureLoader,
+            const Callback& resetCallback,
+            const Sprite* const parent,
+			const Vector2f bottomRightCorner
+		);
+
+	private:
+		static const int c_ButtonIndex;
+	};
+
+	struct CenterMenuExitButton : ExitButton
+	{
+		CenterMenuExitButton(
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+            const ProgramConstants* const programConstants,
+            ImageTextureLoader* const imageTextureLoader,
+            const Callback& exitCallback,
+            const Sprite* const parent,
+			const Vector2f bottomRightCorner
+		);
+
+	private:
+		static const int c_ButtonIndex;
+		
+		static const char* const c_UnselectedTexturePath;
+		static const char* const c_SelectedTexturePath;
+		static const char* const c_ClickedTexturePath;		
+	};
+
+	struct ConfirmationDialogue
+	{
+		bool IsEnabled() const;
+
+		virtual void Enable();
+		virtual void Update();
+		void Draw() const;
+
+	protected:
+		static const float c_FontSize;
+		static const float c_LineSpacing;
+
+		bool m_IsEnabled = false;
+		
+		unique_ptr<Empty> m_Empty = nullptr;
+		unique_ptr<ThemedBacking> m_Backing = nullptr;
+		unique_ptr<TextSprite> m_Message = nullptr;
+
+		ConfirmationDialogue(
+			const char* const message,
+			const Vector2f enginePosition,
+			const Sprite* const parent,
+			const Theme* const backingTheme,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			const InputManager* const inputManager,
+			const Font* const font,
+			TextTextureLoader* const textTextureLoader,
+			ImageTextureLoader* const imageTextureLoader
+		);
 	};
 
 	struct GameEndMenu
@@ -1025,7 +1063,6 @@ namespace BlastOff
 		static const Vector2f c_EnginePosition;
 		static const char* const c_Message;
 
-		bool m_IsEnabled = false;
 		unique_ptr<SlideState> m_SlideState = nullptr;
 	};
 
@@ -1209,42 +1246,6 @@ namespace BlastOff
 		static const char* const c_ClickedTexturePath;
 	};
 
-	struct CenterMenuResetButton : ResetButton
-	{
-		CenterMenuResetButton(
-			const CoordinateTransformer* const coordTransformer,
-			const InputManager* const inputManager,
-            const ProgramConstants* const programConstants,
-            ImageTextureLoader* const imageTextureLoader,
-            const Callback& resetCallback,
-            const Sprite* const parent,
-			const Vector2f bottomRightCorner
-		);
-
-	private:
-		static const int c_ButtonIndex;
-	};
-
-	struct CenterMenuExitButton : ExitButton
-	{
-		CenterMenuExitButton(
-			const CoordinateTransformer* const coordTransformer,
-			const InputManager* const inputManager,
-            const ProgramConstants* const programConstants,
-            ImageTextureLoader* const imageTextureLoader,
-            const Callback& exitCallback,
-            const Sprite* const parent,
-			const Vector2f bottomRightCorner
-		);
-
-	private:
-		static const int c_ButtonIndex;
-		
-		static const char* const c_UnselectedTexturePath;
-		static const char* const c_SelectedTexturePath;
-		static const char* const c_ClickedTexturePath;		
-	};
-
 	struct SettingsMenu
 	{
 		using ConfirmationDialogue = SettingsMenuConfirmationDialogue;
@@ -1279,13 +1280,15 @@ namespace BlastOff
 
 		unique_ptr<WindowSizeAdjuster> m_WindowSizeAdjuster = nullptr;
 
-		vector<const Adjuster*> m_Adjusters = {};
-
-		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<MuteButton> m_MuteButton = nullptr;
 		unique_ptr<ExitButton> m_TopRightExitButton = nullptr;
 		unique_ptr<SaveButton> m_CenterSaveButton = nullptr;
 		unique_ptr<ExitButton> m_CenterExitButton = nullptr;
+
+		vector<Adjuster*> m_Adjusters = {};
+		vector<Button*> m_Buttons = {};
+
+		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<ThemedBacking> m_Backing = nullptr;
 		unique_ptr<ConfirmationDialogue> m_ConfirmationDialogue = nullptr;
 	};

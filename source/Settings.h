@@ -54,7 +54,6 @@ namespace BlastOff
 
     private:
         static const char* const c_DefaultPath;
-        static const Vector2i c_MinWindowSize;
 
         Vector2f m_AspectRatio = Vector2f::Zero();
 
