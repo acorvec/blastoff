@@ -14,7 +14,7 @@
 
 namespace BlastOff
 {
-	const char* const GUIBar::c_BackingTexturePath = "ui/BarBacking.png";
+	const char* const GUIBar::c_BackingTexturePath = "ui/barBacking.png";
 
 	const float GUIBar::c_Height = 3 / 5.0f;
 	const float GUIBar::c_CornerMargin = 1 / 10.0f;
@@ -199,7 +199,7 @@ namespace BlastOff
 
 	const char* const FuelBar::c_EnergyTexturePath =
 	{
-		"ui/FuelBarEnergy.png"
+		"ui/fuelBarEnergy.png"
 	};
 
 	void FuelBar::UpdateStatistic()
@@ -237,7 +237,7 @@ namespace BlastOff
 
 	const char* const SpeedupBar::c_EnergyTexturePath =
 	{
-		"ui/SpeedBarEnergy.png"
+		"ui/speedBarEnergy.png"
 	};
 
 	void SpeedupBar::UpdateStatistic()

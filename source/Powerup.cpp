@@ -168,7 +168,7 @@ namespace BlastOff
 
 	const char* const SpeedUpPowerup::c_TexturePath = 
 	{
-		"powerup/SpeedUpPowerUp.png"
+		"powerup/speedupPowerup.png"
 	};
 
 	const float SpeedUpPowerup::c_MaxCollectionTick = 0.5f;
@@ -212,7 +212,7 @@ namespace BlastOff
 
 	const char* const FuelUpPowerup::c_TexturePath = 
 	{
-		"powerup/FuelUpPowerUp.png"
+		"powerup/fuelupPowerup.png"
 	};
 
 	const float FuelUpPowerup::c_MaxCollectionTick = 0.5f;

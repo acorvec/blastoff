@@ -721,11 +721,11 @@ namespace BlastOff
 
 	const char* const Player::c_SpaceshipTexturePath = 
 	{
-		"player/Spaceship.png"
+		"player/spaceship.png"
 	};
 	const char* const Player::c_FlameTexturePath = 
 	{
-		"player/SpaceshipFlames.png"
+		"player/spaceshipFlames.png"
 	};
 
 	bool Player::IsThrusting() const
