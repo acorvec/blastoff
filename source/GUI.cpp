@@ -1014,19 +1014,19 @@ namespace BlastOff
 
     const char* const MuteButton::c_UnselectedTexturePath =
     {
-        "ui/button/UnselectedMute.png"
+        "ui/button/unselected/mute.png"
     };
     const char* const MuteButton::c_SelectedTexturePath =
     {
-        "ui/button/SelectedMute.png"
+        "ui/button/selected/mute.png"
     };
 	const char* const MuteButton::c_ClickedTexturePath =
 	{
-		"ui/button/ClickedMute.png"
+		"ui/button/clicked/mute.png"
 	};
     const char* const MuteButton::c_ActiveBarTexturePath =
     {
-        "ui/button/MuteActiveBar.png"
+        "ui/button/activeBar.png"
     };
 
 
@@ -1063,15 +1063,15 @@ namespace BlastOff
 
 	const char* const ResetButton::c_UnselectedTexturePath =
 	{
-		"ui/button/UnselectedReset.png"
+		"ui/button/unselected/reset.png"
 	};
 	const char* const ResetButton::c_SelectedTexturePath =
 	{
-		"ui/button/SelectedReset.png"
+		"ui/button/selected/reset.png"
 	};
 	const char* const ResetButton::c_ClickedTexturePath =
 	{
-		"ui/button/ClickedReset.png"
+		"ui/button/clicked/reset.png"
 	};
 
 
@@ -1264,15 +1264,15 @@ namespace BlastOff
 
 	const char* const TopRightExitButton::c_UnselectedTexturePath = 
 	{
-		"ui/button/UnselectedSmallExit.png"
+		"ui/button/unselected/smallExit.png"
 	};
 	const char* const TopRightExitButton::c_SelectedTexturePath = 
 	{
-		"ui/button/SelectedSmallExit.png"
+		"ui/button/selected/smallExit.png"
 	};
 	const char* const TopRightExitButton::c_ClickedTexturePath = 
 	{
-		"ui/button/ClickedSmallExit.png"
+		"ui/button/clicked/smallExit.png"
 	};
 
 
@@ -1307,15 +1307,15 @@ namespace BlastOff
 
 	const char* const PlayButton::c_UnselectedTexturePath = 
 	{
-		"ui/button/UnselectedPlay.png"
+		"ui/button/unselected/play.png"
 	};
 	const char* const PlayButton::c_SelectedTexturePath = 
 	{
-		"ui/button/SelectedPlay.png"
+		"ui/button/selected/play.png"
 	};
 	const char* const PlayButton::c_ClickedTexturePath =
 	{
-		"ui/button/ClickedPlay.png"
+		"ui/button/clicked/play.png"
 	};
 
 
@@ -1350,15 +1350,15 @@ namespace BlastOff
 
 	const char* const SettingsButton::c_UnselectedTexturePath = 
 	{
-		"ui/button/UnselectedSettings.png"
+		"ui/button/unselected/settings.png"
 	};
 	const char* const SettingsButton::c_SelectedTexturePath = 
 	{
-		"ui/button/SelectedSettings.png"
+		"ui/button/selected/settings.png"
 	};
 	const char* const SettingsButton::c_ClickedTexturePath =
 	{
-		"ui/button/ClickedSettings.png"
+		"ui/button/clicked/settings.png"
 	};
 
 
@@ -1394,15 +1394,15 @@ namespace BlastOff
 
 	const char* const MainMenuExitButton::c_UnselectedTexturePath = 
 	{
-		"ui/button/UnselectedLargeExit.png"
+		"ui/button/unselected/largeExit.png"
 	};
 	const char* const MainMenuExitButton::c_SelectedTexturePath = 
 	{
-		"ui/button/SelectedLargeExit.png"
+		"ui/button/selected/largeExit.png"
 	};
 	const char* const MainMenuExitButton::c_ClickedTexturePath =
 	{
-		"ui/button/ClickedLargeExit.png"
+		"ui/button/clicked/largeExit.png"
 	};
 
 
@@ -2047,15 +2047,15 @@ namespace BlastOff
 
 	const char* const SaveButton::c_UnselectedTexturePath = 
 	{
-		"ui/button/UnselectedSave.png"
+		"ui/button/unselected/save.png"
 	};
 	const char* const SaveButton::c_SelectedTexturePath = 
 	{
-		"ui/button/SelectedSave.png"
+		"ui/button/selected/save.png"
 	};
 	const char* const SaveButton::c_ClickedTexturePath = 
 	{
-		"ui/button/ClickedSave.png"
+		"ui/button/clicked/save.png"
 	};
 
 
@@ -2138,15 +2138,15 @@ namespace BlastOff
 
 	const char* const CenterMenuExitButton::c_UnselectedTexturePath = 
 	{
-		"ui/button/UnselectedSmallExit.png"
+		"ui/button/unselected/smallExit.png"
 	};
 	const char* const CenterMenuExitButton::c_SelectedTexturePath = 
 	{
-		"ui/button/SelectedSmallExit.png"
+		"ui/button/selected/smallExit.png"
 	};
 	const char* const CenterMenuExitButton::c_ClickedTexturePath = 
 	{
-		"ui/button/ClickedSmallExit.png"
+		"ui/button/clicked/smallExit.png"
 	};
 
 
