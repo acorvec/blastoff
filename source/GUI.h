@@ -284,6 +284,7 @@ namespace BlastOff
 		);
 
 		Vector2f CalculateBottomRightCorner() const;
+		Vector2f GetEngineSize() const;
 
 		void Update();
 		void Draw() const;
@@ -297,12 +298,16 @@ namespace BlastOff
 
 	struct ConfirmationDialogue
 	{
-		void Update();
+		virtual void Enable();
+
+		virtual void Update();
 		void Draw() const;
 
 	protected:
 		static const float c_FontSize;
 		static const float c_LineSpacing;
+
+		bool m_IsEnabled = false;
 		
 		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<ThemedBacking> m_Backing = nullptr;
@@ -322,24 +327,6 @@ namespace BlastOff
 		);
 	};
 
-	struct SettingsMenuConfirmationDialogue : public ConfirmationDialogue
-	{
-		SettingsMenuConfirmationDialogue(
-			const Sprite* const parent,
-			const Theme* const backingTheme,
-			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConstants,
-			const InputManager* const inputManager,
-			const Font* const font,
-			TextTextureLoader* const textTextureLoader,
-			ImageTextureLoader* const imageTextureLoader
-		);
-
-	protected:
-		static const Vector2f c_EnginePosition;
-		static const char* const c_Message;
-	};
-
 	struct SlideState
 	{
 		SlideState(
@@ -350,12 +337,12 @@ namespace BlastOff
 			const ProgramConstants* const programConstants
 		);
 
-		void SlideOut(const float waitInSeconds = 0);
+		void Slide(const float waitInSeconds = 0);
 		void Update();
 
 	protected:
-		float m_MaxTick = 0;
-		float m_SlideOutTick = c_DeactivatedTick;
+		float m_MaxSlideTick = 0;
+		float m_SlideTick = c_DeactivatedTick;
 		float m_WaitTick = c_DeactivatedTick;
 
 		Vector2f m_StartingPosition = Vector2f::Zero();
@@ -1016,6 +1003,32 @@ namespace BlastOff
 		}
 	};
 
+	struct SettingsMenuConfirmationDialogue : public ConfirmationDialogue
+	{
+		SettingsMenuConfirmationDialogue(
+			const Sprite* const parent,
+			const Theme* const backingTheme,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			const InputManager* const inputManager,
+			const Font* const font,
+			TextTextureLoader* const textTextureLoader,
+			ImageTextureLoader* const imageTextureLoader
+		);
+
+		void Enable() override;
+		void Update() override;
+
+	protected:
+		static const float c_MaxSlideInTick;
+		static const float c_SlideInWait;
+		static const Vector2f c_EnginePosition;
+		static const char* const c_Message;
+
+		bool m_IsEnabled = false;
+		unique_ptr<SlideState> m_SlideState = nullptr;
+	};
+
 	template<
 		typename Num,
 		typename = typename std::enable_if<std::is_arithmetic<Num>::value, Num>
@@ -1135,7 +1148,12 @@ namespace BlastOff
 		unique_ptr<TextLineSprite> m_Sprite = nullptr;
 	};
 
-	struct WindowSizeAdjuster
+	struct SettingsMenuAdjuster
+	{
+		virtual bool HasUnsavedChanges() const = 0;
+	};
+
+	struct WindowSizeAdjuster : SettingsMenuAdjuster
 	{
 		using SlideBar = WindowSizeSlideBar;
 		using Label = WindowSizeLabel;
@@ -1154,13 +1172,17 @@ namespace BlastOff
 
 		float GetValue() const;
 
+		float CalculateHeight() const;
 		Vector2f CalculateDimensions() const;
 
 		void Update();
 		void Draw() const;
 
+		bool HasUnsavedChanges() const override;
+
 	private:
 		float m_Height = 0;
+		float m_StartingValue = 0;
 	
 		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<SlideBar> m_SlideBar = nullptr;
@@ -1226,6 +1248,7 @@ namespace BlastOff
 	struct SettingsMenu
 	{
 		using ConfirmationDialogue = SettingsMenuConfirmationDialogue;
+		using Adjuster = SettingsMenuAdjuster;
 
 		SettingsMenu(
 			const int windowSizeIncrement,
@@ -1247,13 +1270,20 @@ namespace BlastOff
 
 	private:
 		void Apply();
+		void ExitSafely();
+		bool HasUnsavedChanges();
+
+		Callback m_ExitCallback;
 
 		Settings* m_Settings = nullptr;
+
+		unique_ptr<WindowSizeAdjuster> m_WindowSizeAdjuster = nullptr;
+
+		vector<const Adjuster*> m_Adjusters = {};
 
 		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<MuteButton> m_MuteButton = nullptr;
 		unique_ptr<ExitButton> m_TopRightExitButton = nullptr;
-		unique_ptr<WindowSizeAdjuster> m_WindowSizeAdjuster = nullptr;
 		unique_ptr<SaveButton> m_CenterSaveButton = nullptr;
 		unique_ptr<ExitButton> m_CenterExitButton = nullptr;
 		unique_ptr<ThemedBacking> m_Backing = nullptr;

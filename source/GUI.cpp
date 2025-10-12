@@ -725,6 +725,11 @@ namespace BlastOff
 		return (backingSize / 2.0f).InvertY();
 	}
 
+	Vector2f ThemedBacking::GetEngineSize() const
+	{
+		return m_OuterBackingStroke->GetEngineSize();
+	}
+
 	void ThemedBacking::Update()
 	{
 		m_OuterBackingFill->Update();
@@ -742,14 +747,25 @@ namespace BlastOff
 	}
 
 
+	void ConfirmationDialogue::Enable()
+	{
+		m_IsEnabled = true;
+	}
+
 	void ConfirmationDialogue::Update()
 	{
+		if (!m_IsEnabled)
+			return;
+		
 		m_Backing->Update();
 		m_Message->Update();
 	}
 
 	void ConfirmationDialogue::Draw() const
 	{
+		if (!m_IsEnabled)
+			return;
+		
 		m_Backing->Draw();
 		m_Message->Draw();
 	}
@@ -818,43 +834,6 @@ namespace BlastOff
 		initializeBacking();
 	}
 
-
-	SettingsMenuConfirmationDialogue::SettingsMenuConfirmationDialogue(
-		const Sprite* const parent,
-		const Theme* const theme,
-		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConstants,
-		const InputManager* const inputManager,
-		const Font* const font,
-		TextTextureLoader* const textTextureLoader,
-		ImageTextureLoader* const imageTextureLoader
-	) :
-		ConfirmationDialogue(
-			c_Message,
-			c_EnginePosition,
-			parent,
-			theme,
-			coordTransformer,
-			programConstants,
-			inputManager,
-			font,
-			textTextureLoader,
-			imageTextureLoader
-		)
-	{
-
-	}
-
-	const char* const SettingsMenuConfirmationDialogue::c_Message = 
-	{
-		"You haven't saved yet!\n"
-		"Would you like to save?"
-	};
-	const Vector2f SettingsMenuConfirmationDialogue::c_EnginePosition = 
-	{
-		Vector2f::Zero()
-	};
-
 	
 	SlideState::SlideState(
 		const Vector2f startingPosition,
@@ -865,7 +844,7 @@ namespace BlastOff
 	) :
 		m_StartingPosition(startingPosition),
 		m_EndingPosition(endingPosition),
-		m_MaxTick(maxTick),
+		m_MaxSlideTick(maxTick),
 		m_Sprite(sprite),
 		m_ProgramConstants(programConstants)
 	{
@@ -879,7 +858,7 @@ namespace BlastOff
 			{
 				float progress = 
 				{
-					1 - (m_SlideOutTick / m_MaxTick)
+					1 - (m_SlideTick / m_MaxSlideTick)
 				};
 				progress = DoubleSineInterpolation(progress);
 
@@ -894,7 +873,7 @@ namespace BlastOff
 				{
 					m_ProgramConstants->GetTargetFrametime()
 				};
-				m_SlideOutTick -= targetFrametime;
+				m_SlideTick -= targetFrametime;
 			};
 
 		const auto updateWaiting = 
@@ -902,7 +881,7 @@ namespace BlastOff
 			{
 				m_WaitTick -= m_ProgramConstants->GetTargetFrametime();
 				if (!IsWaiting())
-					SlideOut();
+					Slide();
 			};
 
 		if (IsWaiting())
@@ -912,10 +891,10 @@ namespace BlastOff
 			updateSlidingOut();
 	}
 
-	void SlideState::SlideOut(const float waitInSeconds)
+	void SlideState::Slide(const float waitInSeconds)
 	{
 		if (waitInSeconds <= 0)
-			m_SlideOutTick = m_MaxTick;
+			m_SlideTick = m_MaxSlideTick;
 		else
 			m_WaitTick = waitInSeconds;
 	}
@@ -927,7 +906,7 @@ namespace BlastOff
 
 	bool SlideState::IsSlidingOut() const
 	{
-		return m_SlideOutTick >= 0;
+		return m_SlideTick >= 0;
     }
 
 
@@ -1150,7 +1129,7 @@ namespace BlastOff
 
 	void TopRightResetButton::SlideOut()
 	{
-		m_SlideState->SlideOut(c_SlideOutWait);
+		m_SlideState->Slide(c_SlideOutWait);
 	}
 
 	void TopRightResetButton::Update()
@@ -1258,7 +1237,7 @@ namespace BlastOff
 
 	void TopRightExitButton::SlideOut()
 	{
-		m_SlideState->SlideOut(c_SlideOutWait);
+		m_SlideState->Slide(c_SlideOutWait);
 	}
 
 	void TopRightExitButton::Update()
@@ -1569,7 +1548,7 @@ namespace BlastOff
 	void GameEndMenu::Enable()
 	{
 		m_IsEnabled = true;
-		m_SlideState->SlideOut(c_SlideInWait);
+		m_SlideState->Slide(c_SlideInWait);
 	}
 
 	void GameEndMenu::Update()
@@ -1849,6 +1828,82 @@ namespace BlastOff
 	const char* WindowSizeLabel::c_BeginningOfMessage = "Window Size";
 	const Vector2f WindowSizeLabel::c_EnginePosition = { 0, 2 / 5.0f };
 
+	
+	SettingsMenuConfirmationDialogue::SettingsMenuConfirmationDialogue(
+		const Sprite* const parent,
+		const Theme* const theme,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		const InputManager* const inputManager,
+		const Font* const font,
+		TextTextureLoader* const textTextureLoader,
+		ImageTextureLoader* const imageTextureLoader
+	) :
+		ConfirmationDialogue(
+			c_Message,
+			c_EnginePosition,
+			parent,
+			theme,
+			coordTransformer,
+			programConstants,
+			inputManager,
+			font,
+			textTextureLoader,
+			imageTextureLoader
+		)
+	{
+		const auto initializeSlideState = 
+			[&, this]()
+			{
+				const Vector2f viewportSize = 
+				{
+					coordTransformer->GetViewportSize()
+				};
+				const Vector2f backingSize = m_Backing->GetEngineSize();
+				const float startX = (-viewportSize.x / 2.0f) - backingSize.x;
+				const Vector2f startPosition = { startX, 0 };
+				constexpr Vector2f endPosition = Vector2f::Zero();
+
+				m_SlideState = std::make_unique<SlideState>(
+					startPosition,
+					endPosition,
+					c_MaxSlideInTick,
+					m_Empty.get(),
+					programConstants
+				);
+			};
+
+		initializeSlideState();
+	}
+
+	const float SettingsMenuConfirmationDialogue::c_MaxSlideInTick = 1 / 4.0f;
+	const float SettingsMenuConfirmationDialogue::c_SlideInWait = 0;
+	const char* const SettingsMenuConfirmationDialogue::c_Message = 
+	{
+		"You haven't saved yet!\n"
+		"Would you like to save?"
+	};
+	const Vector2f SettingsMenuConfirmationDialogue::c_EnginePosition = 
+	{
+		Vector2f::Zero()
+	};
+
+	void SettingsMenuConfirmationDialogue::Enable()
+	{
+		ConfirmationDialogue::Enable();
+
+		m_SlideState->Slide(c_SlideInWait);
+	}
+
+	void SettingsMenuConfirmationDialogue::Update()
+	{
+		if (!m_IsEnabled)
+			return;
+
+		ConfirmationDialogue::Update();
+		m_SlideState->Update();
+	}
+
 
 	WindowSizeAdjuster::WindowSizeAdjuster(
 		Settings* const settings,
@@ -1891,15 +1946,6 @@ namespace BlastOff
 				);
 			};
 
-		const auto calculateHeight = 
-			[this]() 
-			{
-				const float bottom = m_SlideBar->GetBottomEdgePosition();
-				const float top = m_Label->GetTopEdgePosition();
-
-				m_Height = top - bottom;
-			};
-
 		const auto updatePosition = 
 			[&, this]()
 			{
@@ -1907,8 +1953,9 @@ namespace BlastOff
 			};
 
 		initializeObjects();
-		calculateHeight();
 		updatePosition();
+		
+		m_StartingValue = GetValue();
 	}
 	
 	float WindowSizeAdjuster::GetValue() const
@@ -1916,9 +1963,17 @@ namespace BlastOff
 		return m_SlideBar->GetValue();
 	}
 
+	float WindowSizeAdjuster::CalculateHeight() const
+	{
+		const float bottom = m_SlideBar->GetBottomEdgePosition();
+		const float top = m_Label->GetTopEdgePosition();
+
+		return top - bottom;
+	}
+
 	Vector2f WindowSizeAdjuster::CalculateDimensions() const
 	{
-		return { m_SlideBar->GetWidth(), m_Height };
+		return { m_SlideBar->GetWidth(), CalculateHeight() };
 	}
 
 	void WindowSizeAdjuster::Update()
@@ -1932,6 +1987,11 @@ namespace BlastOff
 	{
 		m_SlideBar->Draw();
 		m_Label->Draw();
+	}
+
+	bool WindowSizeAdjuster::HasUnsavedChanges() const
+	{
+		return GetValue() != m_StartingValue;
 	}
 
 
@@ -2094,7 +2154,8 @@ namespace BlastOff
 		const Callback& exitCallback,
 		const CameraEmpty* const cameraEmpty
 	) :
-		m_Settings(settings)
+		m_Settings(settings),
+		m_ExitCallback(exitCallback)
 	{
 		const auto initializeEmpty = 	
 			[&, this]()
@@ -2106,6 +2167,12 @@ namespace BlastOff
 					programConstants
 				);
 				m_Empty->SetParent(cameraEmpty);
+			};
+
+		const auto safeExitCallback = 
+			[this]()
+			{
+				ExitSafely();
 			};
 
 		const auto initializeTopRightButtons = 
@@ -2125,7 +2192,7 @@ namespace BlastOff
 					inputManager,
 					programConstants,
 					imageTextureLoader,
-					exitCallback,
+					safeExitCallback,
 					m_Empty.get(),
 					ProgramState::SettingsMenu
 				);
@@ -2209,7 +2276,7 @@ namespace BlastOff
 					inputManager,
 					programConstants,
 					imageTextureLoader,
-					exitCallback,
+					safeExitCallback,
 					m_Empty.get(),
 					bottomRightCorner
 				);
@@ -2230,12 +2297,19 @@ namespace BlastOff
 				);
 			};
 
+		const auto initializeAdjustersList = 	
+			[this]()
+			{
+				m_Adjusters = { m_WindowSizeAdjuster.get() };
+			};
+
 		initializeEmpty();
 		initializeTopRightButtons();
 		initializeWindowSizeAdjuster();
 		initializeBacking();
 		initializeCenterButtons();
 		initializeConfirmationDialogue();
+		initializeAdjustersList();
 	}
 
 	void SettingsMenu::Update()
@@ -2259,6 +2333,23 @@ namespace BlastOff
 		m_CenterSaveButton->Draw();
 		m_CenterExitButton->Draw();
 		m_ConfirmationDialogue->Draw();
+	}
+
+	bool SettingsMenu::HasUnsavedChanges()
+	{
+		for (const Adjuster* const adjuster : m_Adjusters)
+			if (adjuster->HasUnsavedChanges())
+				return true;
+
+		return false;
+	}
+
+	void SettingsMenu::ExitSafely()
+	{
+		if (HasUnsavedChanges())
+			m_ConfirmationDialogue->Enable();
+		else
+			m_ExitCallback();
 	}
 
 	void SettingsMenu::Apply()
