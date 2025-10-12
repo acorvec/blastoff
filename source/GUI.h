@@ -624,8 +624,8 @@ namespace BlastOff
 		unique_ptr<RoundedRectangleSprite> m_BackingFill = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_BackingStroke = nullptr;
 		unique_ptr<TextLineSprite> m_Message = nullptr;
-		unique_ptr<ResetButton> m_ResetButton = nullptr;
-		unique_ptr<ExitButton> m_ExitButton = nullptr;
+		unique_ptr<Button> m_ResetButton = nullptr;
+		unique_ptr<Button> m_ExitButton = nullptr;
 		unique_ptr<SlideState> m_SlideState = nullptr;
 	};
 
@@ -688,9 +688,9 @@ namespace BlastOff
         void Draw() const;
 
     private:
-        unique_ptr<PlayButton> m_PlayButton = nullptr;
-        unique_ptr<SettingsButton> m_SettingsButton = nullptr;
-        unique_ptr<ExitButton> m_ExitButton = nullptr;
+        unique_ptr<Button> m_PlayButton = nullptr;
+        unique_ptr<Button> m_SettingsButton = nullptr;
+        unique_ptr<Button> m_ExitButton = nullptr;
 
         const ProgramConstants* m_ProgramConstants = nullptr;
 		const InputManager* m_InputManager = nullptr;
@@ -1280,10 +1280,10 @@ namespace BlastOff
 
 		unique_ptr<WindowSizeAdjuster> m_WindowSizeAdjuster = nullptr;
 
-		unique_ptr<MuteButton> m_MuteButton = nullptr;
-		unique_ptr<ExitButton> m_TopRightExitButton = nullptr;
-		unique_ptr<SaveButton> m_CenterSaveButton = nullptr;
-		unique_ptr<ExitButton> m_CenterExitButton = nullptr;
+		unique_ptr<Button> m_MuteButton = nullptr;
+		unique_ptr<Button> m_TopRightExitButton = nullptr;
+		unique_ptr<Button> m_CenterSaveButton = nullptr;
+		unique_ptr<Button> m_CenterExitButton = nullptr;
 
 		vector<Adjuster*> m_Adjusters = {};
 		vector<Button*> m_Buttons = {};
