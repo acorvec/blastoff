@@ -620,7 +620,117 @@ namespace BlastOff
 		lazyLoadTextures();
 		initializeBacking();
 	}
+
+
+	YesButton::YesButton(
+		const Callback& yesCallback,
+		ImageTextureLoader* const imageTextureLoader,
+		const Vector2f bottomRightCorner,
+		const Sprite* const parent,
+		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
+		const ProgramConstants* const programConstants
+	) :
+		Button(
+			yesCallback,
+			c_UnselectedTexturePath,
+			c_SelectedTexturePath,
+			c_ClickedTexturePath,
+			imageTextureLoader,
+			Vector2f::Zero(),
+			c_EngineSize,
+			parent,
+			coordTransformer,
+			inputManager,
+			programConstants
+		)
+	{
+		const auto initializePosition = 
+			[&, this]()
+			{
+				const Vector2f offset1 = CenterMenuButton::c_AdditionalOffset;
+				const Vector2f offset2 = 
+				{
+					CenterMenuButton::CalculateOffsetByIndex(c_ButtonIndex)
+				};
+				const Vector2f position = bottomRightCorner + offset1 + offset2;
+				m_Sprite->Move(position);
+			};
+
+		initializePosition();
+	}
+
+	const int YesButton::c_ButtonIndex = 0;
+	const Vector2f YesButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
+
+	const char* const YesButton::c_UnselectedTexturePath = 
+	{
+		"ui/button/unselected/yes.png"
+	};
+	const char* const YesButton::c_SelectedTexturePath =
+	{
+		"ui/button/selected/yes.png"
+	};
+	const char* const YesButton::c_ClickedTexturePath = 
+	{
+		"ui/button/clicked/yes.png"
+	};
+
 	
+	NoButton::NoButton(
+		const Callback& noCallback,
+		ImageTextureLoader* const imageTextureLoader,
+		const Vector2f bottomRightCorner,
+		const Sprite* const parent,
+		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
+		const ProgramConstants* const programConstants
+	) :
+		Button(
+			noCallback,
+			c_UnselectedTexturePath,
+			c_SelectedTexturePath,
+			c_ClickedTexturePath,
+			imageTextureLoader,
+			Vector2f::Zero(),
+			c_EngineSize,
+			parent,
+			coordTransformer,
+			inputManager,
+			programConstants
+		)
+	{
+		const auto initializePosition = 
+			[&, this]()
+			{
+				const Vector2f offset1 = CenterMenuButton::c_AdditionalOffset;
+				const Vector2f offset2 = 
+				{
+					CenterMenuButton::CalculateOffsetByIndex(c_ButtonIndex)
+				};
+				const Vector2f position = bottomRightCorner + offset1 + offset2;
+				m_Sprite->Move(position);
+			};
+
+		initializePosition();
+	}
+
+	const int NoButton::c_ButtonIndex = 1;
+	const Vector2f NoButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
+
+	const char* const NoButton::c_UnselectedTexturePath = 
+	{
+		"ui/button/unselected/no.png"
+	};
+	const char* const NoButton::c_SelectedTexturePath =
+	{
+		"ui/button/selected/no.png"
+	};
+	const char* const NoButton::c_ClickedTexturePath = 
+	{
+		"ui/button/clicked/no.png"
+	};
+
 
 	const Theme Theme::c_DarkTheme = 
 	{
@@ -925,6 +1035,8 @@ namespace BlastOff
 		m_BackgroundTint->Update();
 		m_Backing->Update();
 		m_Message->Update();
+		m_YesButton->Update();
+		m_NoButton->Update();
 	}
 
 	void ConfirmationDialogue::Draw() const
@@ -935,6 +1047,8 @@ namespace BlastOff
 		m_BackgroundTint->Draw();
 		m_Backing->Draw();
 		m_Message->Draw();
+		m_YesButton->Draw();
+		m_NoButton->Draw();
 	}
 
 	const float ConfirmationDialogue::c_FontSize = 32;
@@ -1020,10 +1134,50 @@ namespace BlastOff
 				m_BackgroundTint->Enable();
 			};
 
+		const auto yesCallback = 
+			[this]()
+			{
+
+			};
+
+		const auto noCallback = 
+			[this]()
+			{
+
+			};
+
+		const auto initializeButtons = 
+			[&, this]()
+			{
+				const Vector2f bottomRightCorner = 
+				{
+					m_Backing->CalculateBottomRightCorner()
+				};
+				m_YesButton = std::make_unique<YesButton>(
+					yesCallback,
+					imageTextureLoader,
+					bottomRightCorner,
+					m_Empty.get(),
+					coordTransformer,
+					inputManager,
+					programConstants
+				);
+				m_NoButton = std::make_unique<NoButton>(
+					noCallback,
+					imageTextureLoader,
+					bottomRightCorner,
+					m_Empty.get(),
+					coordTransformer,
+					inputManager,
+					programConstants
+				);
+			};
+
 		initializeEmpty();
 		initializeMessage();
 		initializeBacking();
 		initializeBackgroundTint();
+		initializeButtons();
 	}
 
 

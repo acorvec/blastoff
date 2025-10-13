@@ -257,6 +257,48 @@ namespace BlastOff
 		);
 	};
 
+	struct YesButton : Button
+	{
+		YesButton(
+			const Callback& yesCallback,
+			ImageTextureLoader* const imageTextureLoader,
+			const Vector2f bottomRightCorner,
+			const Sprite* const parent,
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+			const ProgramConstants* const programConstants
+		);
+
+	protected:
+		static const int c_ButtonIndex;
+		static const Vector2f c_EngineSize;
+		
+		static const char* const c_UnselectedTexturePath;
+		static const char* const c_SelectedTexturePath;
+		static const char* const c_ClickedTexturePath;
+	};
+
+	struct NoButton : Button
+	{
+		NoButton(
+			const Callback& noCallback,
+			ImageTextureLoader* const imageTextureLoader,
+			const Vector2f bottomRightCorner,
+			const Sprite* const parent,
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+			const ProgramConstants* const programConstants
+		);
+
+	protected:
+		static const int c_ButtonIndex;
+		static const Vector2f c_EngineSize;
+		
+		static const char* const c_UnselectedTexturePath;
+		static const char* const c_SelectedTexturePath;
+		static const char* const c_ClickedTexturePath;
+	};
+
 	struct Theme
 	{
 		static const Theme c_DarkTheme;
@@ -372,6 +414,8 @@ namespace BlastOff
 		unique_ptr<BackgroundTint> m_BackgroundTint = nullptr;
 		unique_ptr<ThemedBacking> m_Backing = nullptr;
 		unique_ptr<TextSprite> m_Message = nullptr;
+		unique_ptr<Button> m_YesButton = nullptr;
+		unique_ptr<Button> m_NoButton = nullptr;
 
 		ConfirmationDialogue(
 			const char* const message,
