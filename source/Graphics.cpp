@@ -1239,6 +1239,13 @@ namespace BlastOff
 		return m_StrokeWidth * ppu;
 	}
 
+	Colour4i ShapeSprite::CalculateRealColour() const
+	{
+		const float realOpacity = m_Colour.a * m_Opacity;
+		const Colour4i realColour = m_Colour.WithOpacity(realOpacity / 0xFF);
+		return realColour;
+	}
+
 
 	RectangleSprite::RectangleSprite(
 		const Rect2f engineRect,
@@ -1267,6 +1274,8 @@ namespace BlastOff
 		};
 		constexpr Vector2f origin = Vector2f::Zero();
 
+		const Colour4i realColour = CalculateRealColour();
+
 		switch (m_Type)
 		{
 			case Type::FillOnly:
@@ -1274,7 +1283,7 @@ namespace BlastOff
 					drawRect.ToRayRect2f(), 
 					origin.ToRayVector2f(), 
 					CalculateRealRotation(), 
-					m_Colour.ToRayColour()
+					realColour.ToRayColour()
 				);
 				break;
 
@@ -1282,7 +1291,7 @@ namespace BlastOff
 				DrawRectangleLinesEx(
 					drawRect.ToRayRect2f(), 
 					CalculateScreenStrokeWidth(), 
-					m_Colour.ToRayColour()
+					realColour.ToRayColour()
 				);
 				break;
 
@@ -1320,6 +1329,8 @@ namespace BlastOff
 			m_CoordTransformer->ToScreenCoordinates(realRect)
 		};
 
+		const Colour4i realColour = CalculateRealColour();
+
 		switch (m_Type)
 		{
 			case Type::FillOnly:
@@ -1327,7 +1338,7 @@ namespace BlastOff
 					drawRect.ToRayRect2f(),
 					m_Roundness,
 					c_Resolution,
-					m_Colour.ToRayColour()
+					realColour.ToRayColour()
 				);
 				break;
 
@@ -1337,7 +1348,7 @@ namespace BlastOff
 					m_Roundness,
 					c_Resolution,
 					CalculateScreenStrokeWidth(),
-					m_Colour.ToRayColour()
+					realColour.ToRayColour()
 				);
 				break;
 

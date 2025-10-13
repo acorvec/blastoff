@@ -514,6 +514,12 @@ namespace BlastOff
 		m_Sprite->SetTexture(m_UnselectedTexture);
 	}
 
+	void Button::UpdateOpacity()
+	{
+		if (m_ParentOpacity)
+			m_Sprite->SetOpacity(*m_ParentOpacity);
+	}
+
 	void Button::Update()
 	{
 		const auto updateSelection =
@@ -559,6 +565,7 @@ namespace BlastOff
 		if (!m_IsEnabled)
 			return;
 
+		UpdateOpacity();
 		updateSelection();
 		if (m_IsSelected)
 			checkForClick();
@@ -581,11 +588,13 @@ namespace BlastOff
 		const Sprite* const parent,
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConstants
+		const ProgramConstants* const programConstants,
+		const float* const parentOpacity 
 	) :
 		m_ClickCallback(clickCallback),
 		m_CoordTransformer(coordTransformer),
-		m_InputManager(inputManager)
+		m_InputManager(inputManager),
+		m_ParentOpacity(parentOpacity)
 	{
 		const auto lazyLoadTextures =
 			[&, this]()
@@ -760,10 +769,12 @@ namespace BlastOff
 		const Vector2f innerSize,
 		const Theme* const theme,
 		const Sprite* const parent,
+		const float* const parentOpacity,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader
-	)
+	) :
+		m_ParentOpacity(parentOpacity)
 	{
 		const auto initializeInnerBacking = 
 			[&, this]()
@@ -845,8 +856,18 @@ namespace BlastOff
 		return m_OuterBackingStroke->GetEngineSize();
 	}
 
+	void ThemedBacking::UpdateOpacity()
+	{
+		m_OuterBackingFill->SetOpacity(*m_ParentOpacity);
+		m_OuterBackingStroke->SetOpacity(*m_ParentOpacity);
+		m_InnerBackingFill->SetOpacity(*m_ParentOpacity);
+		m_InnerBackingStroke->SetOpacity(*m_ParentOpacity);
+	}
+
 	void ThemedBacking::Update()
 	{
+		UpdateOpacity();
+
 		m_OuterBackingFill->Update();
 		m_OuterBackingStroke->Update();
 		m_InnerBackingFill->Update();
@@ -1114,6 +1135,7 @@ namespace BlastOff
 					messageSize,
 					theme,
 					m_Empty.get(),
+					&c_Opacity,
 					coordTransformer,
 					programConstants,
 					imageTextureLoader
@@ -1996,6 +2018,7 @@ namespace BlastOff
 	WindowSizeSlideBar::WindowSizeSlideBar(
 		Settings* const settings,
 		const int windowSizeIncrement,
+		const float* const parentOpacity,
 		const Sprite* const parent,
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
@@ -2003,6 +2026,7 @@ namespace BlastOff
 	) :
 		SettingsMenuSlideBar<int>(
 			c_EnginePosition,
+			parentOpacity,
 			settings->GetWindowSize().y,
 			c_Minimum,
 			CalculateMaximum(settings, windowSizeIncrement),
@@ -2041,12 +2065,14 @@ namespace BlastOff
 		const Sprite* parent,
 		const SlideBar* const slideBar,
 		const Theme* const theme,
+		const float* const parentOpacity,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
 		const Font* const font,
 		TextTextureLoader* const textureLoader
 	) :
-		m_SlideBar(slideBar)
+		m_SlideBar(slideBar),
+		m_ParentOpacity(parentOpacity)
 	{
 		m_Sprite = std::make_unique<TextLineSprite>(
 			c_EnginePosition,
@@ -2065,6 +2091,11 @@ namespace BlastOff
 		return m_Sprite->GetEdgePosition(Direction::Up);
 	}
 
+	void WindowSizeLabel::UpdateOpacity()
+	{
+		m_Sprite->SetOpacity(*m_ParentOpacity);
+	}
+
 	void WindowSizeLabel::Update() 
 	{
 		const auto updateMessage = 
@@ -2081,6 +2112,8 @@ namespace BlastOff
 			};
 
 		updateMessage();
+
+		m_Sprite->SetOpacity(*m_ParentOpacity);
 		m_Sprite->Update();
 	}
 
@@ -2179,6 +2212,7 @@ namespace BlastOff
 	WindowSizeAdjuster::WindowSizeAdjuster(
 		Settings* const settings,
 		const int windowSizeIncrement,
+		const float* const parentOpacity,
 		const Theme* const theme,
 		const Sprite* const parent,
 		const CoordinateTransformer* const coordTransformer,
@@ -2186,7 +2220,8 @@ namespace BlastOff
 		const InputManager* const inputManager,
 		const ProgramConstants* const programConstants,
 		const Font* const font
-	)
+	) :
+		m_ParentOpacity(parentOpacity)
 	{
 		const auto initializeObjects = 
 			[&, this]()
@@ -2201,6 +2236,7 @@ namespace BlastOff
 				m_SlideBar = std::make_unique<SlideBar>(
 					settings,
 					windowSizeIncrement,
+					parentOpacity,
 					m_Empty.get(),
 					coordTransformer,
 					inputManager,
@@ -2210,6 +2246,7 @@ namespace BlastOff
 					m_Empty.get(),
 					m_SlideBar.get(),
 					theme,
+					parentOpacity,
 					coordTransformer,
 					programConstants,
 					font,
@@ -2248,6 +2285,13 @@ namespace BlastOff
 		return { m_SlideBar->GetWidth(), CalculateHeight() };
 	}
 
+	void WindowSizeAdjuster::UpdateOpacity()
+	{
+		m_Empty->SetOpacity(*m_ParentOpacity);
+		m_SlideBar->UpdateOpacity();
+		m_Label->UpdateOpacity();
+	}
+
 	void WindowSizeAdjuster::Update()
 	{
 		m_Empty->Update();
@@ -2274,7 +2318,8 @@ namespace BlastOff
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& saveCallback,
 		const Sprite* const parent,
-		const Vector2f bottomRightCorner
+		const Vector2f bottomRightCorner,
+		const float* const parentOpacity
 	) : 
 		Button(
 			saveCallback,
@@ -2287,7 +2332,8 @@ namespace BlastOff
 			parent,
 			coordTransformer,
 			inputManager,
-			programConstants
+			programConstants,
+			parentOpacity
 		)
 	{
 		const auto initializePosition = 
@@ -2365,7 +2411,8 @@ namespace BlastOff
 		ImageTextureLoader* const imageTextureLoader,
 		const Callback& exitCallback,
 		const Sprite* const parent,
-		const Vector2f bottomRightCorner
+		const Vector2f bottomRightCorner,
+		const float* const parentOpacity
 	) :
 		Button(
 			exitCallback,
@@ -2378,7 +2425,8 @@ namespace BlastOff
 			parent,
 			coordTransformer,
 			inputManager,
-			programConstants
+			programConstants,
+			parentOpacity
 		)
 	{
 		const auto initializePosition = 
@@ -2427,7 +2475,8 @@ namespace BlastOff
 		const CameraEmpty* const cameraEmpty
 	) :
 		m_Settings(settings),
-		m_ExitCallback(exitCallback)
+		m_ExitCallback(exitCallback),
+		m_ProgramConstants(programConstants)
 	{
 		const auto initializeEmpty = 	
 			[&, this]()
@@ -2476,6 +2525,7 @@ namespace BlastOff
 				m_WindowSizeAdjuster = std::make_unique<WindowSizeAdjuster>(
 					m_Settings,
 					windowSizeIncrement,
+					&m_Opacity,
 					&Theme::c_DarkTheme,
 					m_Empty.get(),
 					coordTransformer,
@@ -2517,6 +2567,7 @@ namespace BlastOff
 					innerSize,
 					&Theme::c_DarkTheme,
 					m_Empty.get(),
+					&m_Opacity,
 					coordTransformer,
 					programConstants,
 					imageTextureLoader
@@ -2541,7 +2592,8 @@ namespace BlastOff
 					imageTextureLoader,
 					applyCallback,
 					m_Empty.get(),
-					bottomRightCorner
+					bottomRightCorner,
+					&m_Opacity
 				);
 				m_CenterExitButton = std::make_unique<CenterMenuExitButton>(
 					coordTransformer,
@@ -2550,7 +2602,8 @@ namespace BlastOff
 					imageTextureLoader,
 					safeExitCallback,
 					m_Empty.get(),
-					bottomRightCorner
+					bottomRightCorner,
+					&m_Opacity
 				);
 			};
 
@@ -2593,12 +2646,30 @@ namespace BlastOff
 
 	void SettingsMenu::Update()
 	{
+		const auto fadeOut = 
+			[this]()
+			{
+				const float progress = m_FadeOutTick / c_MaxFadeOutTick;
+				m_Opacity = progress;
+
+				m_FadeOutTick -= m_ProgramConstants->GetTargetFrametime();
+			};
+
+		if (IsFadingOut())
+			fadeOut();
+
 		if (m_ConfirmationDialogue->IsEnabled())
 		{
 			m_ConfirmationDialogue->Update();
 
 			for (Button* button : m_Buttons)
+			{
 				button->UseUnselectedTexture();
+				button->UpdateOpacity();
+			}	
+
+			m_Backing->UpdateOpacity();
+			m_WindowSizeAdjuster->UpdateOpacity();
 		}
 		else
 		{
@@ -2623,7 +2694,12 @@ namespace BlastOff
 		m_ConfirmationDialogue->Draw();
 	}
 
-	bool SettingsMenu::HasUnsavedChanges()
+	bool SettingsMenu::IsFadingOut() const
+	{
+		return m_FadeOutTick >= 0;
+	}
+
+	bool SettingsMenu::HasUnsavedChanges() const
 	{
 		for (const Adjuster* const adjuster : m_Adjusters)
 			if (adjuster->HasUnsavedChanges())
@@ -2635,7 +2711,10 @@ namespace BlastOff
 	void SettingsMenu::ExitSafely()
 	{
 		if (HasUnsavedChanges())
+		{
 			m_ConfirmationDialogue->Enable();
+			m_FadeOutTick = c_MaxFadeOutTick;	
+		}
 		else
 			m_ExitCallback();
 	}
@@ -2645,4 +2724,6 @@ namespace BlastOff
 		const int windowHeight = m_WindowSizeAdjuster->GetValue();
 		m_Settings->ChangeWindowHeight(windowHeight);
 	}
+
+	const float SettingsMenu::c_MaxFadeOutTick = 1 / 4.0f;
 }

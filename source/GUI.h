@@ -223,6 +223,7 @@ namespace BlastOff
 		void SetParent(const Sprite* const parent);
 		void UseUnselectedTexture();
 
+		virtual void UpdateOpacity();
 		virtual void Update();
 		virtual void Draw() const;
 
@@ -238,6 +239,7 @@ namespace BlastOff
 		const CoordinateTransformer* m_CoordTransformer = nullptr;
 		const InputManager* m_InputManager = nullptr;
 
+		const float* m_ParentOpacity = nullptr;
 		const Texture* m_UnselectedTexture = nullptr;
 		const Texture* m_SelectedTexture = nullptr;
 		const Texture* m_ClickedTexture = nullptr;
@@ -253,7 +255,8 @@ namespace BlastOff
 			const Sprite* const parent,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
-			const ProgramConstants* const programConstants
+			const ProgramConstants* const programConstants,
+			const float* const parentOpacity = nullptr
 		);
 	};
 
@@ -322,6 +325,7 @@ namespace BlastOff
 			const Vector2f innerSize,
 			const Theme* const theme,
 			const Sprite* const parent,
+			const float* const parentOpacity,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
 			ImageTextureLoader* const imageTextureLoader
@@ -330,10 +334,13 @@ namespace BlastOff
 		Vector2f CalculateBottomRightCorner() const;
 		Vector2f GetEngineSize() const;
 
+		void UpdateOpacity();
 		void Update();
 		void Draw() const;
 
 	private:
+		const float* const m_ParentOpacity = nullptr;
+
 		unique_ptr<RoundedRectangleSprite> m_OuterBackingFill = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_OuterBackingStroke = nullptr;
 		unique_ptr<RoundedRectangleSprite> m_InnerBackingFill = nullptr;
@@ -407,6 +414,8 @@ namespace BlastOff
 		static const Colour4i c_BackgroundTintColour;
 		static const Direction c_BackgroundTintSlideDirection;
 		static const float c_BackgroundTintSlideLength;
+		
+		static const inline float c_Opacity = 1;
 		
 		bool m_IsEnabled = false;
 		
@@ -646,7 +655,8 @@ namespace BlastOff
             ImageTextureLoader* const imageTextureLoader,
             const Callback& exitCallback,
             const Sprite* const parent,
-			const Vector2f bottomRightCorner
+			const Vector2f bottomRightCorner,
+			const float* const parentOpacity = nullptr
 		);
 
 	private:
@@ -811,6 +821,7 @@ namespace BlastOff
 			const Num maximum,
 			const Colours colours,
 			const Sprite* const parent,
+			const float* const parentOpacity,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
 			const ProgramConstants* const programConstants,
@@ -821,6 +832,7 @@ namespace BlastOff
 			m_Maximum(maximum),
 			m_StepSize(stepSize),
 			m_Colours(colours),
+			m_ParentOpacity(parentOpacity),
 			m_InputManager(inputManager)
 		{
 			const auto checkBounds = 
@@ -903,6 +915,15 @@ namespace BlastOff
 		{
 			const Rect2f engineRect = m_BackingStroke->GetEngineRect();
 			return engineRect.w;
+		}
+
+		void UpdateOpacity()
+		{
+			m_BackingFill->SetOpacity(*m_ParentOpacity);
+			m_BackingStroke->SetOpacity(*m_ParentOpacity);
+
+			m_HandleFill->SetOpacity(*m_ParentOpacity);
+			m_HandleStroke->SetOpacity(*m_ParentOpacity);
 		}
 
 		void Update()
@@ -1048,6 +1069,7 @@ namespace BlastOff
 				};
 
 			updateHandle();
+			UpdateOpacity();
 
 			m_BackingFill->Update();
 			m_BackingStroke->Update();
@@ -1063,24 +1085,6 @@ namespace BlastOff
 		}
 
 	protected:
-		bool m_HandleIsClicked = false;
-		bool m_HandleIsSelected = false;
-
-		Num m_Value = 0;
-		Num m_Minimum = 0;
-		Num m_Maximum = 0;
-
-		optional<Num> m_StepSize = 0;
-		Colours m_Colours = { 0 };
-
-		const InputManager* const m_InputManager = nullptr;
-		
-		unique_ptr<RoundedRectangleSprite> m_BackingFill = nullptr;
-		unique_ptr<RoundedRectangleSprite> m_BackingStroke = nullptr;
-
-		unique_ptr<RoundedRectangleSprite> m_HandleFill = nullptr;
-		unique_ptr<RoundedRectangleSprite> m_HandleStroke = nullptr;
-
 		void InitializeHandlePosition()
 		{
 			const float left = 
@@ -1113,6 +1117,25 @@ namespace BlastOff
 		{
 			return m_BackingFill.get();
 		}
+
+		bool m_HandleIsClicked = false;
+		bool m_HandleIsSelected = false;
+
+		Num m_Value = 0;
+		Num m_Minimum = 0;
+		Num m_Maximum = 0;
+
+		optional<Num> m_StepSize = 0;
+		Colours m_Colours = { 0 };
+
+		const float* m_ParentOpacity = nullptr;
+		const InputManager* const m_InputManager = nullptr;
+		
+		unique_ptr<RoundedRectangleSprite> m_BackingFill = nullptr;
+		unique_ptr<RoundedRectangleSprite> m_BackingStroke = nullptr;
+
+		unique_ptr<RoundedRectangleSprite> m_HandleFill = nullptr;
+		unique_ptr<RoundedRectangleSprite> m_HandleStroke = nullptr;
 	};
 
 	struct SettingsMenuConfirmationDialogue : public ConfirmationDialogue
@@ -1150,6 +1173,7 @@ namespace BlastOff
 
 		SettingsMenuSlideBar(
 			const Vector2f enginePosition,
+			const float* const parentOpacity,
 			const Num startValue,
 			const Num minimum,
 			const Num maximum,
@@ -1172,6 +1196,7 @@ namespace BlastOff
 				maximum,
 				c_Colours,
 				parent,
+				parentOpacity,
 				coordTransformer,
 				inputManager,
 				programConstants,
@@ -1212,6 +1237,7 @@ namespace BlastOff
 		WindowSizeSlideBar(
 			Settings* const settings,
 			const int windowSizeIncrement,
+			const float* const parentOpacity,
 			const Sprite* const parent,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
@@ -1236,6 +1262,7 @@ namespace BlastOff
 			const Sprite* parent,
 			const SlideBar* const slideBar,
 			const Theme* const theme,
+			const float* const parentOpacity,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
 			const Font* const font,
@@ -1244,6 +1271,7 @@ namespace BlastOff
 
 		float GetTopEdgePosition() const;
 
+		void UpdateOpacity();
 		void Update();
 		void Draw() const;
 
@@ -1255,7 +1283,10 @@ namespace BlastOff
 		static const Vector2f c_EnginePosition;
 
 		int m_MostRecentValue = c_DeactivatedTracker;
+
+		const float* m_ParentOpacity = nullptr;
 		const SlideBar* m_SlideBar = nullptr;
+
 		unique_ptr<TextLineSprite> m_Sprite = nullptr;
 	};
 
@@ -1272,6 +1303,7 @@ namespace BlastOff
 		WindowSizeAdjuster(
 			Settings* const settings,
 			const int windowSizeIncrement,
+			const float* const parentOpacity,
 			const Theme* const theme,
 			const Sprite* const parent,
 			const CoordinateTransformer* const coordTransformer,
@@ -1286,6 +1318,7 @@ namespace BlastOff
 		float CalculateHeight() const;
 		Vector2f CalculateDimensions() const;
 
+		void UpdateOpacity();
 		void Update();
 		void Draw() const;
 
@@ -1293,7 +1326,9 @@ namespace BlastOff
 
 	private:
 		float m_StartingValue = 0;
-	
+		
+		const float* m_ParentOpacity = nullptr;
+
 		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<SlideBar> m_SlideBar = nullptr;
 		unique_ptr<Label> m_Label = nullptr;
@@ -1308,7 +1343,8 @@ namespace BlastOff
             ImageTextureLoader* const imageTextureLoader,
             const Callback& saveCallback,
             const Sprite* const parent,
-			const Vector2f enginePosition
+			const Vector2f bottomRightCorner,
+			const float* const parentOpacity = nullptr
 		);
 
 	private:
@@ -1345,11 +1381,18 @@ namespace BlastOff
 	private:
 		void Apply();
 		void ExitSafely();
-		bool HasUnsavedChanges();
+
+		bool IsFadingOut() const;
+		bool HasUnsavedChanges() const;
+
+		static const float c_MaxFadeOutTick;
 
 		Callback m_ExitCallback;
-
+		float m_Opacity = 1;
+		float m_FadeOutTick = c_DeactivatedTick;
+	
 		Settings* m_Settings = nullptr;
+		const ProgramConstants* m_ProgramConstants = nullptr;
 
 		unique_ptr<WindowSizeAdjuster> m_WindowSizeAdjuster = nullptr;
 

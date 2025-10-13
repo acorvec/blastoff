@@ -401,6 +401,7 @@ namespace BlastOff
 
 	protected:
 		float CalculateScreenStrokeWidth() const;
+		Colour4i CalculateRealColour() const;
 
 		using Type = ShapeSpriteType;
 
