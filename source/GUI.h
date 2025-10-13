@@ -833,10 +833,6 @@ namespace BlastOff
 		ShapeColours backing;
 	};
 
-	template<
-		typename Num,
-		typename = typename std::enable_if<std::is_arithmetic<Num>::value, Num>
-	>
 	struct SlideBar
 	{
 		using Colours = SlideBarColours;
@@ -848,316 +844,40 @@ namespace BlastOff
 			const float strokeWidth,
 			const float backingRoundness,
 			const float handleRoundness,
-			const Num startValue,
-			const Num minimum,
-			const Num maximum,
+			const float startValue,
+			const float minimum,
+			const float maximum,
 			const Colours colours,
 			const Sprite* const parent,
 			const float* const parentOpacity,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
 			const ProgramConstants* const programConstants,
-			const optional<Num> stepSize = std::nullopt
-		) :
-			m_Value(startValue),
-			m_Minimum(minimum),
-			m_Maximum(maximum),
-			m_StepSize(stepSize),
-			m_Colours(colours),
-			m_ParentOpacity(parentOpacity),
-			m_InputManager(inputManager)
-		{
-			const auto checkBounds = 
-				[&]()
-				{
-					m_Value = std::max(m_Value, m_Minimum);
-					m_Value = std::min(m_Value, m_Maximum);
-				};
-				
-			const auto createBacking = 
-				[&, this]()
-				{
-					const Rect2f backingRect(enginePosition, backingSize);
-					m_BackingFill = std::make_unique<RoundedRectangleSprite>(
-						backingRect,
-						colours.backing.fill,
-						backingRoundness,
-						coordTransformer,
-						programConstants
-					);
-					m_BackingFill->SetParent(parent);
+			const optional<float> stepSize = std::nullopt
+		);
 
-					m_BackingStroke = std::make_unique<RoundedRectangleSprite>(
-						backingRect,
-						colours.backing.stroke,
-						backingRoundness,
-						coordTransformer,
-						programConstants,
-						strokeWidth
-					);
-					m_BackingStroke->SetParent(m_BackingFill.get());
-				};
+		float GetValue() const;
+		float GetBottomEdgePosition() const;
+		float GetWidth() const;
 
-			const auto createHandle = 
-				[&, this]()
-				{
-					const Rect2f handleRect(Vector2f::Zero(), handleSize);
-					const ShapeColours& defaultColourSet = 
-					{
-						m_Colours.handle.unselected
-					};
-
-					m_HandleFill = std::make_unique<RoundedRectangleSprite>(
-						handleRect,
-						defaultColourSet.fill,
-						handleRoundness,
-						coordTransformer,
-						programConstants
-					);
-					m_HandleFill->SetParent(m_BackingFill.get());
-
-					m_HandleStroke = std::make_unique<RoundedRectangleSprite>(
-						handleRect,
-						defaultColourSet.stroke,
-						handleRoundness,
-						coordTransformer,
-						programConstants,
-						strokeWidth
-					);
-					m_HandleStroke->SetParent(m_HandleFill.get());
-				};
-
-			checkBounds();			
-			createBacking();
-			createHandle();
-			InitializeHandlePosition();
-		}
-
-		float GetValue() const
-		{
-			return m_Value;
-		}
-
-		float GetBottomEdgePosition() const
-		{
-			return m_HandleStroke->GetEdgePosition(Direction::Down);
-		}
-
-		float GetWidth() const
-		{
-			const Rect2f engineRect = m_BackingStroke->GetEngineRect();
-			return engineRect.w;
-		}
-
-		void UpdateOpacity()
-		{
-			m_BackingFill->SetOpacity(*m_ParentOpacity);
-			m_BackingStroke->SetOpacity(*m_ParentOpacity);
-
-			m_HandleFill->SetOpacity(*m_ParentOpacity);
-			m_HandleStroke->SetOpacity(*m_ParentOpacity);
-		}
-
-		void Update()
-		{
-			const auto updateHandleFlags = 
-				[this]()
-				{
-					const Vector2f engineMouse = 
-					{
-						m_InputManager->CalculateMousePosition()
-					};
-					const Sprite* handleRoot = GetHandleRoot();
-					const Rect2f handleRect = handleRoot->CalculateRealRect();
-					m_HandleIsSelected = 
-					{
-						handleRect.CollideWithPoint(engineMouse)
-					};
-
-					constexpr int buttonEnum = MOUSE_BUTTON_LEFT;
-					const bool mouseReleased =
-					{
-						m_InputManager->GetMouseButtonReleased(buttonEnum)
-					};
-					const bool mouseClicked = 
-					{
-						m_InputManager->GetMouseButtonPressed(buttonEnum)
-					};
-					if (mouseReleased)
-						m_HandleIsClicked = false;
-
-					m_HandleIsSelected = false;
-
-					if (m_HandleIsSelected && mouseClicked)
-						m_HandleIsClicked = true;
-					else if (mouseClicked)
-					{
-						// seek if the player clicks on the backing instead
-						const Sprite* backingRoot = GetBackingRoot();
-						const Rect2f backingRect = backingRoot->CalculateRealRect();
-						m_HandleIsClicked = 
-						{
-							backingRect.CollideWithPoint(engineMouse)
-						};
-					}
-				};
-
-			const auto updateHandleColours =
-				[this]()
-				{
-					const auto& colours = m_Colours.handle;
-					if (m_HandleIsClicked)
-					{
-						m_HandleFill->SetColour(colours.clicked.fill);
-						m_HandleStroke->SetColour(colours.clicked.stroke);
-					}
-					else if (m_HandleIsSelected)
-					{
-						m_HandleFill->SetColour(colours.selected.fill);
-						m_HandleStroke->SetColour(colours.selected.stroke);
-					}
-					else
-					{
-						m_HandleFill->SetColour(colours.unselected.fill);
-						m_HandleStroke->SetColour(colours.unselected.stroke);
-					}
-				};
-
-			const auto clampHandlePosition = 
-				[this](const float mouseX) -> float
-				{
-					const float left = 
-					{
-						m_BackingFill->GetEdgePosition(Direction::Left)
-					};
-					const float right = 
-					{
-						m_BackingFill->GetEdgePosition(Direction::Right)
-					};
-					const float reverseLerpResult = ReverseLerp(
-						left, 
-						right, 
-						mouseX
-					);
-					if (reverseLerpResult < 0)
-						return left;
-					else if (reverseLerpResult > 1)
-						return right;
-					else
-						return mouseX;
-				};
-
-			const auto calculateSnappedValue =
-				[this](const Num beforeSnapping) -> Num
-				{
-					const float result = RoundToFraction(
-						(float)beforeSnapping, 
-						(float)(*m_StepSize)
-					);
-					return (Num)result;
-				};
-
-			const auto updateHandlePosition = 
-				[&, this]()
-				{
-					const Vector2f engineMouse = 
-					{
-						m_InputManager->CalculateMousePosition()
-					};
-					const float beforeSnapping = 
-					{
-						clampHandlePosition(engineMouse.x)
-					};
-					const float left = 
-					{
-						m_BackingFill->GetEdgePosition(Direction::Left)
-					};
-					const float right = 
-					{
-						m_BackingFill->GetEdgePosition(Direction::Right)
-					};
-					const float progress = ReverseLerp(
-						left, 
-						right, 
-						beforeSnapping
-					);
-					m_Value = (progress * (m_Maximum - m_Minimum)) + m_Minimum;
-					if (m_StepSize)
-						m_Value = calculateSnappedValue(m_Value);
-					InitializeHandlePosition();
-				};
-
-			const auto updateHandle =
-				[&, this]()
-				{
-					updateHandleFlags();
-					updateHandleColours();
-
-					if (m_HandleIsClicked)
-						updateHandlePosition();
-
-					m_HandleFill->Update();
-					m_HandleStroke->Update();
-				};
-
-			updateHandle();
-			UpdateOpacity();
-
-			m_BackingFill->Update();
-			m_BackingStroke->Update();
-		}
-
-		void Draw() const
-		{
-			m_BackingFill->Draw();
-			m_BackingStroke->Draw();
-
-			m_HandleFill->Draw();
-			m_HandleStroke->Draw();
-		}
+		void UpdateOpacity();
+		void Update();
+		void Draw() const;
 
 	protected:
-		void InitializeHandlePosition()
-		{
-			const float left = 
-			{
-				m_BackingFill->GetEdgePosition(Direction::Left)
-			};
-			const float right = 
-			{
-				m_BackingFill->GetEdgePosition(Direction::Right)
-			};
-			const float progress = 
-			{
-				(m_Value - m_Minimum) / (float)(m_Maximum - m_Minimum)
-			};
+		void InitializeHandlePosition();
 
-			const float a = left, b = right, t = progress;
-			const float engineX = Lerp(left, right, progress);
-
-			Sprite* handleRoot = GetHandleRoot();
-			const Rect2f localRect = handleRoot->GetEngineRect();
-			handleRoot->SetLocalPosition({ engineX, localRect.y });
-		}
-
-		RoundedRectangleSprite* GetHandleRoot() const
-		{
-			return m_HandleFill.get();
-		}
-
-		RoundedRectangleSprite* GetBackingRoot() const
-		{
-			return m_BackingFill.get();
-		}
+		RoundedRectangleSprite* GetHandleRoot() const;
+		RoundedRectangleSprite* GetBackingRoot() const;
 
 		bool m_HandleIsClicked = false;
 		bool m_HandleIsSelected = false;
 
-		Num m_Value = 0;
-		Num m_Minimum = 0;
-		Num m_Maximum = 0;
+		float m_Value = 0;
+		float m_Minimum = 0;
+		float m_Maximum = 0;
 
-		optional<Num> m_StepSize = 0;
+		optional<float> m_StepSize = 0;
 		Colours m_Colours = { 0 };
 
 		const float* m_ParentOpacity = nullptr;
@@ -1202,49 +922,23 @@ namespace BlastOff
 		unique_ptr<SlideState> m_SlideState = nullptr;
 	};
 
-	template<
-		typename Num,
-		typename = typename std::enable_if<std::is_arithmetic<Num>::value, Num>
-	>
-	struct SettingsMenuSlideBar : public SlideBar<Num>
+	struct SettingsMenuSlideBar : public SlideBar
 	{
 		using Colours = SlideBarColours;
 
 		SettingsMenuSlideBar(
 			const Vector2f enginePosition,
 			const float* const parentOpacity,
-			const Num startValue,
-			const Num minimum,
-			const Num maximum,
+			const float startValue,
+			const float minimum,
+			const float maximum,
 			const Sprite* const parent,
 			Settings* const settings,
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
 			const ProgramConstants* const programConstants,
-			const optional<Num> stepSize = std::nullopt
-		) :
-			SlideBar<Num>(
-				enginePosition,
-				c_BackingSize,
-				c_HandleSize,
-				c_StrokeWidth,
-				c_BackingRoundness,
-				c_HandleRoundness,
-				startValue,
-				minimum,
-				maximum,
-				c_Colours,
-				parent,
-				parentOpacity,
-				coordTransformer,
-				inputManager,
-				programConstants,
-				stepSize
-			),
-			m_Settings(settings)
-		{
-
-		}
+			const optional<float> stepSize = std::nullopt
+		);
 		
 	protected:		
 		static constexpr float c_BackingRoundness = 1 / 10.0f;
@@ -1271,7 +965,7 @@ namespace BlastOff
 		Settings* m_Settings;
 	};
 
-	struct VolumeSlideBar : public SettingsMenuSlideBar<float>
+	struct VolumeSlideBar : public SettingsMenuSlideBar
 	{
 		VolumeSlideBar(
 			Settings* const settings,
@@ -1288,7 +982,7 @@ namespace BlastOff
 		static const Vector2f c_EnginePosition;
 	};
 
-	struct WindowSizeSlideBar : public SettingsMenuSlideBar<int>
+	struct WindowSizeSlideBar : public SettingsMenuSlideBar
 	{
 		WindowSizeSlideBar(
 			Settings* const settings,
@@ -1301,19 +995,53 @@ namespace BlastOff
 		);
 
 	protected:
-		static const int c_Minimum;
+		static const float c_Minimum;
 		static const Vector2f c_EnginePosition;
 
-		int CalculateMaximum(
+		float CalculateMaximum(
 			const Settings* const settings, 
-			const int windowSizeIncrement
+			const float windowSizeIncrement
 		) const;
 	};
 
-	struct VolumeLabel
+	struct AdjusterLabel
 	{
-		using SlideBar = VolumeSlideBar;
+		AdjusterLabel(
+			const char* const beginningOfMessage,
+			const Sprite* parent,
+			const SlideBar* const slideBar,
+			const Theme* const theme,
+			const float* const parentOpacity,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			const Font* const font,
+			TextTextureLoader* const textureLoader
+		);
+
+		float GetTopEdgePosition() const;
+
+		void UpdateOpacity();
+		void Update();
+		void Draw() const;
+
+	protected:
+		virtual string FormatValue() const = 0;
+		string CalculateMessage() const;
 		
+		static const float c_FontSize;
+		static const Vector2f c_EnginePosition;
+
+		int m_MostRecentValue = c_DeactivatedTracker;
+
+		const char* m_BeginningOfMessage = nullptr;
+		const float* m_ParentOpacity = nullptr;
+		const SlideBar* m_SlideBar = nullptr;
+
+		unique_ptr<TextLineSprite> m_Sprite = nullptr;
+	};
+
+	struct VolumeLabel : public AdjusterLabel
+	{		
 		VolumeLabel(
 			const Sprite* parent,
 			const SlideBar* const slideBar,
@@ -1325,33 +1053,14 @@ namespace BlastOff
 			TextTextureLoader* const textureLoader
 		);
 
-		float GetTopEdgePosition() const;
-
-		void UpdateOpacity();
-		void Update();
-		void Draw() const;
-
 	private:
-		static string FormatValue(const float value);
+		string FormatValue() const;
 
-		string CalculateMessage() const;
-		
-		static const float c_FontSize;
 		static const char* c_BeginningOfMessage;
-		static const Vector2f c_EnginePosition;
-
-		float m_MostRecentValue = c_DeactivatedTracker;
-
-		const float* m_ParentOpacity = nullptr;
-		const SlideBar* m_SlideBar = nullptr;
-
-		unique_ptr<TextLineSprite> m_Sprite = nullptr;
 	};
 
-	struct WindowSizeLabel 
+	struct WindowSizeLabel : public AdjusterLabel
 	{
-		using SlideBar = WindowSizeSlideBar;
-		
 		WindowSizeLabel(
 			const Sprite* parent,
 			const SlideBar* const slideBar,
@@ -1363,27 +1072,10 @@ namespace BlastOff
 			TextTextureLoader* const textureLoader
 		);
 
-		float GetTopEdgePosition() const;
-
-		void UpdateOpacity();
-		void Update();
-		void Draw() const;
-
 	private:
-		static string FormatValue(const float value);
-		
-		string CalculateMessage() const;
-		
-		static const float c_FontSize;
+		string FormatValue() const;
+
 		static const char* c_BeginningOfMessage;
-		static const Vector2f c_EnginePosition;
-
-		int m_MostRecentValue = c_DeactivatedTracker;
-
-		const float* m_ParentOpacity = nullptr;
-		const SlideBar* m_SlideBar = nullptr;
-
-		unique_ptr<TextLineSprite> m_Sprite = nullptr;
 	};
 
 	struct SettingsMenuAdjuster
