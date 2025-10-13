@@ -514,6 +514,11 @@ namespace BlastOff
 		m_Sprite->SetTexture(m_UnselectedTexture);
 	}
 
+	void Button::Enable()
+	{
+		m_IsEnabled = true;
+	}
+
 	void Button::Disable()
 	{
 		m_IsEnabled = false;
@@ -552,7 +557,7 @@ namespace BlastOff
 				{
 					m_InputManager->GetMouseButtonPressed(MOUSE_BUTTON_LEFT)
 				};
-				if (mousePressed && !m_JustEnabled)
+				if (mousePressed && !m_HasJustEnabled)
 					m_ClickCallback();
 			};
 
@@ -580,7 +585,7 @@ namespace BlastOff
 			checkForClick();
 		updateSprite();
 
-		m_JustEnabled = false;
+		m_HasJustEnabled = false;
 	}
 
 	void Button::Draw() const
@@ -658,7 +663,7 @@ namespace BlastOff
 			c_ClickedTexturePath,
 			imageTextureLoader,
 			Vector2f::Zero(),
-			c_EngineSize,
+			CenterMenuButton::c_EngineSize,
 			parent,
 			coordTransformer,
 			inputManager,
@@ -681,7 +686,6 @@ namespace BlastOff
 	}
 
 	const int YesButton::c_ButtonIndex = 0;
-	const Vector2f YesButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
 
 	const char* const YesButton::c_UnselectedTexturePath = 
 	{
@@ -696,9 +700,9 @@ namespace BlastOff
 		"ui/button/clicked/yes.png"
 	};
 
-	
-	NoButton::NoButton(
-		const Callback& noCallback,
+
+	ConfirmationMenuCancelButton::ConfirmationMenuCancelButton(
+		const Callback& cancelCallback,
 		ImageTextureLoader* const imageTextureLoader,
 		const Vector2f bottomRightCorner,
 		const Sprite* const parent,
@@ -707,13 +711,13 @@ namespace BlastOff
 		const ProgramConstants* const programConstants
 	) :
 		Button(
-			noCallback,
+			cancelCallback,
 			c_UnselectedTexturePath,
 			c_SelectedTexturePath,
 			c_ClickedTexturePath,
 			imageTextureLoader,
 			Vector2f::Zero(),
-			c_EngineSize,
+			CenterMenuButton::c_EngineSize,
 			parent,
 			coordTransformer,
 			inputManager,
@@ -735,8 +739,61 @@ namespace BlastOff
 		initializePosition();
 	}
 
-	const int NoButton::c_ButtonIndex = 1;
-	const Vector2f NoButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
+	const int ConfirmationMenuCancelButton::c_ButtonIndex = 1;
+
+	const char* const ConfirmationMenuCancelButton::c_UnselectedTexturePath = 
+	{
+		"ui/button/unselected/cancel.png"
+	};
+	const char* const ConfirmationMenuCancelButton::c_SelectedTexturePath = 
+	{
+		"ui/button/selected/cancel.png"
+	};
+	const char* const ConfirmationMenuCancelButton::c_ClickedTexturePath = 
+	{
+		"ui/button/clicked/cancel.png"
+	};
+
+	
+	NoButton::NoButton(
+		const Callback& noCallback,
+		ImageTextureLoader* const imageTextureLoader,
+		const Vector2f bottomRightCorner,
+		const Sprite* const parent,
+		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
+		const ProgramConstants* const programConstants
+	) :
+		Button(
+			noCallback,
+			c_UnselectedTexturePath,
+			c_SelectedTexturePath,
+			c_ClickedTexturePath,
+			imageTextureLoader,
+			Vector2f::Zero(),
+			CenterMenuButton::c_EngineSize,
+			parent,
+			coordTransformer,
+			inputManager,
+			programConstants
+		)
+	{
+		const auto initializePosition = 
+			[&, this]()
+			{
+				const Vector2f offset1 = CenterMenuButton::c_AdditionalOffset;
+				const Vector2f offset2 = 
+				{
+					CenterMenuButton::CalculateOffsetByIndex(c_ButtonIndex)
+				};
+				const Vector2f position = bottomRightCorner + offset1 + offset2;
+				m_Sprite->Move(position);
+			};
+
+		initializePosition();
+	}
+
+	const int NoButton::c_ButtonIndex = 2;
 
 	const char* const NoButton::c_UnselectedTexturePath = 
 	{
@@ -915,6 +972,11 @@ namespace BlastOff
 		return m_StartingPosition;
 	}
 
+	bool SlideState::HasJustFinished() const
+	{
+		return m_HasJustFinished;
+	}
+
 	void SlideState::Slide(const float waitInSeconds)
 	{
 		if (waitInSeconds <= 0)
@@ -932,7 +994,7 @@ namespace BlastOff
 
 	void SlideState::Update()
 	{
-		const auto updateSlidingOut =
+		const auto updateSliding =
 			[this]()
 			{
 				float progress = 
@@ -963,11 +1025,17 @@ namespace BlastOff
 					Slide();
 			};
 
+		m_HasJustFinished = false;
+
 		if (IsWaiting())
 			updateWaiting();
 
-		if (IsSlidingOut())
-			updateSlidingOut();
+		if (IsSliding())
+		{
+			updateSliding();
+			if (!IsSliding())
+				m_HasJustFinished = true;
+		}
 	}
 
 	bool SlideState::IsWaiting() const
@@ -975,7 +1043,7 @@ namespace BlastOff
 		return m_WaitTick >= 0;
 	}
 
-	bool SlideState::IsSlidingOut() const
+	bool SlideState::IsSliding() const
 	{
 		return m_SlideTick >= 0;
     }
@@ -1085,6 +1153,7 @@ namespace BlastOff
 		m_Backing->Update();
 		m_Message->Update();
 		m_YesButton->Update();
+		m_CancelButton->Update();
 		m_NoButton->Update();
 	}
 
@@ -1097,6 +1166,7 @@ namespace BlastOff
 		m_Backing->Draw();
 		m_Message->Draw();
 		m_YesButton->Draw();
+		m_CancelButton->Draw();
 		m_NoButton->Draw();
 	}
 
@@ -1115,6 +1185,7 @@ namespace BlastOff
 
 	ConfirmationDialogue::ConfirmationDialogue(
 		const Callback& yesCallback,
+		const Callback& cancelCallback,
 		const Callback& noCallback,
 		const char* const message,
 		const Vector2f enginePosition,
@@ -1195,6 +1266,15 @@ namespace BlastOff
 				};
 				m_YesButton = std::make_unique<YesButton>(
 					yesCallback,
+					imageTextureLoader,
+					bottomRightCorner,
+					m_Empty.get(),
+					coordTransformer,
+					inputManager,
+					programConstants
+				);
+				m_CancelButton = std::make_unique<ConfirmationMenuCancelButton>(
+					cancelCallback,
 					imageTextureLoader,
 					bottomRightCorner,
 					m_Empty.get(),
@@ -2153,6 +2233,7 @@ namespace BlastOff
 	
 	SettingsMenuConfirmationDialogue::SettingsMenuConfirmationDialogue(
 		const Callback& yesCallback,
+		const Callback& cancelCallback,
 		const Callback& noCallback,
 		const Sprite* const parent,
 		const Theme* const theme,
@@ -2165,6 +2246,7 @@ namespace BlastOff
 	) :
 		ConfirmationDialogue(
 			yesCallback,
+			cancelCallback,
 			noCallback,
 			c_Message,
 			c_EnginePosition,
@@ -2223,16 +2305,16 @@ namespace BlastOff
 			m_SlideState->SwapPositions();
 
 		m_SlideState->Slide(c_SlideWait);
+		m_IsSlidingOut = false;
 	}
 
 	void SettingsMenuConfirmationDialogue::Disable() 
 	{
-		ConfirmationDialogue::Disable();
-
 		if (m_SlideState->GetStartingPosition() == m_OffScreenPosition)
 			m_SlideState->SwapPositions();
 
 		m_SlideState->Slide(c_SlideWait);
+		m_IsSlidingOut = true;
 	}
 
 	void SettingsMenuConfirmationDialogue::Update()
@@ -2242,6 +2324,11 @@ namespace BlastOff
 
 		ConfirmationDialogue::Update();
 		m_SlideState->Update();
+		if (m_SlideState->HasJustFinished() && m_IsSlidingOut)
+		{
+			m_IsSlidingOut = false;
+			m_IsEnabled = false;
+		}
 	}
 
 
@@ -2655,6 +2742,12 @@ namespace BlastOff
 				m_ExitCallback();
 			};
 
+		const auto cancelCallback = 
+			[this]()
+			{
+				OnCancellingConfirmationDialogue();
+			};
+
 		const auto noCallback = 
 			[this]()
 			{
@@ -2666,6 +2759,7 @@ namespace BlastOff
 			{
 				m_ConfirmationDialogue = std::make_unique<ConfirmationDialogue>(
 					yesCallback,
+					cancelCallback,
 					noCallback,
 					m_Empty.get(),
 					&Theme::c_DarkTheme,
@@ -2702,6 +2796,15 @@ namespace BlastOff
 
 	void SettingsMenu::Update()
 	{
+		const auto fadeIn = 
+			[this]()
+			{
+				const float progress = 1 - (m_FadeInTick / c_MaxFadeInTick);
+				m_Opacity = progress;
+
+				m_FadeInTick -= m_ProgramConstants->GetTargetFrametime();
+			};
+
 		const auto fadeOut = 
 			[this]()
 			{
@@ -2711,7 +2814,9 @@ namespace BlastOff
 				m_FadeOutTick -= m_ProgramConstants->GetTargetFrametime();
 			};
 
-		if (IsFadingOut())
+		if (IsFadingIn())
+			fadeIn();
+		else if (IsFadingOut())
 			fadeOut();
 
 		for (Button* button : m_Buttons)
@@ -2744,6 +2849,51 @@ namespace BlastOff
 		m_ConfirmationDialogue->Draw();
 	}
 
+	void SettingsMenu::Apply()
+	{
+		const int windowHeight = m_WindowSizeAdjuster->GetValue();
+		m_Settings->ChangeWindowHeight(windowHeight);
+		m_WindowSizeAdjuster->OnApply(windowHeight);
+	}
+
+	void SettingsMenu::ExitSafely()
+	{
+		if (HasUnsavedChanges())
+		{
+			m_ConfirmationDialogue->Enable();
+			FadeOut();
+
+			for (Button* button : m_Buttons)
+				button->Disable();
+		}
+		else
+			m_ExitCallback();
+	}
+
+	void SettingsMenu::OnCancellingConfirmationDialogue()
+	{
+		m_ConfirmationDialogue->Disable();
+		FadeIn();
+
+		for (Button* button : m_Buttons)
+			button->Enable();
+	}
+
+	void SettingsMenu::FadeIn() 
+	{
+		m_FadeInTick = c_MaxFadeInTick;
+	}
+
+	void SettingsMenu::FadeOut() 
+	{
+		m_FadeOutTick = c_MaxFadeOutTick;
+	}
+
+	bool SettingsMenu::IsFadingIn() const
+	{
+		return m_FadeInTick >= 0;
+	}
+
 	bool SettingsMenu::IsFadingOut() const
 	{
 		return m_FadeOutTick >= 0;
@@ -2758,26 +2908,6 @@ namespace BlastOff
 		return false;
 	}
 
-	void SettingsMenu::ExitSafely()
-	{
-		if (HasUnsavedChanges())
-		{
-			m_ConfirmationDialogue->Enable();
-			m_FadeOutTick = c_MaxFadeOutTick;	
-
-			for (Button* button : m_Buttons)
-				button->Disable();
-		}
-		else
-			m_ExitCallback();
-	}
-
-	void SettingsMenu::Apply()
-	{
-		const int windowHeight = m_WindowSizeAdjuster->GetValue();
-		m_Settings->ChangeWindowHeight(windowHeight);
-		m_WindowSizeAdjuster->OnApply(windowHeight);
-	}
-
+	const float SettingsMenu::c_MaxFadeInTick = 1 / 4.0f;
 	const float SettingsMenu::c_MaxFadeOutTick = 1 / 4.0f;
 }

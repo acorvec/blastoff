@@ -224,6 +224,7 @@ namespace BlastOff
 		void UseUnselectedTexture();
 
 		virtual void Disable();
+		virtual void Enable();
 		virtual void UpdateOpacity();
 		virtual void Update();
 		virtual void Draw() const;
@@ -233,7 +234,7 @@ namespace BlastOff
 		bool m_ShouldShowClickedSprite = false;
 		bool m_HasBeenClicked = false;
 		bool m_IsEnabled = true;
-		bool m_JustEnabled = true;
+		bool m_HasJustEnabled = true;
 
 		Callback m_ClickCallback;
 		unique_ptr<ImageSprite> m_Sprite = nullptr;
@@ -276,8 +277,27 @@ namespace BlastOff
 
 	protected:
 		static const int c_ButtonIndex;
-		static const Vector2f c_EngineSize;
 		
+		static const char* const c_UnselectedTexturePath;
+		static const char* const c_SelectedTexturePath;
+		static const char* const c_ClickedTexturePath;
+	};
+
+	struct ConfirmationMenuCancelButton : public Button
+	{
+		ConfirmationMenuCancelButton(
+			const Callback& cancelCallback,
+			ImageTextureLoader* const imageTextureLoader,
+			const Vector2f bottomRightCorner,
+			const Sprite* const parent,
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+			const ProgramConstants* const programConstants
+		);
+
+	protected:
+		static const int c_ButtonIndex;
+
 		static const char* const c_UnselectedTexturePath;
 		static const char* const c_SelectedTexturePath;
 		static const char* const c_ClickedTexturePath;
@@ -297,7 +317,6 @@ namespace BlastOff
 
 	protected:
 		static const int c_ButtonIndex;
-		static const Vector2f c_EngineSize;
 		
 		static const char* const c_UnselectedTexturePath;
 		static const char* const c_SelectedTexturePath;
@@ -360,12 +379,14 @@ namespace BlastOff
 		);
 
 		Vector2f GetStartingPosition() const;
+		bool HasJustFinished() const;
 		
 		void Slide(const float waitInSeconds = 0);
 		void SwapPositions();
 		void Update();
 
 	protected:
+		bool m_HasJustFinished = false;
 		float m_MaxSlideTick = 0;
 		float m_SlideTick = c_DeactivatedTick;
 		float m_WaitTick = c_DeactivatedTick;
@@ -377,7 +398,7 @@ namespace BlastOff
 		Sprite* m_Sprite = nullptr;
 
 		bool IsWaiting() const;
-		bool IsSlidingOut() const;
+		bool IsSliding() const;
 	};
 
 	struct BackgroundTint
@@ -431,15 +452,17 @@ namespace BlastOff
 		unique_ptr<ThemedBacking> m_Backing = nullptr;
 		unique_ptr<TextSprite> m_Message = nullptr;
 		unique_ptr<Button> m_YesButton = nullptr;
+		unique_ptr<Button> m_CancelButton = nullptr;
 		unique_ptr<Button> m_NoButton = nullptr;
 
 		ConfirmationDialogue(
 			const Callback& yesCallback,
+			const Callback& cancelCallback,
 			const Callback& noCallback,
 			const char* const message,
 			const Vector2f enginePosition,
 			const Sprite* const parent,
-			const Theme* const backingTheme,
+			const Theme* const theme,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
 			const InputManager* const inputManager,
@@ -1151,6 +1174,7 @@ namespace BlastOff
 	{
 		SettingsMenuConfirmationDialogue(
 			const Callback& yesCallback,
+			const Callback& cancelCallback,
 			const Callback& noCallback,
 			const Sprite* const parent,
 			const Theme* const backingTheme,
@@ -1172,8 +1196,10 @@ namespace BlastOff
 		static const Vector2f c_EnginePosition;
 		static const char* const c_Message;
 
-		unique_ptr<SlideState> m_SlideState = nullptr;
+		bool m_IsSlidingOut = false;
 		Vector2f m_OffScreenPosition = Vector2f::Zero();
+
+		unique_ptr<SlideState> m_SlideState = nullptr;
 	};
 
 	template<
@@ -1395,15 +1421,23 @@ namespace BlastOff
 	private:
 		void Apply();
 		void ExitSafely();
+		void OnCancellingConfirmationDialogue();
+
+		void FadeIn();
+		void FadeOut();
 
 		bool IsFadingOut() const;
+		bool IsFadingIn() const;
+
 		bool HasUnsavedChanges() const;
 
 		static const float c_MaxFadeOutTick;
+		static const float c_MaxFadeInTick;
 
 		Callback m_ExitCallback;
 		float m_Opacity = 1;
 		float m_FadeOutTick = c_DeactivatedTick;
+		float m_FadeInTick = c_DeactivatedTick;
 	
 		Settings* m_Settings = nullptr;
 		const ProgramConstants* m_ProgramConstants = nullptr;
