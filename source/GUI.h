@@ -352,6 +352,8 @@ namespace BlastOff
 			ImageTextureLoader* const imageTextureLoader
 		);
 
+		float GetInnerBackingHeight() const;
+
 		Vector2f CalculateBottomRightCorner() const;
 		Vector2f GetEngineSize() const;
 
@@ -1080,14 +1082,16 @@ namespace BlastOff
 
 	struct SettingsMenuAdjuster
 	{
+		virtual bool HasUnsavedChanges() const = 0;
+
 		virtual float CalculateHeight() const = 0;
-		virtual Vector2f CalculateDimensions() const = 0;
+		virtual Vector2f CalculateSize() const = 0;
+
+		virtual void SetLocalPosition(const Vector2f position) = 0;
 
 		virtual void UpdateOpacity() = 0;
 		virtual void Update() = 0;
 		virtual void Draw() const = 0;
-
-		virtual bool HasUnsavedChanges() const = 0;
 
 		virtual ~SettingsMenuAdjuster()
 		{
@@ -1115,8 +1119,11 @@ namespace BlastOff
 		float GetValue() const;
 
 		bool HasUnsavedChanges() const override;
+		
 		float CalculateHeight() const override;
-		Vector2f CalculateDimensions() const override;
+		Vector2f CalculateSize() const override;
+
+		void SetLocalPosition(const Vector2f position) override;
 
 		void OnApply(const float newValue);
 		void UpdateOpacity() override;
@@ -1128,6 +1135,7 @@ namespace BlastOff
 		
 		const float* const m_ParentOpacity;
 
+		unique_ptr<Empty> m_Empty = nullptr;
 		unique_ptr<SlideBar> m_SlideBar = nullptr;
 		unique_ptr<Label> m_Label = nullptr;
 	};
@@ -1153,8 +1161,11 @@ namespace BlastOff
 		int GetValue() const;
 
 		bool HasUnsavedChanges() const override;
+
 		float CalculateHeight() const override;
-		Vector2f CalculateDimensions() const override;
+		Vector2f CalculateSize() const override;
+
+		void SetLocalPosition(const Vector2f position) override;
 
 		void OnApply(const int newValue);
 		void UpdateOpacity() override;
@@ -1230,6 +1241,8 @@ namespace BlastOff
 
 		static const float c_MaxFadeOutTick;
 		static const float c_MaxFadeInTick;
+
+		const Theme* c_BackingTheme = &Theme::c_DarkTheme;
 
 		Callback m_ExitCallback;
 		float m_Opacity = 1;

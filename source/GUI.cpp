@@ -910,6 +910,11 @@ namespace BlastOff
 		initializeOuterBacking();
 	}
 
+	float ThemedBacking::GetInnerBackingHeight() const
+	{
+		return m_InnerBackingFill->GetEngineSize().y;
+	}
+
 	Vector2f ThemedBacking::CalculateBottomRightCorner() const
 	{
 		const Vector2f backingSize = 
@@ -2792,16 +2797,23 @@ namespace BlastOff
 		const auto initializeObjects =	
 			[&, this]()
 			{
+				m_Empty = std::make_unique<Empty>(
+					Vector2f::Zero(),
+					coordTransformer,
+					programConstants
+				);
+				m_Empty->SetParent(parent);
+
 				m_SlideBar = std::make_unique<VolumeSlideBar>(
 					settings,
 					parentOpacity,
-					parent,
+					m_Empty.get(),
 					coordTransformer,
 					inputManager,
 					programConstants
 				);
 				m_Label = std::make_unique<Label>(
-					parent,
+					m_Empty.get(),
 					m_SlideBar.get(),
 					theme,
 					parentOpacity,
@@ -2812,7 +2824,15 @@ namespace BlastOff
 				);
 			};
 
+		const auto updatePosition = 
+			[&, this]()
+			{
+				const float height = CalculateHeight();
+				m_Empty->SetLocalPosition({ 0, -height / 4.0f });
+			};
+
 		initializeObjects();
+		updatePosition();
 
 		m_UnappliedValue = GetValue();
 	}
@@ -2829,12 +2849,20 @@ namespace BlastOff
 
 	float VolumeAdjuster::CalculateHeight() const
 	{
-		return 1;
+		const float bottom = m_SlideBar->GetBottomEdgePosition();
+		const float top = m_Label->GetTopEdgePosition();
+
+		return top - bottom;
 	}
 
-	Vector2f VolumeAdjuster::CalculateDimensions() const
+	Vector2f VolumeAdjuster::CalculateSize() const
 	{
 		return { m_SlideBar->GetWidth(), CalculateHeight() };
+	}
+
+	void VolumeAdjuster::SetLocalPosition(const Vector2f position)
+	{
+		m_Empty->SetLocalPosition(position);
 	}
 
 	void VolumeAdjuster::OnApply(const float newValue)
@@ -2844,11 +2872,12 @@ namespace BlastOff
 
 	void VolumeAdjuster::UpdateOpacity()
 	{
-		// todo
+		m_Empty->SetOpacity(*m_ParentOpacity);
 	}
 
 	void VolumeAdjuster::Update()
 	{
+		m_Empty->Update();
 		m_SlideBar->Update();
 		m_Label->Update();
 	}
@@ -2936,9 +2965,14 @@ namespace BlastOff
 		return top - bottom;
 	}
 
-	Vector2f WindowSizeAdjuster::CalculateDimensions() const
+	Vector2f WindowSizeAdjuster::CalculateSize() const
 	{
 		return { m_SlideBar->GetWidth(), CalculateHeight() };
+	}
+
+	void WindowSizeAdjuster::SetLocalPosition(const Vector2f position)
+	{
+		m_Empty->SetLocalPosition(position);
 	}
 
 	void WindowSizeAdjuster::OnApply(const int newValue) 
@@ -3181,7 +3215,7 @@ namespace BlastOff
 				m_VolumeAdjuster = std::make_unique<VolumeAdjuster>(
 					m_Settings,
 					&m_Opacity,
-					&Theme::c_DarkTheme,
+					c_BackingTheme,
 					m_Empty.get(),
 					coordTransformer,
 					textTextureLoader,
@@ -3193,7 +3227,7 @@ namespace BlastOff
 					m_Settings,
 					windowSizeIncrement,
 					&m_Opacity,
-					&Theme::c_DarkTheme,
+					c_BackingTheme,
 					m_Empty.get(),
 					coordTransformer,
 					textTextureLoader,
@@ -3201,6 +3235,12 @@ namespace BlastOff
 					programConstants,
 					font
 				);
+				
+				m_Adjusters = 
+				{ 
+					m_VolumeAdjuster.get(),
+					m_WindowSizeAdjuster.get()
+				};
 			};
 
 		const auto calculateSizeOfComponents = 
@@ -3208,18 +3248,14 @@ namespace BlastOff
 			{
 				// width = max width of every element
 				// height = sum of all components' sizes + margin
-				const array componentSizes = 
-				{
-					m_WindowSizeAdjuster->CalculateDimensions()
-				};
-				const Theme& backingTheme = Theme::c_DarkTheme;
 				const float startHeight = 
 				{
-					backingTheme.outerMargins.y * (componentSizes.size() - 1)
+					c_BackingTheme->innerMargins.y * m_Adjusters.size()
 				};
 				Vector2f result = { 0, startHeight };
-				for (const Vector2f size : componentSizes)
+				for (const Adjuster* adjuster : m_Adjusters)
 				{
+					const Vector2f size = adjuster->CalculateSize();
 					result.x = std::max(result.x, size.x);
 					result.y += size.y;
 				}
@@ -3232,13 +3268,33 @@ namespace BlastOff
 				const Vector2f innerSize = calculateSizeOfComponents();
 				m_Backing = std::make_unique<ThemedBacking>(
 					innerSize,
-					&Theme::c_DarkTheme,
+					c_BackingTheme,
 					m_Empty.get(),
 					&m_Opacity,
 					coordTransformer,
 					programConstants,
 					imageTextureLoader
 				);
+			};
+
+		const auto initializeAdjusterPositions = 
+			[this]()
+			{
+				// todo: the math in this function makes no sense
+				const float margins = c_BackingTheme->innerMargins.y;
+
+				float top = m_Backing->GetInnerBackingHeight() / 2.0f;
+				top -= margins;
+
+				for (size_t i = 0; i < m_Adjusters.size(); i++)
+				{
+					Adjuster* adjuster = m_Adjusters.at(i);
+					const float height = adjuster->CalculateHeight();
+					const float centerY = top - (height / 2.0f) - margins;
+					adjuster->SetLocalPosition({ 0, centerY });
+
+					top -= (height + (margins * 3 / 2.0f));
+				}
 			};
 
 		const auto applyCallback = 
@@ -3301,7 +3357,7 @@ namespace BlastOff
 					cancelCallback,
 					noCallback,
 					m_Empty.get(),
-					&Theme::c_DarkTheme,
+					c_BackingTheme,
 					coordTransformer,
 					programConstants,
 					inputManager,
@@ -3311,14 +3367,9 @@ namespace BlastOff
 				);
 			};
 
-		const auto initializeLists = 	
+		const auto initializeList = 	
 			[this]()
 			{
-				m_Adjusters = 
-				{ 
-					m_VolumeAdjuster.get(),
-					m_WindowSizeAdjuster.get()
-				};
 				m_Buttons = 
 				{
 					m_MuteButton.get(),
@@ -3332,9 +3383,10 @@ namespace BlastOff
 		initializeTopRightButtons();
 		initializeAdjusters();
 		initializeBacking();
+		initializeAdjusterPositions();
 		initializeCenterButtons();
 		initializeConfirmationDialogue();
-		initializeLists();
+		initializeList();
 	}
 
 	void SettingsMenu::Update()
@@ -3371,18 +3423,16 @@ namespace BlastOff
 			
 			m_Backing->UpdateOpacity();
 
-			// for (Adjuster* adjuster : m_Adjusters)
-			// 	adjuster->UpdateOpacity();
-			m_WindowSizeAdjuster->UpdateOpacity();
+			for (Adjuster* adjuster : m_Adjusters)
+				adjuster->UpdateOpacity();
 		}
 		else
 		{
 			m_Empty->Update();
 			m_Backing->Update();
 			
-			// for (Adjuster* adjuster : m_Adjusters)
-			// 	adjuster->Update();
-			m_WindowSizeAdjuster->Update();
+			for (Adjuster* adjuster : m_Adjusters)
+				adjuster->Update();
 
 			m_ConfirmationDialogue->Update();
 		}
@@ -3392,9 +3442,8 @@ namespace BlastOff
 	{
 		m_Backing->Draw();
 		
-		// for (const Adjuster* adjuster : m_Adjusters)
-		// 	adjuster->Draw();
-		m_WindowSizeAdjuster->Draw();
+		for (const Adjuster* adjuster : m_Adjusters)
+			adjuster->Draw();
 	
 		for (const Button* button : m_Buttons)
 			button->Draw();
