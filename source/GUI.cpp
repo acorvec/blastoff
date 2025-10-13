@@ -701,7 +701,7 @@ namespace BlastOff
 	};
 
 
-	ConfirmationMenuCancelButton::ConfirmationMenuCancelButton(
+	SettingsMenuCancelButton::SettingsMenuCancelButton(
 		const Callback& cancelCallback,
 		ImageTextureLoader* const imageTextureLoader,
 		const Vector2f bottomRightCorner,
@@ -739,17 +739,17 @@ namespace BlastOff
 		initializePosition();
 	}
 
-	const int ConfirmationMenuCancelButton::c_ButtonIndex = 1;
+	const int SettingsMenuCancelButton::c_ButtonIndex = 1;
 
-	const char* const ConfirmationMenuCancelButton::c_UnselectedTexturePath = 
+	const char* const SettingsMenuCancelButton::c_UnselectedTexturePath = 
 	{
 		"ui/button/unselected/cancel.png"
 	};
-	const char* const ConfirmationMenuCancelButton::c_SelectedTexturePath = 
+	const char* const SettingsMenuCancelButton::c_SelectedTexturePath = 
 	{
 		"ui/button/selected/cancel.png"
 	};
-	const char* const ConfirmationMenuCancelButton::c_ClickedTexturePath = 
+	const char* const SettingsMenuCancelButton::c_ClickedTexturePath = 
 	{
 		"ui/button/clicked/cancel.png"
 	};
@@ -1273,7 +1273,7 @@ namespace BlastOff
 					inputManager,
 					programConstants
 				);
-				m_CancelButton = std::make_unique<ConfirmationMenuCancelButton>(
+				m_CancelButton = std::make_unique<SettingsMenuCancelButton>(
 					cancelCallback,
 					imageTextureLoader,
 					bottomRightCorner,
@@ -2112,6 +2112,35 @@ namespace BlastOff
         m_ExitButton->Draw();
     }
 	
+
+	VolumeSlideBar::VolumeSlideBar(
+		Settings* const settings,
+		const float* const parentOpacity,
+		const Sprite* const parent,
+		const CoordinateTransformer* const coordTransformer,
+		const InputManager* const inputManager,
+		const ProgramConstants* const programConstants
+	) :
+		SettingsMenuSlideBar<float>(
+			c_EnginePosition,
+			parentOpacity,
+			GetMasterVolume(),
+			c_Minimum,
+			c_Maximum,
+			parent,
+			settings,
+			coordTransformer,
+			inputManager,
+			programConstants
+		)
+	{
+
+	}
+
+	const float VolumeSlideBar::c_Minimum = 0;
+	const float VolumeSlideBar::c_Maximum = 1;
+	const Vector2f VolumeSlideBar::c_EnginePosition = Vector2f::Zero();
+
 	
 	WindowSizeSlideBar::WindowSizeSlideBar(
 		Settings* const settings,
@@ -2157,6 +2186,85 @@ namespace BlastOff
 		);
 		return (int)roundf(unrounded);
 	}
+
+	
+	VolumeLabel::VolumeLabel(
+		const Sprite* parent,
+		const SlideBar* const slideBar,
+		const Theme* const theme,
+		const float* const parentOpacity,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		const Font* const font,
+		TextTextureLoader* const textureLoader
+	) :
+		m_SlideBar(slideBar),
+		m_ParentOpacity(parentOpacity)
+	{
+		m_Sprite = std::make_unique<TextLineSprite>(
+			c_EnginePosition,
+			theme->textColour,
+			c_FontSize,
+			coordTransformer,
+			programConstants,
+			textureLoader,
+			font
+		);
+		m_Sprite->SetParent(parent);
+	}
+
+	float VolumeLabel::GetTopEdgePosition() const
+	{
+		return m_Sprite->GetEdgePosition(Direction::Up);
+	}
+
+	void VolumeLabel::UpdateOpacity()
+	{
+		m_Sprite->SetOpacity(*m_ParentOpacity);
+	}
+
+	void VolumeLabel::Update() 
+	{
+		const auto updateMessage = 
+			[this]()
+			{
+				const float value = m_SlideBar->GetValue();
+				if (value != m_MostRecentValue)
+				{
+					const string message = CalculateMessage();
+					m_Sprite->SetMessage(message);
+
+					m_MostRecentValue = value;
+				}
+			};
+
+		updateMessage();
+
+		m_Sprite->SetOpacity(*m_ParentOpacity);
+		m_Sprite->Update();
+	}
+
+	void VolumeLabel::Draw() const
+	{
+		m_Sprite->Draw();
+	}
+
+	string VolumeLabel::FormatValue(const float value) 
+	{
+		const int rounded = (int)roundf(value * 100);
+		return std::format("{}%", rounded);
+	}
+
+	string VolumeLabel::CalculateMessage() const
+	{
+		const float windowSize = m_SlideBar->GetValue();
+		const string formattedValue = FormatValue(windowSize);
+		return std::format("{}: {}", c_BeginningOfMessage, formattedValue);
+	}
+
+	const float VolumeLabel::c_FontSize = 32;
+	const char* VolumeLabel::c_BeginningOfMessage = "Audio Volume";
+	const Vector2f VolumeLabel::c_EnginePosition = { 0, 2 / 5.0f };
 
 
 	WindowSizeLabel::WindowSizeLabel(
@@ -2220,10 +2328,17 @@ namespace BlastOff
 		m_Sprite->Draw();
 	}
 
+	string WindowSizeLabel::FormatValue(const float value)
+	{
+		const int rounded = (int)roundf(value);
+		return std::to_string(rounded);
+	}
+
 	string WindowSizeLabel::CalculateMessage() const
 	{
 		const float windowSize = m_SlideBar->GetValue();
-		return std::format("{}: {}", c_BeginningOfMessage, windowSize);
+		const string formattedValue = FormatValue(windowSize);
+		return std::format("{}: {}", c_BeginningOfMessage, formattedValue);
 	}
 
 	const float WindowSizeLabel::c_FontSize = 32;
@@ -2332,6 +2447,90 @@ namespace BlastOff
 	}
 
 
+	VolumeAdjuster::VolumeAdjuster(
+		Settings* const settings,
+		const float* parentOpacity,
+		const Theme* const theme,
+		const Sprite* const parent,
+		const CoordinateTransformer* const coordTransformer,
+		TextTextureLoader* const textTextureLoader,
+		const InputManager* const inputManager,
+		const ProgramConstants* const programConstants,
+		const Font* const font
+	) :
+		m_ParentOpacity(parentOpacity)
+	{
+		const auto initializeObjects =	
+			[&, this]()
+			{
+				m_SlideBar = std::make_unique<VolumeSlideBar>(
+					settings,
+					parentOpacity,
+					parent,
+					coordTransformer,
+					inputManager,
+					programConstants
+				);
+				m_Label = std::make_unique<Label>(
+					parent,
+					m_SlideBar.get(),
+					theme,
+					parentOpacity,
+					coordTransformer,
+					programConstants,
+					font,
+					textTextureLoader
+				);
+			};
+
+		initializeObjects();
+
+		m_UnappliedValue = GetValue();
+	}
+
+	float VolumeAdjuster::GetValue() const
+	{
+		return m_SlideBar->GetValue();
+	}
+
+	bool VolumeAdjuster::HasUnsavedChanges() const
+	{
+		return GetValue() != m_UnappliedValue;
+	}
+
+	float VolumeAdjuster::CalculateHeight() const
+	{
+		return 1;
+	}
+
+	Vector2f VolumeAdjuster::CalculateDimensions() const
+	{
+		return { m_SlideBar->GetWidth(), CalculateHeight() };
+	}
+
+	void VolumeAdjuster::OnApply(const float newValue)
+	{
+		m_UnappliedValue = newValue;
+	}
+
+	void VolumeAdjuster::UpdateOpacity()
+	{
+		// todo
+	}
+
+	void VolumeAdjuster::Update()
+	{
+		m_SlideBar->Update();
+		m_Label->Update();
+	}
+
+	void VolumeAdjuster::Draw() const
+	{
+		m_SlideBar->Draw();
+		m_Label->Draw();
+	}
+
+
 	WindowSizeAdjuster::WindowSizeAdjuster(
 		Settings* const settings,
 		const int windowSizeIncrement,
@@ -2395,6 +2594,11 @@ namespace BlastOff
 		return m_SlideBar->GetValue();
 	}
 
+	bool WindowSizeAdjuster::HasUnsavedChanges() const
+	{
+		return GetValue() != m_UnappliedValue;
+	}
+
 	float WindowSizeAdjuster::CalculateHeight() const
 	{
 		const float bottom = m_SlideBar->GetBottomEdgePosition();
@@ -2431,11 +2635,6 @@ namespace BlastOff
 	{
 		m_SlideBar->Draw();
 		m_Label->Draw();
-	}
-
-	bool WindowSizeAdjuster::HasUnsavedChanges() const
-	{
-		return GetValue() != m_UnappliedValue;
 	}
 
 
@@ -2647,9 +2846,20 @@ namespace BlastOff
 				);
 			};
 
-		const auto initializeWindowSizeAdjuster = 
+		const auto initializeAdjusters = 
 			[&, this]()
 			{
+				m_VolumeAdjuster = std::make_unique<VolumeAdjuster>(
+					m_Settings,
+					&m_Opacity,
+					&Theme::c_DarkTheme,
+					m_Empty.get(),
+					coordTransformer,
+					textTextureLoader,
+					inputManager,
+					programConstants,
+					font
+				);
 				m_WindowSizeAdjuster = std::make_unique<WindowSizeAdjuster>(
 					m_Settings,
 					windowSizeIncrement,
@@ -2775,7 +2985,11 @@ namespace BlastOff
 		const auto initializeLists = 	
 			[this]()
 			{
-				m_Adjusters = { m_WindowSizeAdjuster.get() };
+				m_Adjusters = 
+				{ 
+					m_VolumeAdjuster.get(),
+					m_WindowSizeAdjuster.get()
+				};
 				m_Buttons = 
 				{
 					m_MuteButton.get(),
@@ -2787,7 +3001,7 @@ namespace BlastOff
 
 		initializeEmpty();
 		initializeTopRightButtons();
-		initializeWindowSizeAdjuster();
+		initializeAdjusters();
 		initializeBacking();
 		initializeCenterButtons();
 		initializeConfirmationDialogue();
@@ -2825,15 +3039,22 @@ namespace BlastOff
 		if (m_ConfirmationDialogue->IsEnabled())
 		{
 			m_ConfirmationDialogue->Update();
-
+			
 			m_Backing->UpdateOpacity();
-			m_WindowSizeAdjuster->UpdateOpacity();
+
+			// for (Adjuster* adjuster : m_Adjusters)
+			// 	adjuster->UpdateOpacity();
+			m_VolumeAdjuster->UpdateOpacity();
 		}
 		else
 		{
 			m_Empty->Update();
 			m_Backing->Update();
-			m_WindowSizeAdjuster->Update();
+			
+			// for (Adjuster* adjuster : m_Adjusters)
+			// 	adjuster->Update();
+			m_VolumeAdjuster->Update();
+
 			m_ConfirmationDialogue->Update();
 		}
 	}
@@ -2841,7 +3062,10 @@ namespace BlastOff
 	void SettingsMenu::Draw() const
 	{
 		m_Backing->Draw();
-		m_WindowSizeAdjuster->Draw();
+		
+		// for (const Adjuster* adjuster : m_Adjusters)
+		// 	adjuster->Draw();
+		m_VolumeAdjuster->Draw();
 	
 		for (const Button* button : m_Buttons)
 			button->Draw();

@@ -283,9 +283,9 @@ namespace BlastOff
 		static const char* const c_ClickedTexturePath;
 	};
 
-	struct ConfirmationMenuCancelButton : public Button
+	struct SettingsMenuCancelButton : public Button
 	{
-		ConfirmationMenuCancelButton(
+		SettingsMenuCancelButton(
 			const Callback& cancelCallback,
 			ImageTextureLoader* const imageTextureLoader,
 			const Vector2f bottomRightCorner,
@@ -1271,6 +1271,23 @@ namespace BlastOff
 		Settings* m_Settings;
 	};
 
+	struct VolumeSlideBar : public SettingsMenuSlideBar<float>
+	{
+		VolumeSlideBar(
+			Settings* const settings,
+			const float* const parentOpacity,
+			const Sprite* const parent,
+			const CoordinateTransformer* const coordTransformer,
+			const InputManager* const inputManager,
+			const ProgramConstants* const programConstants
+		);
+
+	protected:
+		static const float c_Minimum;
+		static const float c_Maximum;
+		static const Vector2f c_EnginePosition;
+	};
+
 	struct WindowSizeSlideBar : public SettingsMenuSlideBar<int>
 	{
 		WindowSizeSlideBar(
@@ -1291,6 +1308,44 @@ namespace BlastOff
 			const Settings* const settings, 
 			const int windowSizeIncrement
 		) const;
+	};
+
+	struct VolumeLabel
+	{
+		using SlideBar = VolumeSlideBar;
+		
+		VolumeLabel(
+			const Sprite* parent,
+			const SlideBar* const slideBar,
+			const Theme* const theme,
+			const float* const parentOpacity,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			const Font* const font,
+			TextTextureLoader* const textureLoader
+		);
+
+		float GetTopEdgePosition() const;
+
+		void UpdateOpacity();
+		void Update();
+		void Draw() const;
+
+	private:
+		static string FormatValue(const float value);
+
+		string CalculateMessage() const;
+		
+		static const float c_FontSize;
+		static const char* c_BeginningOfMessage;
+		static const Vector2f c_EnginePosition;
+
+		float m_MostRecentValue = c_DeactivatedTracker;
+
+		const float* m_ParentOpacity = nullptr;
+		const SlideBar* m_SlideBar = nullptr;
+
+		unique_ptr<TextLineSprite> m_Sprite = nullptr;
 	};
 
 	struct WindowSizeLabel 
@@ -1315,6 +1370,8 @@ namespace BlastOff
 		void Draw() const;
 
 	private:
+		static string FormatValue(const float value);
+		
 		string CalculateMessage() const;
 		
 		static const float c_FontSize;
@@ -1331,7 +1388,56 @@ namespace BlastOff
 
 	struct SettingsMenuAdjuster
 	{
+		virtual float CalculateHeight() const = 0;
+		virtual Vector2f CalculateDimensions() const = 0;
+
+		virtual void UpdateOpacity() = 0;
+		virtual void Update() = 0;
+		virtual void Draw() const = 0;
+
 		virtual bool HasUnsavedChanges() const = 0;
+
+		virtual ~SettingsMenuAdjuster()
+		{
+
+		}
+	};
+
+	struct VolumeAdjuster : SettingsMenuAdjuster
+	{
+		using SlideBar = VolumeSlideBar;
+		using Label = VolumeLabel;
+		
+		VolumeAdjuster(
+			Settings* const settings,
+			const float* parentOpacity,
+			const Theme* const theme,
+			const Sprite* const parent,
+			const CoordinateTransformer* const coordTransformer,
+			TextTextureLoader* const textTextureLoader,
+			const InputManager* const inputManager,
+			const ProgramConstants* const programConstants,
+			const Font* const font
+		);
+
+		float GetValue() const;
+
+		bool HasUnsavedChanges() const override;
+		float CalculateHeight() const override;
+		Vector2f CalculateDimensions() const override;
+
+		void OnApply(const float newValue);
+		void UpdateOpacity() override;
+		void Update() override;
+		void Draw() const override;
+
+	private:
+		float m_UnappliedValue = 0;
+		
+		const float* const m_ParentOpacity;
+
+		unique_ptr<SlideBar> m_SlideBar = nullptr;
+		unique_ptr<Label> m_Label = nullptr;
 	};
 
 	struct WindowSizeAdjuster : SettingsMenuAdjuster
@@ -1354,15 +1460,14 @@ namespace BlastOff
 
 		int GetValue() const;
 
-		float CalculateHeight() const;
-		Vector2f CalculateDimensions() const;
+		bool HasUnsavedChanges() const override;
+		float CalculateHeight() const override;
+		Vector2f CalculateDimensions() const override;
 
 		void OnApply(const int newValue);
-		void UpdateOpacity();
-		void Update();
-		void Draw() const;
-
-		bool HasUnsavedChanges() const override;
+		void UpdateOpacity() override;
+		void Update() override;
+		void Draw() const override;
 
 	private:
 		int m_UnappliedValue = 0;
@@ -1442,6 +1547,7 @@ namespace BlastOff
 		Settings* m_Settings = nullptr;
 		const ProgramConstants* m_ProgramConstants = nullptr;
 
+		unique_ptr<VolumeAdjuster> m_VolumeAdjuster = nullptr;
 		unique_ptr<WindowSizeAdjuster> m_WindowSizeAdjuster = nullptr;
 
 		unique_ptr<Button> m_MuteButton = nullptr;
