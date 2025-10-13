@@ -223,6 +223,7 @@ namespace BlastOff
 		void SetParent(const Sprite* const parent);
 		void UseUnselectedTexture();
 
+		virtual void Disable();
 		virtual void UpdateOpacity();
 		virtual void Update();
 		virtual void Draw() const;
@@ -232,6 +233,7 @@ namespace BlastOff
 		bool m_ShouldShowClickedSprite = false;
 		bool m_HasBeenClicked = false;
 		bool m_IsEnabled = true;
+		bool m_JustEnabled = true;
 
 		Callback m_ClickCallback;
 		unique_ptr<ImageSprite> m_Sprite = nullptr;
@@ -357,7 +359,10 @@ namespace BlastOff
 			const ProgramConstants* const programConstants
 		);
 
+		Vector2f GetStartingPosition() const;
+		
 		void Slide(const float waitInSeconds = 0);
+		void SwapPositions();
 		void Update();
 
 	protected:
@@ -404,6 +409,8 @@ namespace BlastOff
 		bool IsEnabled() const;
 
 		virtual void Enable();
+		virtual void Disable();
+
 		virtual void Update();
 		void Draw() const;
 
@@ -427,6 +434,8 @@ namespace BlastOff
 		unique_ptr<Button> m_NoButton = nullptr;
 
 		ConfirmationDialogue(
+			const Callback& yesCallback,
+			const Callback& noCallback,
 			const char* const message,
 			const Vector2f enginePosition,
 			const Sprite* const parent,
@@ -1141,6 +1150,8 @@ namespace BlastOff
 	struct SettingsMenuConfirmationDialogue : public ConfirmationDialogue
 	{
 		SettingsMenuConfirmationDialogue(
+			const Callback& yesCallback,
+			const Callback& noCallback,
 			const Sprite* const parent,
 			const Theme* const backingTheme,
 			const CoordinateTransformer* const coordTransformer,
@@ -1152,15 +1163,17 @@ namespace BlastOff
 		);
 
 		void Enable() override;
+		void Disable() override;
 		void Update() override;
 
 	protected:
 		static const float c_MaxSlideInTick;
-		static const float c_SlideInWait;
+		static const float c_SlideWait;
 		static const Vector2f c_EnginePosition;
 		static const char* const c_Message;
 
 		unique_ptr<SlideState> m_SlideState = nullptr;
+		Vector2f m_OffScreenPosition = Vector2f::Zero();
 	};
 
 	template<
@@ -1313,11 +1326,12 @@ namespace BlastOff
 			const Font* const font
 		);
 
-		float GetValue() const;
+		int GetValue() const;
 
 		float CalculateHeight() const;
 		Vector2f CalculateDimensions() const;
 
+		void OnApply(const int newValue);
 		void UpdateOpacity();
 		void Update();
 		void Draw() const;
@@ -1325,7 +1339,7 @@ namespace BlastOff
 		bool HasUnsavedChanges() const override;
 
 	private:
-		float m_StartingValue = 0;
+		int m_UnappliedValue = 0;
 		
 		const float* m_ParentOpacity = nullptr;
 

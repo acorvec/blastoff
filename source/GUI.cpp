@@ -514,6 +514,11 @@ namespace BlastOff
 		m_Sprite->SetTexture(m_UnselectedTexture);
 	}
 
+	void Button::Disable()
+	{
+		m_IsEnabled = false;
+	}
+
 	void Button::UpdateOpacity()
 	{
 		if (m_ParentOpacity)
@@ -543,10 +548,12 @@ namespace BlastOff
 		const auto checkForClick =
 			[this]()
 			{
-				if (m_InputManager->GetMouseButtonPressed(MOUSE_BUTTON_LEFT))
+				const bool mousePressed = 
 				{
+					m_InputManager->GetMouseButtonPressed(MOUSE_BUTTON_LEFT)
+				};
+				if (mousePressed && !m_JustEnabled)
 					m_ClickCallback();
-				}
 			};
 
 		const auto updateSprite =
@@ -562,14 +569,18 @@ namespace BlastOff
 				m_Sprite->Update();
 			};
 
+		UseUnselectedTexture();
+		UpdateOpacity();
+		
 		if (!m_IsEnabled)
 			return;
 
-		UpdateOpacity();
 		updateSelection();
 		if (m_IsSelected)
 			checkForClick();
 		updateSprite();
+
+		m_JustEnabled = false;
 	}
 
 	void Button::Draw() const
@@ -899,6 +910,26 @@ namespace BlastOff
 
 	}
 
+	Vector2f SlideState::GetStartingPosition() const
+	{
+		return m_StartingPosition;
+	}
+
+	void SlideState::Slide(const float waitInSeconds)
+	{
+		if (waitInSeconds <= 0)
+			m_SlideTick = m_MaxSlideTick;
+		else
+			m_WaitTick = waitInSeconds;
+	}
+
+	void SlideState::SwapPositions()
+	{
+		const Vector2f temp = m_StartingPosition;
+		m_StartingPosition = m_EndingPosition;
+		m_EndingPosition = temp;
+	}
+
 	void SlideState::Update()
 	{
 		const auto updateSlidingOut =
@@ -937,14 +968,6 @@ namespace BlastOff
 
 		if (IsSlidingOut())
 			updateSlidingOut();
-	}
-
-	void SlideState::Slide(const float waitInSeconds)
-	{
-		if (waitInSeconds <= 0)
-			m_SlideTick = m_MaxSlideTick;
-		else
-			m_WaitTick = waitInSeconds;
 	}
 
 	bool SlideState::IsWaiting() const
@@ -1048,6 +1071,11 @@ namespace BlastOff
 		m_IsEnabled = true;
 	}
 
+	void ConfirmationDialogue::Disable()
+	{
+		m_IsEnabled = false;
+	}
+
 	void ConfirmationDialogue::Update()
 	{
 		if (!m_IsEnabled)
@@ -1086,6 +1114,8 @@ namespace BlastOff
 	const float ConfirmationDialogue::c_BackgroundTintSlideLength = 1 / 4.0f;
 
 	ConfirmationDialogue::ConfirmationDialogue(
+		const Callback& yesCallback,
+		const Callback& noCallback,
 		const char* const message,
 		const Vector2f enginePosition,
 		const Sprite* const parent,
@@ -1154,18 +1184,6 @@ namespace BlastOff
 					c_BackgroundTintSlideLength
 				);
 				m_BackgroundTint->Enable();
-			};
-
-		const auto yesCallback = 
-			[this]()
-			{
-
-			};
-
-		const auto noCallback = 
-			[this]()
-			{
-
 			};
 
 		const auto initializeButtons = 
@@ -2134,6 +2152,8 @@ namespace BlastOff
 
 	
 	SettingsMenuConfirmationDialogue::SettingsMenuConfirmationDialogue(
+		const Callback& yesCallback,
+		const Callback& noCallback,
 		const Sprite* const parent,
 		const Theme* const theme,
 		const CoordinateTransformer* const coordTransformer,
@@ -2144,6 +2164,8 @@ namespace BlastOff
 		ImageTextureLoader* const imageTextureLoader
 	) :
 		ConfirmationDialogue(
+			yesCallback,
+			noCallback,
 			c_Message,
 			c_EnginePosition,
 			parent,
@@ -2175,13 +2197,14 @@ namespace BlastOff
 					m_Empty.get(),
 					programConstants
 				);
+				m_OffScreenPosition = startPosition;
 			};
 
 		initializeSlideState();
 	}
 
 	const float SettingsMenuConfirmationDialogue::c_MaxSlideInTick = 1 / 4.0f;
-	const float SettingsMenuConfirmationDialogue::c_SlideInWait = 0;
+	const float SettingsMenuConfirmationDialogue::c_SlideWait = 0;
 	const char* const SettingsMenuConfirmationDialogue::c_Message = 
 	{
 		"You haven't saved yet!\n"
@@ -2196,7 +2219,20 @@ namespace BlastOff
 	{
 		ConfirmationDialogue::Enable();
 
-		m_SlideState->Slide(c_SlideInWait);
+		if (m_SlideState->GetStartingPosition() != m_OffScreenPosition)
+			m_SlideState->SwapPositions();
+
+		m_SlideState->Slide(c_SlideWait);
+	}
+
+	void SettingsMenuConfirmationDialogue::Disable() 
+	{
+		ConfirmationDialogue::Disable();
+
+		if (m_SlideState->GetStartingPosition() == m_OffScreenPosition)
+			m_SlideState->SwapPositions();
+
+		m_SlideState->Slide(c_SlideWait);
 	}
 
 	void SettingsMenuConfirmationDialogue::Update()
@@ -2264,10 +2300,10 @@ namespace BlastOff
 		initializeObjects();
 		updatePosition();
 		
-		m_StartingValue = GetValue();
+		m_UnappliedValue = GetValue();
 	}
 	
-	float WindowSizeAdjuster::GetValue() const
+	int WindowSizeAdjuster::GetValue() const
 	{
 		return m_SlideBar->GetValue();
 	}
@@ -2283,6 +2319,11 @@ namespace BlastOff
 	Vector2f WindowSizeAdjuster::CalculateDimensions() const
 	{
 		return { m_SlideBar->GetWidth(), CalculateHeight() };
+	}
+
+	void WindowSizeAdjuster::OnApply(const int newValue) 
+	{
+		m_UnappliedValue = newValue;
 	}
 
 	void WindowSizeAdjuster::UpdateOpacity()
@@ -2307,7 +2348,7 @@ namespace BlastOff
 
 	bool WindowSizeAdjuster::HasUnsavedChanges() const
 	{
-		return GetValue() != m_StartingValue;
+		return GetValue() != m_UnappliedValue;
 	}
 
 
@@ -2607,10 +2648,25 @@ namespace BlastOff
 				);
 			};
 
+		const auto yesCallback = 
+			[this]()
+			{
+				Apply();
+				m_ExitCallback();
+			};
+
+		const auto noCallback = 
+			[this]()
+			{
+				m_ExitCallback();
+			};
+
 		const auto initializeConfirmationDialogue = 
 			[&, this]()
 			{
 				m_ConfirmationDialogue = std::make_unique<ConfirmationDialogue>(
+					yesCallback,
+					noCallback,
 					m_Empty.get(),
 					&Theme::c_DarkTheme,
 					coordTransformer,
@@ -2658,24 +2714,18 @@ namespace BlastOff
 		if (IsFadingOut())
 			fadeOut();
 
+		for (Button* button : m_Buttons)
+			button->Update();
+
 		if (m_ConfirmationDialogue->IsEnabled())
 		{
 			m_ConfirmationDialogue->Update();
-
-			for (Button* button : m_Buttons)
-			{
-				button->UseUnselectedTexture();
-				button->UpdateOpacity();
-			}	
 
 			m_Backing->UpdateOpacity();
 			m_WindowSizeAdjuster->UpdateOpacity();
 		}
 		else
 		{
-			for (Button* button : m_Buttons)
-				button->Update();
-
 			m_Empty->Update();
 			m_Backing->Update();
 			m_WindowSizeAdjuster->Update();
@@ -2714,6 +2764,9 @@ namespace BlastOff
 		{
 			m_ConfirmationDialogue->Enable();
 			m_FadeOutTick = c_MaxFadeOutTick;	
+
+			for (Button* button : m_Buttons)
+				button->Disable();
 		}
 		else
 			m_ExitCallback();
@@ -2723,6 +2776,7 @@ namespace BlastOff
 	{
 		const int windowHeight = m_WindowSizeAdjuster->GetValue();
 		m_Settings->ChangeWindowHeight(windowHeight);
+		m_WindowSizeAdjuster->OnApply(windowHeight);
 	}
 
 	const float SettingsMenu::c_MaxFadeOutTick = 1 / 4.0f;
