@@ -1209,21 +1209,15 @@ namespace BlastOff
 	}
 
 
-	RoundedRectangleSprite::RoundedRectangleSprite(
+	ShapeSprite::ShapeSprite(
 		const Rect2f engineRect,
 		const Colour4i colour,
-		const float roundness,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
-		const optional<float> strokeWidth
+		const optional<float> strokeWidth 
 	) :
-		Sprite(
-			engineRect,
-			coordTransformer,
-			programConstants
-		),
-		m_Colour(colour),
-		m_Roundness(roundness)
+		Sprite(engineRect, coordTransformer, programConstants),
+		m_Colour(colour)
 	{
 		if (strokeWidth)
 		{
@@ -1234,9 +1228,88 @@ namespace BlastOff
 			m_Type = Type::FillOnly;
 	}
 
-	void RoundedRectangleSprite::SetColour(const Colour4i colour) 
+	void ShapeSprite::SetColour(const Colour4i colour) 
 	{
 		m_Colour = colour;
+	}
+
+	float ShapeSprite::CalculateScreenStrokeWidth() const
+	{
+		const float ppu = m_CoordTransformer->GetPixelsPerUnit();
+		return m_StrokeWidth * ppu;
+	}
+
+
+	RectangleSprite::RectangleSprite(
+		const Rect2f engineRect,
+		const Colour4i colour,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		const optional<float> strokeWidth 
+	) :
+		ShapeSprite(
+			engineRect,
+			colour,
+			coordTransformer,
+			programConstants,
+			strokeWidth
+		)
+	{
+
+	}
+
+	void RectangleSprite::Draw() const
+	{
+		const Rect2f realRect = CalculateRealRect();
+		const Rect2f drawRect = 
+		{
+			m_CoordTransformer->ToScreenCoordinates(realRect)
+		};
+		constexpr Vector2f origin = Vector2f::Zero();
+
+		switch (m_Type)
+		{
+			case Type::FillOnly:
+				DrawRectanglePro(
+					drawRect.ToRayRect2f(), 
+					origin.ToRayVector2f(), 
+					CalculateRealRotation(), 
+					m_Colour.ToRayColour()
+				);
+				break;
+
+			case Type::StrokeOnly:
+				DrawRectangleLinesEx(
+					drawRect.ToRayRect2f(), 
+					CalculateScreenStrokeWidth(), 
+					m_Colour.ToRayColour()
+				);
+				break;
+
+			default:
+				break;
+		}
+	}
+
+
+	RoundedRectangleSprite::RoundedRectangleSprite(
+		const Rect2f engineRect,
+		const Colour4i colour,
+		const float roundness,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		const optional<float> strokeWidth
+	) :
+		ShapeSprite(
+			engineRect,
+			colour,
+			coordTransformer,
+			programConstants,
+			strokeWidth
+		),
+		m_Roundness(roundness)
+	{
+		
 	}
 
 	void RoundedRectangleSprite::Draw() const
@@ -1256,6 +1329,7 @@ namespace BlastOff
 					c_Resolution,
 					m_Colour.ToRayColour()
 				);
+				break;
 
 			case Type::StrokeOnly:
 				DrawRectangleRoundedLinesEx(
@@ -1265,6 +1339,7 @@ namespace BlastOff
 					CalculateScreenStrokeWidth(),
 					m_Colour.ToRayColour()
 				);
+				break;
 
 			default:
 				break;
@@ -1272,10 +1347,4 @@ namespace BlastOff
 	}
 
 	const int RoundedRectangleSprite::c_Resolution = 10;
-
-	float RoundedRectangleSprite::CalculateScreenStrokeWidth() const
-	{
-		const float ppu = m_CoordTransformer->GetPixelsPerUnit();
-		return m_StrokeWidth * ppu;
-	}
 }

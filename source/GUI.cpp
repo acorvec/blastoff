@@ -751,99 +751,6 @@ namespace BlastOff
 		m_InnerBackingStroke->Draw();
 	}
 
-
-	bool ConfirmationDialogue::IsEnabled() const
-	{
-		return m_IsEnabled;
-	}
-
-	void ConfirmationDialogue::Enable()
-	{
-		m_IsEnabled = true;
-	}
-
-	void ConfirmationDialogue::Update()
-	{
-		if (!m_IsEnabled)
-			return;
-		
-		m_Backing->Update();
-		m_Message->Update();
-	}
-
-	void ConfirmationDialogue::Draw() const
-	{
-		if (!m_IsEnabled)
-			return;
-		
-		m_Backing->Draw();
-		m_Message->Draw();
-	}
-
-	const float ConfirmationDialogue::c_FontSize = 32;
-	const float ConfirmationDialogue::c_LineSpacing = 3 / 2.0f;
-
-	ConfirmationDialogue::ConfirmationDialogue(
-		const char* const message,
-		const Vector2f enginePosition,
-		const Sprite* const parent,
-		const Theme* const theme,
-		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConstants,
-		const InputManager* const inputManager,
-		const Font* const font,
-		TextTextureLoader* const textTextureLoader,
-		ImageTextureLoader* const imageTextureLoader
-	)
-	{
-		const auto initializeEmpty = 
-			[&, this]()
-			{
-				m_Empty = std::make_unique<Empty>(
-					enginePosition,
-					coordTransformer,
-					programConstants
-				);
-				m_Empty->SetParent(parent);
-			};
-
-		const auto initializeMessage = 
-			[&, this]()
-			{
-				constexpr Vector2f enginePosition = Vector2f::Zero();
-				m_Message = std::make_unique<TextSprite>(
-					enginePosition,
-					theme->textColour,
-					c_FontSize,
-					c_LineSpacing,
-					coordTransformer,
-					programConstants,
-					textTextureLoader,
-					font,
-					message,
-					m_Empty.get()
-				);
-			};
-
-		const auto initializeBacking = 
-			[&, this]()
-			{
-				const Vector2f messageSize = m_Message->CalculateEngineSize();
-				m_Backing = std::make_unique<ThemedBacking>(
-					messageSize,
-					theme,
-					m_Empty.get(),
-					coordTransformer,
-					programConstants,
-					imageTextureLoader
-				);
-			};
-
-		initializeEmpty();
-		initializeMessage();
-		initializeBacking();
-	}
-
 	
 	SlideState::SlideState(
 		const Vector2f startingPosition,
@@ -918,6 +825,206 @@ namespace BlastOff
 	{
 		return m_SlideTick >= 0;
     }
+
+
+	BackgroundTint::BackgroundTint(
+		const Sprite* const parent,
+		const Colour4i colour,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		const Direction slideDirection,
+		const float slideLength
+	)
+	{
+		const auto initializeSprite = 
+			[&, this]()
+			{
+				const Rect2f engineRect(
+					Vector2f::Zero(), 
+					coordTransformer->GetViewportSize()
+				);
+				m_Sprite = std::make_unique<RectangleSprite>(
+					engineRect,
+					colour,
+					coordTransformer,
+					programConstants
+				);
+				m_Sprite->SetParent(parent);
+			};
+
+		const auto initializeSlideState = 
+			[&, this]()
+			{
+				const Vector2f viewportSize = 
+				{
+					coordTransformer->GetViewportSize()
+				};
+				const Vector2f directionVector = 
+				{
+					DirectionToVector2f(Direction::Down)
+				};
+				const Vector2f startPosition = 
+				{
+					viewportSize * (-directionVector)
+				};
+				constexpr Vector2f endPosition = Vector2f::Zero();
+				m_SlideState = std::make_unique<SlideState>(
+					startPosition,
+					endPosition,
+					slideLength,
+					m_Sprite.get(),
+					programConstants
+				);
+				m_SlideState->Slide(c_SlideInWait);
+			};
+
+		initializeSprite();
+		initializeSlideState();
+	}
+
+	void BackgroundTint::Enable()
+	{
+		m_IsEnabled = true;
+	}
+
+	void BackgroundTint::Update()
+	{
+		if (!m_IsEnabled)
+			return;
+
+		m_Sprite->Update();
+		m_SlideState->Update();
+	}
+
+	void BackgroundTint::Draw() const
+	{
+		if (!m_IsEnabled)
+			return;
+
+		m_Sprite->Draw();
+	}
+
+	const float BackgroundTint::c_SlideInWait = 0;
+
+
+	bool ConfirmationDialogue::IsEnabled() const
+	{
+		return m_IsEnabled;
+	}
+
+	void ConfirmationDialogue::Enable()
+	{
+		m_IsEnabled = true;
+	}
+
+	void ConfirmationDialogue::Update()
+	{
+		if (!m_IsEnabled)
+			return;
+		
+		m_BackgroundTint->Update();
+		m_Backing->Update();
+		m_Message->Update();
+	}
+
+	void ConfirmationDialogue::Draw() const
+	{
+		if (!m_IsEnabled)
+			return;
+		
+		m_BackgroundTint->Draw();
+		m_Backing->Draw();
+		m_Message->Draw();
+	}
+
+	const float ConfirmationDialogue::c_FontSize = 32;
+	const float ConfirmationDialogue::c_LineSpacing = 3 / 2.0f;
+
+	const Colour4i ConfirmationDialogue::c_BackgroundTintColour = 
+	{ 
+		0, 0, 0, 0x40 
+	};
+	const Direction ConfirmationDialogue::c_BackgroundTintSlideDirection = 
+	{
+		Direction::Down
+	};
+	const float ConfirmationDialogue::c_BackgroundTintSlideLength = 1 / 4.0f;
+
+	ConfirmationDialogue::ConfirmationDialogue(
+		const char* const message,
+		const Vector2f enginePosition,
+		const Sprite* const parent,
+		const Theme* const theme,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		const InputManager* const inputManager,
+		const Font* const font,
+		TextTextureLoader* const textTextureLoader,
+		ImageTextureLoader* const imageTextureLoader
+	)
+	{
+		const auto initializeEmpty = 
+			[&, this]()
+			{
+				m_Empty = std::make_unique<Empty>(
+					enginePosition,
+					coordTransformer,
+					programConstants
+				);
+				m_Empty->SetParent(parent);
+			};
+
+		const auto initializeMessage = 
+			[&, this]()
+			{
+				constexpr Vector2f enginePosition = Vector2f::Zero();
+				m_Message = std::make_unique<TextSprite>(
+					enginePosition,
+					theme->textColour,
+					c_FontSize,
+					c_LineSpacing,
+					coordTransformer,
+					programConstants,
+					textTextureLoader,
+					font,
+					message,
+					m_Empty.get()
+				);
+			};
+
+		const auto initializeBacking = 
+			[&, this]()
+			{
+				const Vector2f messageSize = m_Message->CalculateEngineSize();
+				m_Backing = std::make_unique<ThemedBacking>(
+					messageSize,
+					theme,
+					m_Empty.get(),
+					coordTransformer,
+					programConstants,
+					imageTextureLoader
+				);
+			};
+
+		const auto initializeBackgroundTint = 
+			[&, this]()
+			{
+				m_BackgroundTint = std::make_unique<BackgroundTint>(
+					parent,
+					c_BackgroundTintColour,
+					coordTransformer,
+					programConstants,
+					c_BackgroundTintSlideDirection,
+					c_BackgroundTintSlideLength
+				);
+				m_BackgroundTint->Enable();
+			};
+
+		initializeEmpty();
+		initializeMessage();
+		initializeBacking();
+		initializeBackgroundTint();
+	}
 
 
 	const Vector2f TopRightButton::c_EngineSize = { 1 / 2.0f, 1 / 2.0f };
@@ -1959,7 +2066,8 @@ namespace BlastOff
 		const auto updatePosition = 
 			[&, this]()
 			{
-				m_Empty->SetLocalPosition({ 0, -m_Height / 4.0f });
+				const float height = CalculateHeight();
+				m_Empty->SetLocalPosition({ 0, -height / 4.0f });
 			};
 
 		initializeObjects();
@@ -2340,24 +2448,24 @@ namespace BlastOff
 		}
 		else
 		{
+			for (Button* button : m_Buttons)
+				button->Update();
+
 			m_Empty->Update();
 			m_Backing->Update();
-			m_MuteButton->Update();
-			m_TopRightExitButton->Update();
 			m_WindowSizeAdjuster->Update();
-			m_CenterSaveButton->Update();
-			m_CenterExitButton->Update();
+			m_ConfirmationDialogue->Update();
 		}
 	}
 
 	void SettingsMenu::Draw() const
 	{
 		m_Backing->Draw();
-		m_MuteButton->Draw();
-		m_TopRightExitButton->Draw();
 		m_WindowSizeAdjuster->Draw();
-		m_CenterSaveButton->Draw();
-		m_CenterExitButton->Draw();
+	
+		for (const Button* button : m_Buttons)
+			button->Draw();
+
 		m_ConfirmationDialogue->Draw();
 	}
 

@@ -385,7 +385,44 @@ namespace BlastOff
 		FillOnly
 	};
 
-	struct RoundedRectangleSprite : public Sprite
+	struct ShapeSprite : public Sprite
+	{
+		ShapeSprite(
+			const Rect2f engineRect,
+			const Colour4i colour,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			const optional<float> strokeWidth 
+		);
+
+		void SetColour(const Colour4i colour);
+
+		void Draw() const override = 0;
+
+	protected:
+		float CalculateScreenStrokeWidth() const;
+
+		using Type = ShapeSpriteType;
+
+		Type m_Type = Type::Invalid;
+		Colour4i m_Colour = c_White;
+		float m_StrokeWidth = 0;
+	};
+
+	struct RectangleSprite : public ShapeSprite
+	{
+		RectangleSprite(
+			const Rect2f engineRect,
+			const Colour4i colour,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			const optional<float> strokeWidth = std::nullopt
+		);
+
+		void Draw() const override;
+	};
+
+	struct RoundedRectangleSprite : public ShapeSprite
 	{
 		RoundedRectangleSprite(
 			const Rect2f engineRect,
@@ -396,20 +433,11 @@ namespace BlastOff
 			const optional<float> strokeWidth = std::nullopt
 		);
 
-		void SetColour(const Colour4i colour);
-
 		void Draw() const override;
 
 	protected:
-		using Type = ShapeSpriteType;
-
 		static const int c_Resolution;
 
-		Type m_Type = Type::Invalid;
-		Colour4i m_Colour = c_White;
 		float m_Roundness = 0;
-		float m_StrokeWidth = 0;
-
-		float CalculateScreenStrokeWidth() const;
 	};
 }

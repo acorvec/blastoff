@@ -937,6 +937,27 @@ namespace BlastOff
 		return Lerp(a.ToVector2f(), b.ToVector2f(), t);
 	}
 
+	constexpr Vector2f DirectionToVector2f(const Direction direction)
+	{
+		switch (direction)
+		{
+			case Direction::Up:
+				return Vector2f::Up();
+
+			case Direction::Down:
+				return Vector2f::Down();
+
+			case Direction::Left:
+				return Vector2f::Left();
+
+			case Direction::Right:
+				return Vector2f::Right();
+
+			default:
+				return Vector2f::Zero();
+		}
+	}
+
 	inline static constexpr Colour4i c_White = Colour4i(0xFF);
 	inline static constexpr Colour4i c_Black = Colour4i(0x00);
 	inline static constexpr Colour4i c_Grey = Colour4i(0x7f);

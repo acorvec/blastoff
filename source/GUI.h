@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Settings.h"
 #include "raylib.h"
+#include <optional>
 
 namespace BlastOff
 {
@@ -325,6 +326,67 @@ namespace BlastOff
 		bool IsSlidingOut() const;
 	};
 
+	struct BackgroundTint
+	{
+		BackgroundTint(
+			const Sprite* const parent,
+			const Colour4i colour,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			const Direction slideDirection,
+			const float slideLength
+		);
+
+		void Enable();
+		void Update();
+		void Draw() const;
+
+	private:
+		static const float c_SlideInWait;
+
+		bool m_IsEnabled = false;
+	
+		unique_ptr<RectangleSprite> m_Sprite = nullptr;
+		unique_ptr<SlideState> m_SlideState = nullptr;
+	};
+
+	struct ConfirmationDialogue
+	{
+		bool IsEnabled() const;
+
+		virtual void Enable();
+		virtual void Update();
+		void Draw() const;
+
+	protected:
+		static const float c_FontSize;
+		static const float c_LineSpacing;
+
+		static const Colour4i c_BackgroundTintColour;
+		static const Direction c_BackgroundTintSlideDirection;
+		static const float c_BackgroundTintSlideLength;
+		
+		bool m_IsEnabled = false;
+		
+		unique_ptr<Empty> m_Empty = nullptr;
+		unique_ptr<BackgroundTint> m_BackgroundTint = nullptr;
+		unique_ptr<ThemedBacking> m_Backing = nullptr;
+		unique_ptr<TextSprite> m_Message = nullptr;
+
+		ConfirmationDialogue(
+			const char* const message,
+			const Vector2f enginePosition,
+			const Sprite* const parent,
+			const Theme* const backingTheme,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			const InputManager* const inputManager,
+			const Font* const font,
+			TextTextureLoader* const textTextureLoader,
+			ImageTextureLoader* const imageTextureLoader
+		);
+	};
+
 	struct TopRightButton
 	{
 		static const Vector2f c_Margins;
@@ -549,38 +611,6 @@ namespace BlastOff
 		static const char* const c_UnselectedTexturePath;
 		static const char* const c_SelectedTexturePath;
 		static const char* const c_ClickedTexturePath;		
-	};
-
-	struct ConfirmationDialogue
-	{
-		bool IsEnabled() const;
-
-		virtual void Enable();
-		virtual void Update();
-		void Draw() const;
-
-	protected:
-		static const float c_FontSize;
-		static const float c_LineSpacing;
-
-		bool m_IsEnabled = false;
-		
-		unique_ptr<Empty> m_Empty = nullptr;
-		unique_ptr<ThemedBacking> m_Backing = nullptr;
-		unique_ptr<TextSprite> m_Message = nullptr;
-
-		ConfirmationDialogue(
-			const char* const message,
-			const Vector2f enginePosition,
-			const Sprite* const parent,
-			const Theme* const backingTheme,
-			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConstants,
-			const InputManager* const inputManager,
-			const Font* const font,
-			TextTextureLoader* const textTextureLoader,
-			ImageTextureLoader* const imageTextureLoader
-		);
 	};
 
 	struct GameEndMenu
@@ -1218,7 +1248,6 @@ namespace BlastOff
 		bool HasUnsavedChanges() const override;
 
 	private:
-		float m_Height = 0;
 		float m_StartingValue = 0;
 	
 		unique_ptr<Empty> m_Empty = nullptr;
