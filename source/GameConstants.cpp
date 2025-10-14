@@ -6,8 +6,6 @@ namespace BlastOff
 		m_LoadingScreenShown(true),
 		m_AmountOfLowClouds(30),
 		m_AmountOfHighClouds(30),
-		m_AmountOfFuelPowerups(10),
-		m_AmountOfSpeedPowerups(10),
 		m_CameraYOffset(-2 / 3.0f),
 		m_WorldBoundHeight(512),
 		m_CragWidthMultiplier(2),
@@ -65,16 +63,6 @@ namespace BlastOff
 	size_t GameConstants::GetAmountOfHighClouds() const
 	{
 		return m_AmountOfHighClouds;
-	}
-
-	size_t GameConstants::GetAmountOfFuelPowerups() const
-	{
-		return m_AmountOfFuelPowerups;
-	}
-
-	size_t GameConstants::GetAmountOfSpeedPowerups() const
-	{
-		return m_AmountOfSpeedPowerups;
 	}
 
 #if COMPILE_CONFIG_DEBUG

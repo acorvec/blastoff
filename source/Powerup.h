@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Enums.h"
+#include "ProgramConstants.h"
 #include "Utils.h"
 #include "Graphics.h"
 #include "Player.h"
@@ -63,12 +63,15 @@ namespace BlastOff
 
 		bool CollideWithPlayer() const override;
 		void OnCollection() override;
+		
+		static const size_t c_Count;
 
 	private:
 		static const char* const c_TexturePath;
 
 		static const float c_MaxCollectionTick;
 		static const float c_OscillationScale;
+		static const float c_EnergyAmount;
 		static const Vector2f c_DefaultEngineSize;
 	};
 
@@ -84,12 +87,38 @@ namespace BlastOff
 
 		bool CollideWithPlayer() const override;
 		void OnCollection() override;
+		
+		static const size_t c_Count;
 	
 	private:
 		static const char* const c_TexturePath;
 
 		static const float c_MaxCollectionTick;
 		static const float c_OscillationScale;
+		static const float c_EnergyAmount;
+		static const Vector2f c_DefaultEngineSize;
+	};
+
+	struct DownforcePowerup : public Powerup
+	{
+		DownforcePowerup(
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			Player* const player,
+			ImageTextureLoader* const imageTextureLoader,
+			const Vector2f enginePosition
+		);
+
+		bool CollideWithPlayer() const override;
+		void OnCollection() override;
+		
+		static const size_t c_Count;
+
+	private:
+		static const char* const c_TexturePath;
+		static const float c_MaxCollectionTick;
+		static const float c_OscillationScale;
+		static const float c_ForceAmount;
 		static const Vector2f c_DefaultEngineSize;
 	};
 }

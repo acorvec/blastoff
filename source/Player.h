@@ -23,7 +23,6 @@ namespace BlastOff
 		float GetGroundedThreshold() const;
 		float GetSpeedupMultiplier() const;
 		float GetRunningOnFumesThreshold() const;
-		float GetRefuelAmount() const;
 
 	private:
 		int m_RegularSmoothingFrames;
@@ -36,7 +35,6 @@ namespace BlastOff
 		float m_GroundedThreshold;
 		float m_SpeedupMultiplier;
 		float m_RunningOnFumesThreshold;
-		float m_RefuelAmount;
 	};
 
 	struct Player
@@ -68,8 +66,9 @@ namespace BlastOff
 		void TeleportToY(const float yPosition);
 		void EmptyFuel();
 
-		void Refuel();
-		void RefillSpeedup();
+		void Refuel(const float amount);
+		void RefillSpeedup(const float amount);
+		void AddToVelocity(const Vector2f amount);
 
 		Rect2f GetEngineRect() const;
 		float GetEdgePosition(const Direction side) const;

@@ -4,6 +4,7 @@
 #include "Graphics.h"
 #include "Logging.h"
 #include "Player.h"
+#include "Powerup.h"
 
 #include <memory>
 
@@ -463,56 +464,57 @@ namespace BlastOff
 			};
 
 		const auto initializePowerupVector =
-			[&](const size_t length, auto& vector)
+			[&](const size_t length, auto& vector, size_t* totalLength)
 			{
 				vector.reserve(length);
 
 				for (size_t index = 0; index < length; index++)
 					initializePowerup(index, length, vector);
+
+				*totalLength += length;
 			};
 
-		const auto initializeSpeedupPowerups =
-			[&]()
+		const auto registerPowerupVector =
+			[this](auto& vector)
 			{
-				const size_t length =
-				{
-					c_Constants.GetAmountOfSpeedPowerups()
-				};
-				initializePowerupVector(length, m_SpeedUpPowerups);
-			};
-
-		const auto initializeFuelUpPowerups =
-			[&]()
-			{
-				const size_t length =
-				{
-					c_Constants.GetAmountOfFuelPowerups()
-				};
-				initializePowerupVector(length, m_FuelUpPowerups);
-			};
-
-		const auto initializeAllPowerupsVector =
-			[this]()
-			{
-				const size_t totalLength =
-				{
-					m_SpeedUpPowerups.size() + m_FuelUpPowerups.size()
-				};
-				m_AllPowerups.reserve(totalLength);
-
-				for (Powerup& powerup : m_SpeedUpPowerups)
-					m_AllPowerups.push_back(&powerup);
-				for (Powerup& powerup : m_FuelUpPowerups)
+				for (Powerup& powerup : vector)
 					m_AllPowerups.push_back(&powerup);
 			};
 
 		const auto initializePowerups =
 			[&]()
 			{
-				initializeSpeedupPowerups();
-				initializeFuelUpPowerups();
+				size_t totalLength = 0;
+				{
+					const size_t length = SpeedUpPowerup::c_Count;
+					initializePowerupVector(
+						length, 
+						m_SpeedUpPowerups, 
+						&totalLength
+					);
+				}
+				{
+					const size_t length = FuelUpPowerup::c_Count;
+					initializePowerupVector(
+						length, 
+						m_FuelUpPowerups, 
+						&totalLength
+					);
+				}
+				{
+					const size_t length = DownforcePowerup::c_Count;
+					initializePowerupVector(
+						length, 
+						m_DownforcePowerups, 
+						&totalLength
+					);
+				}
 
-				initializeAllPowerupsVector();
+				m_AllPowerups.reserve(totalLength);
+
+				registerPowerupVector(m_SpeedUpPowerups);
+				registerPowerupVector(m_FuelUpPowerups);
+				registerPowerupVector(m_DownforcePowerups);
 			};
 
 		const auto initializeGUIBars =

@@ -20,8 +20,6 @@ namespace BlastOff
 
 		size_t GetAmountOfLowClouds() const;
 		size_t GetAmountOfHighClouds() const;
-		size_t GetAmountOfFuelPowerups() const;
-		size_t GetAmountOfSpeedPowerups() const;
 
 #if COMPILE_CONFIG_DEBUG
 		int GetPlayerFreezeKey() const;
@@ -40,8 +38,6 @@ namespace BlastOff
 
 		size_t m_AmountOfLowClouds;
 		size_t m_AmountOfHighClouds;
-		size_t m_AmountOfFuelPowerups;
-		size_t m_AmountOfSpeedPowerups;
 
 #if COMPILE_CONFIG_DEBUG
 		int m_PlayerFreezeKey = 0;

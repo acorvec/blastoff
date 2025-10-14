@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Utils.h"
 
 namespace BlastOff
 {
@@ -9,8 +10,7 @@ namespace BlastOff
 		m_TerminalVelocity(20),
 		m_GroundedThreshold(1),
 		m_SpeedupMultiplier(3 / 2.0f),
-		m_RunningOnFumesThreshold(2),
-		m_RefuelAmount(2 / 3.0f)
+		m_RunningOnFumesThreshold(2)
 	{
 		m_RegularSmoothingFrames = (int)roundf(10 * targetFramerate / 60);
 		m_RotationSmoothingFrames = (int)roundf(5 * targetFramerate / 60);
@@ -59,11 +59,6 @@ namespace BlastOff
 	float PlayerConfig::GetRunningOnFumesThreshold() const 
 	{ 
 		return m_RunningOnFumesThreshold; 
-	}
-
-	float PlayerConfig::GetRefuelAmount() const 
-	{ 
-		return m_RefuelAmount; 
 	}
 
 
@@ -677,17 +672,21 @@ namespace BlastOff
 		m_CurrentFuel = 0;
 	}
 
-	void Player::Refuel()
+	void Player::Refuel(const float amount)
 	{
-		const float refuelAmount = m_Config->GetRefuelAmount() * m_MaximumFuel;
-		m_CurrentFuel += refuelAmount;
-
+		m_CurrentFuel += amount * m_MaximumFuel;
 		m_CurrentFuel = fminf(m_CurrentFuel, m_MaximumFuel);
 	}
 
-	void Player::RefillSpeedup()
+	void Player::RefillSpeedup(const float amount)
 	{
-		m_SpeedupTick = m_MaxSpeedupTick;
+		m_SpeedupTick += amount * m_MaxSpeedupTick;
+		m_SpeedupTick = fminf(m_SpeedupTick, m_MaxSpeedupTick);
+	}
+
+	void Player::AddToVelocity(const Vector2f amount)
+	{
+		m_Velocity += amount;
 	}
 
 	Rect2f Player::GetEngineRect() const

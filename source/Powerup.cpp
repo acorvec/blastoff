@@ -163,16 +163,19 @@ namespace BlastOff
 	{
 		Powerup::OnCollection();
 
-		m_Player->RefillSpeedup();
+		m_Player->RefillSpeedup(c_EnergyAmount);
 	}
+
+	const size_t SpeedUpPowerup::c_Count = 10;
 
 	const char* const SpeedUpPowerup::c_TexturePath = 
 	{
-		"powerup/speedupPowerup.png"
+		"powerup/downforcePowerup.png"
 	};
 
 	const float SpeedUpPowerup::c_MaxCollectionTick = 0.5f;
 	const float SpeedUpPowerup::c_OscillationScale = 10;
+	const float SpeedUpPowerup::c_EnergyAmount = 1;
 	const Vector2f SpeedUpPowerup::c_DefaultEngineSize = { 1, 1 };
 
 
@@ -207,8 +210,10 @@ namespace BlastOff
 	{
 		Powerup::OnCollection();
 
-		m_Player->Refuel();
+		m_Player->Refuel(c_EnergyAmount);
 	}
+
+	const size_t FuelUpPowerup::c_Count = 10;
 
 	const char* const FuelUpPowerup::c_TexturePath = 
 	{
@@ -217,5 +222,54 @@ namespace BlastOff
 
 	const float FuelUpPowerup::c_MaxCollectionTick = 0.5f;
 	const float FuelUpPowerup::c_OscillationScale = 10;
+	const float FuelUpPowerup::c_EnergyAmount = 2 / 3.0f;
 	const Vector2f FuelUpPowerup::c_DefaultEngineSize = { 1, 1 };
+
+
+	DownforcePowerup::DownforcePowerup(
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		Player* const player,
+		ImageTextureLoader* const imageTextureLoader,
+		const Vector2f enginePosition
+	) :
+		Powerup(
+			coordTransformer,
+			programConstants,
+			player,
+			imageTextureLoader,
+			enginePosition,
+			c_TexturePath,
+			c_MaxCollectionTick,
+			c_OscillationScale,
+			c_DefaultEngineSize
+		)
+	{
+
+	}
+
+	bool DownforcePowerup::CollideWithPlayer() const
+	{
+		return CircleCollideWithPlayer();
+	}
+
+	void DownforcePowerup::OnCollection()
+	{
+		Powerup::OnCollection();
+
+		const Vector2f totalForce = Vector2f::Down() * c_ForceAmount;
+		m_Player->AddToVelocity(totalForce);
+	}	
+
+	const size_t DownforcePowerup::c_Count = 10;
+
+	const char* const DownforcePowerup::c_TexturePath = 
+	{
+		"powerup/fuelupPowerup.png"
+	};
+
+	const float DownforcePowerup::c_MaxCollectionTick = 0.5f;
+	const float DownforcePowerup::c_OscillationScale = 10;
+	const float DownforcePowerup::c_ForceAmount = 10;
+	const Vector2f DownforcePowerup::c_DefaultEngineSize = { 1, 1 };
 }

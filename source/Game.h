@@ -57,6 +57,7 @@ namespace BlastOff
 
 		vector<SpeedUpPowerup> m_SpeedUpPowerups = {};
 		vector<FuelUpPowerup> m_FuelUpPowerups = {};
+		vector<DownforcePowerup> m_DownforcePowerups = {};
 
 		vector<LowCloud> m_LowClouds = {};
 		vector<HighCloud> m_HighClouds = {};
