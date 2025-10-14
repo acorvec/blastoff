@@ -578,6 +578,8 @@ namespace BlastOff
 		const RayRect2f convertedDrawRect = drawRect.ToRayRect2f();
 
 		const CornerColours cornerColours = calculateCornerColours();
+
+#if !COMPILE_CONFIG_TESTING
 		DrawRectangleGradientEx(
 			convertedDrawRect,
 			cornerColours.topLeft.ToRayColour(),
@@ -585,6 +587,7 @@ namespace BlastOff
 			cornerColours.bottomRight.ToRayColour(),
 			cornerColours.topRight.ToRayColour()
 		);
+#endif
 	}
 
 
@@ -834,6 +837,7 @@ namespace BlastOff
 		const Vector2f drawOrigin = drawRect.GetSize() / 2.0f;
 		drawRect = drawRect.Translate(drawOrigin);
 
+#if !COMPILE_CONFIG_TESTING
 		DrawTexturePro(
 			*m_Texture,
 			sourceRect.ToRayRect2f(),
@@ -842,6 +846,7 @@ namespace BlastOff
 			CalculateRealRotation(),
 			drawTint.ToRayColour()
 		);
+#endif
 	}
 	
 	Vector2f ImageSprite::CalculateRealPosition() const
@@ -1280,20 +1285,24 @@ namespace BlastOff
 		switch (m_Type)
 		{
 			case Type::FillOnly:
+#if !COMPILE_CONFIG_TESTING
 				DrawRectanglePro(
 					drawRect.ToRayRect2f(), 
 					origin.ToRayVector2f(), 
 					CalculateRealRotation(), 
 					realColour.ToRayColour()
 				);
+#endif
 				break;
 
 			case Type::StrokeOnly:
+#if !COMPILE_CONFIG_TESTING
 				DrawRectangleLinesEx(
 					drawRect.ToRayRect2f(), 
 					CalculateScreenStrokeWidth(), 
 					realColour.ToRayColour()
 				);
+#endif
 				break;
 
 			default:
@@ -1335,15 +1344,18 @@ namespace BlastOff
 		switch (m_Type)
 		{
 			case Type::FillOnly:
+#if !COMPILE_CONFIG_TESTING
 				DrawRectangleRounded(
 					drawRect.ToRayRect2f(),
 					m_Roundness,
 					c_Resolution,
 					realColour.ToRayColour()
 				);
+#endif
 				break;
 
 			case Type::StrokeOnly:
+#if !COMPILE_CONFIG_TESTING
 				DrawRectangleRoundedLinesEx(
 					drawRect.ToRayRect2f(),
 					m_Roundness,
@@ -1351,6 +1363,7 @@ namespace BlastOff
 					CalculateScreenStrokeWidth(),
 					realColour.ToRayColour()
 				);
+#endif
 				break;
 
 			default:

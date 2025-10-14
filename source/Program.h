@@ -10,6 +10,7 @@
 #include "Sound.h"
 #include "Enums.h"
 #include "Settings.h"
+#include <chrono>
 
 namespace BlastOff
 {
@@ -56,6 +57,8 @@ namespace BlastOff
         unique_ptr<Cutscene> m_Cutscene = nullptr;
 		unique_ptr<MainMenu> m_MainMenu = nullptr;
 		unique_ptr<SettingsMenu> m_SettingsMenu = nullptr;
+
+		time_point<high_resolution_clock> m_FrameStartTime = high_resolution_clock::now();
 
 #if COMPILE_CONFIG_DEBUG
 		int m_MostRecentFramerateSet = 0;

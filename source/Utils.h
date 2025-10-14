@@ -10,6 +10,7 @@
 #include <functional>
 #include <cstdint>
 #include <expected>
+#include <chrono>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -44,6 +45,8 @@ namespace BlastOff
 	using std::vector, std::array;
 	using std::function;
 	using std::unordered_map, std::map;
+
+	using namespace std::chrono;
 
 	using byte = uint8_t;
 

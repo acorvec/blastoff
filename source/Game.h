@@ -1,5 +1,7 @@
 #pragma once
 
+#include <deque>
+
 #include "Utils.h"
 #include "Graphics.h"
 #include "Player.h"
@@ -27,6 +29,16 @@ namespace BlastOff
 
 		virtual void Update();
 		virtual void Draw() const;
+
+		static uint64_t GetWinCount() 
+		{
+			return m_WinCount;
+		}
+
+		static uint64_t GetLossCount()
+		{
+			return m_LossCount;
+		}
 
 	private:		
 		CoordinateTransformer* m_CoordTransformer = nullptr;
@@ -70,6 +82,11 @@ namespace BlastOff
 
 		ImageTextureLoader* m_ImageTextureLoader = nullptr;
 		TextTextureLoader* m_TextTextureLoader = nullptr;
+
+#if COMPILE_CONFIG_DEBUG
+		static inline uint64_t m_WinCount = 0;
+		static inline uint64_t m_LossCount = 0;
+#endif
 
 		virtual void ChooseOutcome(const Outcome outcome);
 		void FinishConstruction(

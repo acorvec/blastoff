@@ -7,6 +7,7 @@
 #include "Powerup.h"
 
 #include <memory>
+#include <sys/types.h>
 
 namespace BlastOff
 {
@@ -247,6 +248,30 @@ namespace BlastOff
 	void Game::ChooseOutcome(const Outcome outcome)
 	{
 		m_Outcome = outcome;
+
+#if COMPILE_CONFIG_DEBUG
+		const auto getCounter = 
+			[&, this]() -> uint64_t*
+			{
+				switch (outcome)
+				{
+					case Outcome::Winner:
+						Logging::Log("game won");
+						return &m_WinCount;
+
+					case Outcome::Loser:
+						Logging::Log("game lost");
+						return &m_LossCount;
+
+					default:
+						return nullptr;
+				}
+			};
+
+		uint64_t* const counter = getCounter();
+		if (counter)
+			(*counter)++;
+#endif
 	}
 
 	void Game::FinishConstruction(

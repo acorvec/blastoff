@@ -7,6 +7,7 @@
 #include "Settings.h"
 #include "raylib.h"
 
+#include <chrono>
 #include <memory>
 #include <stdexcept>
 
@@ -189,12 +190,32 @@ namespace BlastOff
 				m_Settings->SaveToDefaultPath();
 			};
 
+		const auto printGameOutcomeStatistics = 
+			[this]()
+			{
+				const uint64_t winCount = Game::GetWinCount();
+				const uint64_t lossCount = Game::GetLossCount();
+
+				if (!(winCount + lossCount))
+					return;
+
+				const float ratio = winCount / (float)(winCount + lossCount);
+				
+				std::print("\n");
+				std::println("Win count: {}", winCount);
+				std::println("Loss count: {}", lossCount);
+				std::print("\n");
+				std::println("Win percentage = {}%", ratio);
+				std::print("\n");
+			};
+
 		if (IsAudioDeviceReady())
 			CloseAudioDevice();
 
 		if (m_Font.texture.id)
 			UnloadFont(m_Font);
 
+		printGameOutcomeStatistics();
 		writeSettingsFile();
 	}
 
@@ -287,7 +308,7 @@ namespace BlastOff
 				const int fastModeKey = c_Config.GetFastModeKey();
 				const int slowModeKey = c_Config.GetSlowModeKey();
 
-				if (IsKeyDown(fastModeKey))
+				if (!IsKeyDown(fastModeKey))
 					activateFastMode();
 				else if (IsKeyDown(slowModeKey))
 					activateSlowMode();
@@ -402,6 +423,22 @@ namespace BlastOff
 				m_PendingStateChange = std::nullopt;
 			};
 
+		const auto printFrametimeStatistics = 
+			[this]()
+			{
+				const auto end = high_resolution_clock::now();
+				const auto duration = end - m_FrameStartTime;
+				m_FrameStartTime = high_resolution_clock::now();
+
+				const float ns = duration_cast<nanoseconds>(duration).count();
+				const float secs = ns / powf(10, 9);
+				const float ratio = c_Config.GetTargetFrametime() / secs;
+
+				// std::printf("frametime: %f ms\n", secs * 1'000.0f);
+				// std::printf("ratio: %fx\n", ratio);
+				// std::printf("\n");
+			};
+
 		if (m_PendingStateChange)
 			handleStateChange();
 
@@ -421,6 +458,8 @@ namespace BlastOff
 
 		if (WindowShouldClose())
 			m_IsRunning = false;
+
+		printFrametimeStatistics();
 	}
 
 	bool Program::ShouldShowCutscene() const

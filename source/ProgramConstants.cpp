@@ -32,8 +32,8 @@ namespace BlastOff
 			m_SlowModeKey = KEY_TWO;
 
 			m_NormalModeMultiplier = 1;
-			m_FastModeMultiplier = 1 / 6.0f;
-			m_SlowModeMultiplier = 6;
+			m_SlowModeMultiplier = 1 / 6.0f;
+			m_FastModeMultiplier = 100;
 #endif
 	}
 
