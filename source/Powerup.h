@@ -118,7 +118,7 @@ namespace BlastOff
 		static const char* const c_TexturePath;
 		static const float c_MaxCollectionTick;
 		static const float c_OscillationScale;
-		static const float c_ForceAmount;
+		static const float c_ForceMultiplier;
 		static const Vector2f c_DefaultEngineSize;
 	};
 }

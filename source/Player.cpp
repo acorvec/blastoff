@@ -684,9 +684,9 @@ namespace BlastOff
 		m_SpeedupTick = fminf(m_SpeedupTick, m_MaxSpeedupTick);
 	}
 
-	void Player::AddToVelocity(const Vector2f amount)
+	void Player::MultiplyVelocity(const float multiplier)
 	{
-		m_Velocity += amount;
+		m_Velocity *= multiplier;
 	}
 
 	Rect2f Player::GetEngineRect() const

@@ -170,7 +170,7 @@ namespace BlastOff
 
 	const char* const SpeedUpPowerup::c_TexturePath = 
 	{
-		"powerup/downforcePowerup.png"
+		"powerup/speedupPowerup.png"
 	};
 
 	const float SpeedUpPowerup::c_MaxCollectionTick = 0.5f;
@@ -257,19 +257,18 @@ namespace BlastOff
 	{
 		Powerup::OnCollection();
 
-		const Vector2f totalForce = Vector2f::Down() * c_ForceAmount;
-		m_Player->AddToVelocity(totalForce);
+		m_Player->MultiplyVelocity(c_ForceMultiplier);
 	}	
 
-	const size_t DownforcePowerup::c_Count = 10;
+	const size_t DownforcePowerup::c_Count = 5;
 
 	const char* const DownforcePowerup::c_TexturePath = 
 	{
-		"powerup/fuelupPowerup.png"
+		"powerup/downforcePowerup.png"
 	};
 
 	const float DownforcePowerup::c_MaxCollectionTick = 0.5f;
 	const float DownforcePowerup::c_OscillationScale = 10;
-	const float DownforcePowerup::c_ForceAmount = 10;
+	const float DownforcePowerup::c_ForceMultiplier = 1 / 4.0f;
 	const Vector2f DownforcePowerup::c_DefaultEngineSize = { 1, 1 };
 }

@@ -68,7 +68,7 @@ namespace BlastOff
 
 		void Refuel(const float amount);
 		void RefillSpeedup(const float amount);
-		void AddToVelocity(const Vector2f amount);
+		void MultiplyVelocity(const float multiplier);
 
 		Rect2f GetEngineRect() const;
 		float GetEdgePosition(const Direction side) const;
