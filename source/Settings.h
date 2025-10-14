@@ -38,7 +38,11 @@ namespace BlastOff
         Vector2i GetWindowPosition() const;
         Vector2i GetWindowSize() const;
 
+        void MuteOrUnmute();
+        void ChangeVolume(const float volume);
         void ChangeWindowHeight(const int windowHeight);
+
+        void ApplyVolume() const;
 
         void UpdateWindowPosition(const Vector2i windowPosition);
         void SaveToDefaultPath() const;
@@ -66,6 +70,7 @@ namespace BlastOff
 
         static unique_ptr<Settings> LoadFromDefaultPath
             (const Vector2f aspectRatio);
+
         Reflectable ToReflectable() const;
     };
 }

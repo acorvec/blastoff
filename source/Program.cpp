@@ -248,6 +248,13 @@ namespace BlastOff
 				}
 			};
 
+		const auto updateMutedField = 
+			[this]()
+			{
+				m_IsMuted = m_Settings->GetAudioVolume() == 0;
+				m_IsMuted |= m_Settings->IsAudioMuted();
+			};
+
 #if COMPILE_CONFIG_DEBUG
 		const auto activateFastMode =
 			[&, this]()
@@ -306,6 +313,9 @@ namespace BlastOff
 		if (controlQEnabled)
 			updateControlQ();
 
+		m_Settings->ApplyVolume();
+		updateMutedField();
+			
 #if COMPILE_CONFIG_DEBUG
 		if (c_Config.GetDebugToolsEnabled())
 			updateSpeedKeys();
@@ -391,7 +401,7 @@ namespace BlastOff
 				m_State = *m_PendingStateChange;
 				m_PendingStateChange = std::nullopt;
 			};
-			
+
 		if (m_PendingStateChange)
 			handleStateChange();
 
@@ -422,12 +432,7 @@ namespace BlastOff
 
 	void Program::MuteOrUnmute()
 	{
-		m_IsMuted = !m_IsMuted;
-
-		if (m_IsMuted)
-			SetMasterVolume(0);
-		else
-			SetMasterVolume(1);
+		m_Settings->MuteOrUnmute();
 	}
 
 	int Program::CalculateNormalFramerate() const

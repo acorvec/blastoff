@@ -2476,14 +2476,15 @@ namespace BlastOff
 		SettingsMenuSlideBar(
 			c_EnginePosition,
 			parentOpacity,
-			GetMasterVolume(),
+			settings->GetAudioVolume(),
 			c_Minimum,
 			c_Maximum,
 			parent,
 			settings,
 			coordTransformer,
 			inputManager,
-			programConstants
+			programConstants,
+			c_StepSize
 		)
 	{
 
@@ -2491,6 +2492,7 @@ namespace BlastOff
 
 	const float VolumeSlideBar::c_Minimum = 0;
 	const float VolumeSlideBar::c_Maximum = 1;
+	const float VolumeSlideBar::c_StepSize = 1 / 100.0f;
 	const Vector2f VolumeSlideBar::c_EnginePosition = Vector2f::Zero();
 
 	
@@ -2978,7 +2980,7 @@ namespace BlastOff
 		m_Empty->SetLocalPosition(position);
 	}
 
-	void WindowSizeAdjuster::OnApply(const int newValue) 
+	void WindowSizeAdjuster::OnApply(const float newValue) 
 	{
 		m_UnappliedValue = newValue;
 	}
@@ -3457,8 +3459,12 @@ namespace BlastOff
 
 	void SettingsMenu::Apply()
 	{
-		const int windowHeight = m_WindowSizeAdjuster->GetValue();
-		m_Settings->ChangeWindowHeight(windowHeight);
+		const float volume = m_VolumeAdjuster->GetValue();
+		m_Settings->ChangeVolume(volume);
+		m_VolumeAdjuster->OnApply(volume);
+
+		const float windowHeight = m_WindowSizeAdjuster->GetValue();
+		m_Settings->ChangeWindowHeight((int)windowHeight);
 		m_WindowSizeAdjuster->OnApply(windowHeight);
 	}
 

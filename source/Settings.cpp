@@ -50,6 +50,29 @@ namespace BlastOff
         return m_WindowSize;
     }
 
+    void Settings::MuteOrUnmute() 
+    {
+        m_AudioIsMuted = !m_AudioIsMuted;
+		ApplyVolume();
+    }
+
+    void Settings::ChangeVolume(const float volume)
+    {
+        if (volume != m_AudioVolume)
+        {
+            m_AudioVolume = volume;
+            ApplyVolume();
+        }
+    }
+
+    void Settings::ApplyVolume() const
+    {
+        if (m_AudioIsMuted)
+			SetMasterVolume(0);
+        else
+			SetMasterVolume(m_AudioVolume);
+    }
+
     void Settings::ChangeWindowHeight(const int windowHeight)
     {
         if (windowHeight != m_WindowSize.y)
@@ -146,6 +169,8 @@ namespace BlastOff
 
         calculateWindowSize();
         calculateWindowPosition();
+
+        ApplyVolume();
     }
 
     Settings::Settings(

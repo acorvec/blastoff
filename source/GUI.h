@@ -981,6 +981,7 @@ namespace BlastOff
 	protected:
 		static const float c_Minimum;
 		static const float c_Maximum;
+		static const float c_StepSize;
 		static const Vector2f c_EnginePosition;
 	};
 
@@ -1167,13 +1168,13 @@ namespace BlastOff
 
 		void SetLocalPosition(const Vector2f position) override;
 
-		void OnApply(const int newValue);
+		void OnApply(const float newValue);
 		void UpdateOpacity() override;
 		void Update() override;
 		void Draw() const override;
 
 	private:
-		int m_UnappliedValue = 0;
+		float m_UnappliedValue = 0;
 		
 		const float* m_ParentOpacity = nullptr;
 
