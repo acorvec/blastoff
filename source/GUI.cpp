@@ -1,6 +1,7 @@
 #include "GUI.h"
 #include "Enums.h"
 #include "Graphics.h"
+#include "OperatingSystem.h"
 #include "Player.h"
 #include "ProgramConstants.h"
 #include "Utils.h"
@@ -2593,7 +2594,7 @@ namespace BlastOff
 
 		updateMessage();
 
-		m_Sprite->SetOpacity(*m_ParentOpacity);
+		UpdateOpacity();
 		m_Sprite->Update();
 	}
 
@@ -2873,6 +2874,8 @@ namespace BlastOff
 	void VolumeAdjuster::UpdateOpacity()
 	{
 		m_Empty->SetOpacity(*m_ParentOpacity);
+		m_SlideBar->UpdateOpacity();
+		m_Label->UpdateOpacity();
 	}
 
 	void VolumeAdjuster::Update()
@@ -3419,12 +3422,13 @@ namespace BlastOff
 
 		if (m_ConfirmationDialogue->IsEnabled())
 		{
-			m_ConfirmationDialogue->Update();
-			
+			m_Empty->Update();
 			m_Backing->UpdateOpacity();
 
 			for (Adjuster* adjuster : m_Adjusters)
 				adjuster->UpdateOpacity();
+
+			m_ConfirmationDialogue->Update();
 		}
 		else
 		{
