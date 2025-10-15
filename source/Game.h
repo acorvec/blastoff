@@ -50,7 +50,20 @@ namespace BlastOff
 		using Outcome = GameOutcome;
 		using EndMenu = GameEndMenu;
 
+		virtual void ChooseOutcome(const Outcome outcome);
+		void FinishConstruction(
+			CoordinateTransformer* const coordTransformer,
+			CameraEmpty* const cameraEmpty,
+			unique_ptr<InputManager> inputManager
+		);
+
+		float GetWorldEdge(const Direction side) const;
+		bool LosingConditionsAreSatisfied() const;
+
 		static const inline Constants c_Constants;
+
+		static inline uint64_t m_WinCount = 0;
+		static inline uint64_t m_LossCount = 0;
 
 		unique_ptr<InputManager> m_InputManager = nullptr;
 
@@ -82,21 +95,6 @@ namespace BlastOff
 
 		ImageTextureLoader* m_ImageTextureLoader = nullptr;
 		TextTextureLoader* m_TextTextureLoader = nullptr;
-
-#if COMPILE_CONFIG_DEBUG
-		static inline uint64_t m_WinCount = 0;
-		static inline uint64_t m_LossCount = 0;
-#endif
-
-		virtual void ChooseOutcome(const Outcome outcome);
-		void FinishConstruction(
-			CoordinateTransformer* const coordTransformer,
-			CameraEmpty* const cameraEmpty,
-			unique_ptr<InputManager> inputManager
-		);
-
-		float GetWorldEdge(const Direction side) const;
-		bool LosingConditionsAreSatisfied() const;
 	};
 
 	struct PlayableGame : public Game
@@ -160,11 +158,11 @@ namespace BlastOff
 		const CameraEmpty* GetCameraEmpty() const;
 
 	protected:
+		bool ResetTimerIsActive() const;
+		
 		static const float c_MaxResetTick;
 		float m_ResetTick = c_DeactivatedTick;
 
 		Callback m_ResetCallback;
-
-		bool ResetTimerIsActive() const;
 	};
 }

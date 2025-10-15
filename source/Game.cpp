@@ -249,7 +249,6 @@ namespace BlastOff
 	{
 		m_Outcome = outcome;
 
-#if COMPILE_CONFIG_DEBUG
 		const auto getCounter = 
 			[&, this]() -> uint64_t*
 			{
@@ -268,10 +267,27 @@ namespace BlastOff
 				}
 			};
 
+		const auto printOutcomeStatistics = 
+			[this]()
+			{
+				if (!(m_WinCount + m_LossCount))
+					return;
+
+				const float ratio = m_WinCount / (float)(m_WinCount + m_LossCount);
+				
+				std::print("\n");
+				std::println("Win count: {}", m_WinCount);
+				std::println("Loss count: {}", m_LossCount);
+				std::print("\n");
+				std::println("Win percentage = {}%", ratio * 100);
+				std::print("\n");
+			};
+
 		uint64_t* const counter = getCounter();
 		if (counter)
 			(*counter)++;
-#endif
+
+		printOutcomeStatistics();
 	}
 
 	void Game::FinishConstruction(

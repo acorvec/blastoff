@@ -190,32 +190,12 @@ namespace BlastOff
 				m_Settings->SaveToDefaultPath();
 			};
 
-		const auto printGameOutcomeStatistics = 
-			[this]()
-			{
-				const uint64_t winCount = Game::GetWinCount();
-				const uint64_t lossCount = Game::GetLossCount();
-
-				if (!(winCount + lossCount))
-					return;
-
-				const float ratio = winCount / (float)(winCount + lossCount);
-				
-				std::print("\n");
-				std::println("Win count: {}", winCount);
-				std::println("Loss count: {}", lossCount);
-				std::print("\n");
-				std::println("Win percentage = {}%", ratio);
-				std::print("\n");
-			};
-
 		if (IsAudioDeviceReady())
 			CloseAudioDevice();
 
 		if (m_Font.texture.id)
 			UnloadFont(m_Font);
 
-		printGameOutcomeStatistics();
 		writeSettingsFile();
 	}
 
@@ -458,8 +438,6 @@ namespace BlastOff
 
 		if (WindowShouldClose())
 			m_IsRunning = false;
-
-		printFrametimeStatistics();
 	}
 
 	bool Program::ShouldShowCutscene() const
