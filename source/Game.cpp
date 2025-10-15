@@ -283,6 +283,10 @@ namespace BlastOff
 				std::println("Win percentage = {}%", ratio * 100);
 				std::print("\n");
 			};
+	
+		constexpr int spaces = 10;
+		for (int i = 0; i < spaces; i++)
+			std::print("\n");
 
 		uint64_t* const counter = getCounter();
 		if (counter)

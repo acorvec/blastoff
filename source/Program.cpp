@@ -10,7 +10,6 @@
 
 #include <chrono>
 #include <memory>
-#include <stdexcept>
 
 namespace BlastOff
 {

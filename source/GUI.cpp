@@ -12,7 +12,6 @@
 #include <cmath>
 #include <format>
 #include <memory>
-#include <stdexcept>
 
 namespace BlastOff
 {

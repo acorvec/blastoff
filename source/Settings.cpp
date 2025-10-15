@@ -6,7 +6,6 @@
 #include <glaze/json/prettify.hpp>
 #include <raylib.h>
 #include <fstream>
-#include <stdexcept>
 
 namespace BlastOff
 {

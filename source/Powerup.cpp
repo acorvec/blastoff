@@ -263,7 +263,7 @@ namespace BlastOff
 		m_Player->MultiplyVelocity(c_ForceMultiplier);
 	}	
 
-	const size_t DownforcePowerup::c_Count = 5;
+	const size_t DownforcePowerup::c_Count = 7;
 
 	const char* const DownforcePowerup::c_TexturePath = 
 	{

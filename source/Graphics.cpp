@@ -7,7 +7,6 @@
 #include "raylib.h"
 
 #include <memory>
-#include <stdexcept>
 
 namespace BlastOff
 {
