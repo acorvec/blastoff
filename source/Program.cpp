@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Graphics.h"
 #include "Logging.h"
+#include "OperatingSystem.h"
 #include "ProgramConstants.h"
 #include "Settings.h"
 #include "raylib.h"
@@ -244,7 +245,8 @@ namespace BlastOff
 							"Program::Update() failed: "
 							"Invalid value of m_State enum."
 						};
-						throw std::runtime_error(message);
+						Logging::Log(message);
+						BreakProgram();
 					}
 				}
 			};
@@ -349,7 +351,8 @@ namespace BlastOff
 							"Program::Draw() failed: "
 							"Invalid value of m_State enum."
 						};
-						throw std::runtime_error(message);
+						Logging::Log(message);
+						BreakProgram();
 					}
 				}
 			};
@@ -387,10 +390,13 @@ namespace BlastOff
 						break;
 
 					default:
-						throw std::runtime_error(
+						const char* const message =
+						{
 							"Program::Update() failed: "
 							"Invalid value of ProgramState enum."
-						);
+						};
+						Logging::Log(message);
+						BreakProgram();
 				}
 			};
 

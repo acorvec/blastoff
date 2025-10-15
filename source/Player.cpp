@@ -1,5 +1,7 @@
 #include "Player.h"
+#include "OperatingSystem.h"
 #include "Utils.h"
+#include "Logging.h"
 
 namespace BlastOff
 {
@@ -324,7 +326,8 @@ namespace BlastOff
 					{
 						"Rect2f::GetEdge(const Direction side) failed."
 					};
-					throw std::runtime_error(message);
+					Logging::Log(message);
+					BreakProgram();
 				}
 				return *result;
 			};
@@ -368,26 +371,30 @@ namespace BlastOff
 				const Vector2f size = m_Spaceship->GetEngineSize();
 				switch (edge.side)
 				{
-				case Direction::Up:
-					return edge.position + (size.y / 2.0f);
+					case Direction::Up:
+						return edge.position + (size.y / 2.0f);
 
-				case Direction::Down:
-					return edge.position - (size.y / 2.0f);
+					case Direction::Down:
+						return edge.position - (size.y / 2.0f);
 
-				case Direction::Left:
-					return edge.position - (size.x / 2.0f);
+					case Direction::Left:
+						return edge.position - (size.x / 2.0f);
 
-				case Direction::Right:
-					return edge.position + (size.x / 2.0f);
+					case Direction::Right:
+						return edge.position + (size.x / 2.0f);
 
-				default:
-					const char* const message =
+					default:
 					{
-						"Player::Update(): "
-						"invalid value of Edge2f parameter: "
-						"invalid member \"side\"."
-					};
-					throw std::runtime_error(message);
+						const char* const message =
+						{
+							"Player::Update(): "
+							"invalid value of Edge2f parameter: "
+							"invalid member \"side\"."
+						};
+						Logging::Log(message);
+						BreakProgram();
+						return 0;
+					}
 				}
 			};
 
@@ -708,7 +715,8 @@ namespace BlastOff
 				"Rect2f::GetEdgePosition"
 				"(" + DirectionToString(side) + ") failed."
 			};
-			throw std::runtime_error(message);
+			Logging::Log(message.c_str());
+			BreakProgram();
 		}
 		return *result;
 	}

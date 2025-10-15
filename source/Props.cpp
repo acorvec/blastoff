@@ -1,4 +1,5 @@
 #include "Props.h"
+#include "OperatingSystem.h"
 
 #if COMPILE_CONFIG_DEBUG
 #include "Logging.h"
@@ -311,7 +312,8 @@ namespace BlastOff
 						"Rect2f::GetOppositeEdgePosition"
 						"(" + DirectionToString(direction) + ") failed."
 					};
-					throw std::runtime_error(message);
+					Logging::Log(message.c_str());
+					BreakProgram();
 				}
 
 				const optional<float> worldEdge =
@@ -325,7 +327,8 @@ namespace BlastOff
 						"Rect2f::GetEdgePosition"
 						"(" + DirectionToString(direction) + ") failed."
 					};
-					throw std::runtime_error(message);
+					Logging::Log(message.c_str());
+					BreakProgram();
 				}
 
 				const bool isLeftMovement = (direction == Direction::Left);

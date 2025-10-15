@@ -3,6 +3,7 @@
 #include "GUI.h"
 #include "Graphics.h"
 #include "Logging.h"
+#include "OperatingSystem.h"
 #include "Player.h"
 #include "Powerup.h"
 
@@ -630,7 +631,8 @@ namespace BlastOff
 				"Rect2f::GetEdgePosition"
 				"(" + DirectionToString(side) + ") failed."
 			};
-			throw std::runtime_error(message);
+			Logging::Log(message.c_str());
+			BreakProgram();
 		}
 		return *value;
 	}
@@ -841,14 +843,6 @@ namespace BlastOff
 					PlaySound(*m_WinSound);
 				else if (m_Outcome == Outcome::Loser)
 					PlaySound(*m_LoseSound);
-				else
-				{
-					throw std::runtime_error(
-						"Game::Update(): "
-						"Unable to determine which Sound to play "
-						"after getting the GameOutcome. "
-					);
-				}
 			};
 
 		const auto getRelevantEndMenu =

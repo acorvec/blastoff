@@ -795,35 +795,17 @@ namespace BlastOff
 			);
 		}
 
-		optional<Edge2f> GetEdge(
-			const Direction side,
-			const bool useCenterOrigin = true
-		) const;
-
-		optional<Edge2f> GetOppositeEdge(
-			const Direction side,
-			const bool useCenterOrigin = true
-		) const;
-
-		optional<float> GetEdgePosition(
-			const Direction side,
-			const bool useCenterOrigin = true
-		) const;
-
-		optional<float> GetOppositeEdgePosition(
-			const Direction side,
-			const bool useCenterOrigin = true
-		) const;
-
-		optional<Line2f> GetLineBySide(
-			const Direction side,
-			const bool useCenterOrigin = true
-		) const;
+		optional<Edge2f> GetEdge(const Direction side) const;
+		optional<Edge2f> GetOppositeEdge(const Direction side) const;
+		optional<float> GetEdgePosition(const Direction side) const;
+		optional<float> GetOppositeEdgePosition(const Direction side) const;
+		optional<Line2f> GetLineBySide(const Direction side) const;
 
 		bool CollideWithLine(const Line2f line) const;
 		bool CollideWithPoint(const Vector2f point) const;
 
 		Rect2i ToRect2i() const;
+
 		constexpr RayRect2f ToRayRect2f() const
 		{
 			return RayRect2f{ x, y, w, h };

@@ -1,23 +1,31 @@
 #include "Sound.h"
+#include "Logging.h"
+#include "OperatingSystem.h"
 
 namespace BlastOff
 {
 	namespace
 	{
-		void ThrowSoundLoadingException(const string& loadingPath)
+		void OnSoundLoadingError(const string& loadingPath)
 		{
-			throw std::runtime_error(
+			const string message = 
+			{
 				"Unable to load Sound from sound file "
 				"at path \"" + loadingPath + "\"."
-			);
+			};
+			Logging::Log(message.c_str());
+			BreakProgram();
 		}
 
 		void ThrowMusicLoadingException(const string& loadingPath)
 		{
-			throw std::runtime_error(
+			const string message = 
+			{
 				"Unable to load Music from sound file "
 				"at path \"" + loadingPath + "\"."
-			);
+			};
+			Logging::Log(message.c_str());
+			BreakProgram();
 		}
 
 		Sound LoadWAVSound(const char* const resourcePath)
@@ -29,7 +37,7 @@ namespace BlastOff
 			const Sound result = LoadSound(cString);
 			if (!result.frameCount)
 			{
-				ThrowSoundLoadingException(resultingPath);
+				OnSoundLoadingError(resultingPath);
 				return result;
 			}
 			else

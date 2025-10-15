@@ -1,4 +1,6 @@
 #include "Utils.h"
+#include "Logging.h"
+#include "OperatingSystem.h"
 
 #include <string.h>
 
@@ -243,10 +245,7 @@ namespace BlastOff
 	}
 
 
-	optional<Edge2f> Rect2f::GetEdge(
-		const Direction side, 
-		const bool useCenterOrigin
-	) const
+	optional<Edge2f> Rect2f::GetEdge(const Direction side) const
 	{
 		const auto getWithCenterOrigin =
 			[&, this]() -> optional<Edge2f>
@@ -270,59 +269,37 @@ namespace BlastOff
 				}
 			};
 
-		if (useCenterOrigin)
-			return getWithCenterOrigin();
-		else
-		{
-			const char* const message =
-			{
-				"Rect2f::GetEdge(..., useCenterOrigin = false) "
-				"not implemented"
-			};
-			throw std::runtime_error(message);
-		}
+		return getWithCenterOrigin();
 	}
 
-	optional<Edge2f> Rect2f::GetOppositeEdge(
-		const Direction side,
-		const bool useCenterOrigin
-	) const
+	optional<Edge2f> Rect2f::GetOppositeEdge(const Direction side) const
 	{
 		const optional<Direction> oppositeSide = GetOppositeDirection(side);
 		if (!oppositeSide)
 			return std::nullopt;
 		else
-			return GetEdge(*oppositeSide, useCenterOrigin);
+			return GetEdge(*oppositeSide);
 	}
 
-	optional<float> Rect2f::GetEdgePosition(
-		const Direction side,
-		const bool useCenterOrigin 
-	) const
+	optional<float> Rect2f::GetEdgePosition(const Direction side) const
 	{
-		const optional<Edge2f> edge = GetEdge(side, useCenterOrigin);
+		const optional<Edge2f> edge = GetEdge(side);
 		if (edge)
 			return edge->position;
 		else
 			return std::nullopt;
 	}
 
-	optional<float> Rect2f::GetOppositeEdgePosition(
-		const Direction side,
-		const bool useCenterOrigin
-	) const
+	optional<float> Rect2f::GetOppositeEdgePosition(const Direction side) const
 	{
-		const optional<Edge2f> edge = GetOppositeEdge(side, useCenterOrigin);
+		const optional<Edge2f> edge = GetOppositeEdge(side);
 		if (edge)
 			return edge->position;
 		else
 			return std::nullopt;
 	}
 
-	optional<Line2f> Rect2f::GetLineBySide(
-		const Direction side,
-		const bool useCenterOrigin
-	) const
+	optional<Line2f> Rect2f::GetLineBySide(const Direction side) const
 	{
 		const auto getWithCenterOrigin =
 			[&, this]()->optional<Line2f>
@@ -346,17 +323,7 @@ namespace BlastOff
 				}
 			};
 
-		if (useCenterOrigin)
-			return getWithCenterOrigin();
-		else
-		{
-			const char* const message =
-			{
-				"Rect2f::GetLineBySide(..., useCenterOrigin = false) "
-				"not implemented"
-			};
-			throw std::runtime_error(message);
-		}
+		return getWithCenterOrigin();
 	}
 
 	bool Rect2f::CollideWithLine(const Line2f line) const
@@ -365,13 +332,7 @@ namespace BlastOff
 		{
 			const optional<Line2f> sideLine = GetLineBySide(side);
 			if (!sideLine)
-			{
-				const char* const message =
-				{
-					"Rect2f::GetLineBySide() failed."
-				};
-				throw std::runtime_error(message);
-			}
+				continue;
 
 			const bool collision = line.Collide(*sideLine);
 			if (collision)
@@ -387,7 +348,7 @@ namespace BlastOff
 		const optional<float> leftEdge = GetEdgePosition(Direction::Left);
 		const optional<float> rightEdge = GetEdgePosition(Direction::Right);
 
-		const auto throwEdgeException =
+		const auto onEdgeError =
 			[&](const Direction side)
 			{
 				const string errorHeader =
@@ -399,27 +360,28 @@ namespace BlastOff
 					errorHeader +
 					"GetEdgePosition(" + DirectionToString(side) + ") failed."
 				};
-				throw std::runtime_error(message);
+				std::println("{}", message);
+				BreakProgram();
 			};
 
 		if (!topEdge)
 		{
-			throwEdgeException(Direction::Up);
+			onEdgeError(Direction::Up);
 			return false;
 		}
 		if (!bottomEdge)
 		{
-			throwEdgeException(Direction::Down);
+			onEdgeError(Direction::Down);
 			return false;
 		}
 		if (!leftEdge)
 		{
-			throwEdgeException(Direction::Left);
+			onEdgeError(Direction::Left);
 			return false;
 		}
 		if (!rightEdge)
 		{
-			throwEdgeException(Direction::Right);
+			onEdgeError(Direction::Right);
 			return false;
 		}
 

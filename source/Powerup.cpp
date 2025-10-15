@@ -1,4 +1,6 @@
 #include "Powerup.h"
+#include "Logging.h"
+#include "OperatingSystem.h"
 
 namespace BlastOff
 {
@@ -51,7 +53,8 @@ namespace BlastOff
 				"Powerup::Draw() failed: "
 				"m_Sprite was not defined in sub-class implementation."
 			};
-			throw std::runtime_error(message);
+			Logging::Log(message);
+			BreakProgram();
 		}
 		m_Sprite->Draw();
 	}

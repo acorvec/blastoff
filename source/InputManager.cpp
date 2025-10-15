@@ -1,7 +1,8 @@
 #include "InputManager.h"
 #include "OperatingSystem.h"
-
 #include "Utils.h"
+#include "Logging.h"
+
 #include "raylib.h"
 
 namespace BlastOff
@@ -52,7 +53,11 @@ namespace BlastOff
     {
         const optional<CursorPosition> cursor = GetCursorPosition();
         if (!cursor)
-            throw std::runtime_error("GetCursorPosition() failed.");
+        {
+            const char* message = "GetCursorPosition() failed.";
+            Logging::Log(message);
+            BreakProgram();
+        }
 
         const Vector2i screenCoords(*cursor);
         const Vector2f engineMouse =

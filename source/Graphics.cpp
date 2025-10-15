@@ -13,12 +13,14 @@ namespace BlastOff
 {
 	namespace
 	{
-		void ThrowPNGLoadingException(const string& resourcePath)
+		void OnPNGLoadingError(const string& resourcePath)
 		{
-			throw std::runtime_error(
+			const string message = 
+			{
 				"Unable to load Texture from image "
 				"at path \"" + resourcePath + "\"."
-			);
+			};
+			Logging::Log(message.c_str());
 		}
 
 		Texture LoadPNG(const char* const resourcePath)
@@ -30,7 +32,7 @@ namespace BlastOff
 			const Texture result = LoadTexture(cString);
 			if (!result.id)
 			{
-				ThrowPNGLoadingException(resultingPath);
+				OnPNGLoadingError(resultingPath);
 				return result;
 			}
 			else
@@ -229,13 +231,16 @@ namespace BlastOff
 		const optional<float> result = m_EngineRect.GetEdgePosition(side);
 		if (!result)
 		{
-			throw std::runtime_error(
+			const char* const message =
+			{
 				"Sprite::GetEdgePosition(const Direction side) failed: "
 				"invalid enum value of side."
-			);
+			};
+			Logging::Log(message);
+			BreakProgram();
+			return 0;
 		}
-		else
-			return *result;
+		return *result;
 	}
 
 	Vector2f Sprite::CalculateRealPosition() const
@@ -388,10 +393,13 @@ namespace BlastOff
 #if COMPILE_CONFIG_DEBUG
 		if (parent == this)
 		{
-			throw std::runtime_error(
+			const char* const message =
+			{
 				"Sprite::SetParent(const Sprite*) failed: "
 				"Unable to set this->m_Parent to self."
-			);
+			};
+			Logging::Log(message);
+			BreakProgram();
 		}
 #endif
 		m_Parent = parent;

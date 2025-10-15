@@ -1,5 +1,7 @@
 #include "Settings.h"
+#include "OperatingSystem.h"
 #include "Utils.h"
+#include "Logging.h"
 
 #include <glaze/json/prettify.hpp>
 #include <raylib.h>
@@ -102,7 +104,8 @@ namespace BlastOff
             {
                 "Unable to generate json from ReflectableSettings object."
             };
-            throw std::runtime_error(message);
+            Logging::Log(message);
+            BreakProgram();
         }
 
         const string json = jsonExpected.value();
@@ -119,15 +122,17 @@ namespace BlastOff
         std::ofstream output(c_DefaultPath);
         if (!output)
         {
-            const string errorMessage = getErrorMessage();
-            throw std::runtime_error(errorMessage);
+            const string message = getErrorMessage();
+            Logging::Log(message.c_str());
+            BreakProgram();
         }
 
         output << prettyJson;
         if (!output)
         {
-            const string errorMessage = getErrorMessage();
-            throw std::runtime_error(errorMessage);
+            const string message = getErrorMessage();
+            Logging::Log(message.c_str());
+            BreakProgram();
         }
 
         output.close();
@@ -209,20 +214,26 @@ namespace BlastOff
         readBuffer << reader.rdbuf();
         if (reader.fail())
         {
-            throw std::runtime_error(
+            const string message = 
+            {
                 "File at path \"" + string(c_DefaultPath) + "\" "
                 "is present, but READING failed."
-            );
+            };
+            Logging::Log(message.c_str());
+            BreakProgram();
         }
 
         const string json = readBuffer.str();
         const auto parseResult = glz::read_json<Reflectable>(json);
         if (!parseResult)
         {
-            throw std::runtime_error(
+            const string message = 
+            {
                 "File at path \"" + string(c_DefaultPath) + "\" "
                 "is present, but PARSING failed."
-            );
+            };
+            Logging::Log(message.c_str());
+            BreakProgram();
         }
 
         const Reflectable reflectable = parseResult.value();

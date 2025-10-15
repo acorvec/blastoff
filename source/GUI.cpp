@@ -1,6 +1,7 @@
 #include "GUI.h"
 #include "Enums.h"
 #include "Graphics.h"
+#include "Logging.h"
 #include "OperatingSystem.h"
 #include "Player.h"
 #include "ProgramConstants.h"
@@ -369,7 +370,8 @@ namespace BlastOff
 						"BarLabel::Update()::calculateCrop failed: "
 						"m_Type enum has an invalid value."
 					};
-					throw std::runtime_error(message);
+					Logging::Log(message);
+					BreakProgram();
 				}
 
 				// this sprite is smaller than the energy sprite, 
@@ -1576,10 +1578,16 @@ namespace BlastOff
 						return c_ButtonIndexInSettingsMenu;
 
 					default:
-						throw std::runtime_error(
+					{
+						const char* const message = 
+						{
 							"Unable to construct TopRightExitButton: "
 							"Invalid parameter \"menuType\"."
-						);
+						};
+						Logging::Log(message);
+						BreakProgram();
+						return 0;
+					}
 				}
 			};
 
