@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <sys/types.h>
+#include <print>
 
 namespace BlastOff
 {
@@ -531,6 +532,7 @@ namespace BlastOff
 			[&]()
 			{
 				size_t totalLength = 0;
+				if (SpeedUpPowerup::c_SpawningEnabled)
 				{
 					const size_t length = SpeedUpPowerup::c_Count;
 					initializePowerupVector(
@@ -539,6 +541,7 @@ namespace BlastOff
 						&totalLength
 					);
 				}
+				if (FuelUpPowerup::c_SpawningEnabled)
 				{
 					const size_t length = FuelUpPowerup::c_Count;
 					initializePowerupVector(
@@ -547,6 +550,7 @@ namespace BlastOff
 						&totalLength
 					);
 				}
+				if (DownforcePowerup::c_SpawningEnabled) 
 				{
 					const size_t length = DownforcePowerup::c_Count;
 					initializePowerupVector(

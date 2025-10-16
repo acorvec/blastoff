@@ -65,6 +65,7 @@ namespace BlastOff
 		void OnCollection() override;
 		
 		static const size_t c_Count;
+		static const bool c_SpawningEnabled;
 
 	private:
 		static const char* const c_TexturePath;
@@ -89,6 +90,7 @@ namespace BlastOff
 		void OnCollection() override;
 		
 		static const size_t c_Count;
+		static const bool c_SpawningEnabled;
 	
 	private:
 		static const char* const c_TexturePath;
@@ -113,6 +115,7 @@ namespace BlastOff
 		void OnCollection() override;
 		
 		static const size_t c_Count;
+		static const bool c_SpawningEnabled;
 
 	private:
 		static const char* const c_TexturePath;

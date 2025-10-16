@@ -22,14 +22,11 @@ namespace BlastOff
 		void RunLoopIteration();
 		bool IsRunning() const;
 
-		void Update();
-		void Draw() const;
-		void EndFrame();
-
 	private:
 		using State = ProgramState;
 
 		static const inline ProgramConstants c_Config;
+		static const bool c_DrawFPS;
 
 		bool m_IsRunning = true;
 		bool m_ShouldCloseAfterFrame = false;
@@ -63,12 +60,17 @@ namespace BlastOff
 #if COMPILE_CONFIG_DEBUG
 		int m_MostRecentFramerateSet = 0;
 #endif
+		void EndFrame();
+		void Update();
+		void Draw() const;
+
 		bool ShouldShowCutscene() const;
 		void MuteOrUnmute();
-
+		
 		int CalculateNormalFramerate() const;
 		int MultiplyFramerate(const float multiplier) const;
 		void SetFramerate(const int framerate);
+		static void DrawFramerate();
 
 		void InitializeGame();
 		void InitializeMainMenu();

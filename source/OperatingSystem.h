@@ -33,9 +33,7 @@ namespace BlastOff
 		int y;
 	};
 
-#if COMPILE_CONFIG_DEBUG
 	void BreakProgram();
-#endif
 
 	optional<CursorPosition> GetCursorPosition();
 

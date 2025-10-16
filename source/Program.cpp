@@ -6,6 +6,7 @@
 #include "OperatingSystem.h"
 #include "ProgramConstants.h"
 #include "Settings.h"
+#include "Utils.h"
 #include "raylib.h"
 
 #include <chrono>
@@ -204,6 +205,8 @@ namespace BlastOff
 		return m_IsRunning;
 	}
 
+	const bool Program::c_DrawFPS = false;
+
 	void Program::RunLoopIteration()
 	{
 		Update();
@@ -282,14 +285,13 @@ namespace BlastOff
 				SetFramerate(newTargetFramerate);
 			};
 
-
 		const auto updateSpeedKeys =
 			[&, this]()
 			{
 				const int fastModeKey = c_Config.GetFastModeKey();
 				const int slowModeKey = c_Config.GetSlowModeKey();
 
-				if (!IsKeyDown(fastModeKey))
+				if (IsKeyDown(fastModeKey))
 					activateFastMode();
 				else if (IsKeyDown(slowModeKey))
 					activateSlowMode();
@@ -317,7 +319,7 @@ namespace BlastOff
 
 		m_Settings->ApplyVolume();
 		updateMutedField();
-			
+
 #if COMPILE_CONFIG_DEBUG
 		if (c_Config.GetDebugToolsEnabled())
 			updateSpeedKeys();
@@ -366,6 +368,9 @@ namespace BlastOff
 
 		drawStateObject();
 		
+		if (c_DrawFPS)
+			DrawFramerate();
+			
 		EndDrawing();
 	}
 
@@ -487,6 +492,17 @@ namespace BlastOff
 #else
 		SetTargetFPS(framerate);
 #endif
+	}
+
+	void Program::DrawFramerate()
+	{
+		const int fps = GetFPS();
+		const string text = std::format("{} FPS", fps);
+
+		constexpr RayColour colour = c_Black.ToRayColour();
+		constexpr Vector2i position = Vector2i::Zero();
+
+		DrawText(text.c_str(), position.x, position.y, 40, colour);
 	}
 
 	void Program::InitializeGame()

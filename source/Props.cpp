@@ -1,9 +1,6 @@
 #include "Props.h"
 #include "OperatingSystem.h"
-
-#if COMPILE_CONFIG_DEBUG
 #include "Logging.h"
-#endif
 
 namespace BlastOff
 {

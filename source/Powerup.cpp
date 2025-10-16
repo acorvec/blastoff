@@ -170,6 +170,7 @@ namespace BlastOff
 	}
 
 	const size_t SpeedUpPowerup::c_Count = 10;
+	const bool SpeedUpPowerup::c_SpawningEnabled = true;
 
 	const char* const SpeedUpPowerup::c_TexturePath = 
 	{
@@ -217,6 +218,7 @@ namespace BlastOff
 	}
 
 	const size_t FuelUpPowerup::c_Count = 10;
+	const bool FuelUpPowerup::c_SpawningEnabled = true;
 
 	const char* const FuelUpPowerup::c_TexturePath = 
 	{
@@ -264,6 +266,7 @@ namespace BlastOff
 	}	
 
 	const size_t DownforcePowerup::c_Count = 8;
+	const bool DownforcePowerup::c_SpawningEnabled = false;
 
 	const char* const DownforcePowerup::c_TexturePath = 
 	{
