@@ -70,9 +70,9 @@ namespace BlastOff
 	void BreakProgram()
 	{
 #if COMPILE_TARGET_WINDOWS
-			__debugbreak();
+		__debugbreak();
 #else
-			__builtin_trap();
+		__builtin_trap();
 #endif
 	}
 
@@ -85,7 +85,7 @@ namespace BlastOff
 	optional<CursorPosition> GetCursorPosition()
 	{
 #if COMPILE_TARGET_WINDOWS
-		
+		return Windows::GetCursorPosition();
 #elif COMPILE_TARGET_LINUX
 		return Linux::GetCursorPosition();
 #endif

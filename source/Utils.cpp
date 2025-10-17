@@ -1,3 +1,7 @@
+#ifdef _WIN32
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include "Utils.h"
 #include "Logging.h"
 #include "OperatingSystem.h"
@@ -218,10 +222,29 @@ namespace BlastOff
 	}
 
 
-	Vector2i FromRayVector2f(const RayVector2f value)
+	Vector2i Vector2i::FromRayVector2f(const RayVector2f value)
 	{
 		return Vector2i{ (int)roundf(value.x), (int)roundf(value.y) };
 	}
+
+#if !USE_GLAZE
+	Vector2i Vector2i::FromJSONValue(const Value& value)
+	{
+		const Value& x = value["x"];
+		const Value& y = value["y"];
+		return { x.GetInt(), y.GetInt() };
+	}
+
+	void Vector2i::WriteToJSONWriter(Writer<StringBuffer>& writer) const
+	{
+		writer.StartObject();
+		writer.Key("x");
+		writer.Int(x);
+		writer.Key("y");
+		writer.Int(y);
+		writer.EndObject();
+	}
+#endif
 
 	Vector2f Vector2i::Normalize() const
 	{
