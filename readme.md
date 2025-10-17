@@ -5,10 +5,11 @@ Blastoff++ is a 2D rocket game written in C++.
 Building is currently tested on the following targets:
 
 - x86-64 linux using the GCC compiler
+- x86-64 windows using MSVC and Visual Studio 2022 Community
 
 Building is currently **NOT** tested on the following targets:
 
-- x86-64 windows using any compiler
+- x86-64 windows using non-MSVC compiler
 - all other targets not mentioned here.
 
 ## Disclaimers
