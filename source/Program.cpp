@@ -360,7 +360,7 @@ namespace BlastOff
 
 		drawStateObject();
 		
-		if (c_FPSDrawing)
+		if (c_DrawFPS)
 			DrawFramerate();
 			
 		EndDrawing();
@@ -407,7 +407,7 @@ namespace BlastOff
 		const auto calculateFrametimeStatistics = 
 			[this]()
 			{
-				if (!c_FrametimePrinting)
+				if (!c_PrintFrametimes)
 					return;
 
 				const auto end = high_resolution_clock::now();
@@ -622,6 +622,6 @@ namespace BlastOff
 		);
 	}
 
-	const bool Program::c_FPSDrawing = false;
-	const bool Program::c_FrametimePrinting = false;
+	const bool Program::c_DrawFPS = false;
+	const bool Program::c_PrintFrametimes = false;
 }

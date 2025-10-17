@@ -44,8 +44,8 @@ namespace BlastOff
 
 		static const inline ProgramConstants c_Config;
 
-		static const bool c_FPSDrawing;
-		static const bool c_FrametimePrinting;
+		static const bool c_DrawFPS;
+		static const bool c_PrintFrametimes;
 
 		bool m_IsRunning = true;
 		bool m_ShouldCloseAfterFrame = false;
