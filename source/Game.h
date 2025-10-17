@@ -59,6 +59,8 @@ namespace BlastOff
 
 		static const inline Constants c_Constants;
 
+		static const bool c_OutcomeStatisticsPrinting;
+
 		static inline uint64_t m_WinCount = 0;
 		static inline uint64_t m_LossCount = 0;
 

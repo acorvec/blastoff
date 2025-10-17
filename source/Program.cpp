@@ -201,8 +201,6 @@ namespace BlastOff
 		return m_IsRunning;
 	}
 
-	const bool Program::c_DrawFPS = false;
-
 	void Program::RunLoopIteration()
 	{
 		Update();
@@ -362,7 +360,7 @@ namespace BlastOff
 
 		drawStateObject();
 		
-		if (c_DrawFPS)
+		if (c_FPSDrawing)
 			DrawFramerate();
 			
 		EndDrawing();
@@ -409,6 +407,9 @@ namespace BlastOff
 		const auto calculateFrametimeStatistics = 
 			[this]()
 			{
+				if (!c_FrametimePrinting)
+					return;
+
 				const auto end = high_resolution_clock::now();
 				const auto duration = end - m_FrameStartTime;
 				m_FrameStartTime = high_resolution_clock::now();
@@ -417,9 +418,9 @@ namespace BlastOff
 				const float secs = ns / powf(10, 9);
 				const float ratio = c_Config.GetTargetFrametime() / secs;
 
-				// std::printf("frametime: %f ms\n", secs * 1'000.0f);
-				// std::printf("ratio: %fx\n", ratio);
-				// std::printf("\n");
+				std::printf("frametime: %f ms\n", secs * 1'000.0f);
+				std::printf("ratio: %fx\n", ratio);
+				std::printf("\n");
 			};
 
 		if (m_PendingStateChange)
@@ -441,6 +442,8 @@ namespace BlastOff
 
 		if (WindowShouldClose())
 			m_IsRunning = false;
+
+		calculateFrametimeStatistics();
 	}
 
 	bool Program::ShouldShowCutscene() const
@@ -618,4 +621,7 @@ namespace BlastOff
 			m_CameraEmpty.get()
 		);
 	}
+
+	const bool Program::c_FPSDrawing = false;
+	const bool Program::c_FrametimePrinting = false;
 }

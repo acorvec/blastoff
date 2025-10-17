@@ -246,8 +246,6 @@ namespace BlastOff
 
 	void Game::ChooseOutcome(const Outcome outcome)
 	{
-		m_Outcome = outcome;
-
 		const auto getCounter = 
 			[&, this]() -> uint64_t*
 			{
@@ -267,10 +265,20 @@ namespace BlastOff
 			};
 
 		const auto printOutcomeStatistics = 
-			[this]()
+			[&, this]()
 			{
+				if (!c_OutcomeStatisticsPrinting)
+					return;
 				if (!(m_WinCount + m_LossCount))
 					return;
+
+				constexpr int spaces = 10;
+				for (int i = 0; i < spaces; i++)
+					std::print("\n");
+
+				uint64_t* const counter = getCounter();
+				if (counter)
+					(*counter)++;
 
 				const float ratio = m_WinCount / (float)(m_WinCount + m_LossCount);
 				
@@ -282,14 +290,7 @@ namespace BlastOff
 				std::print("\n");
 			};
 	
-		constexpr int spaces = 10;
-		for (int i = 0; i < spaces; i++)
-			std::print("\n");
-
-		uint64_t* const counter = getCounter();
-		if (counter)
-			(*counter)++;
-
+		m_Outcome = outcome;
 		printOutcomeStatistics();
 	}
 
@@ -661,6 +662,8 @@ namespace BlastOff
 
 		return false;
 	}
+
+	const bool Game::c_OutcomeStatisticsPrinting = false;
 
 
 	PlayableGame::PlayableGame(
