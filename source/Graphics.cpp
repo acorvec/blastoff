@@ -19,7 +19,7 @@ namespace BlastOff
 				"Unable to load Texture from image "
 				"at path \"" + resourcePath + "\"."
 			};
-			Logging::Log(message.c_str());
+			Logging::LogWarning(message.c_str());
 		}
 
 		Texture LoadPNG(const char* const resourcePath)
@@ -235,7 +235,7 @@ namespace BlastOff
 				"Sprite::GetEdgePosition(const Direction side) failed: "
 				"invalid enum value of side."
 			};
-			Logging::Log(message);
+			Logging::LogWarning(message);
 			BreakProgram();
 			return 0;
 		}
@@ -397,7 +397,7 @@ namespace BlastOff
 				"Sprite::SetParent(const Sprite*) failed: "
 				"Unable to set this->m_Parent to self."
 			};
-			Logging::Log(message);
+			Logging::LogWarning(message);
 			BreakProgram();
 		}
 #endif

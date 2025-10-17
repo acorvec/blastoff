@@ -520,6 +520,7 @@ namespace BlastOff
 		}
 
 		static Vector2i FromRayVector2f(const RayVector2f value);
+		
 #if !USE_GLAZE
 		static Vector2i FromJSONValue(const Value& value);
 		void WriteToJSONWriter(Writer<StringBuffer>& writer) const;

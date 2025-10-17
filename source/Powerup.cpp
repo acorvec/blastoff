@@ -53,10 +53,10 @@ namespace BlastOff
 				"Powerup::Draw() failed: "
 				"m_Sprite was not defined in sub-class implementation."
 			};
-			Logging::Log(message);
-			BreakProgram();
+			Logging::LogWarning(message);
 		}
-		m_Sprite->Draw();
+		else
+			m_Sprite->Draw();
 	}
 
 	void Powerup::OnCollection()

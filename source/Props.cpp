@@ -181,8 +181,7 @@ namespace BlastOff
 				"change in world size. this should not be done "
 				"more than once (after initializing the background)."
 			};
-			Logging::Log(message);
-			BreakProgram();
+			Logging::LogWarning(message);
 		}
 		m_SpriteInitializationCount++;
 #endif
@@ -309,8 +308,8 @@ namespace BlastOff
 						"Rect2f::GetOppositeEdgePosition"
 						"(" + DirectionToString(direction) + ") failed."
 					};
-					Logging::Log(message.c_str());
-					BreakProgram();
+					Logging::LogWarning(message.c_str());
+					return;
 				}
 
 				const optional<float> worldEdge =
@@ -324,8 +323,8 @@ namespace BlastOff
 						"Rect2f::GetEdgePosition"
 						"(" + DirectionToString(direction) + ") failed."
 					};
-					Logging::Log(message.c_str());
-					BreakProgram();
+					Logging::LogWarning(message.c_str());
+					return;
 				}
 
 				const bool isLeftMovement = (direction == Direction::Left);

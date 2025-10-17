@@ -136,16 +136,16 @@ namespace BlastOff
         if (!output)
         {
             const string message = getErrorMessage();
-            Logging::Log(message.c_str());
-            BreakProgram();
+            Logging::LogWarning(message.c_str());
+            return;
         }
 
         output << prettyJson;
         if (!output)
         {
             const string message = getErrorMessage();
-            Logging::Log(message.c_str());
-            BreakProgram();
+            Logging::LogWarning(message.c_str());
+            return;
         }
 
         output.close();
@@ -258,8 +258,8 @@ namespace BlastOff
                 "File at path \"" + string(c_DefaultPath) + "\" "
                 "is present, but READING failed."
             };
-            Logging::Log(message.c_str());
-            BreakProgram();
+            Logging::LogWarning(message.c_str());
+            return nullptr;
         }
 
         const string text = readBuffer.str();

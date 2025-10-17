@@ -45,7 +45,7 @@ namespace BlastOff
 			);
 		}
 #if COMPILE_CONFIG_DEBUG
-		BreakProgram;
+		BreakProgram();
 #endif
 	}
 

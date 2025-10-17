@@ -348,8 +348,7 @@ namespace BlastOff
 			const Sprite* const parent,
 			const float* const parentOpacity,
 			const CoordinateTransformer* const coordTransformer,
-			const ProgramConstants* const programConstants,
-			ImageTextureLoader* const imageTextureLoader
+			const ProgramConstants* const programConstants
 		);
 
 		float GetInnerBackingHeight() const;
@@ -879,7 +878,7 @@ namespace BlastOff
 		float m_Minimum = 0;
 		float m_Maximum = 0;
 
-		optional<float> m_StepSize = 0;
+		optional<float> m_StepSize = 0.0f;
 		Colours m_Colours = { 0 };
 
 		const float* m_ParentOpacity = nullptr;
@@ -1034,7 +1033,7 @@ namespace BlastOff
 		static const float c_FontSize;
 		static const Vector2f c_EnginePosition;
 
-		int m_MostRecentValue = c_DeactivatedTracker;
+		float m_MostRecentValue = c_DeactivatedTracker;
 
 		const char* m_BeginningOfMessage = nullptr;
 		const float* m_ParentOpacity = nullptr;
@@ -1159,7 +1158,7 @@ namespace BlastOff
 			const Font* const font
 		);
 
-		int GetValue() const;
+		float GetValue() const;
 
 		bool HasUnsavedChanges() const override;
 

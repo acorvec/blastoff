@@ -98,10 +98,6 @@ namespace BlastOff
 
 				m_Window->Update();
                 m_CoordinateTransformer->Update();
-                const CoordinateTransformer* const coordTransformer = 
-                {
-                    m_CoordinateTransformer.get()
-                };
                 m_CameraEmpty = std::make_unique<CameraEmpty>(
                     m_CoordinateTransformer.get(),
                     &c_Config,
@@ -247,8 +243,7 @@ namespace BlastOff
 							"Program::Update() failed: "
 							"Invalid value of m_State enum."
 						};
-						Logging::Log(message);
-						BreakProgram();
+						Logging::LogWarning(message);
 					}
 				}
 			};
@@ -352,8 +347,7 @@ namespace BlastOff
 							"Program::Draw() failed: "
 							"Invalid value of m_State enum."
 						};
-						Logging::Log(message);
-						BreakProgram();
+						Logging::LogWarning(message);
 					}
 				}
 			};
@@ -399,8 +393,7 @@ namespace BlastOff
 							"Program::Update() failed: "
 							"Invalid value of ProgramState enum."
 						};
-						Logging::Log(message);
-						BreakProgram();
+						Logging::LogWarning(message);
 				}
 			};
 
@@ -413,14 +406,14 @@ namespace BlastOff
 				m_PendingStateChange = std::nullopt;
 			};
 
-		const auto printFrametimeStatistics = 
+		const auto calculateFrametimeStatistics = 
 			[this]()
 			{
 				const auto end = high_resolution_clock::now();
 				const auto duration = end - m_FrameStartTime;
 				m_FrameStartTime = high_resolution_clock::now();
 
-				const float ns = duration_cast<nanoseconds>(duration).count();
+				const auto ns = duration_cast<nanoseconds>(duration).count();
 				const float secs = ns / powf(10, 9);
 				const float ratio = c_Config.GetTargetFrametime() / secs;
 
@@ -590,12 +583,9 @@ namespace BlastOff
             m_CameraEmpty.get(),
             &m_ImageTextureLoader,
             m_TextTextureLoader.get(),
-            &m_SoundLoader,
             &m_CameraPosition,
             resetCallback,
-            &m_Font,
-            m_Window->GetPosition(),
-            m_Window->GetSize()
+            &m_Font
         );       
     }
 

@@ -17,11 +17,8 @@ namespace BlastOff
 		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
-		SoundLoader* const soundLoader,
 		Vector2f* const cameraPosition,
-		const Font* const font,
-		const Vector2i* const windowPosition,
-		const Vector2i* const windowSize
+		const Font* const font
 	) :
 		m_ProgramConstants(programConstants),
 		m_Font(font),
@@ -492,12 +489,12 @@ namespace BlastOff
 
 				if ((bottomOfRange.y + randomYRange) > worldTop)
 				{
-					Logging::Log("Powerup random range goes too high.");
+					Logging::LogWarning("Powerup random range goes too high.");
 					BreakProgram();
 				}
 				if (bottomOfRange.y < worldBottom)
 				{
-					Logging::Log("Powerup random range goes too low.");
+					Logging::LogWarning("Powerup random range goes too low.");
 					BreakProgram();
 				}
 #endif
@@ -639,8 +636,8 @@ namespace BlastOff
 				"Rect2f::GetEdgePosition"
 				"(" + DirectionToString(side) + ") failed."
 			};
-			Logging::Log(message.c_str());
-			BreakProgram();
+			Logging::LogWarning(message.c_str());
+			return 0;
 		}
 		return *value;
 	}
@@ -683,11 +680,8 @@ namespace BlastOff
             programConstants,
             imageTextureLoader,
             textTextureLoader,
-            soundLoader,
 			&m_CameraPosition,
-            font,
-            windowPosition,
-            windowSize
+            font
         )
     {
 		const auto initializeGraphics =
@@ -888,22 +882,16 @@ namespace BlastOff
 		CameraEmpty* const cameraEmpty,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
-		SoundLoader* const soundLoader,
 		Vector2f* const cameraPosition,
 		const Callback& resetCallback,
-		const Font* const font,
-		const Vector2i* const windowPosition,
-		const Vector2i* const windowSize
+		const Font* const font
 	) :
 		Game(
 			programConstants,
 			imageTextureLoader,
 			textTextureLoader,
-			soundLoader,
 			cameraPosition,
-			font,
-			windowPosition,
-			windowSize
+			font
 		),
 		m_ResetCallback(resetCallback)
 	{
@@ -935,9 +923,6 @@ namespace BlastOff
 		const auto checkForReset =
 			[this]()
 			{
-				const bool alreadyResetting = ResetTimerIsActive();
-				const bool shouldReset = LosingConditionsAreSatisfied();
-
 				if (LosingConditionsAreSatisfied())
 					m_ResetTick = c_MaxResetTick;
 			};

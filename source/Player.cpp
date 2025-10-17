@@ -326,8 +326,8 @@ namespace BlastOff
 					{
 						"Rect2f::GetEdge(const Direction side) failed."
 					};
-					Logging::Log(message);
-					BreakProgram();
+					Logging::LogWarning(message);
+					return Edge2f{ Direction::None, 0 };
 				}
 				return *result;
 			};
@@ -391,8 +391,7 @@ namespace BlastOff
 							"invalid value of Edge2f parameter: "
 							"invalid member \"side\"."
 						};
-						Logging::Log(message);
-						BreakProgram();
+						Logging::LogWarning(message);
 						return 0;
 					}
 				}
@@ -715,8 +714,8 @@ namespace BlastOff
 				"Rect2f::GetEdgePosition"
 				"(" + DirectionToString(side) + ") failed."
 			};
-			Logging::Log(message.c_str());
-			BreakProgram();
+			Logging::LogWarning(message.c_str());
+			return 0;
 		}
 		return *result;
 	}

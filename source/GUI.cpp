@@ -369,8 +369,7 @@ namespace BlastOff
 						"BarLabel::Update()::calculateCrop failed: "
 						"m_Type enum has an invalid value."
 					};
-					Logging::Log(message);
-					BreakProgram();
+					Logging::LogWarning(message);
 				}
 
 				// this sprite is smaller than the energy sprite, 
@@ -841,8 +840,7 @@ namespace BlastOff
 		const Sprite* const parent,
 		const float* const parentOpacity,
 		const CoordinateTransformer* const coordTransformer,
-		const ProgramConstants* const programConstants,
-		ImageTextureLoader* const imageTextureLoader
+		const ProgramConstants* const programConstants
 	) :
 		m_ParentOpacity(parentOpacity)
 	{
@@ -1090,7 +1088,7 @@ namespace BlastOff
 				};
 				const Vector2f directionVector = 
 				{
-					DirectionToVector2f(Direction::Down)
+					DirectionToVector2f(slideDirection)
 				};
 				const Vector2f startPosition = 
 				{
@@ -1245,8 +1243,7 @@ namespace BlastOff
 					m_Empty.get(),
 					&c_Opacity,
 					coordTransformer,
-					programConstants,
-					imageTextureLoader
+					programConstants
 				);
 			};
 
@@ -1583,8 +1580,7 @@ namespace BlastOff
 							"Unable to construct TopRightExitButton: "
 							"Invalid parameter \"menuType\"."
 						};
-						Logging::Log(message);
-						BreakProgram();
+						Logging::LogWarning(message);
 						return 0;
 					}
 				}
@@ -2416,7 +2412,6 @@ namespace BlastOff
 			(m_Value - m_Minimum) / (float)(m_Maximum - m_Minimum)
 		};
 
-		const float a = left, b = right, t = progress;
 		const float engineX = Lerp(left, right, progress);
 
 		Sprite* handleRoot = GetHandleRoot();
@@ -2515,15 +2510,15 @@ namespace BlastOff
 		SettingsMenuSlideBar(
 			c_EnginePosition,
 			parentOpacity,
-			settings->GetWindowSize().y,
+			(float)settings->GetWindowSize().y,
 			c_Minimum,
-			CalculateMaximum(settings, windowSizeIncrement),
+			CalculateMaximum(settings, (float)windowSizeIncrement),
 			parent,
 			settings,
 			coordTransformer,
 			inputManager,
 			programConstants,
-			windowSizeIncrement
+			(float)windowSizeIncrement
 		)
 	{
 
@@ -2541,11 +2536,11 @@ namespace BlastOff
 		// the user can select up to 90% of the current screen height
 		const Vector2i screenSize = settings->GetScreenSize();
 		const float unfloored = screenSize.y * 9 / 10.0f;
-		const float unrounded = FloorToFraction(
+		const float result = FloorToFraction(
 			unfloored, 
 			windowSizeIncrement
 		);
-		return (int)roundf(unrounded);
+		return result;
 	}
 
 	
@@ -2959,7 +2954,7 @@ namespace BlastOff
 		m_UnappliedValue = GetValue();
 	}
 	
-	int WindowSizeAdjuster::GetValue() const
+	float WindowSizeAdjuster::GetValue() const
 	{
 		return m_SlideBar->GetValue();
 	}
@@ -3284,8 +3279,7 @@ namespace BlastOff
 					m_Empty.get(),
 					&m_Opacity,
 					coordTransformer,
-					programConstants,
-					imageTextureLoader
+					programConstants
 				);
 			};
 

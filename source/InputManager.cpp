@@ -55,8 +55,8 @@ namespace BlastOff
         if (!cursor)
         {
             const char* message = "GetCursorPosition() failed.";
-            Logging::Log(message);
-            BreakProgram();
+            Logging::LogWarning(message);
+            return Vector2f::Zero();
         }
 
         const Vector2i screenCoords(*cursor);

@@ -20,11 +20,8 @@ namespace BlastOff
             const ProgramConstants* const programConstants,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
-			SoundLoader* const soundLoader,
 			Vector2f* const cameraPosition,
-			const Font* const font,
-			const Vector2i* const windowPosition,
-			const Vector2i* const windowSize
+			const Font* const font
         );
 
 		virtual void Update();
@@ -144,18 +141,12 @@ namespace BlastOff
 			CameraEmpty* const cameraEmpty,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
-			SoundLoader* const soundLoader,
 			Vector2f* const cameraPosition,
 			const Callback& resetCallback,
-			const Font* const font,
-			const Vector2i* const windowPosition,
-			const Vector2i* const windowSize
+			const Font* const font
 		);
 
 		void Update() override;
-
-		const CoordinateTransformer* GetCoordinateTransformer() const;
-		const CameraEmpty* GetCameraEmpty() const;
 
 	protected:
 		bool ResetTimerIsActive() const;

@@ -13,8 +13,7 @@ namespace BlastOff
 				"Unable to load Sound from sound file "
 				"at path \"" + loadingPath + "\"."
 			};
-			Logging::Log(message.c_str());
-			BreakProgram();
+			Logging::LogWarning(message.c_str());
 		}
 
 		void ThrowMusicLoadingException(const string& loadingPath)
@@ -24,8 +23,7 @@ namespace BlastOff
 				"Unable to load Music from sound file "
 				"at path \"" + loadingPath + "\"."
 			};
-			Logging::Log(message.c_str());
-			BreakProgram();
+			Logging::LogWarning(message.c_str());
 		}
 
 		Sound LoadWAVSound(const char* const resourcePath)
