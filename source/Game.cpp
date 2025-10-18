@@ -6,6 +6,7 @@
 #include "OperatingSystem.h"
 #include "Player.h"
 #include "Powerup.h"
+#include "Props.h"
 
 #include <memory>
 #include <sys/types.h>
@@ -84,32 +85,8 @@ namespace BlastOff
 					powerup->OnCollection();
 			};
 
-		const auto updatePowerup =
-			[&](Powerup* const powerup)
-			{
-				powerup->Update();
-
-				const bool collision = powerup->CollideWithPlayer();
-				if (collision)
-					handlePowerupCollision(powerup);
-			};
-
-		const auto updatePowerups =
-			[&, this]()
-			{
-				for (Powerup* const powerup : m_AllPowerups)
-					updatePowerup(powerup);
-			};
-
-		const auto updateClouds =
-			[this]()
-			{
-				for (Cloud* const cloud : m_AllClouds)
-					cloud->Update();
-			};
-
 		const auto updateMiscObjects =
-			[this]()
+			[&, this]()
 			{
 				m_CoordTransformer->Update();
 				m_InputManager->Update();
@@ -120,6 +97,21 @@ namespace BlastOff
 				m_SpeedupBar->Update();
 				m_FuelBarLabel->Update();
 				m_SpeedupBarLabel->Update();
+
+				for (Cloud* const cloud : m_AllClouds)
+					cloud->Update();
+
+				for (Powerup* const powerup : m_AllPowerups)
+				{
+					powerup->Update();
+
+					const bool collision = powerup->CollideWithPlayer();
+					if (collision)
+						handlePowerupCollision(powerup);
+				}
+
+				for (FloatingPlatform& platform : m_FloatingPlatforms)
+					platform.Update();
 			};
 
 		const auto checkForOutcome =
@@ -181,10 +173,8 @@ namespace BlastOff
 #endif
 
 		updateCameraPosition();
-		updatePowerups();
-		updateClouds();
-		checkForOutcome();
 		updateMiscObjects();
+		checkForOutcome();
 
 #if COMPILE_CONFIG_DEBUG
 		if (m_ProgramConstants->GetDebugToolsEnabled())
@@ -202,27 +192,6 @@ namespace BlastOff
 					cloud->Draw();
 			};
 
-		const auto drawPowerups =
-			[this]()
-			{
-				for (const Powerup* const powerup : m_AllPowerups)
-					powerup->Draw();
-			};
-
-		const auto drawCloudsBelowPlayer =
-			[&, this]()
-			{
-				for (const Cloud* const cloud : m_AllClouds)
-					drawCloud(cloud, false);
-			};
-
-		const auto drawCloudsAbovePlayer =
-			[&, this]()
-			{
-				for (const Cloud* const cloud : m_AllClouds)
-					drawCloud(cloud, true);
-			};
-
 		const auto drawObjects =
 			[&, this]()
 			{
@@ -230,10 +199,19 @@ namespace BlastOff
 				m_Crag->Draw();
 				m_Platform->Draw();
 
-				drawCloudsBelowPlayer();
-				drawPowerups();
+				for (const Cloud* const cloud : m_AllClouds)
+					drawCloud(cloud, false);
+				
+				for (const Powerup* const powerup : m_AllPowerups)
+					powerup->Draw();
+
+				for (const FloatingPlatform& platform : m_FloatingPlatforms)
+					platform.Draw();
+
 				m_Player->Draw();
-				drawCloudsAbovePlayer();
+				
+				for (const Cloud* const cloud : m_AllClouds)
+					drawCloud(cloud, true);
 
 				m_FuelBar->Draw();
 				m_SpeedupBar->Draw();
@@ -267,7 +245,11 @@ namespace BlastOff
 		const auto printOutcomeStatistics = 
 			[&, this]()
 			{
-				if (!c_OutcomeStatisticsPrinting)
+				uint64_t* const counter = getCounter();
+				if (counter)
+					(*counter)++;
+
+				if (!c_PrintOutcomeStatistics)
 					return;
 				if (!(m_WinCount + m_LossCount))
 					return;
@@ -275,10 +257,6 @@ namespace BlastOff
 				constexpr int spaces = 10;
 				for (int i = 0; i < spaces; i++)
 					std::print("\n");
-
-				uint64_t* const counter = getCounter();
-				if (counter)
-					(*counter)++;
 
 				const float ratio = m_WinCount / (float)(m_WinCount + m_LossCount);
 				
@@ -338,16 +316,31 @@ namespace BlastOff
 				);
 			};
 
-		const auto initializePlatform =
+		const auto initializeSpawnPlatform =
 			[&, this]()
 			{
 				const float platformHeight = c_Constants.GetPlatformHeight();
-				m_Platform = std::make_unique<Platform>(
+				m_Platform = std::make_unique<SpawnPlatform>(
 					platformHeight,
 					m_CoordTransformer,
 					m_ProgramConstants,
 					m_ImageTextureLoader
 				);
+			};
+
+		const auto initializeFloatingPlatforms = 
+			[&, this]()
+			{
+				const size_t maxIndex = FloatingPlatform::c_Count;
+				for (size_t index = 0; index < maxIndex; index++)
+				{
+					(void)index;
+					m_FloatingPlatforms.emplace_back(
+						m_CoordTransformer,
+						m_ProgramConstants,
+						m_ImageTextureLoader
+					);
+				}
 			};
 
 		const auto initializeCloudDirection =
@@ -608,7 +601,8 @@ namespace BlastOff
 			{
 				initializeBackgroundSprite();
 				initializeCrag();
-				initializePlatform();
+				initializeSpawnPlatform();
+				initializeFloatingPlatforms();
 				initializeClouds();
 				initializePlayer();
 				initializePowerups();
@@ -663,7 +657,7 @@ namespace BlastOff
 		return false;
 	}
 
-	const bool Game::c_OutcomeStatisticsPrinting = false;
+	const bool Game::c_PrintOutcomeStatistics = false;
 
 
 	PlayableGame::PlayableGame(

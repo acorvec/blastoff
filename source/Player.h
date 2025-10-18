@@ -42,7 +42,7 @@ namespace BlastOff
 		Player(
 			const GameOutcome* const gameOutcome,
 			const Rect2f* const worldBounds,
-			const Platform* const platform,
+			const SpawnPlatform* const platform,
 			const CoordinateTransformer* const coordTransformer,
 			const GameConstants* const gameConstants,
 			const ProgramConstants* const programConstants,
@@ -102,7 +102,7 @@ namespace BlastOff
 
 		const Rect2f* m_WorldBounds = nullptr;
 		const GameOutcome* m_GameOutcome = nullptr;
-		const Platform* m_Platform = nullptr;
+		const SpawnPlatform* m_Platform = nullptr;
 		const CoordinateTransformer* m_CoordTransformer = nullptr;
 		const ProgramConstants* m_ProgramConstants = nullptr;
 		const GameConstants* m_GameConstants = nullptr;

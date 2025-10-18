@@ -67,7 +67,7 @@ namespace BlastOff
 	Player::Player(
 		const GameOutcome* const gameOutcome,
 		const Rect2f* const worldBounds,
-		const Platform* const platform, 
+		const SpawnPlatform* const platform, 
 		const CoordinateTransformer* const coordTransformer,
 		const GameConstants* const gameConstants,
 		const ProgramConstants* const programConstants,

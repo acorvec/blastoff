@@ -1,11 +1,20 @@
 #pragma once
 
+#include "ProgramConstants.h"
 #include "Utils.h"
 #include "Graphics.h"
 #include "Debug.h"
 
 namespace BlastOff
 {
+	struct SpawningRange
+	{
+		float bottom = 0;
+		float top = 0;
+
+		float ChooseYPosition() const;
+	};
+
 	struct Crag
 	{
 		Crag(
@@ -18,13 +27,12 @@ namespace BlastOff
 
 	private:
 		static const char* const c_TexturePath;
-
 		unique_ptr<ImageSprite> m_Sprite;
 	};
 
-	struct Platform
+	struct SpawnPlatform
 	{
-		Platform(
+		SpawnPlatform(
 			const float platformHeight,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants, 
@@ -44,6 +52,53 @@ namespace BlastOff
 	private:
 		static const char* const c_TexturePath;
 		unique_ptr<ImageSprite> m_Sprite;
+	};
+
+	struct FloatingPlatformSegment
+	{
+		FloatingPlatformSegment(
+			const Sprite* const parent,
+			const size_t segmentIndex,
+			const size_t amountOfSegments,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			ImageTextureLoader* const imageTextureLoader
+		);
+
+		void Update();
+		void Draw() const;
+
+	private:
+		static const float c_EngineHeight;
+		static const float c_XOffsetPerSegment;
+		static const char* const c_TexturePath;
+
+		unique_ptr<ImageSprite> m_Sprite;
+	};
+
+	struct FloatingPlatform
+	{
+		FloatingPlatform(
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			ImageTextureLoader* const imageTextureLoader
+		);
+
+		void Update();
+		void Draw() const;
+
+		static const size_t c_Count;
+
+	private:
+		using Segment = FloatingPlatformSegment;
+
+		static const SpawningRange c_SpawningRange;
+
+		static const size_t c_MinimumSegmentCount;
+		static const size_t c_MaximumSegmentCount;
+
+		unique_ptr<Empty> m_Empty = nullptr;
+		vector<Segment> m_Segments = {};
 	};
 	
 	struct BackgroundConfiguration
@@ -97,12 +152,6 @@ namespace BlastOff
 		void InitializeUpperAtmosphereSprite();
 	};
 
-	struct CloudSpawningRange
-	{
-		float bottom = 0;
-		float top = 0;
-	};
-
 	struct Cloud
 	{
 		void Update();
@@ -111,8 +160,6 @@ namespace BlastOff
 		bool DrawsAbovePlayer() const;
 
 	protected:
-		using SpawningRange = CloudSpawningRange;
-
 		float m_RandomSpeedMultiplier = 0;
 		bool m_DrawsAbovePlayer = false;
 

@@ -1,9 +1,25 @@
 #include "Props.h"
+#include "Graphics.h"
 #include "OperatingSystem.h"
 #include "Logging.h"
+#include "Utils.h"
+#include "raylib.h"
+#include <memory>
 
 namespace BlastOff
 {
+	float SpawningRange::ChooseYPosition() const
+	{
+		const float num = GetRandomFloat();
+
+		const float start = bottom;
+		const float end = top;
+
+		const float result = start + (num * (end - start));
+		return result;
+	}
+
+
 	Crag::Crag(
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
@@ -40,7 +56,7 @@ namespace BlastOff
 	const char* const Crag::c_TexturePath = "props/crag.png";
 
 
-	Platform::Platform(
+	SpawnPlatform::SpawnPlatform(
 		const float platformHeight,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
@@ -69,12 +85,7 @@ namespace BlastOff
 		m_Sprite->SetEngineRect(engineRect);
 	}
 
-	void Platform::Draw() const
-	{
-		m_Sprite->Draw();
-	}
-
-	void Platform::UpdateCollisionRect(const Vector2f playerSize)
+	void SpawnPlatform::UpdateCollisionRect(const Vector2f playerSize)
 	{
 		const Rect2f engineRect = m_Sprite->GetEngineRect();
 		const Vector2f engineSize = engineRect.GetSize();
@@ -86,29 +97,177 @@ namespace BlastOff
 		m_Sprite->SetCollisionRect(collisionRect);
 	}
 
-	Vector2f Platform::GetEngineSize() const
+	Vector2f SpawnPlatform::GetEngineSize() const
 	{	
 		return m_Sprite->GetEngineSize();
 	}
 
-	Line2f Platform::GetTopCollisionLine() const
+	Line2f SpawnPlatform::GetTopCollisionLine() const
 	{
 		return m_Sprite->GetTopCollisionLine();
 	}
 
-	Line2f Platform::GetLeftCollisionLine() const
+	Line2f SpawnPlatform::GetLeftCollisionLine() const
 	{
 		return m_Sprite->GetLeftCollisionLine();
 	}
 
-	Line2f Platform::GetRightCollisionLine() const
+	Line2f SpawnPlatform::GetRightCollisionLine() const
 	{
 		return m_Sprite->GetRightCollisionLine();
 	}
 
-	const char* const Platform::c_TexturePath = "props/platform.png";
+	void SpawnPlatform::Draw() const
+	{
+		m_Sprite->Draw();
+	}
+
+	const char* const SpawnPlatform::c_TexturePath = "props/spawnPlatform.png";
 
 
+	FloatingPlatformSegment::FloatingPlatformSegment(
+		const Sprite* const parent,
+		const size_t segmentIndex,
+		const size_t amountOfSegments,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		ImageTextureLoader* const imageTextureLoader
+	)
+	{
+		const auto calculateEngineRect =
+			[&, this](const Texture* texture) -> Rect2f
+			{
+				const float aspectRatio = texture->width / (float)texture->height;
+				const Vector2f engineSize = 
+				{ 
+					aspectRatio * c_EngineHeight, 
+					c_EngineHeight 
+				};
+				const float perSegment = c_XOffsetPerSegment;
+				const float overhang = engineSize.x - perSegment;
+				const float fromLeft = segmentIndex * perSegment;
+				const float totalWidth = 
+				{
+					((amountOfSegments - 1) * perSegment) + overhang
+				};
+				const float left = -totalWidth / 2.0f;
+				const float xPosition = left + fromLeft;
+				return Rect2f({ xPosition, 0 }, engineSize);
+			};	
+
+		const Texture* texture = 
+		{
+			imageTextureLoader->LazyLoadTexture(c_TexturePath)
+		};
+		m_Sprite = std::make_unique<ImageSprite>(
+			calculateEngineRect(texture),
+			coordTransformer,
+			programConstants,
+			texture
+		);
+		m_Sprite->SetParent(parent);
+	}
+
+	void FloatingPlatformSegment::Update()
+	{
+		m_Sprite->Update();
+	}
+
+	void FloatingPlatformSegment::Draw() const
+	{
+		m_Sprite->Draw();
+	}
+
+	const float FloatingPlatformSegment::c_EngineHeight = 10 / 46.0f;
+	const float FloatingPlatformSegment::c_XOffsetPerSegment = 0.169837f;
+	const char* const FloatingPlatformSegment::c_TexturePath = 
+	{
+		"props/floatingPlatform.png"
+	};
+
+
+	FloatingPlatform::FloatingPlatform(
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		ImageTextureLoader* const imageTextureLoader
+	)
+	{
+		const auto initializeEmpty = 	
+			[&, this]()
+			{
+				const Vector2f viewportSize = 
+				{
+					coordTransformer->GetViewportSize()
+				};
+				const Vector2f enginePosition = 
+				{
+					(GetRandomFloat() - (1 / 2.0f)) * viewportSize.x,
+					c_SpawningRange.ChooseYPosition()
+				};
+				m_Empty = std::make_unique<Empty>(
+					enginePosition, 
+					coordTransformer, 
+					programConstants
+				);
+			};
+
+		const auto generateSegmentCount = 
+			[this]()
+			{
+				const float randomNumber = GetRandomFloat();
+				
+				const float start = c_MinimumSegmentCount;
+				const float end = c_MaximumSegmentCount;
+				
+				const float result = start + (randomNumber * (end - start));
+				return (size_t)result;
+			};
+
+		const auto initializeSegments = 
+			[&, this]()
+			{
+				const size_t segmentCount = generateSegmentCount();
+				for (size_t index = 0; index < segmentCount; index++)
+				{
+					m_Segments.emplace_back(
+						m_Empty.get(),
+						index,
+						segmentCount,
+						coordTransformer,
+						programConstants,
+						imageTextureLoader
+					);
+				}
+			};
+
+		initializeEmpty();
+		initializeSegments();
+	}
+
+	const size_t FloatingPlatform::c_Count = 15;
+
+	void FloatingPlatform::Update()
+	{
+		for (Segment& segment : m_Segments)
+			segment.Update();
+	}
+
+	void FloatingPlatform::Draw() const
+	{
+		for (const Segment& segment : m_Segments)
+			segment.Draw();
+	}
+
+	const SpawningRange FloatingPlatform::c_SpawningRange = 
+	{
+		.bottom=50, 
+		.top=480 
+	};
+
+	const size_t FloatingPlatform::c_MinimumSegmentCount = 7;
+	const size_t FloatingPlatform::c_MaximumSegmentCount = 14;
+
+	
 	BackgroundConfiguration::BackgroundConfiguration() :
 		m_LowerAtmosphereColour(0xA8, 0xFF, 0xFF),
 		m_MiddleAtmosphereColour(0x32, 0x5B, 0xFF),
@@ -437,12 +596,7 @@ namespace BlastOff
 
 	void Cloud::InitializeYPosition()
 	{
-		const float x = GetRandomFloat();
-
-		const float start = m_SpawningRange.bottom;
-		const float end = m_SpawningRange.top;
-
-		const float yPosition = start + (x * (end - start));
+		const float yPosition = m_SpawningRange.ChooseYPosition();
 		const Vector2f enginePosition = { 0, yPosition };
 		const Rect2f engineRect(enginePosition, m_EngineSize);
 
@@ -480,10 +634,10 @@ namespace BlastOff
 	}
 
 	const char* const LowCloud::c_TexturePath = "props/lowCloud.png";
-	const CloudSpawningRange LowCloud::c_SpawningRange = 
+	const SpawningRange LowCloud::c_SpawningRange = 
 	{
-		5.4863021f, 
-		261.4863f 
+		.bottom=50, 
+		.top=261.4863f 
 	};
 	const float LowCloud::c_SpeedMultiplier = 1;
 	const float LowCloud::c_SpeedRandomness = 2 / 10.0f;
@@ -515,10 +669,10 @@ namespace BlastOff
 
 	const char* const HighCloud::c_TexturePath = "props/highCloud.png";
 
-	const CloudSpawningRange HighCloud::c_SpawningRange =
+	const SpawningRange HighCloud::c_SpawningRange =
 	{
-		256,
-		409.6f
+		.bottom=256,
+		.top=409.6f
 	};
 	const float HighCloud::c_SpeedMultiplier = 3 / 2.0f;
 	const float HighCloud::c_SpeedRandomness = 2 / 10.0f;

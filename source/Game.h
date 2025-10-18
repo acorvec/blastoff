@@ -1,7 +1,5 @@
 #pragma once
 
-#include <deque>
-
 #include "Utils.h"
 #include "Graphics.h"
 #include "Player.h"
@@ -59,7 +57,7 @@ namespace BlastOff
 
 		static const inline Constants c_Constants;
 
-		static const bool c_OutcomeStatisticsPrinting;
+		static const bool c_PrintOutcomeStatistics;
 
 		static inline uint64_t m_WinCount = 0;
 		static inline uint64_t m_LossCount = 0;
@@ -72,7 +70,7 @@ namespace BlastOff
 
 		unique_ptr<Background> m_Background = nullptr;
 		unique_ptr<Crag> m_Crag = nullptr;
-		unique_ptr<Platform> m_Platform = nullptr;
+		unique_ptr<SpawnPlatform> m_Platform = nullptr;
 		unique_ptr<Player> m_Player = nullptr;
 		unique_ptr<GUIBar> m_FuelBar = nullptr;
 		unique_ptr<GUIBar> m_SpeedupBar = nullptr;
@@ -82,6 +80,7 @@ namespace BlastOff
 		vector<SpeedUpPowerup> m_SpeedUpPowerups = {};
 		vector<FuelUpPowerup> m_FuelUpPowerups = {};
 		vector<DownforcePowerup> m_DownforcePowerups = {};
+		vector<FloatingPlatform> m_FloatingPlatforms = {};
 
 		vector<LowCloud> m_LowClouds = {};
 		vector<HighCloud> m_HighClouds = {};

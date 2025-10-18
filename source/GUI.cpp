@@ -542,7 +542,11 @@ namespace BlastOff
 				};
 				const Rect2f engineRect = m_Sprite->CalculateRealRect();
 
-				m_IsSelected = engineRect.CollideWithPoint(mousePosition);
+				const Circle2f circle(
+					engineRect.GetPosition(), 
+					engineRect.w / 2.0f
+				);
+				m_IsSelected = circle.CollideWithPoint(mousePosition);
 
 				const bool leftButtonDown =
 				{
@@ -3292,9 +3296,9 @@ namespace BlastOff
 				float top = m_Backing->GetInnerBackingHeight() / 2.0f;
 				top -= margins;
 
-				for (size_t i = 0; i < m_Adjusters.size(); i++)
+				for (size_t index = 0; index < m_Adjusters.size(); index++)
 				{
-					Adjuster* adjuster = m_Adjusters.at(i);
+					Adjuster* adjuster = m_Adjusters.at(index);
 					const float height = adjuster->CalculateHeight();
 					const float centerY = top - (height / 2.0f) - margins;
 					adjuster->SetLocalPosition({ 0, centerY });
