@@ -236,6 +236,7 @@ namespace BlastOff
 		~TextTextureLoader();
 
 		const Texture* LazyLoadTexture(const Parameters& parameters);
+		Vector2f Measure(const Parameters& parameters) const;
 
 	private:
 		using CacheMap = unordered_map<Parameters, Texture, Parameters::Hasher>;
@@ -305,7 +306,6 @@ namespace BlastOff
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
 			TextTextureLoader* const textureLoader,
-			const Font* const font,
 			const string& message = ""
 		);
 
@@ -330,7 +330,6 @@ namespace BlastOff
 		Colour4i m_Colour = c_White;
 		float m_FontSize = 0;
 		string m_Message = "";
-		const Font* m_Font = nullptr;
 		TextTextureLoader* m_TextureLoader = nullptr;
 
 		Parameters CalculateParameters() const;
@@ -348,7 +347,6 @@ namespace BlastOff
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
 			TextTextureLoader* const textureLoader,
-			const Font* const font,
 			const string& message = "",
 			const Sprite* const parent = nullptr
 		);
@@ -368,7 +366,6 @@ namespace BlastOff
 
 		const CoordinateTransformer* m_CoordTransformer;
 		const ProgramConstants* m_ProgramConstants;
-		const Font* m_Font;
 
 		unique_ptr<Empty> m_Empty = nullptr;
 		vector<LineSprite> m_LineSprites = {};

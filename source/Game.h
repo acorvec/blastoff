@@ -18,8 +18,7 @@ namespace BlastOff
             const ProgramConstants* const programConstants,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
-			Vector2f* const cameraPosition,
-			const Font* const font
+			Vector2f* const cameraPosition
         );
 
 		virtual void Update();
@@ -89,7 +88,6 @@ namespace BlastOff
 		vector<FloatingPlatform*> m_AllFloatingPlatforms = {};
 
 		const ProgramConstants* m_ProgramConstants = nullptr;
-		const Font* m_Font = nullptr;
 
 		ImageTextureLoader* m_ImageTextureLoader = nullptr;
 		TextTextureLoader* m_TextTextureLoader = nullptr;
@@ -106,7 +104,6 @@ namespace BlastOff
 			const Callback& muteUnmuteUnmuteCallback,
 			const Callback& resetCallback,
 			const Callback& exitCallback,
-			const Font* const font,
 			const Vector2i* const windowPosition,
 			const Vector2i* const windowSize
 		);
@@ -143,8 +140,7 @@ namespace BlastOff
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
 			Vector2f* const cameraPosition,
-			const Callback& resetCallback,
-			const Font* const font
+			const Callback& resetCallback
 		);
 
 		void Update() override;

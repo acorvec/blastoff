@@ -302,6 +302,8 @@ namespace BlastOff
 			segmentRect.GetEdgePosition(Direction::Up)
 		};
 
+		// this path should never happen.
+		// it's probably still a good idea, since C++ warnings are evil
 		if (!thisTop)
 		{
 			updateMostRecentPlayerPosition();

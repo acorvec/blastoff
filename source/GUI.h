@@ -116,8 +116,7 @@ namespace BlastOff
 			const char* const message,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
-			TextTextureLoader* const textTextureLoader,
-			const Font* const font
+			TextTextureLoader* const textTextureLoader
 		);
 	};
 
@@ -146,8 +145,7 @@ namespace BlastOff
 			const char* const message,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
-			TextTextureLoader* const textTextureLoader,
-			const Font* const font
+			TextTextureLoader* const textTextureLoader
 		);
 
 		void Update() override;
@@ -170,8 +168,7 @@ namespace BlastOff
 			const char* const message,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
-			TextTextureLoader* const textTextureLoader,
-			const Font* const font
+			TextTextureLoader* const textTextureLoader
 		);
 
 		void Update();
@@ -188,8 +185,7 @@ namespace BlastOff
 			const GUIBar* fuelBar,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
-			TextTextureLoader* const textTextureLoader,
-			const Font* const font
+			TextTextureLoader* const textTextureLoader
 		);
 
 	private:
@@ -203,8 +199,7 @@ namespace BlastOff
 			const GUIBar* speedupLabel,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
-			TextTextureLoader* const textTextureLoader,
-			const Font* const font
+			TextTextureLoader* const textTextureLoader
 		);
 
 	private:
@@ -467,7 +462,6 @@ namespace BlastOff
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
 			const InputManager* const inputManager,
-			const Font* const font,
 			TextTextureLoader* const textTextureLoader,
 			ImageTextureLoader* const imageTextureLoader
 		);
@@ -712,8 +706,7 @@ namespace BlastOff
 			const ProgramConstants* const programConstants,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
-			const CameraEmpty* const cameraEmpty,
-			const Font* const font
+			const CameraEmpty* const cameraEmpty
 		);
 		virtual ~GameEndMenu()
 		{
@@ -756,8 +749,7 @@ namespace BlastOff
 			const ProgramConstants* const programConstants,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
-			const CameraEmpty* const cameraEmpty,
-			const Font* const font
+			const CameraEmpty* const cameraEmpty
 		);
 
 	private:
@@ -775,8 +767,7 @@ namespace BlastOff
 			const ProgramConstants* const programConstants,
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
-			const CameraEmpty* const cameraEmpty,
-			const Font* const font
+			const CameraEmpty* const cameraEmpty
 		);
 
 	private:
@@ -796,7 +787,6 @@ namespace BlastOff
             const Callback& playCallback,
             const Callback& settingsCallback,
             const Callback& exitCallback,
-            const Font* const font,
             const Vector2i* const windowPosition,
             const Vector2i* const windowSize
         );
@@ -811,7 +801,6 @@ namespace BlastOff
 
         const ProgramConstants* m_ProgramConstants = nullptr;
 		const InputManager* m_InputManager = nullptr;
-        const Font* m_Font = nullptr;
         const CoordinateTransformer* m_CoordTransformer = nullptr;
         const CameraEmpty* m_CameraEmpty = nullptr;
         const Vector2i* m_WindowPosition = nullptr;
@@ -902,7 +891,6 @@ namespace BlastOff
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
 			const InputManager* const inputManager,
-			const Font* const font,
 			TextTextureLoader* const textTextureLoader,
 			ImageTextureLoader* const imageTextureLoader
 		);
@@ -1016,7 +1004,6 @@ namespace BlastOff
 			const float* const parentOpacity,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
-			const Font* const font,
 			TextTextureLoader* const textureLoader
 		);
 
@@ -1051,7 +1038,6 @@ namespace BlastOff
 			const float* const parentOpacity,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
-			const Font* const font,
 			TextTextureLoader* const textureLoader
 		);
 
@@ -1070,7 +1056,6 @@ namespace BlastOff
 			const float* const parentOpacity,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
-			const Font* const font,
 			TextTextureLoader* const textureLoader
 		);
 
@@ -1112,8 +1097,7 @@ namespace BlastOff
 			const CoordinateTransformer* const coordTransformer,
 			TextTextureLoader* const textTextureLoader,
 			const InputManager* const inputManager,
-			const ProgramConstants* const programConstants,
-			const Font* const font
+			const ProgramConstants* const programConstants
 		);
 
 		float GetValue() const;
@@ -1154,8 +1138,7 @@ namespace BlastOff
 			const CoordinateTransformer* const coordTransformer,
 			TextTextureLoader* const textTextureLoader,
 			const InputManager* const inputManager,
-			const ProgramConstants* const programConstants,
-			const Font* const font
+			const ProgramConstants* const programConstants
 		);
 
 		float GetValue() const;
@@ -1214,7 +1197,6 @@ namespace BlastOff
 			const CoordinateTransformer* const coordTransformer,
 			const InputManager* const inputManager,
             const ProgramConstants* const programConstants,
-			const Font* const font,
             ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
 			Settings* const settings,

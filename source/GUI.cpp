@@ -264,8 +264,7 @@ namespace BlastOff
 		const char* const message,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
-		TextTextureLoader* const textTextureLoader,
-		const Font* const font
+		TextTextureLoader* const textTextureLoader
 	)
 	{
 		m_Sprite = std::make_unique<TextLineSprite>(
@@ -275,7 +274,6 @@ namespace BlastOff
 			coordTransformer,
 			programConstants,
 			textTextureLoader,
-			font,
 			message
 		);
 	}
@@ -288,8 +286,7 @@ namespace BlastOff
 		const char* const message,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
-		TextTextureLoader* const textTextureLoader,
-		const Font* const font
+		TextTextureLoader* const textTextureLoader
 	) :
 		GUILabel(
 			c_Offset,
@@ -298,8 +295,7 @@ namespace BlastOff
 			message,
 			coordTransformer,
 			programConstants,
-			textTextureLoader,
-			font
+			textTextureLoader
 		),
 		m_Type(type),
 		m_Bar(bar)
@@ -403,8 +399,7 @@ namespace BlastOff
 		const char* const message,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
-		TextTextureLoader* const textTextureLoader,
-		const Font* const font
+		TextTextureLoader* const textTextureLoader
 	)
 	{
 		using Type = BarLabelType;
@@ -415,8 +410,7 @@ namespace BlastOff
 			message,
 			coordTransformer,
 			programConstants,
-			textTextureLoader,
-			font
+			textTextureLoader
 		);
 		m_EnergyLabel = std::make_unique<BarLabelComponent>(
 			bar,
@@ -425,8 +419,7 @@ namespace BlastOff
 			message,
 			coordTransformer,
 			programConstants,
-			textTextureLoader,
-			font
+			textTextureLoader
 		);
 	}
 
@@ -454,8 +447,7 @@ namespace BlastOff
 		const GUIBar* fuelBar,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
-		TextTextureLoader* const textTextureLoader,
-		const Font* const font
+		TextTextureLoader* const textTextureLoader
 	) :
 		BarLabel(
 			fuelBar,
@@ -463,8 +455,7 @@ namespace BlastOff
 			c_Message,
 			coordTransformer,
 			programConstants,
-			textTextureLoader,
-			font
+			textTextureLoader
 		)
 	{
 
@@ -483,8 +474,7 @@ namespace BlastOff
 		const GUIBar* speedupBar,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
-		TextTextureLoader* const textTextureLoader,
-		const Font* const font
+		TextTextureLoader* const textTextureLoader
 	) :
 		BarLabel(
 			speedupBar,
@@ -492,8 +482,7 @@ namespace BlastOff
 			c_Message,
 			coordTransformer,
 			programConstants,
-			textTextureLoader,
-			font
+			textTextureLoader
 		)
 	{
 
@@ -1203,7 +1192,6 @@ namespace BlastOff
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
 		const InputManager* const inputManager,
-		const Font* const font,
 		TextTextureLoader* const textTextureLoader,
 		ImageTextureLoader* const imageTextureLoader
 	)
@@ -1231,7 +1219,6 @@ namespace BlastOff
 					coordTransformer,
 					programConstants,
 					textTextureLoader,
-					font,
 					message,
 					m_Empty.get()
 				);
@@ -1810,8 +1797,7 @@ namespace BlastOff
 		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
-		const CameraEmpty* const cameraEmpty,
-		const Font* const font
+		const CameraEmpty* const cameraEmpty
 	) 
 	{
 		const auto initializeEmpty = 
@@ -1865,7 +1851,6 @@ namespace BlastOff
 					coordTransformer,
 					programConstants,
 					textTextureLoader,
-					font,
 					messageText
 				);
 				m_Message->SetParent(m_Empty.get());
@@ -1999,8 +1984,7 @@ namespace BlastOff
 		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
-		const CameraEmpty* const cameraEmpty,
-		const Font* const font
+		const CameraEmpty* const cameraEmpty
 	) :
 		GameEndMenu(
 			c_BackingColour,
@@ -2012,8 +1996,7 @@ namespace BlastOff
 			programConstants,
 			imageTextureLoader,
 			textTextureLoader,
-			cameraEmpty,
-			font
+			cameraEmpty
 		)
 	{
 
@@ -2031,8 +2014,7 @@ namespace BlastOff
 		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
-		const CameraEmpty* const cameraEmpty,
-		const Font* const font
+		const CameraEmpty* const cameraEmpty
 	) :
 		GameEndMenu(
 			c_BackingColour,
@@ -2044,8 +2026,7 @@ namespace BlastOff
 			programConstants,
 			imageTextureLoader,
 			textTextureLoader,
-			cameraEmpty,
-			font
+			cameraEmpty
 		)
 	{
 
@@ -2065,7 +2046,6 @@ namespace BlastOff
         const Callback& playCallback,
         const Callback& settingsCallback,
         const Callback& exitCallback,
-        const Font* const font,
         const Vector2i* const windowPosition,
         const Vector2i* const windowSize
     ) :
@@ -2075,7 +2055,6 @@ namespace BlastOff
         m_CameraEmpty(cameraEmpty),
         m_ImageTextureLoader(imageTextureLoader),
         m_TextTextureLoader(textTextureLoader),
-        m_Font(font),
         m_WindowPosition(windowPosition),
         m_WindowSize(windowSize)
     {
@@ -2556,7 +2535,6 @@ namespace BlastOff
 		const float* const parentOpacity,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
-		const Font* const font,
 		TextTextureLoader* const textureLoader
 	) :
 		m_BeginningOfMessage(beginningOfMessage),
@@ -2569,8 +2547,7 @@ namespace BlastOff
 			c_FontSize,
 			coordTransformer,
 			programConstants,
-			textureLoader,
-			font
+			textureLoader
 		);
 		m_Sprite->SetParent(parent);
 	}
@@ -2628,7 +2605,6 @@ namespace BlastOff
 		const float* const parentOpacity,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
-		const Font* const font,
 		TextTextureLoader* const textureLoader
 	) :
 		AdjusterLabel(
@@ -2639,7 +2615,6 @@ namespace BlastOff
 			parentOpacity,
 			coordTransformer,
 			programConstants,
-			font,
 			textureLoader
 		)
 	{
@@ -2662,7 +2637,6 @@ namespace BlastOff
 		const float* const parentOpacity,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
-		const Font* const font,
 		TextTextureLoader* const textureLoader
 	) :
 		AdjusterLabel(
@@ -2673,7 +2647,6 @@ namespace BlastOff
 			parentOpacity,
 			coordTransformer,
 			programConstants,
-			font,
 			textureLoader
 		)
 	{
@@ -2698,7 +2671,6 @@ namespace BlastOff
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
 		const InputManager* const inputManager,
-		const Font* const font,
 		TextTextureLoader* const textTextureLoader,
 		ImageTextureLoader* const imageTextureLoader
 	) :
@@ -2713,7 +2685,6 @@ namespace BlastOff
 			coordTransformer,
 			programConstants,
 			inputManager,
-			font,
 			textTextureLoader,
 			imageTextureLoader
 		)
@@ -2798,8 +2769,7 @@ namespace BlastOff
 		const CoordinateTransformer* const coordTransformer,
 		TextTextureLoader* const textTextureLoader,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConstants,
-		const Font* const font
+		const ProgramConstants* const programConstants
 	) :
 		m_ParentOpacity(parentOpacity)
 	{
@@ -2828,7 +2798,6 @@ namespace BlastOff
 					parentOpacity,
 					coordTransformer,
 					programConstants,
-					font,
 					textTextureLoader
 				);
 			};
@@ -2909,8 +2878,7 @@ namespace BlastOff
 		const CoordinateTransformer* const coordTransformer,
 		TextTextureLoader* const textTextureLoader,
 		const InputManager* const inputManager,
-		const ProgramConstants* const programConstants,
-		const Font* const font
+		const ProgramConstants* const programConstants
 	) :
 		m_ParentOpacity(parentOpacity)
 	{
@@ -2940,7 +2908,6 @@ namespace BlastOff
 					parentOpacity,
 					coordTransformer,
 					programConstants,
-					font,
 					textTextureLoader
 				);
 			};
@@ -3167,7 +3134,6 @@ namespace BlastOff
 		const CoordinateTransformer* const coordTransformer,
 		const InputManager* const inputManager,
 		const ProgramConstants* const programConstants,
-		const Font* const font,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
 		Settings* const settings,
@@ -3231,8 +3197,7 @@ namespace BlastOff
 					coordTransformer,
 					textTextureLoader,
 					inputManager,
-					programConstants,
-					font
+					programConstants
 				);
 				m_WindowSizeAdjuster = std::make_unique<WindowSizeAdjuster>(
 					m_Settings,
@@ -3243,8 +3208,7 @@ namespace BlastOff
 					coordTransformer,
 					textTextureLoader,
 					inputManager,
-					programConstants,
-					font
+					programConstants
 				);
 				
 				m_Adjusters = 
@@ -3371,7 +3335,6 @@ namespace BlastOff
 					coordTransformer,
 					programConstants,
 					inputManager,
-					font,
 					textTextureLoader,
 					imageTextureLoader
 				);

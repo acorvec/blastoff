@@ -530,7 +530,6 @@ namespace BlastOff
             muteUnmuteUnmuteCallback,
 			resetCallback,
 			exitCallback,
-			&m_Font,
 			m_Window->GetPosition(),
 			m_Window->GetSize()
 		);
@@ -566,7 +565,6 @@ namespace BlastOff
 			playCallback,
 			settingsCallback,
 			exitCallback,
-			&m_Font,
 			m_Window->GetPosition(),
 			m_Window->GetSize()
 		);
@@ -587,8 +585,7 @@ namespace BlastOff
             &m_ImageTextureLoader,
             m_TextTextureLoader.get(),
             &m_CameraPosition,
-            resetCallback,
-            &m_Font
+            resetCallback
         );       
     }
 
@@ -612,7 +609,6 @@ namespace BlastOff
 			m_CoordinateTransformer.get(),
 			m_InputManager.get(),
 			&c_Config,
-			&m_Font,
 			&m_ImageTextureLoader,
 			m_TextTextureLoader.get(),
 			m_Settings.get(),

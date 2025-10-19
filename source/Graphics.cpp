@@ -716,6 +716,17 @@ namespace BlastOff
 			return result;
 	}
 
+	Vector2f TextTextureLoader::Measure(const Parameters& parameters) const
+	{
+		const RayVector2f rayResult = MeasureTextEx(
+			*m_Font,
+			parameters.message.c_str(),
+			parameters.fontSize,
+			parameters.spacing
+		);
+		return Vector2f::FromRayVector2f(rayResult);
+	}
+
 	const Texture* TextTextureLoader::LoadAndInsert
 		(const Parameters& parameters)
 	{
@@ -929,7 +940,6 @@ namespace BlastOff
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
 		TextTextureLoader* const textureLoader,
-		const Font* const font,
 		const string& message
 	) :
 		ImageSprite(
@@ -941,7 +951,6 @@ namespace BlastOff
 		m_Colour(colour),
 		m_FontSize(fontSize),
 		m_TextureLoader(textureLoader),
-		m_Font(font),
 		m_Message(message)
 	{
 		
@@ -986,22 +995,15 @@ namespace BlastOff
 			[this]()
 			{
 				const Parameters parameters = CalculateParameters();
-				const RayVector2f measurement = MeasureTextEx(
-					*m_Font,
-					parameters.message.c_str(),
-					parameters.fontSize,
-					parameters.spacing
-				);
-
 				const float ppu = m_CoordTransformer->GetFontPixelsPerUnit();
-				Vector2f convertedMeasurement =
+
+				const Vector2f measurement = 
 				{
-					Vector2f::FromRayVector2f(measurement)
+					m_TextureLoader->Measure(parameters) / ppu
 				};
-				convertedMeasurement /= ppu;
 
 				const Vector2f enginePosition = m_EngineRect.GetPosition();
-				m_EngineRect = Rect2f(enginePosition, convertedMeasurement);
+				m_EngineRect = Rect2f(enginePosition, measurement);
 			};
 
 		const auto lazyLoadTexture =
@@ -1060,7 +1062,6 @@ namespace BlastOff
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
 		TextTextureLoader* const textureLoader,
-		const Font* const font,
 		const string& message,
 		const Sprite* const parent
 	) :
@@ -1070,8 +1071,7 @@ namespace BlastOff
 		m_LineSpacing(lineSpacing),
 		m_CoordTransformer(coordTransformer),
 		m_ProgramConstants(programConstants),
-		m_TextureLoader(textureLoader),
-		m_Font(font)
+		m_TextureLoader(textureLoader)
 	{
 		const auto createEmpty = 
 			[&, this]()
@@ -1146,7 +1146,6 @@ namespace BlastOff
 					m_CoordTransformer,
 					m_ProgramConstants,
 					m_TextureLoader,
-					m_Font,
 					line.c_str()
 				);
 				LineSprite& back = m_LineSprites.back();

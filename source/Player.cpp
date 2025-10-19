@@ -662,9 +662,6 @@ namespace BlastOff
 			applyVelocity();
 		}
 		fadeSpaceshipFlame();
-
-		if (m_DidCollideVertically)
-			std::println("{}", (string)m_Velocity);
 	}
 
 	void Player::Draw() const

@@ -18,11 +18,9 @@ namespace BlastOff
 		const ProgramConstants* const programConstants,
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
-		Vector2f* const cameraPosition,
-		const Font* const font
+		Vector2f* const cameraPosition
 	) :
 		m_ProgramConstants(programConstants),
-		m_Font(font),
 		m_CameraPosition(cameraPosition),
 		m_ImageTextureLoader(imageTextureLoader),
 		m_TextTextureLoader(textTextureLoader)
@@ -591,15 +589,13 @@ namespace BlastOff
 					m_FuelBar.get(),
 					m_CoordTransformer,
 					m_ProgramConstants,
-					m_TextTextureLoader,
-					m_Font
+					m_TextTextureLoader
 				);
 				m_SpeedupBarLabel = std::make_unique<SpeedupBarLabel>(
 					m_SpeedupBar.get(),
 					m_CoordTransformer,
 					m_ProgramConstants,
-					m_TextTextureLoader,
-					m_Font
+					m_TextTextureLoader
 				);
 			};
 
@@ -676,7 +672,6 @@ namespace BlastOff
         const Callback& muteUnmuteUnmuteCallback,
         const Callback& resetCallback,
 		const Callback& exitCallback,
-        const Font* const font,
         const Vector2i* const windowPosition,
         const Vector2i* const windowSize
     ) :
@@ -684,8 +679,7 @@ namespace BlastOff
             programConstants,
             imageTextureLoader,
             textTextureLoader,
-			&m_CameraPosition,
-            font
+			&m_CameraPosition
         )
     {
 		const auto initializeGraphics =
@@ -743,8 +737,7 @@ namespace BlastOff
 					m_ProgramConstants,
 					imageTextureLoader,
 					textTextureLoader,
-					m_CameraEmpty.get(),
-					font
+					m_CameraEmpty.get()
 				);
 				m_LoseMenu = std::make_unique<LoseMenu>(
 					resetCallback,
@@ -754,8 +747,7 @@ namespace BlastOff
 					m_ProgramConstants,
 					imageTextureLoader,
 					textTextureLoader,
-					m_CameraEmpty.get(),
-					font
+					m_CameraEmpty.get()
 				);
 			};
 
@@ -887,15 +879,13 @@ namespace BlastOff
 		ImageTextureLoader* const imageTextureLoader,
 		TextTextureLoader* const textTextureLoader,
 		Vector2f* const cameraPosition,
-		const Callback& resetCallback,
-		const Font* const font
+		const Callback& resetCallback
 	) :
 		Game(
 			programConstants,
 			imageTextureLoader,
 			textTextureLoader,
-			cameraPosition,
-			font
+			cameraPosition
 		),
 		m_ResetCallback(resetCallback)
 	{
