@@ -281,12 +281,12 @@ namespace BlastOff
 		const Vector2f emptyPosition = m_Empty->GetLocalPosition();
 		const float localizedPlayerX = playerRect.x - emptyPosition.x;
 		
-		if (localizedPlayerX < (left - (playerRect.w / 2.0f)))
+		if (localizedPlayerX < left)
 		{
 			updateMostRecentPlayerPosition();
 			return std::nullopt;
 		}
-		if (localizedPlayerX > (right + (playerRect.w / 2.0f)))
+		if (localizedPlayerX > right)
 		{
 			updateMostRecentPlayerPosition();
 			return std::nullopt;
