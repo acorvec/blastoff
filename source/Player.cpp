@@ -1,5 +1,7 @@
 #include "Player.h"
+#include "Graphics.h"
 #include "OperatingSystem.h"
+#include "Props.h"
 #include "Utils.h"
 #include "Logging.h"
 
@@ -67,7 +69,8 @@ namespace BlastOff
 	Player::Player(
 		const GameOutcome* const gameOutcome,
 		const Rect2f* const worldBounds,
-		const SpawnPlatform* const platform, 
+		const SpawnPlatform* const spawnPlatform,
+		const vector<FloatingPlatform*>* const floatingPlatforms,
 		const CoordinateTransformer* const coordTransformer,
 		const GameConstants* const gameConstants,
 		const ProgramConstants* const programConstants,
@@ -78,7 +81,8 @@ namespace BlastOff
 		m_MaxSpeedupTick(5),
 		m_GameOutcome(gameOutcome),
 		m_WorldBounds(worldBounds),
-		m_Platform(platform),
+		m_SpawnPlatform(spawnPlatform),
+		m_FloatingPlatforms(floatingPlatforms),
 		m_CoordTransformer(coordTransformer),
 		m_GameConstants(gameConstants),
 		m_ProgramConstants(programConstants),
@@ -122,7 +126,7 @@ namespace BlastOff
 				};
 				const float spaceshipHeight = m_Config->GetSpaceshipHeight();
 
-				const Vector2f platformSize = m_Platform->GetEngineSize();
+				const Vector2f platformSize = m_SpawnPlatform->GetEngineSize();
 				const float platformHeight = platformSize.y;
 
 				const Vector2f vpSize = viewportSize;
@@ -290,6 +294,9 @@ namespace BlastOff
 		const auto applyGravity =
 			[this]()
 			{
+				if (m_DidCollideVertically)
+					return;
+
 				const float acceleration =
 				{
 					m_GameConstants->GetGravitationalAcceleration()
@@ -458,6 +465,8 @@ namespace BlastOff
 					offsettedPosition
 				);
 				m_Spaceship->SetLocalPosition(newPosition);
+
+				m_DidCollideVertically = true;
 			};
 
 		const auto applyWorldBoundCollisions =
@@ -522,12 +531,12 @@ namespace BlastOff
 				}
 			};
 
-		const auto applyPlatformCollisions =
+		const auto applySpawnPlatformCollisions = 
 			[&, this]()
 			{
-				const Line2f topLine = m_Platform->GetTopCollisionLine();
-				const Line2f leftLine = m_Platform->GetLeftCollisionLine();
-				const Line2f rightLine = m_Platform->GetRightCollisionLine();
+				const Line2f topLine = m_SpawnPlatform->GetTopCollisionLine();
+				const Line2f leftLine = m_SpawnPlatform->GetLeftCollisionLine();
+				const Line2f rightLine = m_SpawnPlatform->GetRightCollisionLine();
 
 				m_BottomCollision = false;
 
@@ -553,16 +562,28 @@ namespace BlastOff
 				}
 			};
 
+		const auto applyFloatingPlatformCollisions = 
+			[&, this]()
+			{
+				for (FloatingPlatform* platform : *m_FloatingPlatforms)
+				{
+					const Rect2f engineRect = m_Spaceship->GetEngineRect();
+					const optional<Edge2f> collision = 
+					{
+						platform->CollideWithPlayer(engineRect)
+					};
+					if (collision)
+						applyPropYCollision(*collision);
+				}
+			};
+
 		const auto calculateVelocityForRotation =
 			[this]()
 			{
 				if (!m_DidCollideHorizontally)
 					return m_Velocity;
 				else
-				{
-					m_DidCollideHorizontally = false;
 					return m_Velocity.InvertX();
-				}
 			};
 
 		const auto applyRotation =
@@ -621,10 +642,14 @@ namespace BlastOff
 				m_Spaceship->Move(m_Velocity * frametime);
 			};
 
+		m_DidCollideHorizontally = false;
+		m_DidCollideVertically = false;
+
 		if (!m_IsFrozen)
 		{
 			applyWorldBoundCollisions();
-			applyPlatformCollisions();
+			applySpawnPlatformCollisions();
+			applyFloatingPlatformCollisions();
 			applyRotation();
 			updateThrustAcceleration();
 			updateFuel();
@@ -637,6 +662,9 @@ namespace BlastOff
 			applyVelocity();
 		}
 		fadeSpaceshipFlame();
+
+		if (m_DidCollideVertically)
+			std::println("{}", (string)m_Velocity);
 	}
 
 	void Player::Draw() const

@@ -110,8 +110,8 @@ namespace BlastOff
 						handlePowerupCollision(powerup);
 				}
 
-				for (FloatingPlatform& platform : m_FloatingPlatforms)
-					platform.Update();
+				for (FloatingPlatform* const platform : m_AllFloatingPlatforms)
+					platform->Update();
 			};
 
 		const auto checkForOutcome =
@@ -205,8 +205,9 @@ namespace BlastOff
 				for (const Powerup* const powerup : m_AllPowerups)
 					powerup->Draw();
 
-				for (const FloatingPlatform& platform : m_FloatingPlatforms)
-					platform.Draw();
+				const auto& vector = m_AllFloatingPlatforms;
+				for (const FloatingPlatform* const platform : vector)
+					platform->Draw();
 
 				m_Player->Draw();
 				
@@ -331,8 +332,9 @@ namespace BlastOff
 		const auto initializeFloatingPlatforms = 
 			[&, this]()
 			{
-				const size_t maxIndex = FloatingPlatform::c_Count;
-				for (size_t index = 0; index < maxIndex; index++)
+				const size_t length = FloatingPlatform::c_Count;
+				m_FloatingPlatforms.reserve(length);
+				for (size_t index = 0; index < length; index++)
 				{
 					(void)index;
 					m_FloatingPlatforms.emplace_back(
@@ -341,6 +343,10 @@ namespace BlastOff
 						m_ImageTextureLoader
 					);
 				}
+
+				m_AllFloatingPlatforms.reserve(length);
+				for (FloatingPlatform& platform : m_FloatingPlatforms)
+					m_AllFloatingPlatforms.push_back(&platform);
 			};
 
 		const auto initializeCloudDirection =
@@ -418,6 +424,7 @@ namespace BlastOff
 					&m_Outcome,
 					&m_WorldBounds,
 					m_Platform.get(),
+					&m_AllFloatingPlatforms,
 					m_CoordTransformer,
 					&c_Constants,
 					m_ProgramConstants,

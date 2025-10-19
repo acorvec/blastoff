@@ -5,6 +5,7 @@
 #include "Utils.h"
 #include "raylib.h"
 #include <memory>
+#include <optional>
 
 namespace BlastOff
 {
@@ -144,11 +145,11 @@ namespace BlastOff
 					c_EngineHeight 
 				};
 				const float perSegment = c_XOffsetPerSegment;
-				const float overhang = engineSize.x - perSegment;
 				const float fromLeft = segmentIndex * perSegment;
+				const float overhang = engineSize.x - perSegment;
 				const float totalWidth = 
 				{
-					((amountOfSegments - 1) * perSegment) + overhang
+					((amountOfSegments - 1) * perSegment) + (overhang / 2.0f)
 				};
 				const float left = -totalWidth / 2.0f;
 				const float xPosition = left + fromLeft;
@@ -166,6 +167,16 @@ namespace BlastOff
 			texture
 		);
 		m_Sprite->SetParent(parent);
+	}
+
+	float FloatingPlatformSegment::GetEdgePosition(const Direction side) const
+	{
+		return m_Sprite->GetEdgePosition(side);
+	}
+
+	Rect2f FloatingPlatformSegment::CalculateRealRect() const
+	{
+		return m_Sprite->CalculateRealRect();
 	}
 
 	void FloatingPlatformSegment::Update()
@@ -244,7 +255,122 @@ namespace BlastOff
 		initializeSegments();
 	}
 
-	const size_t FloatingPlatform::c_Count = 15;
+	float FloatingPlatform::GetEdgePosition(const Direction side) const
+	{
+		const Segment& backSegment = m_Segments.back();
+		return backSegment.GetEdgePosition(side);
+	}
+
+	optional<Edge2f> FloatingPlatform::CollideWithPlayer
+		(const Rect2f playerRect) 
+	{
+		const auto updateMostRecentPlayerPosition = 
+			[&, this]()
+			{
+				m_MostRecentPlayerPosition = playerRect.GetPosition();
+			};
+
+		const float left = 
+		{
+			m_Segments.front().GetEdgePosition(Direction::Left)
+		};
+		const float right = 
+		{
+			m_Segments.back().GetEdgePosition(Direction::Right)
+		};
+		const Vector2f emptyPosition = m_Empty->GetLocalPosition();
+		const float localizedPlayerX = playerRect.x - emptyPosition.x;
+		
+		if (localizedPlayerX < (left - (playerRect.w / 2.0f)))
+		{
+			updateMostRecentPlayerPosition();
+			return std::nullopt;
+		}
+		if (localizedPlayerX > (right + (playerRect.w / 2.0f)))
+		{
+			updateMostRecentPlayerPosition();
+			return std::nullopt;
+		}
+
+		const optional<float> playerBottom = 
+		{
+			playerRect.GetEdgePosition(Direction::Down)
+		};
+		const Rect2f segmentRect = m_Segments.back().CalculateRealRect();
+		const optional<float> thisTop = 
+		{
+			segmentRect.GetEdgePosition(Direction::Up)
+		};
+
+		if (!thisTop)
+		{
+			updateMostRecentPlayerPosition();
+			return std::nullopt;
+		}
+
+		if (playerBottom == *thisTop)
+		{
+			updateMostRecentPlayerPosition();
+			return Edge2f{ Direction::Up, *thisTop };
+		}
+
+		if (!m_MostRecentPlayerPosition)
+		{
+			updateMostRecentPlayerPosition();
+			return std::nullopt;
+		}
+		if (m_Segments.empty())
+		{
+			const char* const message = 
+			{
+				"FloatingPlatform::CollideWithPlayer"
+				"(const Rect2f playerRect) failed: "
+				"This object was not initialized correctly. "
+				"There are no segments present "
+				"in the FloatingPlatform instance!"
+			};
+			Logging::LogWarning(message);
+			
+			updateMostRecentPlayerPosition();
+			return std::nullopt;
+		}
+
+		const Vector2f previousPosition = *m_MostRecentPlayerPosition;
+		const Vector2f currentPosition = playerRect.GetPosition();
+		const Vector2f playerVelocity = currentPosition - previousPosition;
+		m_MostRecentPlayerPosition = currentPosition;
+
+		if (playerVelocity.Magnitude() == 0)
+			return std::nullopt;
+		if (playerVelocity.y > 0)
+			return std::nullopt;
+
+		const Rect2f previousRect(previousPosition, playerRect.GetSize());
+		const Rect2f currentRect = playerRect;
+		const optional<float> previousBottom = 
+		{
+			previousRect.GetEdgePosition(Direction::Down)
+		};
+		const optional<float> currentBottom = 
+		{
+			currentRect.GetEdgePosition(Direction::Down)
+		};
+
+		// const Rect2f segmentRect = m_Segments.back().CalculateRealRect();
+		// const optional<float> thisTop = 
+		// {
+		// 	segmentRect.GetEdgePosition(Direction::Up)
+		// };
+		
+		const bool result = 
+		{
+			previousBottom > thisTop && currentBottom < thisTop
+		};
+		if (result)
+			return Edge2f{ Direction::Up, *thisTop };
+		else
+		 	return std::nullopt;
+	}
 
 	void FloatingPlatform::Update()
 	{
@@ -257,6 +383,8 @@ namespace BlastOff
 		for (const Segment& segment : m_Segments)
 			segment.Draw();
 	}
+
+	const size_t FloatingPlatform::c_Count = 15;
 
 	const SpawningRange FloatingPlatform::c_SpawningRange = 
 	{

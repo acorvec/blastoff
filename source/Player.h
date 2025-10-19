@@ -42,7 +42,8 @@ namespace BlastOff
 		Player(
 			const GameOutcome* const gameOutcome,
 			const Rect2f* const worldBounds,
-			const SpawnPlatform* const platform,
+			const SpawnPlatform* const spawnPlatform,
+			const vector<FloatingPlatform*>* const floatingPlatforms,
 			const CoordinateTransformer* const coordTransformer,
 			const GameConstants* const gameConstants,
 			const ProgramConstants* const programConstants,
@@ -82,6 +83,7 @@ namespace BlastOff
 		static inline unique_ptr<const PlayerConfig> m_Config = nullptr;
 
 		bool m_DidCollideHorizontally = false;
+		bool m_DidCollideVertically = false;
 		bool m_BottomCollision = false;
 		bool m_IsFrozen = false;
 
@@ -102,7 +104,8 @@ namespace BlastOff
 
 		const Rect2f* m_WorldBounds = nullptr;
 		const GameOutcome* m_GameOutcome = nullptr;
-		const SpawnPlatform* m_Platform = nullptr;
+		const SpawnPlatform* m_SpawnPlatform = nullptr;
+		const vector<FloatingPlatform*>* m_FloatingPlatforms = nullptr;
 		const CoordinateTransformer* m_CoordTransformer = nullptr;
 		const ProgramConstants* m_ProgramConstants = nullptr;
 		const GameConstants* m_GameConstants = nullptr;

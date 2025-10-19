@@ -65,6 +65,9 @@ namespace BlastOff
 			ImageTextureLoader* const imageTextureLoader
 		);
 
+		float GetEdgePosition(const Direction side) const;
+		Rect2f CalculateRealRect() const;
+
 		void Update();
 		void Draw() const;
 
@@ -84,6 +87,9 @@ namespace BlastOff
 			ImageTextureLoader* const imageTextureLoader
 		);
 
+		float GetEdgePosition(const Direction side) const;
+		optional<Edge2f> CollideWithPlayer(const Rect2f playerRect);
+
 		void Update();
 		void Draw() const;
 
@@ -99,6 +105,8 @@ namespace BlastOff
 
 		unique_ptr<Empty> m_Empty = nullptr;
 		vector<Segment> m_Segments = {};
+
+		optional<Vector2f> m_MostRecentPlayerPosition = std::nullopt;
 	};
 	
 	struct BackgroundConfiguration

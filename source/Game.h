@@ -81,12 +81,12 @@ namespace BlastOff
 		vector<FuelUpPowerup> m_FuelUpPowerups = {};
 		vector<DownforcePowerup> m_DownforcePowerups = {};
 		vector<FloatingPlatform> m_FloatingPlatforms = {};
-
 		vector<LowCloud> m_LowClouds = {};
 		vector<HighCloud> m_HighClouds = {};
 
 		vector<Powerup*> m_AllPowerups = {};
 		vector<Cloud*> m_AllClouds = {};
+		vector<FloatingPlatform*> m_AllFloatingPlatforms = {};
 
 		const ProgramConstants* m_ProgramConstants = nullptr;
 		const Font* m_Font = nullptr;
