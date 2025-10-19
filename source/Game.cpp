@@ -36,6 +36,59 @@ namespace BlastOff
 				return -(powf(x, 1 / 3.0f) / 3);
 			};
 
+		const auto handlePowerupCollision =
+			[](Powerup* const powerup)
+			{
+				if (!powerup->IsCollected())
+					powerup->OnCollection();
+			};
+
+		const auto updateMiscObjects =
+			[&, this]()
+			{
+				m_CoordTransformer->Update();
+				m_InputManager->Update();
+
+				m_Player->Update();
+				m_FuelBar->Update();
+				m_SpeedupBar->Update();
+				m_FuelBarLabel->Update();
+				m_SpeedupBarLabel->Update();
+
+				for (Cloud* const cloud : m_AllClouds)
+					cloud->Update();
+
+				for (Powerup* const powerup : m_AllPowerups)
+				{
+					powerup->Update();
+
+					const bool collision = powerup->CollideWithPlayer();
+					if (collision)
+						handlePowerupCollision(powerup);
+				}
+
+				for (FloatingPlatform* const platform : m_AllFloatingPlatforms)
+					platform->Update();
+			};
+
+		const auto checkForOutcome =
+			[&, this]()
+			{
+				if (m_Outcome != Outcome::None)
+					return;
+
+				const float playerBottom =
+				{
+					m_Player->GetEdgePosition(Direction::Down)
+				};
+
+				if (playerBottom > GetWorldEdge(Direction::Up))
+					ChooseOutcome(Outcome::Winner);
+
+				if (LosingConditionsAreSatisfied())
+					ChooseOutcome(Outcome::Loser);
+			};
+
 		const auto updateCameraPosition =
 			[&, this]()
 			{
@@ -74,60 +127,8 @@ namespace BlastOff
 					m_CameraPosition->y = minY;
 				else
 					m_CameraPosition->y = unclampedResult;
-			};
-
-		const auto handlePowerupCollision =
-			[](Powerup* const powerup)
-			{
-				if (!powerup->IsCollected())
-					powerup->OnCollection();
-			};
-
-		const auto updateMiscObjects =
-			[&, this]()
-			{
-				m_CoordTransformer->Update();
-				m_InputManager->Update();
-
-				m_Player->Update();
+				
 				m_CameraEmpty->Update();
-				m_FuelBar->Update();
-				m_SpeedupBar->Update();
-				m_FuelBarLabel->Update();
-				m_SpeedupBarLabel->Update();
-
-				for (Cloud* const cloud : m_AllClouds)
-					cloud->Update();
-
-				for (Powerup* const powerup : m_AllPowerups)
-				{
-					powerup->Update();
-
-					const bool collision = powerup->CollideWithPlayer();
-					if (collision)
-						handlePowerupCollision(powerup);
-				}
-
-				for (FloatingPlatform* const platform : m_AllFloatingPlatforms)
-					platform->Update();
-			};
-
-		const auto checkForOutcome =
-			[&, this]()
-			{
-				if (m_Outcome != Outcome::None)
-					return;
-
-				const float playerBottom =
-				{
-					m_Player->GetEdgePosition(Direction::Down)
-				};
-
-				if (playerBottom > GetWorldEdge(Direction::Up))
-					ChooseOutcome(Outcome::Winner);
-
-				if (LosingConditionsAreSatisfied())
-					ChooseOutcome(Outcome::Loser);
 			};
 
 #if COMPILE_CONFIG_DEBUG
@@ -170,9 +171,9 @@ namespace BlastOff
 			};
 #endif
 
-		updateCameraPosition();
 		updateMiscObjects();
 		checkForOutcome();
+		updateCameraPosition();
 
 #if COMPILE_CONFIG_DEBUG
 		if (m_ProgramConstants->GetDebugToolsEnabled())

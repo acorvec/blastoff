@@ -294,13 +294,13 @@ namespace BlastOff
 #endif
 
 		m_CoordinateTransformer->Update();
-		m_CameraEmpty->Update();
 		m_Window->Update();
 
 		if (ShouldShowCutscene())
 			m_Cutscene->Update();
-
+		
 		updateStateObject();
+		m_CameraEmpty->Update();
 		
 		const bool isSoundEnabled = c_Config.GetSoundEnabled();
 		if (isSoundEnabled)
