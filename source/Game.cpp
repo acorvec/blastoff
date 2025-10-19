@@ -331,6 +331,9 @@ namespace BlastOff
 		const auto initializeFloatingPlatforms = 
 			[&, this]()
 			{
+				if (!FloatingPlatform::c_SpawningEnabled)
+					return;
+
 				const size_t length = FloatingPlatform::c_Count;
 				m_FloatingPlatforms.reserve(length);
 				for (size_t index = 0; index < length; index++)

@@ -99,7 +99,7 @@ namespace BlastOff
 		const float applications
 	)
 	{
-		const float last_index = floor(applications);
+		const size_t last_index = (size_t)floor(applications);
 		float result = number;
 
 		for (size_t index = 0; index < last_index; index++)

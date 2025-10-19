@@ -387,6 +387,7 @@ namespace BlastOff
 	}
 
 	const size_t FloatingPlatform::c_Count = 15;
+	const bool FloatingPlatform::c_SpawningEnabled = false;
 
 	const SpawningRange FloatingPlatform::c_SpawningRange = 
 	{

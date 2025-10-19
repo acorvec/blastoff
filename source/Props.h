@@ -94,6 +94,7 @@ namespace BlastOff
 		void Draw() const;
 
 		static const size_t c_Count;
+		static const bool c_SpawningEnabled;
 
 	private:
 		using Segment = FloatingPlatformSegment;
