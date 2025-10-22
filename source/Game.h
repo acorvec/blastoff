@@ -24,16 +24,6 @@ namespace BlastOff
 		virtual void Update();
 		virtual void Draw() const;
 
-		static uint64_t GetWinCount() 
-		{
-			return m_WinCount;
-		}
-
-		static uint64_t GetLossCount()
-		{
-			return m_LossCount;
-		}
-
 	private:		
 		CoordinateTransformer* m_CoordTransformer = nullptr;
 		CameraEmpty* m_CameraEmpty = nullptr;
@@ -56,16 +46,11 @@ namespace BlastOff
 
 		static const inline Constants c_Constants;
 
-		static const bool c_PrintOutcomeStatistics;
-
-		static inline uint64_t m_WinCount = 0;
-		static inline uint64_t m_LossCount = 0;
-
-		unique_ptr<InputManager> m_InputManager = nullptr;
-
 		Outcome m_Outcome = Outcome::None;
 		Direction m_CloudMovementDirection = Direction::None;
 		Rect2f m_WorldBounds = Rect2f::UnitRect();
+
+		unique_ptr<InputManager> m_InputManager = nullptr;
 
 		unique_ptr<Background> m_Background = nullptr;
 		unique_ptr<Crag> m_Crag = nullptr;
@@ -147,8 +132,14 @@ namespace BlastOff
 
 	protected:
 		bool ResetTimerIsActive() const;
-		
+		void ChooseOutcome(const Outcome outcome) override;
+
+		static inline uint64_t m_WinCount = 0;
+		static inline uint64_t m_LossCount = 0;
+
+		static const bool c_PrintOutcomeStatistics;		
 		static const float c_MaxResetTick;
+		
 		float m_ResetTick = c_DeactivatedTick;
 
 		Callback m_ResetCallback;

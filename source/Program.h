@@ -47,6 +47,10 @@ namespace BlastOff
 		static const bool c_DrawFPS;
 		static const bool c_PrintFrametimes;
 
+#if COMPILE_CONFIG_DEBUG
+		static const bool c_SpeedupInverted;
+#endif
+
 		bool m_IsRunning = true;
 		bool m_ShouldCloseAfterFrame = false;
         bool m_IsMuted = false;

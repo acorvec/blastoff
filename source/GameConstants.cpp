@@ -7,7 +7,7 @@ namespace BlastOff
 		m_AmountOfLowClouds(30),
 		m_AmountOfHighClouds(30),
 		m_CameraYOffset(-2 / 3.0f),
-		m_WorldBoundHeight(512),
+		m_WorldBoundHeight(650),
 		m_CragWidthMultiplier(2),
 		m_GravitationalAcceleration(5),
 		m_CollisionMultiplier(3 / 4.0f),

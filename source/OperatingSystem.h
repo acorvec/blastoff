@@ -4,8 +4,6 @@
 #include <string>
 #include <memory>
 
-#include "Debug.h"
-
 #ifdef _WIN32
 #define COMPILE_TARGET_WINDOWS _WIN32
 #else

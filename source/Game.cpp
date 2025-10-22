@@ -224,52 +224,7 @@ namespace BlastOff
 
 	void Game::ChooseOutcome(const Outcome outcome)
 	{
-		const auto getCounter = 
-			[&, this]() -> uint64_t*
-			{
-				switch (outcome)
-				{
-					case Outcome::Winner:
-						Logging::Log("game won");
-						return &m_WinCount;
-
-					case Outcome::Loser:
-						Logging::Log("game lost");
-						return &m_LossCount;
-
-					default:
-						return nullptr;
-				}
-			};
-
-		const auto printOutcomeStatistics = 
-			[&, this]()
-			{
-				uint64_t* const counter = getCounter();
-				if (counter)
-					(*counter)++;
-
-				if (!c_PrintOutcomeStatistics)
-					return;
-				if (!(m_WinCount + m_LossCount))
-					return;
-
-				constexpr int spaces = 10;
-				for (int i = 0; i < spaces; i++)
-					std::print("\n");
-
-				const float ratio = m_WinCount / (float)(m_WinCount + m_LossCount);
-				
-				std::print("\n");
-				std::println("Win count: {}", m_WinCount);
-				std::println("Loss count: {}", m_LossCount);
-				std::print("\n");
-				std::println("Win percentage = {}%", ratio * 100);
-				std::print("\n");
-			};
-	
 		m_Outcome = outcome;
-		printOutcomeStatistics();
 	}
 
 	void Game::FinishConstruction(
@@ -664,8 +619,6 @@ namespace BlastOff
 		return false;
 	}
 
-	const bool Game::c_PrintOutcomeStatistics = false;
-
 
 	PlayableGame::PlayableGame(
         const bool* const programIsMuted,
@@ -939,4 +892,72 @@ namespace BlastOff
 	{
 		return m_ResetTick >= 0;
 	}
+
+	void Cutscene::ChooseOutcome(const Outcome outcome)
+	{
+		const auto getCounter = 
+			[&, this]() -> uint64_t*
+			{
+				switch (outcome)
+				{
+					case Outcome::Winner:
+						if (c_PrintOutcomeStatistics)
+							Logging::Log("game won");
+						return &m_WinCount;
+
+					case Outcome::Loser:
+						if (c_PrintOutcomeStatistics)
+							Logging::Log("game lost");
+						return &m_LossCount;
+
+					default:
+						return nullptr;
+				}
+			};
+
+		const auto trackOutcomeStatistics = 
+			[&, this]()
+			{
+				constexpr int spaces = 10;
+				for (int i = 0; i < spaces; i++)
+					if (c_PrintOutcomeStatistics)	
+						std::print("\n");
+
+				uint64_t* const counter = getCounter();
+				if (counter)
+					(*counter)++;
+
+				if (!c_PrintOutcomeStatistics)
+					return;
+				if (!(m_WinCount + m_LossCount))
+					return;
+
+				string message = "";
+				const float ratio = m_WinCount / (float)(m_WinCount + m_LossCount);
+				
+				std::print("\n");
+				
+				message = std::format("Win count: {}", m_WinCount);
+				Logging::Log(message.c_str());
+
+				message = std::format("Loss count: {}", m_LossCount);
+				Logging::Log(message.c_str());
+
+				std::print("\n");
+
+				message = std::format("Win percentage = {}%", ratio * 100);
+				Logging::Log(message.c_str());
+
+				std::print("\n");
+			};
+	
+		Game::ChooseOutcome(outcome);
+
+		trackOutcomeStatistics();
+		
+		if (c_PrintOutcomeStatistics)
+			m_ResetCallback();
+	}
+
+	const bool Cutscene::c_PrintOutcomeStatistics = true;
 }

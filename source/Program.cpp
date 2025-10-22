@@ -59,11 +59,15 @@ namespace BlastOff
 		const auto initializeGraphics =
 			[&, this]()
 			{
-				constexpr Vector2i dummyWindowSize = { 0, 0 };
+#if COMPILE_TARGET_EMSCRIPTEN
+				constexpr Vector2i initialWindowSize = { 854, 480 };
+#else
+				constexpr Vector2i initialWindowSize = { 0, 0 };
+#endif
 				const string windowName = c_Config.CalculateBuildString();
 
 				m_Window = std::make_unique<RayWindow>(
-					dummyWindowSize, 
+					initialWindowSize, 
 					windowName
 				);
 				applySettings();
@@ -284,7 +288,11 @@ namespace BlastOff
 				const int fastModeKey = c_Config.GetFastModeKey();
 				const int slowModeKey = c_Config.GetSlowModeKey();
 
-				if (IsKeyDown(fastModeKey))
+				const bool fastKeyDown = IsKeyDown(fastModeKey);
+
+				if (fastKeyDown && !c_SpeedupInverted)
+					activateFastMode();
+				else if ((!fastKeyDown) && c_SpeedupInverted)
 					activateFastMode();
 				else if (IsKeyDown(slowModeKey))
 					activateSlowMode();
@@ -620,4 +628,8 @@ namespace BlastOff
 
 	const bool Program::c_DrawFPS = false;
 	const bool Program::c_PrintFrametimes = false;
+
+#if COMPILE_CONFIG_DEBUG
+	const bool Program::c_SpeedupInverted = false;
+#endif
 }

@@ -1,6 +1,8 @@
 #include "OperatingSystem.h"
 
 #if COMPILE_TARGET_WINDOWS
+	#include "Debug.h"
+
 	#define WIN32_LEAN_AND_MEAN true
 	#include "windows.h"
 	#include "Winuser.h"
@@ -61,6 +63,16 @@ namespace BlastOff
 		}
 #endif
 
+#if COMPILE_TARGET_EMSCRIPTEN
+		namespace Emscripten
+		{
+			optional<CursorPosition> GetCursorPosition()
+			{
+				return CursorPosition{ 0, 0 };
+			}
+		}
+#endif
+	
 		string GetFontDirectory()
 		{
 			return "resource/ttf/";
@@ -86,6 +98,8 @@ namespace BlastOff
 	{
 #if COMPILE_TARGET_WINDOWS
 		return Windows::GetCursorPosition();
+#elif COMPILE_TARGET_EMSCRIPTEN
+		return Emscripten::GetCursorPosition();
 #elif COMPILE_TARGET_LINUX
 		return Linux::GetCursorPosition();
 #endif
