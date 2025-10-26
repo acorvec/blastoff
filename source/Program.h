@@ -56,6 +56,8 @@ namespace BlastOff
         bool m_IsMuted = false;
 		bool m_GameShouldReset = false;
         bool m_CutsceneShouldReset = false;
+		
+		unique_ptr<RayWindow> m_Window = nullptr;
 
 		Font m_Font = { 0 };
 		State m_State = State::None;
@@ -71,7 +73,6 @@ namespace BlastOff
         unique_ptr<CoordinateTransformer> m_CoordinateTransformer = nullptr;
         unique_ptr<InputManager> m_InputManager = nullptr;
         unique_ptr<CameraEmpty> m_CameraEmpty = nullptr;
-		unique_ptr<RayWindow> m_Window = nullptr;
 		unique_ptr<MusicLoop> m_BackgroundMusicLoop = nullptr;
 		unique_ptr<Game> m_Game = nullptr;
         unique_ptr<Cutscene> m_Cutscene = nullptr;
