@@ -18,5 +18,8 @@ Building is currently **NOT** tested on the following targets:
 - x86-64 windows using non-MSVC compiler
 - all other targets not mentioned here.
 
-## Disclaimers
-This software is provided with no warranty. It may ruin your computer, and it will **NOT** be acorvec's fault. Please proceed with caution.
+## Legal and Licensing
+
+This software is provided with no warranty. It may ruin your computer, and it will **NOT** be acorvec's responsibility. Please proceed with caution.
+
+Please contact for licensing. I'm always interested in collaborating, especially with others who may have a better grasp on porting games to other platforms.
