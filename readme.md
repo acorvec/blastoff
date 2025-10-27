@@ -1,5 +1,9 @@
 Blastoff is a 2D rocket game written in C++.
 
+## Showcase
+
+[![Watch the video](https://raw.githubusercontent.com/acorvec/blastoff/master/promo/main/thumb.jpg)](https://raw.githubusercontent.com/acorvec/blastoff/master/promo/main/video.mp4)
+
 ## Building
 
 Building is currently tested on the following targets:
