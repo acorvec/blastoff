@@ -58,11 +58,6 @@ if (WIN32)
     target_link_options(${PROJECT_NAME} PRIVATE -static)
 endif()
 
-if(MSVC)
-# MSVC libraries
-	set(RAYLIB_LIBRARIES "winmm.lib;${RAYLIB_LIBRARY_DIR}/x64/${CMAKE_BUILD_TYPE}/raylib.lib;")
-endif()
-
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(${PROJECT_NAME} PRIVATE _DEBUG=1)
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
