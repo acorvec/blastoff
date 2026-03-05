@@ -6,7 +6,7 @@ Blastoff is a 2D rocket game written in C++.
 
 ## Building
 
-Building is currently tested on the following targets:
+Building is currently tested and working on the following targets:
 
 - x86-64 linux using the GCC compiler
 - x86-64 windows using MSYS2 with UCRT (preferred build method on Windows)
