@@ -62,6 +62,8 @@ namespace BlastOff
 
 		UpdatePosition();
 		updateSize();
+
+		m_HasRunFirstUpdate = true;
 	}
 
 	const Vector2i* RayWindow::GetPosition() const
@@ -81,6 +83,9 @@ namespace BlastOff
 
 	void RayWindow::SetSize(const Vector2i size)
 	{
+		if (IsWindowFullscreen())
+			ToggleFullscreen();
+
 		SetWindowSize(size.x, size.y);
 	}
 

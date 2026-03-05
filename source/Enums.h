@@ -12,6 +12,7 @@ namespace BlastOff
 	enum class ProgramState
 	{
 		None,
+		Loading,
 		Game,
 		MainMenu,
 		SettingsMenu

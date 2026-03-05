@@ -1,5 +1,14 @@
-BlastoffPP.vcxproj
+/_deps/
 /x64/
 /vendor/
 /BlastOff++/
 /.vs/
+/CMakeFiles/
+BlastoffPP.vcxproj.user
+BlastOffpp.exe
+cmake_install.cmake
+CMakeCache.txt
+CPackConfig.cmake
+CPackSourceConfig.cmake
+Makefile
+settings.json

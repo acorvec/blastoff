@@ -36,6 +36,7 @@ namespace BlastOff
 		int MultiplyFramerate(const float multiplier) const;
 		void SetFramerate(const int framerate);
 		static void DrawFramerate();
+		void PauseForOneFrame();
 
 		void InitializeGame();
 		void InitializeMainMenu();
@@ -60,7 +61,7 @@ namespace BlastOff
 		unique_ptr<RayWindow> m_Window = nullptr;
 
 		Font m_Font = { 0 };
-		State m_State = State::None;
+		State m_State = State::Loading;
 		optional<State> m_PendingStateChange = std::nullopt;
         Vector2f m_CameraPosition = Vector2f::Zero();
 
@@ -80,6 +81,9 @@ namespace BlastOff
 		unique_ptr<SettingsMenu> m_SettingsMenu = nullptr;
 
 		time_point<high_resolution_clock> m_FrameStartTime = high_resolution_clock::now();
+		uint64_t m_FramesSinceCreation = 0;
+		Vector2i m_InitialWindowPosition = Vector2i::Zero();
+		Vector2i m_InitialWindowSize = Vector2i::Zero();
 
 #if COMPILE_CONFIG_DEBUG
 		int m_MostRecentFramerateSet = 0;

@@ -36,24 +36,8 @@ namespace BlastOff
 					windowSizeIncrement
 				);
 
-				const Vector2i windowSize = m_Settings->GetWindowSize();
-				const Vector2i windowPosition = 
-				{
-					m_Settings->GetWindowPosition()
-				};
-				m_Window->SetSize(windowSize);
-				m_Window->SetPosition(windowPosition);
-			};
-
-		const auto pauseForOneFrame = 
-			[this]()
-			{
-				BeginDrawing();
-
-				const Colour4i voidColour = c_Config.GetVoidColour();
-				ClearBackground(voidColour.ToRayColour());
-
-				EndDrawing();
+				m_InitialWindowSize = m_Settings->GetWindowSize();
+				m_InitialWindowPosition = m_Settings->GetWindowPosition();
 			};
 
 		const auto initializeGraphics =
@@ -90,37 +74,7 @@ namespace BlastOff
 				{
 					std::make_unique<TextTextureLoader>(&m_Font)
 				};
-				m_CoordinateTransformer = std::make_unique<CoordinateTransformer>(
-                    m_Window->GetSize(),
-                    m_Window->GetPosition(),
-                    &m_CameraPosition                    
-                );
-
-				// pause for one frame because of 
-				// some weird bug with Raylib or GLFW
-				pauseForOneFrame();
-
-				m_Window->Update();
-                m_CoordinateTransformer->Update();
-                m_CameraEmpty = std::make_unique<CameraEmpty>(
-                    m_CoordinateTransformer.get(),
-                    &c_Config,
-                    &m_CameraPosition
-                );
 			};
-
-        const auto initializeInput = 
-            [this]()
-            {
-				const CoordinateTransformer* const coordTransformer = 
-				{
-					m_CoordinateTransformer.get()
-				};
-                m_InputManager = 
-                {
-                    std::make_unique<PlayableInputManager>(coordTransformer)
-                };
-            };
 
 		const auto initializeSound =
 			[this]()
@@ -170,14 +124,9 @@ namespace BlastOff
 		logInitialMessage();
 
 		initializeGraphics();
-		initializeInput();
 		initializeSound();
 		initializeBackgroundMusic();
 		disableEscapeKey();
-		InitializeMainMenu();
-		InitializeCutscene();
-
-		m_State = State::MainMenu;
 	}
 
 	Program::~Program()
@@ -214,6 +163,44 @@ namespace BlastOff
 
 	void Program::Update()
 	{
+		const auto initializeGraphics = [this]()
+			{
+				m_Window->SetSize(m_InitialWindowSize);
+				m_Window->SetPosition(m_InitialWindowPosition);
+
+				// pause for one frame because of 
+				// some weird bug with Raylib or GLFW
+				PauseForOneFrame();
+				m_Window->Update();
+				m_CoordinateTransformer = std::make_unique<CoordinateTransformer>(
+					m_Window->GetSize(),
+					m_Window->GetPosition(),
+					&m_CameraPosition
+				);
+				m_CoordinateTransformer->Update();
+
+				m_CameraEmpty = std::make_unique<CameraEmpty>(
+					m_CoordinateTransformer.get(),
+					&c_Config,
+					&m_CameraPosition
+				);
+
+				m_State = State::MainMenu;
+			};
+
+		const auto initializeInput =
+			[this]()
+			{
+				const CoordinateTransformer* const coordTransformer =
+				{
+					m_CoordinateTransformer.get()
+				};
+				m_InputManager =
+				{
+					std::make_unique<PlayableInputManager>(coordTransformer)
+				};
+			};
+
 		const auto updateControlQ =
 			[this]()
 			{
@@ -301,14 +288,17 @@ namespace BlastOff
 			};
 #endif
 
-		m_CoordinateTransformer->Update();
-		m_Window->Update();
+		if (m_State != State::Loading)
+		{
+			m_CoordinateTransformer->Update();
+			m_Window->Update();
 
-		if (ShouldShowCutscene())
-			m_Cutscene->Update();
-		
-		updateStateObject();
-		m_CameraEmpty->Update();
+			if (ShouldShowCutscene())
+				m_Cutscene->Update();
+
+			updateStateObject();
+			m_CameraEmpty->Update();
+		}
 		
 		const bool isSoundEnabled = c_Config.GetSoundEnabled();
 		if (isSoundEnabled)
@@ -325,6 +315,15 @@ namespace BlastOff
 		if (c_Config.GetDebugToolsEnabled())
 			updateSpeedKeys();
 #endif
+
+		if (m_FramesSinceCreation == 2)
+		{
+			initializeGraphics();
+			initializeInput();
+
+			InitializeMainMenu();
+			InitializeCutscene();
+		}
 	}
 
 	void Program::Draw() const
@@ -363,11 +362,14 @@ namespace BlastOff
 		const Colour4i voidColour = c_Config.GetVoidColour();
 		ClearBackground(voidColour.ToRayColour());
 
-		if (ShouldShowCutscene())
-			m_Cutscene->Draw();
+		if (m_State != State::Loading)
+		{
+			if (ShouldShowCutscene())
+				m_Cutscene->Draw();
 
-		drawStateObject();
-		
+			drawStateObject();
+		}
+
 		if (c_DrawFPS)
 			DrawFramerate();
 			
@@ -448,6 +450,8 @@ namespace BlastOff
             m_CutsceneShouldReset = false;
         }
 
+		m_FramesSinceCreation++;
+
 		if (WindowShouldClose())
 			m_IsRunning = false;
 
@@ -507,6 +511,16 @@ namespace BlastOff
 		constexpr Vector2i position = Vector2i::Zero();
 
 		DrawText(text.c_str(), position.x, position.y, 40, colour);
+	}
+
+	void Program::PauseForOneFrame()
+	{
+		BeginDrawing();
+
+		const Colour4i voidColour = c_Config.GetVoidColour();
+		ClearBackground(voidColour.ToRayColour());
+
+		EndDrawing();
 	}
 
 	void Program::InitializeGame()

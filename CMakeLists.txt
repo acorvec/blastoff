@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 4.0)
 project(BlastOffpp CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+set(CMAKE_POLICY_VERSION_MINIMUM 4.0)
 
 include(FetchContent)
 set(FETCHCONTENT_QUIET FALSE)
@@ -14,7 +14,7 @@ if (UNIX AND NOT EMSCRIPTEN)
 endif ()
 
 if (EMSCRIPTEN)
-    set(PLATFORM "Web")
+	set(CMAKE_BUILD_TYPE "Emscripten")
 endif ()
 FetchContent_Declare(
     raylib
@@ -49,9 +49,19 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
 target_include_directories(${PROJECT_NAME} PRIVATE ${X11_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/_deps/rapidjson-src/include")
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
-target_link_libraries(${PROJECT_NAME} PRIVATE stdc++) 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${X11_LIBRARIES})
 # target_link_libraries(${PROJECT_NAME} PRIVATE glaze::glaze)
+
+if (WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE stdc++exp)
+    target_link_options(${PROJECT_NAME} PRIVATE -static-libstdc++ -static-libgcc)
+    target_link_options(${PROJECT_NAME} PRIVATE -static)
+endif()
+
+if(MSVC)
+# MSVC libraries
+	set(RAYLIB_LIBRARIES "winmm.lib;${RAYLIB_LIBRARY_DIR}/x64/${CMAKE_BUILD_TYPE}/raylib.lib;")
+endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(${PROJECT_NAME} PRIVATE _DEBUG=1)

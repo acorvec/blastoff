@@ -39,6 +39,8 @@ namespace BlastOff
 		Vector2i m_Position = Vector2i::Zero();
 		Vector2i m_Size = Vector2i::Zero();
 
+		bool m_HasRunFirstUpdate = false;
+
 		void UpdatePosition();
 	};
 
