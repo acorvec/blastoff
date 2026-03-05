@@ -68,26 +68,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -110,12 +110,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Andrew\Libraries\raylib-5.5_win64_msvc16\include;C:\Users\Andrew\Libraries\rapidjson\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Andrew\Libraries\raylib-5.5_win64_msvc16\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\vendor\raylib-5.5_win64_msvc16\include;$(ProjectDir)\vendor\rapidjson\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\vendor\raylib-5.5_win64_msvc16\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\Andrew\Libraries\raylib-5.5_win64_msvc16\include;C:\Users\Andrew\Libraries\rapidjson\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Andrew\Libraries\raylib-5.5_win64_msvc16\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\vendor\raylib-5.5_win64_msvc16\include;$(ProjectDir)\vendor\rapidjson\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\vendor\raylib-5.5_win64_msvc16\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

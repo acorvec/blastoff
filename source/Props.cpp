@@ -227,8 +227,8 @@ namespace BlastOff
 			{
 				const float randomNumber = GetRandomFloat();
 				
-				const float start = c_MinimumSegmentCount;
-				const float end = c_MaximumSegmentCount;
+				const float start = (float)c_MinimumSegmentCount;
+				const float end = (float)c_MaximumSegmentCount;
 				
 				const float result = start + (randomNumber * (end - start));
 				return (size_t)result;

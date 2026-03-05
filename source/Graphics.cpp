@@ -752,19 +752,16 @@ namespace BlastOff
 
 	void TextTextureLoader::CheckMessage(const char* const message)
 	{
-		const bool containsNewline = 
-		{
-			StringContains(message, '\n')
-		};
+		const bool containsNewline = StringContains(message, '\n');
 		if (containsNewline)
 		{
-			const char* const message = 
+			const char* const warning = 
 			{
 				"TextSprites should not contain "
 				"newline characters in their message. "
 				"Please use multiple TextSprites instead."
 			};
-			Logging::LogWarning(message);
+			Logging::LogWarning(warning);
 		}
 	}
 
