@@ -492,13 +492,16 @@ namespace BlastOff
 
 	void Program::SetFramerate(const int framerate) 
 	{
+#if !COMPILE_TARGET_EMSCRIPTEN
 #if COMPILE_CONFIG_DEBUG
 		if (framerate != m_MostRecentFramerateSet)
 			SetTargetFPS(framerate);
-
-		m_MostRecentFramerateSet = framerate;
 #else
 		SetTargetFPS(framerate);
+#endif
+#endif
+#if COMPILE_CONFIG_DEBUG
+		m_MostRecentFramerateSet = framerate;
 #endif
 	}
 
