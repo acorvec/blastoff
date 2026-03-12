@@ -16,7 +16,7 @@ namespace BlastOff
 			Logging::LogWarning(message.c_str());
 		}
 
-		void ThrowMusicLoadingException(const string& loadingPath)
+		void OnMusicLoadingError(const string& loadingPath)
 		{
 			const string message = 
 			{
@@ -51,7 +51,7 @@ namespace BlastOff
 			const Music result = LoadMusicStream(cString);
 			if (!result.frameCount)
 			{
-				ThrowMusicLoadingException(resultingPath);
+				OnMusicLoadingError(resultingPath);
 				return result;
 			}
 			else
