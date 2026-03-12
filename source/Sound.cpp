@@ -73,15 +73,19 @@ namespace BlastOff
 		const auto getCachedValue =
 			[&, this]() -> const Sound*
 			{
-				try
-				{
+				//try
+				//{
+				//	return &m_CachedValues.at(resourcePath);
+				//}
+				//catch (const std::out_of_range& exception)
+				//{
+				//	(void)exception;
+				//	return nullptr;
+				//}
+				if (m_CachedValues.contains(resourcePath))
 					return &m_CachedValues.at(resourcePath);
-				}
-				catch (const std::out_of_range& exception)
-				{
-					(void)exception;
+				else
 					return nullptr;
-				}
 			};
 
 		const auto result = getCachedValue();
@@ -114,15 +118,19 @@ namespace BlastOff
 		const auto getCachedValue =
 			[&, this]() -> const Music*
 			{
-				try
-				{
+				//try
+				//{
+				//	return &m_CachedValues.at(resourcePath);
+				//}
+				//catch (const std::out_of_range& exception)
+				//{
+				//	(void)exception;
+				//	return nullptr;
+				//}
+				if (m_CachedValues.contains(resourcePath))
 					return &m_CachedValues.at(resourcePath);
-				}
-				catch (const std::out_of_range& exception)
-				{
-					(void)exception;
+				else
 					return nullptr;
-				}
 			};
 
 		const auto result = getCachedValue();

@@ -20,6 +20,14 @@
 #define COMPILE_TARGET_DESKTOP 0 
 #endif
 
+#ifdef __EMSCRIPTEN__
+#define COMPILE_TARGET_EMSCRIPTEN 1
+#define COMPILE_TARGET_WEB 1
+#else
+#define COMPILE_TARGET_EMSCRIPTEN 0
+#define COMPILE_TARGET_WEB 0
+#endif
+
 namespace BlastOff
 {
 	using std::optional, std::unique_ptr;

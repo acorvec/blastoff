@@ -70,8 +70,6 @@ if (EMSCRIPTEN)
     endforeach ()
     message("${ASSET_BUNDLE_CMD}")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -gsource-map")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
-    target_link_options(${PROJECT_NAME} PRIVATE -fexceptions)
 endif ()
 
 # fixes builds in vscode

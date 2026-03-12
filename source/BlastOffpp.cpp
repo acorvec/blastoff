@@ -1,6 +1,6 @@
 #include "Program.h"
 
-#ifndef __EMSCRIPTEN__
+#if !COMPILE_TARGET_EMSCRIPTEN
 
 int main()
 {
