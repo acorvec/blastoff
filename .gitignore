@@ -4,6 +4,8 @@
 /BlastOff++/
 /.vs/
 /CMakeFiles/
+/build/
+/_deps/
 BlastoffPP.vcxproj.user
 BlastOffpp.exe
 BlastOffpp.html

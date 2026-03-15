@@ -1,0 +1,260 @@
+[
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\BlastOffpp.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\BlastOffpp.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\BlastOffpp.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/BlastOffpp.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/BlastOffpp.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\GUI.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\GUI.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\GUI.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/GUI.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/GUI.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\Game.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\Game.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\Game.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/Game.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/Game.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\GameConstants.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\GameConstants.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\GameConstants.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/GameConstants.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/GameConstants.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\Graphics.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\Graphics.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\Graphics.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/Graphics.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/Graphics.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\InputManager.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\InputManager.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\InputManager.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/InputManager.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/InputManager.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\Logging.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\Logging.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\Logging.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/Logging.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/Logging.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\OperatingSystem.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\OperatingSystem.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\OperatingSystem.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/OperatingSystem.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/OperatingSystem.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\Player.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\Player.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\Player.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/Player.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/Player.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\Powerup.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\Powerup.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\Powerup.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/Powerup.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/Powerup.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\Program.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\Program.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\Program.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/Program.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/Program.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\ProgramConstants.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\ProgramConstants.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\ProgramConstants.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/ProgramConstants.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/ProgramConstants.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\Props.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\Props.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\Props.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/Props.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/Props.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\Settings.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\Settings.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\Settings.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/Settings.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/Settings.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\Sound.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\Sound.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\Sound.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/Sound.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/Sound.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_DEBUG=1 -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\sources -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\rapidjson-src\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++latest -MDd -RTC1 -Zi @CMakeFiles\\BlastOffpp.dir\\source\\Utils.cpp.obj.modmap /FoCMakeFiles\\BlastOffpp.dir\\source\\Utils.cpp.obj /FdCMakeFiles\\BlastOffpp.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\source\\Utils.cpp",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/source/Utils.cpp",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/CMakeFiles/BlastOffpp.dir/source/Utils.cpp.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_CRT_SECURE_NO_WARNINGS -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src -external:IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -external:W0 /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /Fo_deps\\raylib-build\\raylib\\CMakeFiles\\raylib.dir\\raudio.c.obj /Fd_deps\\raylib-build\\raylib\\CMakeFiles\\raylib.dir\\raylib.pdb /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\raudio.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/raudio.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/CMakeFiles/raylib.dir/raudio.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_CRT_SECURE_NO_WARNINGS -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src -external:IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -external:W0 /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /Fo_deps\\raylib-build\\raylib\\CMakeFiles\\raylib.dir\\rcore.c.obj /Fd_deps\\raylib-build\\raylib\\CMakeFiles\\raylib.dir\\raylib.pdb /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\rcore.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/rcore.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/CMakeFiles/raylib.dir/rcore.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_CRT_SECURE_NO_WARNINGS -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src -external:IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -external:W0 /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /Fo_deps\\raylib-build\\raylib\\CMakeFiles\\raylib.dir\\rmodels.c.obj /Fd_deps\\raylib-build\\raylib\\CMakeFiles\\raylib.dir\\raylib.pdb /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\rmodels.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/rmodels.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/CMakeFiles/raylib.dir/rmodels.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_CRT_SECURE_NO_WARNINGS -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src -external:IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -external:W0 /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /Fo_deps\\raylib-build\\raylib\\CMakeFiles\\raylib.dir\\rshapes.c.obj /Fd_deps\\raylib-build\\raylib\\CMakeFiles\\raylib.dir\\raylib.pdb /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\rshapes.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/rshapes.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/CMakeFiles/raylib.dir/rshapes.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_CRT_SECURE_NO_WARNINGS -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src -external:IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -external:W0 /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /Fo_deps\\raylib-build\\raylib\\CMakeFiles\\raylib.dir\\rtext.c.obj /Fd_deps\\raylib-build\\raylib\\CMakeFiles\\raylib.dir\\raylib.pdb /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\rtext.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/rtext.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/CMakeFiles/raylib.dir/rtext.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -D_CRT_SECURE_NO_WARNINGS -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src -external:IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -external:W0 /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /Fo_deps\\raylib-build\\raylib\\CMakeFiles\\raylib.dir\\rtextures.c.obj /Fd_deps\\raylib-build\\raylib\\CMakeFiles\\raylib.dir\\raylib.pdb /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\rtextures.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/rtextures.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/CMakeFiles/raylib.dir/rtextures.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\context.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\context.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/context.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/context.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\init.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\init.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/init.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/init.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\input.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\input.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/input.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/input.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\monitor.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\monitor.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/monitor.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/monitor.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\platform.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\platform.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/platform.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/platform.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\vulkan.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\vulkan.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/vulkan.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/vulkan.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\window.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\window.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/window.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/window.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\egl_context.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\egl_context.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/egl_context.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/egl_context.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\osmesa_context.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\osmesa_context.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/osmesa_context.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\null_init.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\null_init.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/null_init.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/null_init.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\null_monitor.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\null_monitor.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/null_monitor.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\null_window.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\null_window.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/null_window.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/null_window.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\null_joystick.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\null_joystick.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/null_joystick.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\win32_module.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\win32_module.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/win32_module.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/win32_module.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\win32_time.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\win32_time.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/win32_time.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/win32_time.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\win32_thread.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\win32_thread.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/win32_thread.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/win32_thread.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\win32_init.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\win32_init.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/win32_init.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/win32_init.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\win32_joystick.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\win32_joystick.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/win32_joystick.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/win32_joystick.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\win32_monitor.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\win32_monitor.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/win32_monitor.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/win32_monitor.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\win32_window.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\win32_window.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/win32_window.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/win32_window.c.obj"
+},
+{
+  "directory": "C:/Users/developer/source/repos/mine/blastoff/build",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\include -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src -IC:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-build\\raylib\\external\\glfw\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Fo_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\wgl_context.c.obj /Fd_deps\\raylib-build\\raylib\\external\\glfw\\src\\CMakeFiles\\glfw.dir\\ /FS -c C:\\Users\\developer\\source\\repos\\mine\\blastoff\\build\\_deps\\raylib-src\\src\\external\\glfw\\src\\wgl_context.c",
+  "file": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-src/src/external/glfw/src/wgl_context.c",
+  "output": "C:/Users/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/wgl_context.c.obj"
+}
+]
