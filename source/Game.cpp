@@ -959,5 +959,5 @@ namespace BlastOff
 			m_ResetCallback();
 	}
 
-	const bool Cutscene::c_PrintOutcomeStatistics = true;
+	const bool Cutscene::c_PrintOutcomeStatistics = false;
 }

@@ -39,7 +39,7 @@ namespace BlastOff
 			const string banner = CalculateBanner();
 			std::fprintf(
 				stderr, 
-				"WARNING: %s: %s\n", 
+				"WARNING: %s%s\n", 
 				banner.c_str(), 
 				value
 			);
