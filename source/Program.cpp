@@ -184,8 +184,6 @@ namespace BlastOff
 					&c_Config,
 					&m_CameraPosition
 				);
-
-				m_State = State::MainMenu;
 			};
 
 		const auto initializeInput =
@@ -320,9 +318,17 @@ namespace BlastOff
 		{
 			initializeGraphics();
 			initializeInput();
+		}
+		else if (m_FramesSinceCreation == 3)
+		{
+			m_CoordinateTransformer->Update();
+			m_Window->Update();
+			m_CameraEmpty->Update();
 
 			InitializeMainMenu();
 			InitializeCutscene();
+
+			m_State = State::MainMenu;
 		}
 	}
 
