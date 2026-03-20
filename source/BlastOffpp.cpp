@@ -4,6 +4,8 @@
 
 int main()
 {
+    SetUpPlatform();
+
     BlastOff::Program program;
     while (program.IsRunning())
         program.RunLoopIteration();
@@ -17,7 +19,7 @@ int main()
 
 BlastOff::Program program;
 
-static void mainloop()
+void mainloop()
 {
     program.RunLoopIteration();
     if (!program.IsRunning())
@@ -26,7 +28,7 @@ static void mainloop()
 
 int main()
 {
-    emscripten_set_main_loop(mainloop, 0, 1);
+    BlastOff::SetUpPlatform(program.GetTargetFramerate());
     return 0;
 }
 

@@ -22,6 +22,11 @@ namespace BlastOff
 		void RunLoopIteration();
 		bool IsRunning() const;
 
+		inline int GetTargetFramerate()
+		{
+			return c_Config.GetTargetFramerate();
+		}
+
 	private:
 		using State = ProgramState;
 

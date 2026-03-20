@@ -3,6 +3,7 @@
 #include <optional>
 #include <string>
 #include <memory>
+#include <cstdio>
 
 #ifdef _WIN32
 #define COMPILE_TARGET_WINDOWS _WIN32
@@ -41,6 +42,7 @@ namespace BlastOff
 
 	void BreakProgram();
 
+	void SetUpPlatform(const int fps);
 	optional<CursorPosition> GetCursorPosition();
 
 	string GetFontPath(const char* const name, const char* const extension);
