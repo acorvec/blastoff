@@ -4,7 +4,7 @@
 
 int main()
 {
-    SetUpPlatform();
+    BlastOff::SetUpPlatform();
 
     BlastOff::Program program;
     while (program.IsRunning())

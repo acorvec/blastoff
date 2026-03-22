@@ -1,15 +1,15 @@
 #include "OperatingSystem.h"
 
 #if COMPILE_TARGET_WINDOWS
-	#include "Debug.h"
+#include "Debug.h"
 
-	#define WIN32_LEAN_AND_MEAN true
-	#include "windows.h"
-	#include "Winuser.h"
+#define WIN32_LEAN_AND_MEAN true
+#include "windows.h"
+#include "Winuser.h"
 #endif
 
 #if COMPILE_TARGET_LINUX
-	#include <X11/Xlib.h>
+#include <X11/Xlib.h>
 #endif
 
 
