@@ -51,11 +51,10 @@ events:
   -
     kind: "message-v1"
     backtrace:
-      - "/usr/share/cmake/Modules/CMakeDetermineSystem.cmake:207 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineSystem.cmake:212 (message)"
       - "CMakeLists.txt:2 (project)"
     message: |
-      The target system is: Emscripten - 1 - x86
-      The host system is: Linux - 6.18.12-1-MANJARO - x86_64
+      The system is: Linux - 6.18.12-1-MANJARO - x86_64
   -
     kind: "find-v1"
     backtrace:
@@ -86,8 +85,6 @@ events:
       - "/usr/bin/site_perl/"
       - "/usr/bin/vendor_perl/"
       - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
     searched_directories:
       - "/home/developer/source/repos/github/emsdk/gmake"
       - "/home/developer/source/repos/github/emsdk/upstream/emscripten/gmake"
@@ -98,8 +95,6 @@ events:
       - "/usr/bin/site_perl/gmake"
       - "/usr/bin/vendor_perl/gmake"
       - "/usr/bin/core_perl/gmake"
-      - "/bin/gmake"
-      - "/sbin/gmake"
       - "/home/developer/source/repos/github/emsdk/make"
       - "/home/developer/source/repos/github/emsdk/upstream/emscripten/make"
       - "/home/developer/.local/bin/make"
@@ -117,33 +112,37 @@ events:
         - "/usr/bin/site_perl"
         - "/usr/bin/vendor_perl"
         - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
   -
     kind: "find-v1"
     backtrace:
-      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
-      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompiler.cmake:73 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:69 (_cmake_find_compiler)"
       - "CMakeLists.txt:2 (project)"
     mode: "program"
-    variable: "CMAKE_STRIP"
-    description: "Path to a program."
+    variable: "CMAKE_CXX_COMPILER"
+    description: "CXX compiler"
     settings:
       SearchFramework: "NEVER"
       SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: false
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
       CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
       CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
       CMAKE_FIND_USE_INSTALL_PREFIX: true
     names:
-      - "llvm-strip"
-      - "strip"
+      - "c++"
+      - "CC"
+      - "g++"
+      - "aCC"
+      - "cl"
+      - "bcc"
+      - "xlC"
+      - "icpx"
+      - "icx"
+      - "clang++"
     candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
       - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
       - "/home/developer/.local/bin/"
       - "/usr/local/sbin/"
       - "/usr/local/bin/"
@@ -151,26 +150,13 @@ events:
       - "/usr/bin/site_perl/"
       - "/usr/bin/vendor_perl/"
       - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
     searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/llvm-strip"
-      - "/home/developer/source/repos/github/emsdk/llvm-strip"
-      - "/home/developer/.local/bin/llvm-strip"
-      - "/usr/local/sbin/llvm-strip"
-      - "/usr/local/bin/llvm-strip"
-      - "/usr/bin/llvm-strip"
-      - "/usr/bin/site_perl/llvm-strip"
-      - "/usr/bin/vendor_perl/llvm-strip"
-      - "/usr/bin/core_perl/llvm-strip"
-      - "/bin/llvm-strip"
-      - "/sbin/llvm-strip"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/strip"
-      - "/home/developer/source/repos/github/emsdk/strip"
-      - "/home/developer/.local/bin/strip"
-      - "/usr/local/sbin/strip"
-      - "/usr/local/bin/strip"
-    found: "/usr/bin/strip"
+      - "/home/developer/source/repos/github/emsdk/c++"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/c++"
+      - "/home/developer/.local/bin/c++"
+      - "/usr/local/sbin/c++"
+      - "/usr/local/bin/c++"
+    found: "/usr/bin/c++"
     search_context:
       ENV{PATH}:
         - "/home/developer/source/repos/github/emsdk"
@@ -182,473 +168,17 @@ events:
         - "/usr/bin/site_perl"
         - "/usr/bin/vendor_perl"
         - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
   -
     kind: "find-v1"
     backtrace:
-      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
-      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
-      - "CMakeLists.txt:2 (project)"
-    mode: "program"
-    variable: "CMAKE_LINKER"
-    description: "Path to a program."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: false
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "ld.lld"
-      - "ld"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/ld.lld"
-      - "/home/developer/source/repos/github/emsdk/ld.lld"
-      - "/home/developer/.local/bin/ld.lld"
-      - "/usr/local/sbin/ld.lld"
-      - "/usr/local/bin/ld.lld"
-      - "/usr/bin/ld.lld"
-      - "/usr/bin/site_perl/ld.lld"
-      - "/usr/bin/vendor_perl/ld.lld"
-      - "/usr/bin/core_perl/ld.lld"
-      - "/bin/ld.lld"
-      - "/sbin/ld.lld"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/ld"
-      - "/home/developer/source/repos/github/emsdk/ld"
-      - "/home/developer/.local/bin/ld"
-      - "/usr/local/sbin/ld"
-      - "/usr/local/bin/ld"
-    found: "/usr/bin/ld"
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
-      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
-      - "CMakeLists.txt:2 (project)"
-    mode: "program"
-    variable: "CMAKE_OBJDUMP"
-    description: "Path to a program."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: false
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "llvm-objdump"
-      - "objdump"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/llvm-objdump"
-      - "/home/developer/source/repos/github/emsdk/llvm-objdump"
-      - "/home/developer/.local/bin/llvm-objdump"
-      - "/usr/local/sbin/llvm-objdump"
-      - "/usr/local/bin/llvm-objdump"
-      - "/usr/bin/llvm-objdump"
-      - "/usr/bin/site_perl/llvm-objdump"
-      - "/usr/bin/vendor_perl/llvm-objdump"
-      - "/usr/bin/core_perl/llvm-objdump"
-      - "/bin/llvm-objdump"
-      - "/sbin/llvm-objdump"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/objdump"
-      - "/home/developer/source/repos/github/emsdk/objdump"
-      - "/home/developer/.local/bin/objdump"
-      - "/usr/local/sbin/objdump"
-      - "/usr/local/bin/objdump"
-    found: "/usr/bin/objdump"
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
-      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
-      - "CMakeLists.txt:2 (project)"
-    mode: "program"
-    variable: "CMAKE_OBJCOPY"
-    description: "Path to a program."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: false
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "llvm-objcopy"
-      - "objcopy"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/llvm-objcopy"
-      - "/home/developer/source/repos/github/emsdk/llvm-objcopy"
-      - "/home/developer/.local/bin/llvm-objcopy"
-      - "/usr/local/sbin/llvm-objcopy"
-      - "/usr/local/bin/llvm-objcopy"
-      - "/usr/bin/llvm-objcopy"
-      - "/usr/bin/site_perl/llvm-objcopy"
-      - "/usr/bin/vendor_perl/llvm-objcopy"
-      - "/usr/bin/core_perl/llvm-objcopy"
-      - "/bin/llvm-objcopy"
-      - "/sbin/llvm-objcopy"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/objcopy"
-      - "/home/developer/source/repos/github/emsdk/objcopy"
-      - "/home/developer/.local/bin/objcopy"
-      - "/usr/local/sbin/objcopy"
-      - "/usr/local/bin/objcopy"
-    found: "/usr/bin/objcopy"
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
-      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
-      - "CMakeLists.txt:2 (project)"
-    mode: "program"
-    variable: "CMAKE_READELF"
-    description: "Path to a program."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: false
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "llvm-readelf"
-      - "readelf"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/llvm-readelf"
-      - "/home/developer/source/repos/github/emsdk/llvm-readelf"
-      - "/home/developer/.local/bin/llvm-readelf"
-      - "/usr/local/sbin/llvm-readelf"
-      - "/usr/local/bin/llvm-readelf"
-      - "/usr/bin/llvm-readelf"
-      - "/usr/bin/site_perl/llvm-readelf"
-      - "/usr/bin/vendor_perl/llvm-readelf"
-      - "/usr/bin/core_perl/llvm-readelf"
-      - "/bin/llvm-readelf"
-      - "/sbin/llvm-readelf"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/readelf"
-      - "/home/developer/source/repos/github/emsdk/readelf"
-      - "/home/developer/.local/bin/readelf"
-      - "/usr/local/sbin/readelf"
-      - "/usr/local/bin/readelf"
-    found: "/usr/bin/readelf"
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
-      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
-      - "CMakeLists.txt:2 (project)"
-    mode: "program"
-    variable: "CMAKE_DLLTOOL"
-    description: "Path to a program."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: false
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "llvm-dlltool"
-      - "dlltool"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/llvm-dlltool"
-      - "/home/developer/source/repos/github/emsdk/llvm-dlltool"
-      - "/home/developer/.local/bin/llvm-dlltool"
-      - "/usr/local/sbin/llvm-dlltool"
-      - "/usr/local/bin/llvm-dlltool"
-      - "/usr/bin/llvm-dlltool"
-      - "/usr/bin/site_perl/llvm-dlltool"
-      - "/usr/bin/vendor_perl/llvm-dlltool"
-      - "/usr/bin/core_perl/llvm-dlltool"
-      - "/bin/llvm-dlltool"
-      - "/sbin/llvm-dlltool"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/dlltool"
-      - "/home/developer/source/repos/github/emsdk/dlltool"
-      - "/home/developer/.local/bin/dlltool"
-      - "/usr/local/sbin/dlltool"
-      - "/usr/local/bin/dlltool"
-      - "/usr/bin/dlltool"
-      - "/usr/bin/site_perl/dlltool"
-      - "/usr/bin/vendor_perl/dlltool"
-      - "/usr/bin/core_perl/dlltool"
-      - "/bin/dlltool"
-      - "/sbin/dlltool"
-    found: false
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
-      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
-      - "CMakeLists.txt:2 (project)"
-    mode: "program"
-    variable: "CMAKE_ADDR2LINE"
-    description: "Path to a program."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: false
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "llvm-addr2line"
-      - "addr2line"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/llvm-addr2line"
-      - "/home/developer/source/repos/github/emsdk/llvm-addr2line"
-      - "/home/developer/.local/bin/llvm-addr2line"
-      - "/usr/local/sbin/llvm-addr2line"
-      - "/usr/local/bin/llvm-addr2line"
-      - "/usr/bin/llvm-addr2line"
-      - "/usr/bin/site_perl/llvm-addr2line"
-      - "/usr/bin/vendor_perl/llvm-addr2line"
-      - "/usr/bin/core_perl/llvm-addr2line"
-      - "/bin/llvm-addr2line"
-      - "/sbin/llvm-addr2line"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/addr2line"
-      - "/home/developer/source/repos/github/emsdk/addr2line"
-      - "/home/developer/.local/bin/addr2line"
-      - "/usr/local/sbin/addr2line"
-      - "/usr/local/bin/addr2line"
-    found: "/usr/bin/addr2line"
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
-      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
-      - "CMakeLists.txt:2 (project)"
-    mode: "program"
-    variable: "CMAKE_TAPI"
-    description: "Path to a program."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: false
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "tapi"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/tapi"
-      - "/home/developer/source/repos/github/emsdk/tapi"
-      - "/home/developer/.local/bin/tapi"
-      - "/usr/local/sbin/tapi"
-      - "/usr/local/bin/tapi"
-      - "/usr/bin/tapi"
-      - "/usr/bin/site_perl/tapi"
-      - "/usr/bin/vendor_perl/tapi"
-      - "/usr/bin/core_perl/tapi"
-      - "/bin/tapi"
-      - "/sbin/tapi"
-    found: false
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/Platform/Emscripten.cmake:6 (find_file)"
-      - "/usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:462 (find_file)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:500 (CMAKE_DETERMINE_COMPILER_ID_WRITE)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
       - "CMakeLists.txt:2 (project)"
     mode: "file"
-    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
+    variable: "src_in"
     description: "Path to a file."
     settings:
       SearchFramework: "NEVER"
@@ -659,125 +189,10 @@ events:
       CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
       CMAKE_FIND_USE_INSTALL_PREFIX: true
     names:
-      - "Platform/Emscripten.cmake"
+      - "CMakeCXXCompilerId.cpp.in"
     candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cmake/Modules/"
-    found: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/usr/local"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/FindGit.cmake:111 (find_program)"
-      - "/usr/share/cmake/Modules/ExternalProject/shared_internal_commands.cmake:926 (find_package)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:1700 (_ep_add_download_command)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:1617 (__FetchContent_populateDirect)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:2155:EVAL:2 (__FetchContent_doPopulation)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:2155 (cmake_language)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:2394 (__FetchContent_Populate)"
-      - "CMakeLists.txt:25 (FetchContent_MakeAvailable)"
-    mode: "program"
-    variable: "GIT_EXECUTABLE"
-    description: "Git command line client"
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "git"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/git"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/git"
-      - "/home/developer/.local/bin/git"
-      - "/usr/local/sbin/git"
-      - "/usr/local/bin/git"
-    found: "/usr/bin/git"
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-
----
-events:
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/CMakeDetermineSystem.cmake:12 (find_program)"
-      - "CMakeLists.txt:2 (project)"
-    mode: "program"
-    variable: "CMAKE_UNAME"
-    description: "Path to a program."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "uname"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/uname"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/uname"
-      - "/home/developer/.local/bin/uname"
-      - "/usr/local/sbin/uname"
-      - "/usr/local/bin/uname"
-    found: "/usr/bin/uname"
+      - "/usr/share/cmake/Modules/"
+    found: "/usr/share/cmake/Modules/CMakeCXXCompilerId.cpp.in"
     search_context:
       ENV{PATH}:
         - "/home/developer/source/repos/github/emsdk"
@@ -792,61 +207,55 @@ events:
   -
     kind: "message-v1"
     backtrace:
-      - "/usr/share/cmake/Modules/CMakeDetermineSystem.cmake:207 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
       - "CMakeLists.txt:2 (project)"
     message: |
-      The target system is: Emscripten - 1 - x86
-      The host system is: Linux - 6.18.12-1-MANJARO - x86_64
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /usr/bin/c++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+      
+      The CXX compiler identification is GNU, found in:
+        /home/developer/source/repos/mine/blastoff/CMakeFiles/4.2.3/CompilerIdCXX/a.out
+      
   -
     kind: "find-v1"
     backtrace:
-      - "/usr/share/cmake/Modules/CMakeUnixFindMake.cmake:5 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
       - "CMakeLists.txt:2 (project)"
     mode: "program"
-    variable: "CMAKE_MAKE_PROGRAM"
+    variable: "CMAKE_AR"
     description: "Path to a program."
     settings:
       SearchFramework: "NEVER"
       SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
       CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
       CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
       CMAKE_FIND_USE_INSTALL_PREFIX: true
     names:
-      - "gmake"
-      - "make"
-      - "smake"
+      - "ar"
     candidate_directories:
+      - "/usr/bin/"
       - "/home/developer/source/repos/github/emsdk/"
       - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
       - "/home/developer/.local/bin/"
       - "/usr/local/sbin/"
       - "/usr/local/bin/"
-      - "/usr/bin/"
       - "/usr/bin/site_perl/"
       - "/usr/bin/vendor_perl/"
       - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/gmake"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/gmake"
-      - "/home/developer/.local/bin/gmake"
-      - "/usr/local/sbin/gmake"
-      - "/usr/local/bin/gmake"
-      - "/usr/bin/gmake"
-      - "/usr/bin/site_perl/gmake"
-      - "/usr/bin/vendor_perl/gmake"
-      - "/usr/bin/core_perl/gmake"
-      - "/bin/gmake"
-      - "/sbin/gmake"
-      - "/home/developer/source/repos/github/emsdk/make"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/make"
-      - "/home/developer/.local/bin/make"
-      - "/usr/local/sbin/make"
-      - "/usr/local/bin/make"
-    found: "/usr/bin/make"
+    found: "/usr/bin/ar"
     search_context:
       ENV{PATH}:
         - "/home/developer/source/repos/github/emsdk"
@@ -858,10 +267,47 @@ events:
         - "/usr/bin/site_perl"
         - "/usr/bin/vendor_perl"
         - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_RANLIB"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ranlib"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
+      - "/home/developer/.local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    found: "/usr/bin/ranlib"
+    search_context:
+      ENV{PATH}:
+        - "/home/developer/source/repos/github/emsdk"
+        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
+        - "/home/developer/.local/bin"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
   -
     kind: "find-v1"
     backtrace:
@@ -880,37 +326,17 @@ events:
       CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
       CMAKE_FIND_USE_INSTALL_PREFIX: true
     names:
-      - "llvm-strip"
       - "strip"
     candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
+      - "/usr/bin/"
       - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
       - "/home/developer/.local/bin/"
       - "/usr/local/sbin/"
       - "/usr/local/bin/"
-      - "/usr/bin/"
       - "/usr/bin/site_perl/"
       - "/usr/bin/vendor_perl/"
       - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/llvm-strip"
-      - "/home/developer/source/repos/github/emsdk/llvm-strip"
-      - "/home/developer/.local/bin/llvm-strip"
-      - "/usr/local/sbin/llvm-strip"
-      - "/usr/local/bin/llvm-strip"
-      - "/usr/bin/llvm-strip"
-      - "/usr/bin/site_perl/llvm-strip"
-      - "/usr/bin/vendor_perl/llvm-strip"
-      - "/usr/bin/core_perl/llvm-strip"
-      - "/bin/llvm-strip"
-      - "/sbin/llvm-strip"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/strip"
-      - "/home/developer/source/repos/github/emsdk/strip"
-      - "/home/developer/.local/bin/strip"
-      - "/usr/local/sbin/strip"
-      - "/usr/local/bin/strip"
     found: "/usr/bin/strip"
     search_context:
       ENV{PATH}:
@@ -923,10 +349,6 @@ events:
         - "/usr/bin/site_perl"
         - "/usr/bin/vendor_perl"
         - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
   -
     kind: "find-v1"
     backtrace:
@@ -945,37 +367,17 @@ events:
       CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
       CMAKE_FIND_USE_INSTALL_PREFIX: true
     names:
-      - "ld.lld"
       - "ld"
     candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
+      - "/usr/bin/"
       - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
       - "/home/developer/.local/bin/"
       - "/usr/local/sbin/"
       - "/usr/local/bin/"
-      - "/usr/bin/"
       - "/usr/bin/site_perl/"
       - "/usr/bin/vendor_perl/"
       - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/ld.lld"
-      - "/home/developer/source/repos/github/emsdk/ld.lld"
-      - "/home/developer/.local/bin/ld.lld"
-      - "/usr/local/sbin/ld.lld"
-      - "/usr/local/bin/ld.lld"
-      - "/usr/bin/ld.lld"
-      - "/usr/bin/site_perl/ld.lld"
-      - "/usr/bin/vendor_perl/ld.lld"
-      - "/usr/bin/core_perl/ld.lld"
-      - "/bin/ld.lld"
-      - "/sbin/ld.lld"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/ld"
-      - "/home/developer/source/repos/github/emsdk/ld"
-      - "/home/developer/.local/bin/ld"
-      - "/usr/local/sbin/ld"
-      - "/usr/local/bin/ld"
     found: "/usr/bin/ld"
     search_context:
       ENV{PATH}:
@@ -988,10 +390,47 @@ events:
         - "/usr/bin/site_perl"
         - "/usr/bin/vendor_perl"
         - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_NM"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "nm"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
+      - "/home/developer/.local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    found: "/usr/bin/nm"
+    search_context:
+      ENV{PATH}:
+        - "/home/developer/source/repos/github/emsdk"
+        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
+        - "/home/developer/.local/bin"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
   -
     kind: "find-v1"
     backtrace:
@@ -1010,37 +449,17 @@ events:
       CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
       CMAKE_FIND_USE_INSTALL_PREFIX: true
     names:
-      - "llvm-objdump"
       - "objdump"
     candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
+      - "/usr/bin/"
       - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
       - "/home/developer/.local/bin/"
       - "/usr/local/sbin/"
       - "/usr/local/bin/"
-      - "/usr/bin/"
       - "/usr/bin/site_perl/"
       - "/usr/bin/vendor_perl/"
       - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/llvm-objdump"
-      - "/home/developer/source/repos/github/emsdk/llvm-objdump"
-      - "/home/developer/.local/bin/llvm-objdump"
-      - "/usr/local/sbin/llvm-objdump"
-      - "/usr/local/bin/llvm-objdump"
-      - "/usr/bin/llvm-objdump"
-      - "/usr/bin/site_perl/llvm-objdump"
-      - "/usr/bin/vendor_perl/llvm-objdump"
-      - "/usr/bin/core_perl/llvm-objdump"
-      - "/bin/llvm-objdump"
-      - "/sbin/llvm-objdump"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/objdump"
-      - "/home/developer/source/repos/github/emsdk/objdump"
-      - "/home/developer/.local/bin/objdump"
-      - "/usr/local/sbin/objdump"
-      - "/usr/local/bin/objdump"
     found: "/usr/bin/objdump"
     search_context:
       ENV{PATH}:
@@ -1053,10 +472,6 @@ events:
         - "/usr/bin/site_perl"
         - "/usr/bin/vendor_perl"
         - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
   -
     kind: "find-v1"
     backtrace:
@@ -1075,37 +490,17 @@ events:
       CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
       CMAKE_FIND_USE_INSTALL_PREFIX: true
     names:
-      - "llvm-objcopy"
       - "objcopy"
     candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
+      - "/usr/bin/"
       - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
       - "/home/developer/.local/bin/"
       - "/usr/local/sbin/"
       - "/usr/local/bin/"
-      - "/usr/bin/"
       - "/usr/bin/site_perl/"
       - "/usr/bin/vendor_perl/"
       - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/llvm-objcopy"
-      - "/home/developer/source/repos/github/emsdk/llvm-objcopy"
-      - "/home/developer/.local/bin/llvm-objcopy"
-      - "/usr/local/sbin/llvm-objcopy"
-      - "/usr/local/bin/llvm-objcopy"
-      - "/usr/bin/llvm-objcopy"
-      - "/usr/bin/site_perl/llvm-objcopy"
-      - "/usr/bin/vendor_perl/llvm-objcopy"
-      - "/usr/bin/core_perl/llvm-objcopy"
-      - "/bin/llvm-objcopy"
-      - "/sbin/llvm-objcopy"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/objcopy"
-      - "/home/developer/source/repos/github/emsdk/objcopy"
-      - "/home/developer/.local/bin/objcopy"
-      - "/usr/local/sbin/objcopy"
-      - "/usr/local/bin/objcopy"
     found: "/usr/bin/objcopy"
     search_context:
       ENV{PATH}:
@@ -1118,10 +513,6 @@ events:
         - "/usr/bin/site_perl"
         - "/usr/bin/vendor_perl"
         - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
   -
     kind: "find-v1"
     backtrace:
@@ -1140,37 +531,17 @@ events:
       CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
       CMAKE_FIND_USE_INSTALL_PREFIX: true
     names:
-      - "llvm-readelf"
       - "readelf"
     candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
+      - "/usr/bin/"
       - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
       - "/home/developer/.local/bin/"
       - "/usr/local/sbin/"
       - "/usr/local/bin/"
-      - "/usr/bin/"
       - "/usr/bin/site_perl/"
       - "/usr/bin/vendor_perl/"
       - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/llvm-readelf"
-      - "/home/developer/source/repos/github/emsdk/llvm-readelf"
-      - "/home/developer/.local/bin/llvm-readelf"
-      - "/usr/local/sbin/llvm-readelf"
-      - "/usr/local/bin/llvm-readelf"
-      - "/usr/bin/llvm-readelf"
-      - "/usr/bin/site_perl/llvm-readelf"
-      - "/usr/bin/vendor_perl/llvm-readelf"
-      - "/usr/bin/core_perl/llvm-readelf"
-      - "/bin/llvm-readelf"
-      - "/sbin/llvm-readelf"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/readelf"
-      - "/home/developer/source/repos/github/emsdk/readelf"
-      - "/home/developer/.local/bin/readelf"
-      - "/usr/local/sbin/readelf"
-      - "/usr/local/bin/readelf"
     found: "/usr/bin/readelf"
     search_context:
       ENV{PATH}:
@@ -1183,10 +554,6 @@ events:
         - "/usr/bin/site_perl"
         - "/usr/bin/vendor_perl"
         - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
   -
     kind: "find-v1"
     backtrace:
@@ -1205,43 +572,27 @@ events:
       CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
       CMAKE_FIND_USE_INSTALL_PREFIX: true
     names:
-      - "llvm-dlltool"
       - "dlltool"
     candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
+      - "/usr/bin/"
       - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
       - "/home/developer/.local/bin/"
       - "/usr/local/sbin/"
       - "/usr/local/bin/"
-      - "/usr/bin/"
       - "/usr/bin/site_perl/"
       - "/usr/bin/vendor_perl/"
       - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
     searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/llvm-dlltool"
-      - "/home/developer/source/repos/github/emsdk/llvm-dlltool"
-      - "/home/developer/.local/bin/llvm-dlltool"
-      - "/usr/local/sbin/llvm-dlltool"
-      - "/usr/local/bin/llvm-dlltool"
-      - "/usr/bin/llvm-dlltool"
-      - "/usr/bin/site_perl/llvm-dlltool"
-      - "/usr/bin/vendor_perl/llvm-dlltool"
-      - "/usr/bin/core_perl/llvm-dlltool"
-      - "/bin/llvm-dlltool"
-      - "/sbin/llvm-dlltool"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/dlltool"
+      - "/usr/bin/dlltool"
       - "/home/developer/source/repos/github/emsdk/dlltool"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/dlltool"
       - "/home/developer/.local/bin/dlltool"
       - "/usr/local/sbin/dlltool"
       - "/usr/local/bin/dlltool"
-      - "/usr/bin/dlltool"
       - "/usr/bin/site_perl/dlltool"
       - "/usr/bin/vendor_perl/dlltool"
       - "/usr/bin/core_perl/dlltool"
-      - "/bin/dlltool"
-      - "/sbin/dlltool"
     found: false
     search_context:
       ENV{PATH}:
@@ -1254,10 +605,6 @@ events:
         - "/usr/bin/site_perl"
         - "/usr/bin/vendor_perl"
         - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
   -
     kind: "find-v1"
     backtrace:
@@ -1276,37 +623,17 @@ events:
       CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
       CMAKE_FIND_USE_INSTALL_PREFIX: true
     names:
-      - "llvm-addr2line"
       - "addr2line"
     candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
+      - "/usr/bin/"
       - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
       - "/home/developer/.local/bin/"
       - "/usr/local/sbin/"
       - "/usr/local/bin/"
-      - "/usr/bin/"
       - "/usr/bin/site_perl/"
       - "/usr/bin/vendor_perl/"
       - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/llvm-addr2line"
-      - "/home/developer/source/repos/github/emsdk/llvm-addr2line"
-      - "/home/developer/.local/bin/llvm-addr2line"
-      - "/usr/local/sbin/llvm-addr2line"
-      - "/usr/local/bin/llvm-addr2line"
-      - "/usr/bin/llvm-addr2line"
-      - "/usr/bin/site_perl/llvm-addr2line"
-      - "/usr/bin/vendor_perl/llvm-addr2line"
-      - "/usr/bin/core_perl/llvm-addr2line"
-      - "/bin/llvm-addr2line"
-      - "/sbin/llvm-addr2line"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/addr2line"
-      - "/home/developer/source/repos/github/emsdk/addr2line"
-      - "/home/developer/.local/bin/addr2line"
-      - "/usr/local/sbin/addr2line"
-      - "/usr/local/bin/addr2line"
     found: "/usr/bin/addr2line"
     search_context:
       ENV{PATH}:
@@ -1319,10 +646,6 @@ events:
         - "/usr/bin/site_perl"
         - "/usr/bin/vendor_perl"
         - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
   -
     kind: "find-v1"
     backtrace:
@@ -1343,29 +666,25 @@ events:
     names:
       - "tapi"
     candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
+      - "/usr/bin/"
       - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
       - "/home/developer/.local/bin/"
       - "/usr/local/sbin/"
       - "/usr/local/bin/"
-      - "/usr/bin/"
       - "/usr/bin/site_perl/"
       - "/usr/bin/vendor_perl/"
       - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
     searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/tapi"
+      - "/usr/bin/tapi"
       - "/home/developer/source/repos/github/emsdk/tapi"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/tapi"
       - "/home/developer/.local/bin/tapi"
       - "/usr/local/sbin/tapi"
       - "/usr/local/bin/tapi"
-      - "/usr/bin/tapi"
       - "/usr/bin/site_perl/tapi"
       - "/usr/bin/vendor_perl/tapi"
       - "/usr/bin/core_perl/tapi"
-      - "/bin/tapi"
-      - "/sbin/tapi"
     found: false
     search_context:
       ENV{PATH}:
@@ -1378,19 +697,404 @@ events:
         - "/usr/bin/site_perl"
         - "/usr/bin/vendor_perl"
         - "/usr/bin/core_perl"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
   -
     kind: "find-v1"
     backtrace:
-      - "/usr/share/cmake/Modules/Platform/Emscripten.cmake:6 (find_file)"
-      - "/usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
+      - "/usr/share/cmake/Modules/Compiler/GNU-FindBinUtils.cmake:18 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:207 (include)"
       - "CMakeLists.txt:2 (project)"
-    mode: "file"
-    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
-    description: "Path to a file."
+    mode: "program"
+    variable: "CMAKE_CXX_COMPILER_AR"
+    description: "A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gcc-ar-15.2"
+      - "gcc-ar-15"
+      - "gcc-ar15"
+      - "gcc-ar"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
+      - "/home/developer/.local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/usr/bin/gcc-ar-15.2"
+      - "/home/developer/source/repos/github/emsdk/gcc-ar-15.2"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/gcc-ar-15.2"
+      - "/home/developer/.local/bin/gcc-ar-15.2"
+      - "/usr/local/sbin/gcc-ar-15.2"
+      - "/usr/local/bin/gcc-ar-15.2"
+      - "/usr/bin/site_perl/gcc-ar-15.2"
+      - "/usr/bin/vendor_perl/gcc-ar-15.2"
+      - "/usr/bin/core_perl/gcc-ar-15.2"
+      - "/usr/bin/gcc-ar-15"
+      - "/home/developer/source/repos/github/emsdk/gcc-ar-15"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/gcc-ar-15"
+      - "/home/developer/.local/bin/gcc-ar-15"
+      - "/usr/local/sbin/gcc-ar-15"
+      - "/usr/local/bin/gcc-ar-15"
+      - "/usr/bin/site_perl/gcc-ar-15"
+      - "/usr/bin/vendor_perl/gcc-ar-15"
+      - "/usr/bin/core_perl/gcc-ar-15"
+      - "/usr/bin/gcc-ar15"
+      - "/home/developer/source/repos/github/emsdk/gcc-ar15"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/gcc-ar15"
+      - "/home/developer/.local/bin/gcc-ar15"
+      - "/usr/local/sbin/gcc-ar15"
+      - "/usr/local/bin/gcc-ar15"
+      - "/usr/bin/site_perl/gcc-ar15"
+      - "/usr/bin/vendor_perl/gcc-ar15"
+      - "/usr/bin/core_perl/gcc-ar15"
+    found: "/usr/bin/gcc-ar"
+    search_context:
+      ENV{PATH}:
+        - "/home/developer/source/repos/github/emsdk"
+        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
+        - "/home/developer/.local/bin"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Compiler/GNU-FindBinUtils.cmake:30 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:207 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_CXX_COMPILER_RANLIB"
+    description: "A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gcc-ranlib-15.2"
+      - "gcc-ranlib-15"
+      - "gcc-ranlib15"
+      - "gcc-ranlib"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
+      - "/home/developer/.local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/usr/bin/gcc-ranlib-15.2"
+      - "/home/developer/source/repos/github/emsdk/gcc-ranlib-15.2"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/gcc-ranlib-15.2"
+      - "/home/developer/.local/bin/gcc-ranlib-15.2"
+      - "/usr/local/sbin/gcc-ranlib-15.2"
+      - "/usr/local/bin/gcc-ranlib-15.2"
+      - "/usr/bin/site_perl/gcc-ranlib-15.2"
+      - "/usr/bin/vendor_perl/gcc-ranlib-15.2"
+      - "/usr/bin/core_perl/gcc-ranlib-15.2"
+      - "/usr/bin/gcc-ranlib-15"
+      - "/home/developer/source/repos/github/emsdk/gcc-ranlib-15"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/gcc-ranlib-15"
+      - "/home/developer/.local/bin/gcc-ranlib-15"
+      - "/usr/local/sbin/gcc-ranlib-15"
+      - "/usr/local/bin/gcc-ranlib-15"
+      - "/usr/bin/site_perl/gcc-ranlib-15"
+      - "/usr/bin/vendor_perl/gcc-ranlib-15"
+      - "/usr/bin/core_perl/gcc-ranlib-15"
+      - "/usr/bin/gcc-ranlib15"
+      - "/home/developer/source/repos/github/emsdk/gcc-ranlib15"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/gcc-ranlib15"
+      - "/home/developer/.local/bin/gcc-ranlib15"
+      - "/usr/local/sbin/gcc-ranlib15"
+      - "/usr/local/bin/gcc-ranlib15"
+      - "/usr/bin/site_perl/gcc-ranlib15"
+      - "/usr/bin/vendor_perl/gcc-ranlib15"
+      - "/usr/bin/core_perl/gcc-ranlib15"
+    found: "/usr/bin/gcc-ranlib"
+    search_context:
+      ENV{PATH}:
+        - "/home/developer/source/repos/github/emsdk"
+        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
+        - "/home/developer/.local/bin"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/home/developer/source/repos/mine/blastoff/CMakeFiles/CMakeScratch/TryCompile-Y1uQjQ"
+      binary: "/home/developer/source/repos/mine/blastoff/CMakeFiles/CMakeScratch/TryCompile-Y1uQjQ"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/home/developer/source/repos/mine/blastoff/CMakeFiles/CMakeScratch/TryCompile-Y1uQjQ'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_da531/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_da531.dir/build.make CMakeFiles/cmTC_da531.dir/build
+        make[1]: Entering directory '/home/developer/source/repos/mine/blastoff/CMakeFiles/CMakeScratch/TryCompile-Y1uQjQ'
+        Building CXX object CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o
+        /usr/bin/c++   -v -o CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/c++
+        Target: x86_64-pc-linux-gnu
+        Configured with: /build/gcc/src/gcc/configure --enable-languages=ada,c,c++,d,fortran,go,lto,m2,objc,obj-c++,rust,cobol --enable-bootstrap --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://gitlab.archlinux.org/archlinux/packaging/packages/gcc/-/issues --with-build-config=bootstrap-lto --with-linker-hash-style=gnu --with-system-zlib --enable-__cxa_atexit --enable-cet=auto --enable-checking=release --enable-clocale=gnu --enable-default-pie --enable-default-ssp --enable-gnu-indirect-function --enable-gnu-unique-object --enable-libstdcxx-backtrace --enable-link-serialization=1 --enable-linker-build-id --enable-lto --enable-multilib --enable-plugin --enable-shared --enable-threads=posix --disable-libssp --disable-libstdcxx-pch --disable-werror
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 15.2.1 20260209 (GCC) 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_da531.dir/'
+         /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/cc1plus -quiet -v -D_GNU_SOURCE /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_da531.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -o /tmp/ccKftNAK.s
+        GNU C++17 (GCC) version 15.2.1 20260209 (x86_64-pc-linux-gnu)
+        	compiled by GNU C version 15.2.1 20260209, GMP version 6.3.0, MPFR version 4.2.2, MPC version 1.3.1, isl version isl-0.27-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1
+         /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/x86_64-pc-linux-gnu
+         /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/backward
+         /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include
+         /usr/local/include
+         /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include-fixed
+         /usr/include
+        End of search list.
+        Compiler executable checksum: 5e3969de92aa3c12a625237f01b15b2f
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_da531.dir/'
+         as -v --64 -o CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccKftNAK.s
+        GNU assembler version 2.46 (x86_64-pc-linux-gnu) using BFD version (GNU Binutils) 2.46
+        COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/
+        LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.'
+        Linking CXX executable cmTC_da531
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_da531.dir/link.txt --verbose=1
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/c++
+        COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper
+        Target: x86_64-pc-linux-gnu
+        Configured with: /build/gcc/src/gcc/configure --enable-languages=ada,c,c++,d,fortran,go,lto,m2,objc,obj-c++,rust,cobol --enable-bootstrap --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://gitlab.archlinux.org/archlinux/packaging/packages/gcc/-/issues --with-build-config=bootstrap-lto --with-linker-hash-style=gnu --with-system-zlib --enable-__cxa_atexit --enable-cet=auto --enable-checking=release --enable-clocale=gnu --enable-default-pie --enable-default-ssp --enable-gnu-indirect-function --enable-gnu-unique-object --enable-libstdcxx-backtrace --enable-link-serialization=1 --enable-linker-build-id --enable-lto --enable-multilib --enable-plugin --enable-shared --enable-threads=posix --disable-libssp --disable-libstdcxx-pch --disable-werror
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 15.2.1 20260209 (GCC) 
+        COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/
+        LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_da531' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_da531.'
+         /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccabYJYQ.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_da531 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib -v CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o
+        collect2 version 15.2.1 20260209
+        /usr/bin/ld -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccabYJYQ.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_da531 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib -v CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o
+        GNU ld (GNU Binutils) 2.46
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_da531' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_da531.'
+        /usr/bin/c++ -v -Wl,-v CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_da531
+        make[1]: Leaving directory '/home/developer/source/repos/mine/blastoff/CMakeFiles/CMakeScratch/TryCompile-Y1uQjQ'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:217 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1]
+          add: [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/x86_64-pc-linux-gnu]
+          add: [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/backward]
+          add: [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include]
+          add: [/usr/local/include]
+          add: [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include-fixed]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1] ==> [/usr/include/c++/15.2.1]
+        collapse include dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/x86_64-pc-linux-gnu] ==> [/usr/include/c++/15.2.1/x86_64-pc-linux-gnu]
+        collapse include dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/backward] ==> [/usr/include/c++/15.2.1/backward]
+        collapse include dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include] ==> [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include-fixed] ==> [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include-fixed]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/usr/include/c++/15.2.1;/usr/include/c++/15.2.1/x86_64-pc-linux-gnu;/usr/include/c++/15.2.1/backward;/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include;/usr/local/include;/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include-fixed;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:253 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
+        ignore line: [Change Dir: '/home/developer/source/repos/mine/blastoff/CMakeFiles/CMakeScratch/TryCompile-Y1uQjQ']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_da531/fast]
+        ignore line: [/usr/bin/make  -f CMakeFiles/cmTC_da531.dir/build.make CMakeFiles/cmTC_da531.dir/build]
+        ignore line: [make[1]: Entering directory '/home/developer/source/repos/mine/blastoff/CMakeFiles/CMakeScratch/TryCompile-Y1uQjQ']
+        ignore line: [Building CXX object CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/usr/bin/c++   -v -o CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/c++]
+        ignore line: [Target: x86_64-pc-linux-gnu]
+        ignore line: [Configured with: /build/gcc/src/gcc/configure --enable-languages=ada c c++ d fortran go lto m2 objc obj-c++ rust cobol --enable-bootstrap --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://gitlab.archlinux.org/archlinux/packaging/packages/gcc/-/issues --with-build-config=bootstrap-lto --with-linker-hash-style=gnu --with-system-zlib --enable-__cxa_atexit --enable-cet=auto --enable-checking=release --enable-clocale=gnu --enable-default-pie --enable-default-ssp --enable-gnu-indirect-function --enable-gnu-unique-object --enable-libstdcxx-backtrace --enable-link-serialization=1 --enable-linker-build-id --enable-lto --enable-multilib --enable-plugin --enable-shared --enable-threads=posix --disable-libssp --disable-libstdcxx-pch --disable-werror]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 15.2.1 20260209 (GCC) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_da531.dir/']
+        ignore line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/cc1plus -quiet -v -D_GNU_SOURCE /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_da531.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -o /tmp/ccKftNAK.s]
+        ignore line: [GNU C++17 (GCC) version 15.2.1 20260209 (x86_64-pc-linux-gnu)]
+        ignore line: [	compiled by GNU C version 15.2.1 20260209  GMP version 6.3.0  MPFR version 4.2.2  MPC version 1.3.1  isl version isl-0.27-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1]
+        ignore line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/x86_64-pc-linux-gnu]
+        ignore line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/backward]
+        ignore line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include-fixed]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [Compiler executable checksum: 5e3969de92aa3c12a625237f01b15b2f]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_da531.dir/']
+        ignore line: [ as -v --64 -o CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccKftNAK.s]
+        ignore line: [GNU assembler version 2.46 (x86_64-pc-linux-gnu) using BFD version (GNU Binutils) 2.46]
+        ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [Linking CXX executable cmTC_da531]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_da531.dir/link.txt --verbose=1]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/c++]
+        ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper]
+        ignore line: [Target: x86_64-pc-linux-gnu]
+        ignore line: [Configured with: /build/gcc/src/gcc/configure --enable-languages=ada c c++ d fortran go lto m2 objc obj-c++ rust cobol --enable-bootstrap --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://gitlab.archlinux.org/archlinux/packaging/packages/gcc/-/issues --with-build-config=bootstrap-lto --with-linker-hash-style=gnu --with-system-zlib --enable-__cxa_atexit --enable-cet=auto --enable-checking=release --enable-clocale=gnu --enable-default-pie --enable-default-ssp --enable-gnu-indirect-function --enable-gnu-unique-object --enable-libstdcxx-backtrace --enable-link-serialization=1 --enable-linker-build-id --enable-lto --enable-multilib --enable-plugin --enable-shared --enable-threads=posix --disable-libssp --disable-libstdcxx-pch --disable-werror]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 15.2.1 20260209 (GCC) ]
+        ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_da531' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_da531.']
+        link line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccabYJYQ.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_da531 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib -v CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o]
+          arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccabYJYQ.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [-m] ==> ignore
+          arg [elf_x86_64] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+          arg [-pie] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_da531] ==> ignore
+          arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o] ==> obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o]
+          arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o] ==> obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o]
+          arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o] ==> obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o]
+          arg [-L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1] ==> dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1]
+          arg [-L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib] ==> dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib]
+          arg [-L/lib/../lib] ==> dir [/lib/../lib]
+          arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
+          arg [-L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../..] ==> dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../..]
+          arg [-L/lib] ==> dir [/lib]
+          arg [-L/usr/lib] ==> dir [/usr/lib]
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lstdc++] ==> lib [stdc++]
+          arg [-lm] ==> lib [m]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [-lc] ==> lib [c]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o] ==> obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o]
+          arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o] ==> obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o]
+        ignore line: [collect2 version 15.2.1 20260209]
+        ignore line: [/usr/bin/ld -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccabYJYQ.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_da531 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib -v CMakeFiles/cmTC_da531.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o]
+        linker tool for 'CXX': /usr/bin/ld
+        collapse obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o] ==> [/usr/lib/Scrt1.o]
+        collapse obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o] ==> [/usr/lib/crti.o]
+        collapse obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o] ==> [/usr/lib/crtn.o]
+        collapse library dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1] ==> [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1]
+        collapse library dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib] ==> [/usr/lib]
+        collapse library dir [/lib/../lib] ==> [/lib]
+        collapse library dir [/usr/lib/../lib] ==> [/usr/lib]
+        collapse library dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../..] ==> [/usr/lib]
+        collapse library dir [/lib] ==> [/lib]
+        collapse library dir [/usr/lib] ==> [/usr/lib]
+        implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+        implicit objs: [/usr/lib/Scrt1.o;/usr/lib/crti.o;/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o;/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o;/usr/lib/crtn.o]
+        implicit dirs: [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1;/usr/lib;/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake:38 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:299 (cmake_determine_linker_id)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Running the CXX compiler's linker: "/usr/bin/ld" "-v"
+      GNU ld (GNU Binutils) 2.46
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/FindGit.cmake:111 (find_program)"
+      - "/usr/share/cmake/Modules/ExternalProject/shared_internal_commands.cmake:926 (find_package)"
+      - "/usr/share/cmake/Modules/FetchContent.cmake:1700 (_ep_add_download_command)"
+      - "/usr/share/cmake/Modules/FetchContent.cmake:1617 (__FetchContent_populateDirect)"
+      - "/usr/share/cmake/Modules/FetchContent.cmake:2155:EVAL:2 (__FetchContent_doPopulation)"
+      - "/usr/share/cmake/Modules/FetchContent.cmake:2155 (cmake_language)"
+      - "/usr/share/cmake/Modules/FetchContent.cmake:2394 (__FetchContent_Populate)"
+      - "CMakeLists.txt:25 (FetchContent_MakeAvailable)"
+    mode: "program"
+    variable: "GIT_EXECUTABLE"
+    description: "Git command line client"
     settings:
       SearchFramework: "NEVER"
       SearchAppBundle: "NEVER"
@@ -1400,10 +1104,41 @@ events:
       CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
       CMAKE_FIND_USE_INSTALL_PREFIX: true
     names:
-      - "Platform/Emscripten.cmake"
+      - "git"
     candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cmake/Modules/"
-    found: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+      - "/home/developer/source/repos/github/emsdk/"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
+      - "/home/developer/.local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/"
+      - "/usr/bin/"
+      - "/usr/sbin/"
+      - "/usr/"
+      - "/bin/"
+      - "/sbin/"
+      - "/usr/X11R6/bin/"
+      - "/usr/X11R6/sbin/"
+      - "/usr/X11R6/"
+      - "/usr/pkg/bin/"
+      - "/usr/pkg/sbin/"
+      - "/usr/pkg/"
+      - "/opt/bin/"
+      - "/opt/sbin/"
+      - "/opt/"
+    searched_directories:
+      - "/home/developer/source/repos/github/emsdk/git"
+      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/git"
+      - "/home/developer/.local/bin/git"
+      - "/usr/local/sbin/git"
+      - "/usr/local/bin/git"
+    found: "/usr/bin/git"
     search_context:
       ENV{PATH}:
         - "/home/developer/source/repos/github/emsdk"
@@ -1417,1194 +1152,11 @@ events:
         - "/usr/bin/core_perl"
       CMAKE_INSTALL_PREFIX: "/usr/local"
       CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
         - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/Compiler/Clang-FindBinUtils.cmake:50 (find_program)"
-      - "/usr/share/cmake/Modules/CMakeDetermineCCompiler.cmake:201 (include)"
-      - "_deps/raylib-src/CMakeLists.txt:3 (project)"
-    mode: "program"
-    variable: "CMAKE_C_COMPILER_CLANG_SCAN_DEPS"
-    description: "`clang-scan-deps` dependency scanner"
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: false
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "clang-scan-deps-23.0"
-      - "clang-scan-deps-23"
-      - "clang-scan-deps23"
-      - "clang-scan-deps"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/clang-scan-deps-23.0"
-      - "/home/developer/source/repos/github/emsdk/clang-scan-deps-23.0"
-      - "/home/developer/.local/bin/clang-scan-deps-23.0"
-      - "/usr/local/sbin/clang-scan-deps-23.0"
-      - "/usr/local/bin/clang-scan-deps-23.0"
-      - "/usr/bin/clang-scan-deps-23.0"
-      - "/usr/bin/site_perl/clang-scan-deps-23.0"
-      - "/usr/bin/vendor_perl/clang-scan-deps-23.0"
-      - "/usr/bin/core_perl/clang-scan-deps-23.0"
-      - "/bin/clang-scan-deps-23.0"
-      - "/sbin/clang-scan-deps-23.0"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/clang-scan-deps-23"
-      - "/home/developer/source/repos/github/emsdk/clang-scan-deps-23"
-      - "/home/developer/.local/bin/clang-scan-deps-23"
-      - "/usr/local/sbin/clang-scan-deps-23"
-      - "/usr/local/bin/clang-scan-deps-23"
-      - "/usr/bin/clang-scan-deps-23"
-      - "/usr/bin/site_perl/clang-scan-deps-23"
-      - "/usr/bin/vendor_perl/clang-scan-deps-23"
-      - "/usr/bin/core_perl/clang-scan-deps-23"
-      - "/bin/clang-scan-deps-23"
-      - "/sbin/clang-scan-deps-23"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/clang-scan-deps23"
-      - "/home/developer/source/repos/github/emsdk/clang-scan-deps23"
-      - "/home/developer/.local/bin/clang-scan-deps23"
-      - "/usr/local/sbin/clang-scan-deps23"
-      - "/usr/local/bin/clang-scan-deps23"
-      - "/usr/bin/clang-scan-deps23"
-      - "/usr/bin/site_perl/clang-scan-deps23"
-      - "/usr/bin/vendor_perl/clang-scan-deps23"
-      - "/usr/bin/core_perl/clang-scan-deps23"
-      - "/bin/clang-scan-deps23"
-      - "/sbin/clang-scan-deps23"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/clang-scan-deps"
-      - "/home/developer/source/repos/github/emsdk/clang-scan-deps"
-      - "/home/developer/.local/bin/clang-scan-deps"
-      - "/usr/local/sbin/clang-scan-deps"
-      - "/usr/local/bin/clang-scan-deps"
-      - "/usr/bin/clang-scan-deps"
-      - "/usr/bin/site_perl/clang-scan-deps"
-      - "/usr/bin/vendor_perl/clang-scan-deps"
-      - "/usr/bin/core_perl/clang-scan-deps"
-      - "/bin/clang-scan-deps"
-      - "/sbin/clang-scan-deps"
-    found: false
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "try_compile-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
-      - "/usr/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
-      - "/usr/share/cmake/Modules/CheckCCompilerFlag.cmake:105 (cmake_check_compiler_flag)"
-      - "_deps/raylib-src/cmake/AddIfFlagCompiles.cmake:3 (CHECK_C_COMPILER_FLAG)"
-      - "_deps/raylib-src/cmake/CompilerFlags.cmake:5 (add_if_flag_compiles)"
-      - "_deps/raylib-src/CMakeLists.txt:27 (include)"
-    checks:
-      - "Performing Test COMPILER_HAS_THOSE_TOGGLES"
-    directories:
-      source: "/home/developer/source/repos/mine/blastoff/CMakeFiles/CMakeScratch/TryCompile-5qsYT6"
-      binary: "/home/developer/source/repos/mine/blastoff/CMakeFiles/CMakeScratch/TryCompile-5qsYT6"
-    cmakeVariables:
-      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/home/developer/source/repos/github/emsdk/upstream/emscripten/emscan-deps"
-      CMAKE_C_FLAGS: ""
-      CMAKE_C_FLAGS_DEBUG: "-g"
-      CMAKE_EXE_LINKER_FLAGS: ""
-      CMAKE_MODULE_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cmake/Modules;/home/developer/source/repos/github/emsdk/upstream/emscripten/cmake/Modules;/home/developer/source/repos/github/emsdk/upstream/emscripten/cmake/Modules;/home/developer/source/repos/mine/blastoff/_deps/raylib-src/cmake"
-    buildResult:
-      variable: "COMPILER_HAS_THOSE_TOGGLES"
-      cached: true
-      stdout: |
-        Change Dir: '/home/developer/source/repos/mine/blastoff/CMakeFiles/CMakeScratch/TryCompile-5qsYT6'
-        
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_8dd79/fast
-        /usr/bin/make  -f CMakeFiles/cmTC_8dd79.dir/build.make CMakeFiles/cmTC_8dd79.dir/build
-        make[1]: Entering directory '/home/developer/source/repos/mine/blastoff/CMakeFiles/CMakeScratch/TryCompile-5qsYT6'
-        Building C object CMakeFiles/cmTC_8dd79.dir/src.c.o
-        /home/developer/source/repos/github/emsdk/upstream/emscripten/emcc -DCOMPILER_HAS_THOSE_TOGGLES  -Werror=pointer-arith -MD -MT CMakeFiles/cmTC_8dd79.dir/src.c.o -MF CMakeFiles/cmTC_8dd79.dir/src.c.o.d -o CMakeFiles/cmTC_8dd79.dir/src.c.o -c /home/developer/source/repos/mine/blastoff/CMakeFiles/CMakeScratch/TryCompile-5qsYT6/src.c
-        Linking C executable cmTC_8dd79.js
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8dd79.dir/link.txt --verbose=1
-        /home/developer/source/repos/github/emsdk/upstream/emscripten/emcc @CMakeFiles/cmTC_8dd79.dir/objects1.rsp -o cmTC_8dd79.js
-        make[1]: Leaving directory '/home/developer/source/repos/mine/blastoff/CMakeFiles/CMakeScratch/TryCompile-5qsYT6'
-        
-      exitCode: 0
-  -
-    kind: "find-v1"
-    backtrace:
-      - "_deps/rapidjson-src/CMakeLists.txt:49 (find_program)"
-    mode: "program"
-    variable: "CCACHE_FOUND"
-    description: "Path to a program."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "ccache"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/ccache"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/ccache"
-      - "/home/developer/.local/bin/ccache"
-      - "/usr/local/sbin/ccache"
-      - "/usr/local/bin/ccache"
-      - "/usr/bin/ccache"
-      - "/usr/bin/site_perl/ccache"
-      - "/usr/bin/vendor_perl/ccache"
-      - "/usr/bin/core_perl/ccache"
-      - "/bin/ccache"
-      - "/sbin/ccache"
-    found: false
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "_deps/rapidjson-src/CMakeLists.txt:58 (find_program)"
-    mode: "program"
-    variable: "VALGRIND_FOUND"
-    description: "Path to a program."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "valgrind"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/valgrind"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/valgrind"
-      - "/home/developer/.local/bin/valgrind"
-      - "/usr/local/sbin/valgrind"
-      - "/usr/local/bin/valgrind"
-      - "/usr/bin/valgrind"
-      - "/usr/bin/site_perl/valgrind"
-      - "/usr/bin/vendor_perl/valgrind"
-      - "/usr/bin/core_perl/valgrind"
-      - "/bin/valgrind"
-      - "/sbin/valgrind"
-    found: false
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/FindDoxygen.cmake:770 (find_program)"
-      - "/usr/share/cmake/Modules/FindDoxygen.cmake:955 (_Doxygen_find_doxygen)"
-      - "_deps/rapidjson-src/doc/CMakeLists.txt:1 (find_package)"
-    mode: "program"
-    variable: "DOXYGEN_EXECUTABLE"
-    description: "Doxygen documentation generation tool (https://www.doxygen.nl)"
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "doxygen"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-      - "/Applications/Doxygen.app/Contents/Resources/"
-      - "/Applications/Doxygen.app/Contents/MacOS/"
-      - "/Applications/Utilities/Doxygen.app/Contents/Resources/"
-      - "/Applications/Utilities/Doxygen.app/Contents/MacOS/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/doxygen"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/doxygen"
-      - "/home/developer/.local/bin/doxygen"
-      - "/usr/local/sbin/doxygen"
-      - "/usr/local/bin/doxygen"
-      - "/usr/bin/doxygen"
-      - "/usr/bin/site_perl/doxygen"
-      - "/usr/bin/vendor_perl/doxygen"
-      - "/usr/bin/core_perl/doxygen"
-      - "/bin/doxygen"
-      - "/sbin/doxygen"
-      - "/Applications/Doxygen.app/Contents/Resources/doxygen"
-      - "/Applications/Doxygen.app/Contents/MacOS/doxygen"
-      - "/Applications/Utilities/Doxygen.app/Contents/Resources/doxygen"
-      - "/Applications/Utilities/Doxygen.app/Contents/MacOS/doxygen"
-    found: false
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/FindDoxygen.cmake:858 (find_program)"
-      - "/usr/share/cmake/Modules/FindDoxygen.cmake:959 (_Doxygen_find_dot)"
-      - "_deps/rapidjson-src/doc/CMakeLists.txt:1 (find_package)"
-    mode: "program"
-    variable: "DOXYGEN_DOT_EXECUTABLE"
-    description: "Dot tool for use with Doxygen"
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "dot"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-      - "/ATT/Graphviz/bin/"
-      - "C:/Program Files/ATT/Graphviz/bin/"
-      - "/Applications/Graphviz.app/Contents/MacOS/"
-      - "/Applications/Utilities/Graphviz.app/Contents/MacOS/"
-      - "/Applications/Doxygen.app/Contents/Resources/"
-      - "/Applications/Doxygen.app/Contents/MacOS/"
-      - "/Applications/Utilities/Doxygen.app/Contents/Resources/"
-      - "/Applications/Utilities/Doxygen.app/Contents/MacOS/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/dot"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/dot"
-      - "/home/developer/.local/bin/dot"
-      - "/usr/local/sbin/dot"
-      - "/usr/local/bin/dot"
-      - "/usr/bin/dot"
-      - "/usr/bin/site_perl/dot"
-      - "/usr/bin/vendor_perl/dot"
-      - "/usr/bin/core_perl/dot"
-      - "/bin/dot"
-      - "/sbin/dot"
-      - "/ATT/Graphviz/bin/dot"
-      - "C:/Program Files/ATT/Graphviz/bin/dot"
-      - "/Applications/Graphviz.app/Contents/MacOS/dot"
-      - "/Applications/Utilities/Graphviz.app/Contents/MacOS/dot"
-      - "/Applications/Doxygen.app/Contents/Resources/dot"
-      - "/Applications/Doxygen.app/Contents/MacOS/dot"
-      - "/Applications/Utilities/Doxygen.app/Contents/Resources/dot"
-      - "/Applications/Utilities/Doxygen.app/Contents/MacOS/dot"
-    found: false
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "_deps/rapidjson-src/CMakeModules/FindGTestSrc.cmake:14 (FIND_PATH)"
-      - "_deps/rapidjson-src/test/CMakeLists.txt:1 (find_package)"
-    mode: "path"
-    variable: "GTEST_SOURCE_DIR"
-    description: "Path to a file."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "CMakeLists.txt"
-      - "src/gtest_main.cc"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/CMakeLists.txt"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/src/gtest_main.cc"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/src/gtest_main.cc"
-    found: false
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "_deps/rapidjson-src/CMakeModules/FindGTestSrc.cmake:21 (FIND_PATH)"
-      - "_deps/rapidjson-src/test/CMakeLists.txt:1 (find_package)"
-    mode: "path"
-    variable: "GTEST_INCLUDE_DIR"
-    description: "Path to a file."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "gtest/gtest.h"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/test/GTEST_SOURCE_DIR-NOTFOUND/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/test/GTEST_SOURCE_DIR-NOTFOUND/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/test/GTEST_SOURCE_DIR-NOTFOUND/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/test/GTEST_SOURCE_DIR-NOTFOUND/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/test/GTEST_SOURCE_DIR-NOTFOUND/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/test/GTEST_SOURCE_DIR-NOTFOUND/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/include/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/test/GTEST_SOURCE_DIR-NOTFOUND/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/test/GTEST_SOURCE_DIR-NOTFOUND/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/test/GTEST_SOURCE_DIR-NOTFOUND/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/test/GTEST_SOURCE_DIR-NOTFOUND/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/test/GTEST_SOURCE_DIR-NOTFOUND/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/test/GTEST_SOURCE_DIR-NOTFOUND/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/github/emsdk/upstream/emscripten/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/.local/bin/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/sbin/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/local/bin/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/site_perl/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/vendor_perl/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/bin/core_perl/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/wasm32-emscripten/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/usr/src/gtest/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/include/gtest/gtest.h"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot/home/developer/source/repos/mine/blastoff/_deps/rapidjson-src/thirdparty/gtest/googletest/gtest/gtest.h"
-    found: false
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/CTest.cmake:171 (find_program)"
-      - "_deps/rapidjson-src/CMakeLists.txt:178 (include)"
-    mode: "program"
-    variable: "GITCOMMAND"
-    description: "Path to a program."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "git"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/git"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/git"
-      - "/home/developer/.local/bin/git"
-      - "/usr/local/sbin/git"
-      - "/usr/local/bin/git"
-    found: "/usr/bin/git"
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/CTest.cmake:188 (find_program)"
-      - "_deps/rapidjson-src/CMakeLists.txt:178 (include)"
-    mode: "program"
-    variable: "MEMORYCHECK_COMMAND"
-    description: "Path to the memory checking command, used for memory error detection."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "purify"
-      - "valgrind"
-      - "boundscheck"
-      - "drmemory"
-      - "cuda-memcheck"
-      - "compute-sanitizer"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/purify"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/purify"
-      - "/home/developer/.local/bin/purify"
-      - "/usr/local/sbin/purify"
-      - "/usr/local/bin/purify"
-      - "/usr/bin/purify"
-      - "/usr/bin/site_perl/purify"
-      - "/usr/bin/vendor_perl/purify"
-      - "/usr/bin/core_perl/purify"
-      - "/bin/purify"
-      - "/sbin/purify"
-      - "/home/developer/source/repos/github/emsdk/valgrind"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/valgrind"
-      - "/home/developer/.local/bin/valgrind"
-      - "/usr/local/sbin/valgrind"
-      - "/usr/local/bin/valgrind"
-      - "/usr/bin/valgrind"
-      - "/usr/bin/site_perl/valgrind"
-      - "/usr/bin/vendor_perl/valgrind"
-      - "/usr/bin/core_perl/valgrind"
-      - "/bin/valgrind"
-      - "/sbin/valgrind"
-      - "/home/developer/source/repos/github/emsdk/boundscheck"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/boundscheck"
-      - "/home/developer/.local/bin/boundscheck"
-      - "/usr/local/sbin/boundscheck"
-      - "/usr/local/bin/boundscheck"
-      - "/usr/bin/boundscheck"
-      - "/usr/bin/site_perl/boundscheck"
-      - "/usr/bin/vendor_perl/boundscheck"
-      - "/usr/bin/core_perl/boundscheck"
-      - "/bin/boundscheck"
-      - "/sbin/boundscheck"
-      - "/home/developer/source/repos/github/emsdk/drmemory"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/drmemory"
-      - "/home/developer/.local/bin/drmemory"
-      - "/usr/local/sbin/drmemory"
-      - "/usr/local/bin/drmemory"
-      - "/usr/bin/drmemory"
-      - "/usr/bin/site_perl/drmemory"
-      - "/usr/bin/vendor_perl/drmemory"
-      - "/usr/bin/core_perl/drmemory"
-      - "/bin/drmemory"
-      - "/sbin/drmemory"
-      - "/home/developer/source/repos/github/emsdk/cuda-memcheck"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cuda-memcheck"
-      - "/home/developer/.local/bin/cuda-memcheck"
-      - "/usr/local/sbin/cuda-memcheck"
-      - "/usr/local/bin/cuda-memcheck"
-      - "/usr/bin/cuda-memcheck"
-      - "/usr/bin/site_perl/cuda-memcheck"
-      - "/usr/bin/vendor_perl/cuda-memcheck"
-      - "/usr/bin/core_perl/cuda-memcheck"
-      - "/bin/cuda-memcheck"
-      - "/sbin/cuda-memcheck"
-      - "/home/developer/source/repos/github/emsdk/compute-sanitizer"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/compute-sanitizer"
-      - "/home/developer/.local/bin/compute-sanitizer"
-      - "/usr/local/sbin/compute-sanitizer"
-      - "/usr/local/bin/compute-sanitizer"
-      - "/usr/bin/compute-sanitizer"
-      - "/usr/bin/site_perl/compute-sanitizer"
-      - "/usr/bin/vendor_perl/compute-sanitizer"
-      - "/usr/bin/core_perl/compute-sanitizer"
-      - "/bin/compute-sanitizer"
-      - "/sbin/compute-sanitizer"
-    found: false
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/CTest.cmake:196 (find_program)"
-      - "_deps/rapidjson-src/CMakeLists.txt:178 (include)"
-    mode: "program"
-    variable: "COVERAGE_COMMAND"
-    description: "Path to the coverage program that CTest uses for performing coverage inspection"
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "gcov"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/gcov"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/gcov"
-      - "/home/developer/.local/bin/gcov"
-      - "/usr/local/sbin/gcov"
-      - "/usr/local/bin/gcov"
-    found: "/usr/bin/gcov"
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-...
-
----
-events:
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/Platform/Emscripten.cmake:6 (find_file)"
-      - "/usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
-      - "CMakeLists.txt:2 (project)"
-    mode: "file"
-    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
-    description: "Path to a file."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "Platform/Emscripten.cmake"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cmake/Modules/"
-    found: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/FindGit.cmake:111 (find_program)"
-      - "/usr/share/cmake/Modules/ExternalProject/shared_internal_commands.cmake:926 (find_package)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:1700 (_ep_add_download_command)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:1617 (__FetchContent_populateDirect)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:2155:EVAL:2 (__FetchContent_doPopulation)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:2155 (cmake_language)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:2394 (__FetchContent_Populate)"
-      - "CMakeLists.txt:25 (FetchContent_MakeAvailable)"
-    mode: "program"
-    variable: "GIT_EXECUTABLE"
-    description: "Git command line client"
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "git"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/git"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/git"
-      - "/home/developer/.local/bin/git"
-      - "/usr/local/sbin/git"
-      - "/usr/local/bin/git"
-    found: "/usr/bin/git"
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-
----
-events:
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/Platform/Emscripten.cmake:6 (find_file)"
-      - "/usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
-      - "CMakeLists.txt:2 (project)"
-    mode: "file"
-    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
-    description: "Path to a file."
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "Platform/Emscripten.cmake"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/cmake/Modules/"
-    found: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-  -
-    kind: "find-v1"
-    backtrace:
-      - "/usr/share/cmake/Modules/FindGit.cmake:111 (find_program)"
-      - "/usr/share/cmake/Modules/ExternalProject/shared_internal_commands.cmake:926 (find_package)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:1700 (_ep_add_download_command)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:1617 (__FetchContent_populateDirect)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:2155:EVAL:2 (__FetchContent_doPopulation)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:2155 (cmake_language)"
-      - "/usr/share/cmake/Modules/FetchContent.cmake:2394 (__FetchContent_Populate)"
-      - "CMakeLists.txt:25 (FetchContent_MakeAvailable)"
-    mode: "program"
-    variable: "GIT_EXECUTABLE"
-    description: "Git command line client"
-    settings:
-      SearchFramework: "NEVER"
-      SearchAppBundle: "NEVER"
-      CMAKE_FIND_USE_CMAKE_PATH: true
-      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
-      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
-      CMAKE_FIND_USE_INSTALL_PREFIX: true
-    names:
-      - "git"
-    candidate_directories:
-      - "/home/developer/source/repos/github/emsdk/"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/"
-      - "/home/developer/.local/bin/"
-      - "/usr/local/sbin/"
-      - "/usr/local/bin/"
-      - "/usr/bin/"
-      - "/usr/bin/site_perl/"
-      - "/usr/bin/vendor_perl/"
-      - "/usr/bin/core_perl/"
-      - "/bin/"
-      - "/sbin/"
-    searched_directories:
-      - "/home/developer/source/repos/github/emsdk/git"
-      - "/home/developer/source/repos/github/emsdk/upstream/emscripten/git"
-      - "/home/developer/.local/bin/git"
-      - "/usr/local/sbin/git"
-      - "/usr/local/bin/git"
-    found: "/usr/bin/git"
-    search_context:
-      ENV{PATH}:
-        - "/home/developer/source/repos/github/emsdk"
-        - "/home/developer/source/repos/github/emsdk/upstream/emscripten"
-        - "/home/developer/.local/bin"
-        - "/usr/local/sbin"
-        - "/usr/local/bin"
-        - "/usr/bin"
-        - "/usr/bin/site_perl"
-        - "/usr/bin/vendor_perl"
-        - "/usr/bin/core_perl"
-      CMAKE_INSTALL_PREFIX: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-      CMAKE_SYSTEM_PREFIX_PATH:
-        - "/"
-        - "/"
-      CMAKE_FIND_ROOT_PATH: "/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot;/home/developer/source/repos/github/emsdk/upstream/emscripten/cache/sysroot"
-...
+        - "/usr"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
