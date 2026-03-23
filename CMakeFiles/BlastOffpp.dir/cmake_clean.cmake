@@ -1,0 +1,41 @@
+file(REMOVE_RECURSE
+  "BlastOffpp.html"
+  "BlastOffpp.pdb"
+  "CMakeFiles/BlastOffpp.dir/source/BlastOffpp.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/BlastOffpp.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/GUI.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/GUI.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/Game.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/Game.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/GameConstants.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/GameConstants.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/Graphics.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/Graphics.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/InputManager.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/InputManager.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/Logging.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/Logging.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/OperatingSystem.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/OperatingSystem.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/Player.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/Player.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/Powerup.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/Powerup.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/Program.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/Program.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/ProgramConstants.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/ProgramConstants.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/Props.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/Props.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/Settings.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/Settings.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/Sound.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/Sound.cpp.o.d"
+  "CMakeFiles/BlastOffpp.dir/source/Utils.cpp.o"
+  "CMakeFiles/BlastOffpp.dir/source/Utils.cpp.o.d"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/BlastOffpp.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
