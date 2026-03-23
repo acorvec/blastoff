@@ -12,7 +12,9 @@ set(BUILD_GAMES    OFF CACHE BOOL "" FORCE) # don't build the supplied example g
 FetchContent_Declare(
     raylib
     GIT_REPOSITORY "https://github.com/raysan5/raylib.git"
-    GIT_TAG "1eea511070ece8e4f96e961588811340ebd0b11e"
+# potentially required for building with make; otherwise unnecessary
+#   GIT_TAG "1eea511070ece8e4f96e961588811340ebd0b11e"
+    GIT_TAG "master"
     GIT_PROGRESS TRUE
 )
 FetchContent_Declare(
@@ -60,14 +62,14 @@ if (EMSCRIPTEN)
 
     target_compile_definitions(${PROJECT_NAME} PRIVATE COMPILE_TARGET_EMSCRIPTEN=1)
 
-    file(GLOB_RECURSE PNG_RESOURCES CONFIGURE "${CMAKE_CURRENT_LIST_DIR}/resource/png/*")
-    file(GLOB_RECURSE TTF_RESOURCES CONFIGURE "${CMAKE_CURRENT_LIST_DIR}/resource/ttf/*")
-    file(GLOB_RECURSE WAV_RESOURCES CONFIGURE "${CMAKE_CURRENT_LIST_DIR}/resource/wav/*")
-    file(GLOB_RECURSE OGG_RESOURCES CONFIGURE "${CMAKE_CURRENT_LIST_DIR}/resource/ogg/*")
+    file(GLOB_RECURSE PNG_RESOURCES CONFIGURE "${CMAKE_CURRENT_SOURCE_DIR}/build/resource/png/*")
+    file(GLOB_RECURSE TTF_RESOURCES CONFIGURE "${CMAKE_CURRENT_SOURCE_DIR}/build/resource/ttf/*")
+    file(GLOB_RECURSE WAV_RESOURCES CONFIGURE "${CMAKE_CURRENT_SOURCE_DIR}/build/resource/wav/*")
+    file(GLOB_RECURSE OGG_RESOURCES CONFIGURE "${CMAKE_CURRENT_SOURCE_DIR}/build/resource/ogg/*")
 
     set(PRELOAD_FILES ${PNG_RESOURCES} ${WAV_RESOURCES} ${OGG_RESOURCES} ${TTF_RESOURCES})
     foreach (FILE ${PRELOAD_FILES})
-        target_link_libraries(${PROJECT_NAME} PRIVATE "--preload-file \"${FILE}@../\"")
+        target_link_libraries(${PROJECT_NAME} PRIVATE "--preload-file \"${FILE}\"")
     endforeach ()
     message("${ASSET_BUNDLE_CMD}")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -gsource-map")
