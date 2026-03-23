@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/developer/source/repos/mine/blastoff/build/cmake_install.cmake",
+		"/home/developer/source/repos/mine/blastoff/build/_deps/raylib-build/cmake_install.cmake",
+		"/home/developer/source/repos/mine/blastoff/build/_deps/raylib-build/raylib/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

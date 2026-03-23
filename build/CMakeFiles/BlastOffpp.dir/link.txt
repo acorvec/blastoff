@@ -1,0 +1,1 @@
+/home/developer/source/repos/github/emsdk/upstream/emscripten/em++  -s ASYNCIFY  -s ASYNCIFY -gsource-map -sUSE_GLFW=3 -sEXPORTED_RUNTIME_METHODS=ccall @CMakeFiles/BlastOffpp.dir/objects1.rsp -o /home/developer/source/repos/mine/blastoff/BlastOffpp.html @CMakeFiles/BlastOffpp.dir/linkLibs.rsp
