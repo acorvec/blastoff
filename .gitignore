@@ -5,6 +5,7 @@
 /.vs/
 /build/CMakeFiles/
 /build/_deps/
+/build/resource/
 BlastoffPP.vcxproj.user
 BlastOffpp
 BlastOffpp.exe
