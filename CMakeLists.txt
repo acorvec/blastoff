@@ -50,10 +50,6 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
     target_compile_definitions(${PROJECT_NAME} PRIVATE _DEBUG=0)
 endif()
 
-# emscripten is the reincarnation of the devil in software form.
-# this is a counter to remind you of how many afternoons this bullshit has wasted:
-# 4
-
 if (EMSCRIPTEN)
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
 

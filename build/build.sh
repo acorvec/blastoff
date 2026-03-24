@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
-make -j 12
+cmake .. -DCMAKE_BUILD_TYPE=Debug
+ninja -j12

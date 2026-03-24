@@ -200,7 +200,7 @@ namespace BlastOff
 	void SetUpPlatform(const int fps)
 	{
 #if COMPILE_TARGET_WINDOWS
-		Window::SetUpPlatform(fps);
+		Windows::SetUpPlatform(fps);
 #elif COMPILE_TARGET_LINUX
 		Linux::SetUpPlatform(fps);
 #elif COMPILE_TARGET_EMSCRIPTEN

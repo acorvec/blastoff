@@ -19,4 +19,6 @@ build/CMakeCache.txt
 build/CPackConfig.cmake
 build/CPackSourceConfig.cmake
 build/build.ninja
+build/.ninja_deps
+build/.ninja_log
 settings.json
