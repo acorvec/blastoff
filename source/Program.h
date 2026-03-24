@@ -22,10 +22,8 @@ namespace BlastOff
 		void RunLoopIteration();
 		bool IsRunning() const;
 
-		inline int GetTargetFramerate()
-		{
-			return c_Config.GetTargetFramerate();
-		}
+        void SetWindowSize(const int width, const int height) const;
+		int GetTargetFramerate() const;		
 
 	private:
 		using State = ProgramState;

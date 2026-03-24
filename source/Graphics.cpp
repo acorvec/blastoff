@@ -83,8 +83,10 @@ namespace BlastOff
 
 	void RayWindow::SetSize(const Vector2i size)
 	{
+#if !COMPILE_TARGET_EMSCRIPTEN
 		if (IsWindowFullscreen())
 			ToggleFullscreen();
+#endif
 
 		SetWindowSize(size.x, size.y);
 	}

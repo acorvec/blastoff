@@ -154,6 +154,16 @@ namespace BlastOff
 		return m_IsRunning;
 	}
 
+    void Program::SetWindowSize(const int width, int height) const
+    {
+        m_Window->SetSize({ width, height });
+    }
+
+    int Program::GetTargetFramerate() const
+    {
+	    return c_Config.GetTargetFramerate();
+	}
+
 	void Program::RunLoopIteration()
 	{
 		Update();

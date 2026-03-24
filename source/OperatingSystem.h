@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <cstdio>
+#include <functional>
 
 #ifdef _WIN32
 #define COMPILE_TARGET_WINDOWS _WIN32
@@ -29,6 +30,10 @@
 #define COMPILE_TARGET_WEB 0
 #endif
 
+#if COMPILE_TARGET_EMSCRIPTEN
+#include <emscripten/html5.h>
+#endif
+
 namespace BlastOff
 {
 	using std::optional, std::unique_ptr;
@@ -39,6 +44,29 @@ namespace BlastOff
 		int x;
 		int y;
 	};
+
+    namespace Emscripten
+    {
+        EM_BOOL UpdateCursorPosition(
+		    const int eventType,
+			const EmscriptenMouseEvent* const event,
+			void* const userData
+		);
+        EM_BOOL ProcessKey(
+            const int eventType, 
+            const EmscriptenKeyboardEvent* const keyEvent, 
+            void* const userData
+        );
+        EM_BOOL ProcessFullscreenChange(
+            const int eventType,
+            const EmscriptenFullscreenChangeEvent* const event, 
+            void* const userData
+        );
+
+        void SetWindowSizeCallback
+            (const std::function<void(int, int)>& callback);
+        void SetAspectRatio(const float value);
+    }
 
 	void BreakProgram();
 
