@@ -1682,8 +1682,11 @@ namespace BlastOff
 		const Vector2f engineSize = MainMenuButton::c_EngineSize;
 		const Vector2f margins = MainMenuButton::c_Margins;
 
-		const Vector2f translation = (engineSize + margins) / 2.0f;
-		Translate(translation.InvertX());
+		Vector2f translation = (engineSize + margins) / 2.0f;
+#if !COMPILE_TARGET_DESKTOP
+        translation.y = 0;
+#endif  	
+        Translate(translation.InvertX());
 	}
 
 	const char* const PlayButton::c_UnselectedTexturePath = 
@@ -1725,7 +1728,10 @@ namespace BlastOff
 		const Vector2f engineSize = MainMenuButton::c_EngineSize;
 		const Vector2f margins = MainMenuButton::c_Margins;
 
-		const Vector2f translation = (engineSize + margins) / 2.0f;
+		Vector2f translation = (engineSize + margins) / 2.0f;
+#if !COMPILE_TARGET_DESKTOP
+        translation.y = 0;
+#endif
 		Translate(translation);
 	}
 
@@ -1947,7 +1953,7 @@ namespace BlastOff
 			m_Message->Update();
 			m_ResetButton->Update();
 			m_ExitButton->Update();
-			m_SlideState->Update();
+            m_SlideState->Update();
 		}
 	}
 
@@ -2077,6 +2083,10 @@ namespace BlastOff
                     playCallback,
                     m_CameraEmpty
                 );
+
+                // exit button is only shown on desktop, 
+                // as there's no need for it on other platforms
+#if COMPILE_TARGET_DESKTOP
                 m_ExitButton = std::make_unique<MainMenuExitButton>(
                     m_CoordTransformer,
                     m_InputManager,
@@ -2085,6 +2095,9 @@ namespace BlastOff
                     exitCallback,
                     m_CameraEmpty
                 );
+#else
+                (void)exitCallback;
+#endif
             };
 
         initializeButtons();
@@ -2094,14 +2107,20 @@ namespace BlastOff
     {
         m_SettingsButton->Update();
         m_PlayButton->Update();
+
+#if COMPILE_TARGET_DESKTOP
         m_ExitButton->Update();
+#endif
     }
 
     void MainMenu::Draw() const
     {
         m_SettingsButton->Draw();
         m_PlayButton->Draw();
+
+#if COMPILE_TARGET_DESKTOP
         m_ExitButton->Draw();
+#endif
     }
 
 
