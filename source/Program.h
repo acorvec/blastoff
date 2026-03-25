@@ -22,7 +22,7 @@ namespace BlastOff
 		void RunLoopIteration();
 		bool IsRunning() const;
 
-        void SetWindowSize(const int width, const int height) const;
+        void SetWindowSize(const int width, const int height);
 		int GetTargetFramerate() const;		
 
 	private:

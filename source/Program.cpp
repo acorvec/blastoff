@@ -154,9 +154,11 @@ namespace BlastOff
 		return m_IsRunning;
 	}
 
-    void Program::SetWindowSize(const int width, int height) const
+    void Program::SetWindowSize(const int width, int height) 
     {
-        m_Window->SetSize({ width, height });
+        m_Settings->ChangeWindowHeight(height);
+
+        InitializeSettingsMenu();
     }
 
     int Program::GetTargetFramerate() const
