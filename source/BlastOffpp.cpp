@@ -2,9 +2,10 @@
 
 #if COMPILE_TARGET_DESKTOP
 
+BlastOff::Program program;
+
 int main()
 {
-    BlastOff::Program program;
     BlastOff::SetUpPlatform(program.GetTargetFramerate());
 
     while (program.IsRunning())
