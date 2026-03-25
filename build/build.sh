@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cmake .. -DCMAKE_BUILD_TYPE=Debug
+cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug
 ninja -j12

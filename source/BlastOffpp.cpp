@@ -4,9 +4,9 @@
 
 int main()
 {
-    BlastOff::SetUpPlatform();
-
     BlastOff::Program program;
+    BlastOff::SetUpPlatform(program.GetTargetFramerate());
+
     while (program.IsRunning())
         program.RunLoopIteration();
 
