@@ -176,10 +176,12 @@ namespace BlastOff
 				let rect = canvas.getBoundingClientRect();
 				return rect.top;
 			});
+            const int wx = GetWindowLeft();
+            const int wy = GetWindowTop();
 
 			mostRecentCursorPosition =
 			{
-				rawPos.x - cx, rawPos.y - cy
+				rawPos.x - cx + wx, rawPos.y - cy + wy
 			};
 			return EM_TRUE;
 		}
@@ -228,8 +230,14 @@ namespace BlastOff
             aspectRatio = value;
         }
 
+        EM_JS(int, _GetWindowLeft, (), { return window.screenLeft; });
+        EM_JS(int, _GetWindowTop, (), { return window.screenTop; });
+
         EM_JS(int, _GetScreenWidth, (), { return window.innerWidth; });
         EM_JS(int, _GetScreenHeight, (), { return window.innerHeight; });
+
+        int GetWindowLeft() { return _GetWindowLeft(); }
+        int GetWindowTop() { return _GetWindowTop(); }
 
         int GetScreenWidth() { return _GetScreenWidth(); }
         int GetScreenHeight() { return _GetScreenHeight(); }

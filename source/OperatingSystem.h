@@ -68,6 +68,9 @@ namespace BlastOff
             (const std::function<void(int, int)>& callback);
         void SetAspectRatio(const float value);
 
+        int GetWindowLeft();
+        int GetWindowTop();
+
         int GetScreenWidth();
         int GetScreenHeight();
     }
