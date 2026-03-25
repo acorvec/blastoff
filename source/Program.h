@@ -48,6 +48,8 @@ namespace BlastOff
 
 		static const inline ProgramConstants c_Config;
 
+        static const uint64_t c_LoadingFrameIndex;
+
 		static const bool c_DrawFPS;
 		static const bool c_PrintFrametimes;
 

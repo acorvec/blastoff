@@ -326,15 +326,16 @@ namespace BlastOff
 			updateSpeedKeys();
 #endif
 
-		if (m_FramesSinceCreation == 2)
+        // glfw has some bugs that necessitate this apparently
+		if (m_FramesSinceCreation == c_LoadingFrameIndex + 0)
 		{
 			initializeGraphics();
 			initializeInput();
 		}
-		else if (m_FramesSinceCreation == 3)
+		else if (m_FramesSinceCreation == c_LoadingFrameIndex + 2)
 		{
-			m_CoordinateTransformer->Update();
 			m_Window->Update();
+			m_CoordinateTransformer->Update();
 			m_CameraEmpty->Update();
 
 			InitializeMainMenu();
@@ -661,6 +662,8 @@ namespace BlastOff
 			m_CameraEmpty.get()
 		);
 	}
+
+    const uint64_t Program::c_LoadingFrameIndex = 0;
 
 	const bool Program::c_DrawFPS = false;
 	const bool Program::c_PrintFrametimes = false;
