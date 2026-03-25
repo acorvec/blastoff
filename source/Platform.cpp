@@ -1,4 +1,4 @@
-#include "OperatingSystem.h"
+#include "Platform.h"
 
 #if COMPILE_TARGET_WINDOWS
 #include "Debug.h"

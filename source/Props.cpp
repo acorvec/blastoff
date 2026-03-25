@@ -1,6 +1,6 @@
 #include "Props.h"
 #include "Graphics.h"
-#include "OperatingSystem.h"
+#include "Platform.h"
 #include "Logging.h"
 #include "Utils.h"
 #include "raylib.h"

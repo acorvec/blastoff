@@ -1,6 +1,6 @@
 #include "Graphics.h"
 #include "Logging.h"
-#include "OperatingSystem.h"
+#include "Platform.h"
 #include "ProgramConstants.h"
 #include "Utils.h"
 

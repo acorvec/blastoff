@@ -1,6 +1,6 @@
 #include "Powerup.h"
 #include "Logging.h"
-#include "OperatingSystem.h"
+#include "Platform.h"
 
 namespace BlastOff
 {

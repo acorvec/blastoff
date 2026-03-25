@@ -15,7 +15,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include "OperatingSystem.h"
+#include "Platform.h"
 #include "Debug.h"
 #include "JSONDefs.h"
 

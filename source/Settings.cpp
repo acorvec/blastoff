@@ -1,5 +1,5 @@
 #include "Settings.h"
-#include "OperatingSystem.h"
+#include "Platform.h"
 #include "Utils.h"
 #include "Logging.h"
 

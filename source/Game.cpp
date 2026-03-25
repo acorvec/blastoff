@@ -3,7 +3,7 @@
 #include "GUI.h"
 #include "Graphics.h"
 #include "Logging.h"
-#include "OperatingSystem.h"
+#include "Platform.h"
 #include "Player.h"
 #include "Powerup.h"
 #include "Props.h"

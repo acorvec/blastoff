@@ -2,7 +2,7 @@
 
 #include "Utils.h"
 #include "Debug.h"
-#include "OperatingSystem.h"
+#include "Platform.h"
 
 namespace BlastOff
 {
