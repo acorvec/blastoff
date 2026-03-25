@@ -1,6 +1,6 @@
 #include "Program.h"
 
-#if !COMPILE_TARGET_EMSCRIPTEN
+#if COMPILE_TARGET_DESKTOP
 
 int main()
 {
@@ -13,7 +13,7 @@ int main()
     return 0;
 }
 
-#else
+#elif COMPILE_TARGET_EMSCRIPTEN
 
 #include <emscripten.h>
 

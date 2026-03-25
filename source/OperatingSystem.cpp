@@ -57,6 +57,11 @@ namespace BlastOff
 			XCloseDisplay(display);
 			return CursorPosition{ cursorX, cursorY };
 		}
+
+        float GetWindowHeightMultiplier()
+        {
+            return 9 / 10.0f;
+        }
 	}
 #endif
 
@@ -77,6 +82,11 @@ namespace BlastOff
 			else
 				return std::nullopt;
 		}
+
+        float GetWindowHeightMultiplier()
+        {
+            return 9 / 10.0f;
+        }
 	}
 #endif
 
@@ -166,16 +176,10 @@ namespace BlastOff
 			{
 				event->targetX, event->targetY
 			};
-			const int cx = EM_ASM_INT({
-				let canvas = document.querySelector("canvas");
-				let rect = canvas.getBoundingClientRect();
-				return rect.left;
-			});
-			const int cy = EM_ASM_INT({
-				let canvas = document.querySelector("canvas");
-				let rect = canvas.getBoundingClientRect();
-				return rect.top;
-			});
+
+            const int cx = GetCanvasLeft();
+            const int cy = GetCanvasTop();
+
             const int wx = GetWindowLeft();
             const int wy = GetWindowTop();
 
@@ -206,10 +210,10 @@ namespace BlastOff
         )
         {
             const int maxHeight = GetScreenHeight();
-            const float newHeight = maxHeight * 9 / 10.0f;
+            const float newHeight = maxHeight * GetWindowHeightMultiplier();
             const int width = (int)(newHeight * aspectRatio);
 
-            setWindowSize(width, maxHeight);
+            setWindowSize(width, newHeight);
 
             return EM_FALSE;
         }
@@ -230,11 +234,30 @@ namespace BlastOff
             aspectRatio = value;
         }
 
+        float GetWindowHeightMultiplier()
+        {
+            return 8 / 10.0f;
+        }
+
+        EM_JS(int, _GetCanvasLeft, (), {
+			let canvas = document.querySelector("canvas");
+			let rect = canvas.getBoundingClientRect();
+			return rect.left;
+		});
+        EM_JS(int, _GetCanvasTop, (), {
+			let canvas = document.querySelector("canvas");
+			let rect = canvas.getBoundingClientRect();
+			return rect.top;
+		});
+
         EM_JS(int, _GetWindowLeft, (), { return window.screenLeft; });
         EM_JS(int, _GetWindowTop, (), { return window.screenTop; });
 
         EM_JS(int, _GetScreenWidth, (), { return window.innerWidth; });
         EM_JS(int, _GetScreenHeight, (), { return window.innerHeight; });
+
+        int GetCanvasLeft() { return _GetCanvasLeft(); }
+        int GetCanvasTop() { return _GetCanvasTop(); }
 
         int GetWindowLeft() { return _GetWindowLeft(); }
         int GetWindowTop() { return _GetWindowTop(); }
@@ -285,4 +308,15 @@ namespace BlastOff
 		return Emscripten::GetCursorPosition();
 #endif
 	}
+
+    float GetWindowHeightMultiplier()
+    {
+ #if COMPILE_TARGET_WINDOWS
+		return Windows::GetWindowHeightMultiplier();
+#elif COMPILE_TARGET_LINUX
+		return Linux::GetWindowHeightMultiplier();
+#elif COMPILE_TARGET_EMSCRIPTEN
+		return Emscripten::GetWindowHeightMultiplier();
+#endif       
+    }
 }

@@ -68,11 +68,16 @@ namespace BlastOff
             (const std::function<void(int, int)>& callback);
         void SetAspectRatio(const float value);
 
+        int GetCanvasLeft();
+        int GetCanvasTop();
+
         int GetWindowLeft();
         int GetWindowTop();
 
         int GetScreenWidth();
         int GetScreenHeight();
+
+        float GetWindowHeightMultiplier(); 
     }
 #endif
 
@@ -80,6 +85,7 @@ namespace BlastOff
 
 	void SetUpPlatform(const int fps);
 	optional<CursorPosition> GetCursorPosition();
+    float GetWindowHeightMultiplier();
 
 	string GetFontPath(const char* const name, const char* const extension);
 }

@@ -162,7 +162,8 @@ namespace BlastOff
         const auto calculateWindowSize = 
             [&, this]()
             {
-                const float scaledHeight = m_ScreenSize.y * 9 / 10.0f;
+                const float multiplier = GetWindowHeightMultiplier();
+                const float scaledHeight = m_ScreenSize.y * multiplier;
                 const auto inc = (float)windowSizeIncrement;
                 const float roundedY = RoundToFraction(scaledHeight, inc);
                 const float scaledWidth = 
