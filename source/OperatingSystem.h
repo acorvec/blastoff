@@ -45,6 +45,7 @@ namespace BlastOff
 		int y;
 	};
 
+#if COMPILE_TARGET_EMSCRIPTEN
     namespace Emscripten
     {
         EM_BOOL UpdateCursorPosition(
@@ -57,16 +58,20 @@ namespace BlastOff
             const EmscriptenKeyboardEvent* const keyEvent, 
             void* const userData
         );
-        EM_BOOL ProcessFullscreenChange(
+        EM_BOOL ProcessResizeEvent(
             const int eventType,
-            const EmscriptenFullscreenChangeEvent* const event, 
+            const EmscriptenUiEvent* const event,
             void* const userData
         );
 
         void SetWindowSizeCallback
             (const std::function<void(int, int)>& callback);
         void SetAspectRatio(const float value);
+
+        int GetScreenWidth();
+        int GetScreenHeight();
     }
+#endif
 
 	void BreakProgram();
 

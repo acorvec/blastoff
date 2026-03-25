@@ -183,10 +183,7 @@ namespace BlastOff
                 m_WindowPosition = unrounded.ToVector2i();
             };
 
-        m_ScreenSize = 
-        {
-            GetScreenWidth(), GetScreenHeight()
-        };
+        UpdateScreenSize();
 
         calculateWindowSize();
         calculateWindowPosition();
@@ -223,10 +220,7 @@ namespace BlastOff
     Settings::Settings(const Document& document, const Vector2f aspectRatio)  :
         m_AspectRatio(aspectRatio)
     {
-        m_ScreenSize =
-        {
-            GetScreenWidth(), GetScreenHeight()
-        };
+        UpdateScreenSize();
 
         const Value& audioIsMuted = document["audioIsMuted"];
         m_AudioIsMuted = audioIsMuted.GetBool();
@@ -285,6 +279,21 @@ namespace BlastOff
         return std::make_unique<Settings>(document, aspectRatio);
 #endif
     }
+
+    void Settings::UpdateScreenSize() 
+    {
+#if COMPILE_TARGET_EMSCRIPTEN
+        const int width = Emscripten::GetScreenWidth();
+        const int height = Emscripten::GetScreenHeight();
+        m_ScreenSize = { width, height };
+#else
+        m_ScreenSize = 
+        {
+            GetScreenWidth(), GetScreenHeight()
+        };
+#endif
+    }
+
 
 #if USE_GLAZE
     ReflectableSettings Settings::ToReflectable() const

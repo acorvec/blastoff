@@ -137,11 +137,11 @@ namespace BlastOff
 
 			[&]()
 			{
-				const auto result = emscripten_set_fullscreenchange_callback(
+				const auto result = emscripten_set_resize_callback(
 					EMSCRIPTEN_EVENT_TARGET_WINDOW,
 					nullptr,
                     EM_FALSE,
-					ProcessFullscreenChange
+					ProcessResizeEvent
 				);
 				if (result)
 				{
@@ -197,24 +197,20 @@ namespace BlastOff
 			return EM_FALSE;
 		}
 
-		EM_BOOL ProcessFullscreenChange(
-			const int eventType,
-			const EmscriptenFullscreenChangeEvent* const event,
-			void* const userData
-		)
-		{
-            // this is not working.
+        EM_BOOL ProcessResizeEvent(
+            const int eventType,
+            const EmscriptenUiEvent* const event,
+            void* const userData
+        )
+        {
+            const int maxHeight = GetScreenHeight();
+            const float newHeight = maxHeight * 9 / 10.0f;
+            const int width = (int)(newHeight * aspectRatio);
 
-			//if (event->isFullscreen)
-			//{
-			//	const int maxHeight = event->screenHeight;
-			//	const int width = (int)(maxHeight * aspectRatio);
+            setWindowSize(width, maxHeight);
 
-			//	setWindowSize(width, maxHeight);
-			//}
-
-            return EM_TRUE;
-		}
+            return EM_FALSE;
+        }
 
 		optional<CursorPosition> GetCursorPosition()
 		{
@@ -231,6 +227,12 @@ namespace BlastOff
         {
             aspectRatio = value;
         }
+
+        EM_JS(int, _GetScreenWidth, (), { return window.innerWidth; });
+        EM_JS(int, _GetScreenHeight, (), { return window.innerHeight; });
+
+        int GetScreenWidth() { return _GetScreenWidth(); }
+        int GetScreenHeight() { return _GetScreenHeight(); }
     }
 #endif
 	

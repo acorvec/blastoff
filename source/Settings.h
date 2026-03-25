@@ -85,6 +85,8 @@ namespace BlastOff
         static unique_ptr<Settings> LoadFromDefaultPath
             (const Vector2f aspectRatio);
 
+        void UpdateScreenSize();
+
 #if USE_GLAZE
         Reflectable ToReflectable() const;
 #else

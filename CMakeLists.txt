@@ -46,7 +46,7 @@ endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(${PROJECT_NAME} PRIVATE _DEBUG=1)
-    target_compile_options(${PROJECT_NAME} PRIVATE -g)
+    target_compile_options(${PROJECT_NAME} PRIVATE -g -O0)
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
     target_compile_definitions(${PROJECT_NAME} PRIVATE _DEBUG=0)
 endif()
@@ -69,7 +69,7 @@ if (EMSCRIPTEN)
         target_link_libraries(${PROJECT_NAME} PRIVATE "--preload-file \"${FILE}\"")
     endforeach ()
     message("${ASSET_BUNDLE_CMD}")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -gsource-map")
+    target_compile_options(${PROJECT_NAME} PRIVATE -g -O0 -gsource-map)
 endif ()
 
 # fixes builds in vscode
