@@ -9,9 +9,9 @@ Blastoff is a 2D rocket game written in C++.
 Building is currently tested and working on the following targets:
 
 - x86-64 linux using the GCC compiler
-- x86-64 windows using MSYS2 with UCRT (preferred build method on Windows)
-- x86-64 windows using MSVC and Visual Studio 2026 Community*
+- x86-64 windows using MSYS2 with UCRT
 - webassembly using emcmake and ninja on Linux
+- x86-64 windows using MSVC and Visual Studio 2026 Community*
 
 *The Visual Studio Project assumes that you have sourced the vendor libraries yourself and put them in the "vendor" folder. Please do so before building, or use MSYS2 with UCRT.
 
