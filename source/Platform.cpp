@@ -211,8 +211,10 @@ namespace BlastOff
         {
             const int maxHeight = GetScreenHeight();
             const float newHeight = maxHeight * GetWindowHeightMultiplier();
-            const int width = (int)(newHeight * aspectRatio);
 
+			// width is not needed anymore; 
+			// it's calculated by setWindowSize function call
+            constexpr int width = 0;
             setWindowSize(width, newHeight);
 
             return EM_FALSE;

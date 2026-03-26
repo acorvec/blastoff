@@ -156,6 +156,7 @@ namespace BlastOff
 
     void Program::SetWindowSize(const int width, int height) 
     {
+		(void)width;
         m_Settings->ChangeWindowHeight(height);
 
         InitializeSettingsMenu();

@@ -26,7 +26,7 @@
     <ClCompile Include="source\GUI.cpp" />
     <ClCompile Include="source\InputManager.cpp" />
     <ClCompile Include="source\Logging.cpp" />
-    <ClCompile Include="source\OperatingSystem.cpp" />
+    <ClCompile Include="source\Platform.cpp" />
     <ClCompile Include="source\Player.cpp" />
     <ClCompile Include="source\Powerup.cpp" />
     <ClCompile Include="source\Program.cpp" />
@@ -46,7 +46,7 @@
     <ClInclude Include="source\InputManager.h" />
     <ClInclude Include="source\JSONDefs.h" />
     <ClInclude Include="source\Logging.h" />
-    <ClInclude Include="source\OperatingSystem.h" />
+    <ClInclude Include="source\Platform.h" />
     <ClInclude Include="source\Player.h" />
     <ClInclude Include="source\Powerup.h" />
     <ClInclude Include="source\Program.h" />
