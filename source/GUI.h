@@ -514,7 +514,6 @@ namespace BlastOff
             const Sprite* const parent
         );
 
-        void SlideOut();
         void Update() override;
         void Draw() const override;
 
