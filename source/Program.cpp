@@ -350,6 +350,10 @@ namespace BlastOff
 			InitializeMainMenu();
 			InitializeCutscene();
 
+			// for the purposes of pre-loading text textures
+			// (yes this is slow. oh well)
+			InitializeSettingsMenu();
+
 			m_State = State::MainMenu;
 		}
 	}
