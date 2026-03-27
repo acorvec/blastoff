@@ -24,7 +24,6 @@ namespace BlastOff
 		Colour4i GetInvalidColour1() const;
 		Colour4i GetInvalidColour2() const;
 		Colour4i GetVoidColour() const;
-		Colour4i GetInterSceneFadeColour() const;
 
 		const string& GetFontFace() const;
 		int GetFontRenderSize() const;

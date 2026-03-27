@@ -353,6 +353,7 @@ namespace BlastOff
 			// for the purposes of pre-loading text textures
 			// (yes this is slow. oh well)
 			InitializeSettingsMenu();
+			InitializeGame();
 
 			m_State = State::MainMenu;
 		}
