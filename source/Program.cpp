@@ -23,16 +23,16 @@ namespace BlastOff
 				Logging::Log(message);
 			};
 
-		const auto applySettings = 
+		const auto applySettings =
 			[this]()
 			{
 				const Vector2f aspectRatio = c_Config.GetDefaultAspectRatio();
-				const int windowSizeIncrement = 
+				const int windowSizeIncrement =
 				{
 					c_Config.GetWindowSizeIncrement()
 				};
 				m_Settings = Settings::LoadOrDefault(
-					aspectRatio, 
+					aspectRatio,
 					windowSizeIncrement
 				);
 
@@ -51,11 +51,11 @@ namespace BlastOff
 				const string windowName = c_Config.CalculateBuildString();
 
 				m_Window = std::make_unique<RayWindow>(
-					initialWindowSize, 
+					initialWindowSize,
 					windowName
 				);
 				applySettings();
-				
+
 				const int normalFramerate = CalculateNormalFramerate();
 				SetFramerate(normalFramerate);
 
@@ -63,16 +63,14 @@ namespace BlastOff
 				const string fontPath = GetFontPath(fontFace.c_str(), "ttf");
 				const int fontSize = c_Config.GetFontRenderSize();
 
-				m_ImageTextureLoader.PreloadTextures();
-
 				constexpr int codepointCount = 0;
 				m_Font = LoadFontEx(
-					fontPath.c_str(), 
-					fontSize, 
-					nullptr, 
+					fontPath.c_str(),
+					fontSize,
+					nullptr,
 					codepointCount
 				);
-				m_TextTextureLoader = 
+				m_TextTextureLoader =
 				{
 					std::make_unique<TextTextureLoader>(&m_Font)
 				};
@@ -84,8 +82,6 @@ namespace BlastOff
 				const bool isSoundEnabled = c_Config.GetSoundEnabled();
 				if (isSoundEnabled)
 					InitAudioDevice();
-
-				m_SoundLoader.PreloadSounds();
 			};
 
 		const auto initializeBackgroundMusic =
@@ -124,6 +120,13 @@ namespace BlastOff
 					SetExitKey(KEY_NULL);
 			};
 
+		const auto preloadResources = 
+			[this]()
+			{
+				m_ImageTextureLoader.PreloadTextures();
+				m_SoundLoader.PreloadSounds();
+			};
+
 		Logging::Initialize(&c_Config);
 		logInitialMessage();
 
@@ -131,6 +134,7 @@ namespace BlastOff
 		initializeSound();
 		initializeBackgroundMusic();
 		disableEscapeKey();
+		preloadResources();
 	}
 
 	Program::~Program()
