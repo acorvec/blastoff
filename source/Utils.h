@@ -7,6 +7,7 @@
 #include <map>
 #include <array>
 #include <sstream>
+#include <fstream>
 #include <functional>
 #include <cstdint>
 #include <expected>
@@ -74,6 +75,8 @@ namespace BlastOff
 	
 	static inline constexpr float c_ToDegreesMultiplier = 180 / c_Pi;
 	static inline constexpr float c_ToRadiansMultiplier = c_Pi / 180;
+
+	optional<string> LoadTextFile(const char* const resourcePath);
 
 	enum class Direction
 	{

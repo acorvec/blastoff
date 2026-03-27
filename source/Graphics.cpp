@@ -607,7 +607,7 @@ namespace BlastOff
 
 	// TRILINEAR filtering seems to be broken, 
 	// but it looks too good to pass up
-	const int ImageTextureLoader::c_DefaultTextureFiltering = 
+	const int ImageTextureLoader::c_DefaultTextureFiltering =
 	{
 		TEXTURE_FILTER_TRILINEAR
 	};
@@ -619,6 +619,25 @@ namespace BlastOff
 			(void)name;
 			UnloadTexture(texture);
 		}
+	}
+
+	void ImageTextureLoader::PreloadTextures()
+	{
+		const auto fileTextOpt = LoadTextFile(c_ResourceListPath);
+		if (!fileTextOpt)
+		{
+			const string format = std::format(
+				"unable to load text file at path \"{}\".",
+				c_ResourceListPath
+			);
+			Logging::LogWarning(format.c_str());
+			return;
+		}
+
+		const string& fileText = *fileTextOpt;
+		const auto resources = SplitString(fileText.c_str(), '\n');
+		for (const string& resource : resources)
+			(void)LazyLoadTexture(resource.c_str());
 	}
 
 	const Texture* ImageTextureLoader::LazyLoadTexture
@@ -686,6 +705,11 @@ namespace BlastOff
 		result = (result * multiplier) + hash<string>()(key.message);
 		return result;
 	}
+
+	const char* const ImageTextureLoader::c_ResourceListPath =
+	{
+		"resources/imageList.txt"
+	};
 
 
 	TextTextureLoader::TextTextureLoader(const Font* const font) :

@@ -63,6 +63,8 @@ namespace BlastOff
 				const string fontPath = GetFontPath(fontFace.c_str(), "ttf");
 				const int fontSize = c_Config.GetFontRenderSize();
 
+				m_ImageTextureLoader.PreloadTextures();
+
 				constexpr int codepointCount = 0;
 				m_Font = LoadFontEx(
 					fontPath.c_str(), 

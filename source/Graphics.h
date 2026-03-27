@@ -208,9 +208,12 @@ namespace BlastOff
 		static const int c_DefaultTextureFiltering;
 
 		~ImageTextureLoader();
+		void PreloadTextures();
 		const Texture* LazyLoadTexture(const char* const resourcePath);
 
 	private:
+		static const char* const c_ResourceListPath;
+
 		unordered_map<string, Texture> m_CachedValues = {};
 		const Texture* LoadAndInsert(const char* const resourcePath);
 	};

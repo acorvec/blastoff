@@ -11,6 +11,24 @@
 
 namespace BlastOff
 {	
+	optional<string> LoadTextFile(const char* const resourcePath)
+	{
+		const static string start = string("resource/txt/");
+		const string resultingPath = start + resourcePath;
+		const char* const cString = resultingPath.c_str();
+
+		std::ifstream opening(cString);
+		if (!opening.is_open())
+			return std::nullopt;
+
+		std::ostringstream contents;
+		contents << opening.rdbuf();
+		const string result = contents.str();
+
+		opening.close();
+		return result;
+	}
+
 	string ByteToHexString(const byte value)
 	{
 		return std::format("{:#04x}", value);
