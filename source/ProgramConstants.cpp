@@ -13,7 +13,6 @@ namespace BlastOff
 		m_InvalidColour1(0xFF, 0x00, 0xFF),
 		m_InvalidColour2(c_Black),
 		m_VoidColour(c_Black),
-		m_InterSceneFadeColour(c_Black),
 		m_SecondsBetweenSceneChange(1 / 2.0f),
 		m_FontFace("Ubuntu-Medium"),
 		m_FontRenderSize(192),
@@ -90,11 +89,6 @@ namespace BlastOff
 	Colour4i ProgramConstants::GetVoidColour() const
 	{
 		return m_VoidColour;
-	}
-
-	Colour4i ProgramConstants::GetInterSceneFadeColour() const
-	{
-		return m_InterSceneFadeColour;
 	}
 
 	const string& ProgramConstants::GetFontFace() const

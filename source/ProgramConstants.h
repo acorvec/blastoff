@@ -63,7 +63,6 @@ namespace BlastOff
 		Colour4i m_InvalidColour1;
 		Colour4i m_InvalidColour2;
 		Colour4i m_VoidColour;
-		Colour4i m_InterSceneFadeColour;
 
 		float m_SecondsBetweenSceneChange;
 
