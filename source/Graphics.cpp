@@ -727,6 +727,13 @@ namespace BlastOff
 		}
 	}
 
+	void TextTextureLoader::PreloadTextures
+		(const vector<Parameters>& toCache)
+	{
+		for (const Parameters& parameters : toCache)
+			(void)LazyLoadTexture(parameters);
+	}
+
 	const Texture* TextTextureLoader::LazyLoadTexture
 		(const Parameters& parameters)
 	{
@@ -976,7 +983,8 @@ namespace BlastOff
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
 		TextTextureLoader* const textureLoader,
-		const string& message
+		const string& message,
+		const vector<string>& possibleMessages
 	) :
 		ImageSprite(
 			Rect2f(enginePosition, Vector2f::Zero()),
@@ -989,7 +997,14 @@ namespace BlastOff
 		m_TextureLoader(textureLoader),
 		m_Message(message)
 	{
-		
+		PreloadTextures(possibleMessages);
+	}
+
+	void TextLineSprite::PreloadTextures
+		(const vector<string>& possibleMessages)
+	{
+		const auto cacheParams = CalculateCacheParameters(possibleMessages);
+		m_TextureLoader->PreloadTextures(cacheParams);
 	}
 
 	Colour4i TextLineSprite::GetColour() const
@@ -1063,7 +1078,28 @@ namespace BlastOff
 
 	const float TextLineSprite::c_SpacingPer24 = 2;
 
+	vector<TextTextureParameters> TextLineSprite::CalculateCacheParameters
+		(const vector<string>& possibleMessages)
+	{
+		vector<Parameters> cacheParameters = {};
+		cacheParameters.reserve(possibleMessages.size());
+
+		for (const string& message : possibleMessages)
+		{
+			const auto result = CalculateParameters(message);
+			cacheParameters.push_back(result);
+		}
+
+		return cacheParameters;
+	}
+
 	TextTextureParameters TextLineSprite::CalculateParameters() const
+	{
+		return CalculateParameters(m_Message);
+	}
+
+	TextTextureParameters TextLineSprite::CalculateParameters
+		(const string& message) const
 	{
 		const float scaledFontSize =
 		{
@@ -1074,12 +1110,12 @@ namespace BlastOff
 		{
 			m_CoordTransformer->ScaleTextureFontSize(unscaledSpacing)
 		};
-		const TextTextureParameters parameters =
+		const Parameters parameters =
 		{
 			.fontSize = scaledFontSize,
 			.spacing = scaledSpacing,
 			.colour = m_Colour,
-			.message = m_Message
+			.message = message
 		};
 		return parameters;
 	}

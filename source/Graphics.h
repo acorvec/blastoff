@@ -240,6 +240,7 @@ namespace BlastOff
 		TextTextureLoader(const Font* const font);
 		~TextTextureLoader();
 
+		void PreloadTextures(const vector<Parameters>& toCache);
 		const Texture* LazyLoadTexture(const Parameters& parameters);
 		Vector2f Measure(const Parameters& parameters) const;
 
@@ -311,7 +312,8 @@ namespace BlastOff
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
 			TextTextureLoader* const textureLoader,
-			const string& message = ""
+			const string& message = "",
+			const vector<string>& possibleMessages = {}
 		);
 
 		Colour4i GetColour() const;
@@ -337,7 +339,12 @@ namespace BlastOff
 		string m_Message = "";
 		TextTextureLoader* m_TextureLoader = nullptr;
 
+		void PreloadTextures(const vector<string>& possibleMessages);
+		vector<Parameters> CalculateCacheParameters
+			(const vector<string>& possibleMessages);
+
 		Parameters CalculateParameters() const;
+		Parameters CalculateParameters(const string& message) const;
 		float CalculateSpacing() const;
 	};
 
@@ -363,6 +370,7 @@ namespace BlastOff
 
 	protected:
 		using LineSprite = TextLineSprite;
+		using Parameters = TextTextureParameters;
 
 		Vector2f m_EnginePosition;
 		Colour4i m_Colour;

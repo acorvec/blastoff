@@ -116,7 +116,8 @@ namespace BlastOff
 			const char* const message,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
-			TextTextureLoader* const textTextureLoader
+			TextTextureLoader* const textTextureLoader,
+			const vector<string>& possibleMessages = {}
 		);
 	};
 
@@ -847,6 +848,11 @@ namespace BlastOff
 		);
 
 		float GetValue() const;
+		float GetMinimum() const;
+		float GetMaximum() const;
+
+		optional<float> GetStep() const;
+
 		float GetBottomEdgePosition() const;
 		float GetWidth() const;
 
@@ -1004,7 +1010,8 @@ namespace BlastOff
 			const float* const parentOpacity,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
-			TextTextureLoader* const textureLoader
+			TextTextureLoader* const textureLoader,
+			const function<const vector<string>&()>& calculatePossibleMessages
 		);
 
 		float GetTopEdgePosition() const;
@@ -1014,7 +1021,8 @@ namespace BlastOff
 		void Draw() const;
 
 	protected:
-		virtual string FormatValue() const = 0;
+		virtual string FormatValue(const float value) const = 0;
+		string FormatValue() const;
 		string CalculateMessage() const;
 		
 		static const float c_FontSize;
@@ -1042,8 +1050,12 @@ namespace BlastOff
 		);
 
 	private:
-		string FormatValue() const;
+		const vector<string>& CalculatePossibleMessages() const;
+		string FormatValue(const float value) const;
 
+		static inline vector<string> m_PossibleMessages = {};
+
+		static const size_t c_RoundSteps;
 		static const char* c_BeginningOfMessage;
 	};
 
@@ -1060,7 +1072,10 @@ namespace BlastOff
 		);
 
 	private:
-		string FormatValue() const;
+		const vector<string>& CalculatePossibleMessages() const;
+		string FormatValue(const float value) const;
+		
+		static inline vector<string> m_PossibleMessages = {};
 
 		static const char* c_BeginningOfMessage;
 	};

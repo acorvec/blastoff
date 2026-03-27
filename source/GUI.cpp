@@ -264,7 +264,8 @@ namespace BlastOff
 		const char* const message,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
-		TextTextureLoader* const textTextureLoader
+		TextTextureLoader* const textTextureLoader,
+		const vector<string>& possibleMessages
 	)
 	{
 		m_Sprite = std::make_unique<TextLineSprite>(
@@ -274,7 +275,8 @@ namespace BlastOff
 			coordTransformer,
 			programConstants,
 			textTextureLoader,
-			message
+			message,
+			possibleMessages
 		);
 	}
 
@@ -2221,6 +2223,21 @@ namespace BlastOff
 		return m_Value;
 	}
 
+	float SlideBar::GetMinimum() const
+	{
+		return m_Minimum;
+	}
+
+	float SlideBar::GetMaximum() const
+	{
+		return m_Maximum;
+	}
+
+	optional<float> SlideBar::GetStep() const
+	{
+		return m_StepSize;
+	}
+
 	float SlideBar::GetBottomEdgePosition() const
 	{
 		return m_HandleStroke->GetEdgePosition(Direction::Down);
@@ -2554,19 +2571,23 @@ namespace BlastOff
 		const float* const parentOpacity,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
-		TextTextureLoader* const textureLoader
+		TextTextureLoader* const textureLoader,
+		const function<const vector<string>&()>& calculatePossibleMessages
 	) :
 		m_BeginningOfMessage(beginningOfMessage),
 		m_SlideBar(slideBar),
 		m_ParentOpacity(parentOpacity)
 	{
+		static const string defaultMessage = "";
 		m_Sprite = std::make_unique<TextLineSprite>(
 			c_EnginePosition,
 			theme->textColour,
 			c_FontSize,
 			coordTransformer,
 			programConstants,
-			textureLoader
+			textureLoader,
+			defaultMessage,
+			calculatePossibleMessages()
 		);
 		m_Sprite->SetParent(parent);
 	}
@@ -2607,6 +2628,11 @@ namespace BlastOff
 		m_Sprite->Draw();
 	}
 
+	string AdjusterLabel::FormatValue() const
+	{
+		return FormatValue(m_SlideBar->GetValue());
+	}
+
 	string AdjusterLabel::CalculateMessage() const
 	{
 		const string formattedValue = FormatValue();
@@ -2634,18 +2660,39 @@ namespace BlastOff
 			parentOpacity,
 			coordTransformer,
 			programConstants,
-			textureLoader
+			textureLoader,
+			[this]() -> auto& { return CalculatePossibleMessages(); }
 		)
 	{
 
 	}
 
-	string VolumeLabel::FormatValue() const
+	const vector<string>& VolumeLabel::CalculatePossibleMessages() const
 	{
-		const int rounded = (int)roundf(m_SlideBar->GetValue() * 100);
+		if (m_PossibleMessages.size() != 0)
+			return m_PossibleMessages;
+
+		for (size_t index = 0; index < c_RoundSteps + 1; index++)
+		{
+			const float value = index / (float)c_RoundSteps;
+			const string message = std::format(
+				"{}: {}", 
+				c_BeginningOfMessage, 
+				VolumeLabel::FormatValue(value)
+			);
+			m_PossibleMessages.push_back(message);
+		}
+
+		return m_PossibleMessages;
+	}
+
+	string VolumeLabel::FormatValue(const float value) const
+	{
+		const int rounded = (int)roundf(value * c_RoundSteps);
 		return std::format("{}%", rounded);
 	}
-	
+
+	const size_t VolumeLabel::c_RoundSteps = 100;
 	const char* VolumeLabel::c_BeginningOfMessage = "Audio Volume";
 
 
@@ -2666,15 +2713,56 @@ namespace BlastOff
 			parentOpacity,
 			coordTransformer,
 			programConstants,
-			textureLoader
+			textureLoader,
+			[this]() -> auto& { return CalculatePossibleMessages(); }
 		)
 	{
 
 	}
 
-	string WindowSizeLabel::FormatValue() const
+	const vector<string>& WindowSizeLabel::CalculatePossibleMessages() const
 	{
-		const int rounded = (int)roundf(m_SlideBar->GetValue());
+		if (m_PossibleMessages.size() != 0)
+			return m_PossibleMessages;
+
+		const float minimum = m_SlideBar->GetMinimum();
+		const float maximum = m_SlideBar->GetMaximum();
+		const auto step = m_SlideBar->GetStep();
+
+		// if there is no step then it is impossible 
+		// to calculate all possible messages.
+		// log an error and return a default value, 
+		// as this should never happen if you use this class correctly
+		if (!step)
+		{
+			const char* const warning =
+			{
+				"there is no step value for this SlideBar. "
+				"it is impossible to cache all possible textures without "
+				"having a step value, as floating-point values have near-"
+				"infinite permutations. please set a step value to use "
+				"caching functionality"
+			};
+			Logging::LogWarning(warning);
+			return m_PossibleMessages;
+		}
+
+		for (float value = minimum; value <= maximum; value += *step)
+		{
+			const string message = std::format(
+				"{}: {}", 
+				c_BeginningOfMessage, 
+				WindowSizeLabel::FormatValue(value)
+			);
+			m_PossibleMessages.push_back(message);
+		}
+
+		return m_PossibleMessages;
+	}
+
+	string WindowSizeLabel::FormatValue(const float value) const
+	{
+		const int rounded = (int)roundf(value);
 		return std::format("{}", rounded);
 	}
 
