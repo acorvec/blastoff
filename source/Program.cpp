@@ -84,6 +84,8 @@ namespace BlastOff
 				const bool isSoundEnabled = c_Config.GetSoundEnabled();
 				if (isSoundEnabled)
 					InitAudioDevice();
+
+				m_SoundLoader.PreloadSounds();
 			};
 
 		const auto initializeBackgroundMusic =

@@ -1,0 +1,4 @@
+win.wav
+lose.wav
+egg1.wav
+egg2.wav

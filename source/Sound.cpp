@@ -68,6 +68,25 @@ namespace BlastOff
 		}
 	}
 
+	void SoundLoader::PreloadSounds()
+	{
+		const auto fileTextOpt = LoadTextFile(c_ResourceListPath);
+		if (!fileTextOpt)
+		{
+			const string format = std::format(
+				"unable to load text file at path \"{}\".",
+				c_ResourceListPath
+			);
+			Logging::LogWarning(format.c_str());
+			return;
+		}
+
+		const string& fileText = *fileTextOpt;
+		const auto resources = SplitString(fileText.c_str(), '\n');
+		for (const string& resource : resources)
+			(void)LazyLoadSound(resource.c_str());
+	}
+
 	const Sound* SoundLoader::LazyLoadSound(const char* const resourcePath)
 	{
 		const auto getCachedValue =
@@ -102,6 +121,11 @@ namespace BlastOff
 
 		return &m_CachedValues.at(resourcePath);
 	}
+
+	const char* const SoundLoader::c_ResourceListPath =
+	{
+		"resources/soundList.txt"
+	};
 
 
 	MusicLoader::~MusicLoader()

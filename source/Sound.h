@@ -9,9 +9,12 @@ namespace BlastOff
 	struct SoundLoader
 	{
 		~SoundLoader();
+		void PreloadSounds();
 		const Sound* LazyLoadSound(const char* const resourcePath);
 
 	private:
+		static const char* const c_ResourceListPath;
+
 		unordered_map<string, Sound> m_CachedValues = {};
 		const Sound* LoadAndInsert(const char* const resourcePath);
 	};
