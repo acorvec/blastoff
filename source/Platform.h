@@ -30,6 +30,8 @@
 #define COMPILE_TARGET_WEB 0
 #endif
 
+#define COMPILE_FEATURE_EXCEPTIONS (!COMPILE_TARGET_EMSCRIPTEN)
+
 #if COMPILE_TARGET_EMSCRIPTEN
 #include <emscripten/html5.h>
 #endif

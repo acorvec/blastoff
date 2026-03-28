@@ -18,6 +18,7 @@ namespace BlastOff
 	{
 		Program();
 		~Program();
+		void Deinitialize();
 
 		void RunLoopIteration();
 		bool IsRunning() const;
@@ -52,6 +53,8 @@ namespace BlastOff
 
         static const uint64_t c_LoadingFrameIndex;
 		static const size_t c_TotalSurfaceCount;
+
+		static const char* const c_WindowClosedMessage;
 
 		static const bool c_DrawFPS;
 		static const bool c_PrintFrametimes;

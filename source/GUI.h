@@ -1266,15 +1266,22 @@ namespace BlastOff
 
 	struct LoadingScreen
 	{
-		LoadingScreen(const size_t totalSurfaces, const RayWindow* const window);
+		LoadingScreen(
+			const size_t totalSurfaces, 
+			const RayWindow* const window,
+			const function<void()>& terminateCallback
+		);
 
 		void Update();
 		void Draw();
+		void HandleEvents();
 
 	private:
 		const static Colour4i c_BackgroundColour;
 		const static Colour4i c_ForegroundColour;
 		const static float c_MiddleRectWidth;
+
+		function<void()> m_TerminateCallback;
 
 		size_t m_TotalSurfaceCount = 1;
 		size_t m_LoadedSurfaceCount = 0;

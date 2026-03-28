@@ -17,6 +17,8 @@ namespace BlastOff
 	const uint64_t Program::c_LoadingFrameIndex = 0;
 	const size_t Program::c_TotalSurfaceCount = 161;
 
+	const char* const Program::c_WindowClosedMessage = "window closed";
+
 	const bool Program::c_DrawFPS = false;
 	const bool Program::c_PrintFrametimes = false;
 
@@ -141,7 +143,12 @@ namespace BlastOff
 
 	Program::~Program()
 	{
-		const auto writeSettingsFile = 
+		Deinitialize();
+	}
+
+	void Program::Deinitialize()
+	{
+		const auto writeSettingsFile =
 			[this]()
 			{
 				const Vector2i* positionPtr = m_Window->GetPosition();
@@ -550,19 +557,15 @@ namespace BlastOff
 
 	void Program::FinishInitialization()
 	{
-		const auto preloadResources =
-			[this]()
-			{
-				m_ImageTextureLoader.PreloadTextures();
-				m_SoundLoader.PreloadSounds();
-			};
-
 		m_Window->Update();
 		m_CoordinateTransformer->Update();
 		m_CameraEmpty->Update();
 
 		InitializeLoadingScreen();
-		preloadResources();
+
+		m_ImageTextureLoader.PreloadTextures();
+		m_SoundLoader.PreloadSounds();
+
 		InitializeMainMenu();
 		InitializeCutscene();
 
@@ -576,9 +579,18 @@ namespace BlastOff
 
 	void Program::InitializeLoadingScreen()
 	{
+		const auto terminateCallback =
+			[]()
+			{
+				// why can't i throw an exception from a std::function?
+				// stupid
+				std::exit(0);
+			};
+
 		m_LoadingScreen = std::make_unique<LoadingScreen>(
 			c_TotalSurfaceCount,
-			m_Window.get()
+			m_Window.get(),
+			terminateCallback
 		);
 
 		const auto onSurfaceLoad =

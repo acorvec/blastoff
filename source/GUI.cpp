@@ -3611,16 +3611,21 @@ namespace BlastOff
 
 	LoadingScreen::LoadingScreen(
 		const size_t totalSurfaces,
-		const RayWindow* const window
+		const RayWindow* const window,
+		const function<void()>& terminateCallback
 	) :
 		m_TotalSurfaceCount(totalSurfaces),
-		m_Window(window)
+		m_Window(window),
+		m_TerminateCallback(terminateCallback)
 	{
+
 	}
 
 	void LoadingScreen::Update()
 	{
 		m_LoadedSurfaceCount++;
+
+		HandleEvents();
 	}
 
 	void LoadingScreen::Draw()
@@ -3670,5 +3675,13 @@ namespace BlastOff
 		drawMiddleRect();
 
 		EndDrawing();
+	}
+
+	void LoadingScreen::HandleEvents()
+	{
+#if COMPILE_FEATURE_EXCEPTIONS
+		if (WindowShouldClose())
+			m_TerminateCallback();
+#endif
 	}
 }
