@@ -3597,4 +3597,78 @@ namespace BlastOff
 
 	const float SettingsMenu::c_MaxFadeInTick = 1 / 4.0f;
 	const float SettingsMenu::c_MaxFadeOutTick = 1 / 4.0f;
+
+
+	const Colour4i LoadingScreen::c_BackgroundColour = 
+	{
+		Colour4i(0x60, 0x60, 0xA0)
+	};
+	const Colour4i LoadingScreen::c_ForegroundColour =
+	{
+		Colour4i(0xA8, 0xFF, 0xFF)
+	};
+	const float LoadingScreen::c_MiddleRectWidth = 1 / 10.0f;
+
+	LoadingScreen::LoadingScreen(
+		const size_t totalSurfaces,
+		const RayWindow* const window
+	) :
+		m_TotalSurfaceCount(totalSurfaces),
+		m_Window(window)
+	{
+	}
+
+	void LoadingScreen::Update()
+	{
+		m_LoadedSurfaceCount++;
+	}
+
+	void LoadingScreen::Draw()
+	{
+		const auto drawMainRect =
+			[this]()
+			{
+				const float progress =
+				{
+					m_LoadedSurfaceCount / (float)m_TotalSurfaceCount
+				};
+				const Vector2i* const dimensions = m_Window->GetSize();
+				const float yPos = dimensions->y * (1 - progress);
+				const Vector2i position = { 0, (int)yPos };
+
+				DrawRectangle(
+					position.x, position.y,
+					dimensions->x, dimensions->y,
+					c_ForegroundColour.ToRayColour()
+				);
+			};
+
+		const auto drawMiddleRect =
+			[this]()
+			{
+				const Vector2i* const windowSize = m_Window->GetSize();
+				const Vector2i dimensions = 
+				{ 
+					(int)(windowSize->x * c_MiddleRectWidth),
+					windowSize->y 
+				};
+				const Vector2i position =
+				{
+					(int)((windowSize->x - dimensions.x) * 0.5f), 0
+				};
+				DrawRectangle(
+					position.x, position.y,
+					dimensions.x, dimensions.y,
+					c_ForegroundColour.ToRayColour()
+				);
+			};
+
+		BeginDrawing();
+		ClearBackground(c_BackgroundColour.ToRayColour());
+
+		drawMainRect();
+		drawMiddleRect();
+
+		EndDrawing();
+	}
 }

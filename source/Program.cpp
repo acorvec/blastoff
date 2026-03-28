@@ -120,13 +120,6 @@ namespace BlastOff
 					SetExitKey(KEY_NULL);
 			};
 
-		const auto preloadResources = 
-			[this]()
-			{
-				m_ImageTextureLoader.PreloadTextures();
-				m_SoundLoader.PreloadSounds();
-			};
-
 		Logging::Initialize(&c_Config);
 		logInitialMessage();
 
@@ -134,7 +127,6 @@ namespace BlastOff
 		initializeSound();
 		initializeBackgroundMusic();
 		disableEscapeKey();
-		preloadResources();
 	}
 
 	Program::~Program()
@@ -343,10 +335,19 @@ namespace BlastOff
 		}
 		else if (m_FramesSinceCreation == c_LoadingFrameIndex + 2)
 		{
+			const auto preloadResources =
+				[this]()
+				{
+					m_ImageTextureLoader.PreloadTextures();
+					m_SoundLoader.PreloadSounds();
+				};
+
 			m_Window->Update();
 			m_CoordinateTransformer->Update();
 			m_CameraEmpty->Update();
 
+			InitializeLoadingScreen();
+			preloadResources();
 			InitializeMainMenu();
 			InitializeCutscene();
 
@@ -560,6 +561,24 @@ namespace BlastOff
 		EndDrawing();
 	}
 
+	void Program::InitializeLoadingScreen()
+	{
+		m_LoadingScreen = std::make_unique<LoadingScreen>(
+			c_TotalSurfaceCount,
+			m_Window.get()
+		);
+
+		const auto onSurfaceLoad =
+			[this]()
+			{
+				m_LoadingScreen->Update();
+				m_LoadingScreen->Draw();
+			};
+
+		m_ImageTextureLoader.SetLoadCallback(onSurfaceLoad);
+		m_TextTextureLoader->SetLoadCallback(onSurfaceLoad);
+	}
+
 	void Program::InitializeGame()
 	{
 		const auto resetCallback =
@@ -678,6 +697,7 @@ namespace BlastOff
 	}
 
     const uint64_t Program::c_LoadingFrameIndex = 0;
+	const size_t Program::c_TotalSurfaceCount = 161;
 
 	const bool Program::c_DrawFPS = false;
 	const bool Program::c_PrintFrametimes = false;

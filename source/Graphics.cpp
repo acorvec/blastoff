@@ -640,6 +640,11 @@ namespace BlastOff
 			(void)LazyLoadTexture(resource.c_str());
 	}
 
+	void ImageTextureLoader::SetLoadCallback(const function<void()>& callback)
+	{
+		m_LoadCallback = callback;
+	}
+
 	const Texture* ImageTextureLoader::LazyLoadTexture
 		(const char* const resourcePath)
 	{
@@ -672,9 +677,12 @@ namespace BlastOff
 		(const char* const resourcePath)
 	{
 		const Texture result = LoadPNG(resourcePath);
+		SetTextureFilter(result, c_DefaultTextureFiltering);
 		m_CachedValues.insert({ resourcePath, result });
 
-		SetTextureFilter(result, c_DefaultTextureFiltering);
+		if (m_LoadCallback)
+			m_LoadCallback();
+
 		return &m_CachedValues.at(resourcePath);
 	}
 
@@ -734,6 +742,11 @@ namespace BlastOff
 			(void)LazyLoadTexture(parameters);
 	}
 
+	void TextTextureLoader::SetLoadCallback(const function<void()>& callback)
+	{
+		m_LoadCallback = callback;
+	}
+
 	const Texture* TextTextureLoader::LazyLoadTexture
 		(const Parameters& parameters)
 	{
@@ -790,9 +803,13 @@ namespace BlastOff
 		m_CachedValues.insert({ parameters, result });
 
 		SetTextureFilter(
-			result, 
+			result,
 			ImageTextureLoader::c_DefaultTextureFiltering
 		);
+
+		if (m_LoadCallback)
+			m_LoadCallback();
+
 		return &m_CachedValues.at(parameters);
 	}
 

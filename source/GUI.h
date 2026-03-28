@@ -1263,4 +1263,22 @@ namespace BlastOff
 		unique_ptr<ThemedBacking> m_Backing = nullptr;
 		unique_ptr<ConfirmationDialogue> m_ConfirmationDialogue = nullptr;
 	};
+
+	struct LoadingScreen
+	{
+		LoadingScreen(const size_t totalSurfaces, const RayWindow* const window);
+
+		void Update();
+		void Draw();
+
+	private:
+		const static Colour4i c_BackgroundColour;
+		const static Colour4i c_ForegroundColour;
+		const static float c_MiddleRectWidth;
+
+		size_t m_TotalSurfaceCount = 1;
+		size_t m_LoadedSurfaceCount = 0;
+
+		const RayWindow* m_Window = nullptr;
+	};
 }

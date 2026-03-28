@@ -41,6 +41,7 @@ namespace BlastOff
 		static void DrawFramerate();
 		void PauseForOneFrame();
 
+		void InitializeLoadingScreen();
 		void InitializeGame();
 		void InitializeMainMenu();
 		void InitializeCutscene();
@@ -49,6 +50,7 @@ namespace BlastOff
 		static const inline ProgramConstants c_Config;
 
         static const uint64_t c_LoadingFrameIndex;
+		static const size_t c_TotalSurfaceCount;
 
 		static const bool c_DrawFPS;
 		static const bool c_PrintFrametimes;
@@ -84,6 +86,7 @@ namespace BlastOff
         unique_ptr<Cutscene> m_Cutscene = nullptr;
 		unique_ptr<MainMenu> m_MainMenu = nullptr;
 		unique_ptr<SettingsMenu> m_SettingsMenu = nullptr;
+		unique_ptr<LoadingScreen> m_LoadingScreen = nullptr;
 
 		time_point<high_resolution_clock> m_FrameStartTime = high_resolution_clock::now();
 		uint64_t m_FramesSinceCreation = 0;

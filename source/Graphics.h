@@ -209,12 +209,15 @@ namespace BlastOff
 
 		~ImageTextureLoader();
 		void PreloadTextures();
+		void SetLoadCallback(const function<void()>& callback);
 		const Texture* LazyLoadTexture(const char* const resourcePath);
 
 	private:
 		static const char* const c_ResourceListPath;
 
 		unordered_map<string, Texture> m_CachedValues = {};
+		function<void()> m_LoadCallback;
+
 		const Texture* LoadAndInsert(const char* const resourcePath);
 	};
 
@@ -241,6 +244,7 @@ namespace BlastOff
 		~TextTextureLoader();
 
 		void PreloadTextures(const vector<Parameters>& toCache);
+		void SetLoadCallback(const function<void()>& callback);
 		const Texture* LazyLoadTexture(const Parameters& parameters);
 		Vector2f Measure(const Parameters& parameters) const;
 
@@ -248,6 +252,7 @@ namespace BlastOff
 		using CacheMap = unordered_map<Parameters, Texture, Parameters::Hasher>;
 
 		CacheMap m_CachedValues = {};
+		function<void()> m_LoadCallback;
 		const Font* m_Font;
 
 		const Texture* LoadAndInsert(const Parameters& parameters);
