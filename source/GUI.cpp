@@ -3607,7 +3607,7 @@ namespace BlastOff
 	{
 		Colour4i(0xA8, 0xFF, 0xFF)
 	};
-	const float LoadingScreen::c_MiddleRectWidth = 1 / 10.0f;
+	const float LoadingScreen::c_MiddleRectWidth = 1 / 20.0f;
 
 	LoadingScreen::LoadingScreen(
 		const size_t totalSurfaces,
