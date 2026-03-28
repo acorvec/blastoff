@@ -41,6 +41,7 @@ namespace BlastOff
 		static void DrawFramerate();
 		void PauseForOneFrame();
 
+		void FinishInitialization();
 		void InitializeLoadingScreen();
 		void InitializeGame();
 		void InitializeMainMenu();

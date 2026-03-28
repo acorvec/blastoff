@@ -14,6 +14,16 @@
 
 namespace BlastOff
 {
+	const uint64_t Program::c_LoadingFrameIndex = 0;
+	const size_t Program::c_TotalSurfaceCount = 161;
+
+	const bool Program::c_DrawFPS = false;
+	const bool Program::c_PrintFrametimes = false;
+
+#if COMPILE_CONFIG_DEBUG
+	const bool Program::c_SpeedupInverted = false;
+#endif
+
 	Program::Program()
 	{
 		const auto logInitialMessage =
@@ -334,30 +344,7 @@ namespace BlastOff
 			initializeInput();
 		}
 		else if (m_FramesSinceCreation == c_LoadingFrameIndex + 2)
-		{
-			const auto preloadResources =
-				[this]()
-				{
-					m_ImageTextureLoader.PreloadTextures();
-					m_SoundLoader.PreloadSounds();
-				};
-
-			m_Window->Update();
-			m_CoordinateTransformer->Update();
-			m_CameraEmpty->Update();
-
-			InitializeLoadingScreen();
-			preloadResources();
-			InitializeMainMenu();
-			InitializeCutscene();
-
-			// for the purposes of pre-loading text textures
-			// (yes this is slow. oh well)
-			InitializeSettingsMenu();
-			InitializeGame();
-
-			m_State = State::MainMenu;
-		}
+			FinishInitialization();
 	}
 
 	void Program::Draw() const
@@ -561,6 +548,32 @@ namespace BlastOff
 		EndDrawing();
 	}
 
+	void Program::FinishInitialization()
+	{
+		const auto preloadResources =
+			[this]()
+			{
+				m_ImageTextureLoader.PreloadTextures();
+				m_SoundLoader.PreloadSounds();
+			};
+
+		m_Window->Update();
+		m_CoordinateTransformer->Update();
+		m_CameraEmpty->Update();
+
+		InitializeLoadingScreen();
+		preloadResources();
+		InitializeMainMenu();
+		InitializeCutscene();
+
+		// for the purposes of pre-loading text textures
+		// (yes this is slow. oh well)
+		InitializeSettingsMenu();
+		InitializeGame();
+
+		m_State = State::MainMenu;
+	}
+
 	void Program::InitializeLoadingScreen()
 	{
 		m_LoadingScreen = std::make_unique<LoadingScreen>(
@@ -695,14 +708,4 @@ namespace BlastOff
 			m_CameraEmpty.get()
 		);
 	}
-
-    const uint64_t Program::c_LoadingFrameIndex = 0;
-	const size_t Program::c_TotalSurfaceCount = 161;
-
-	const bool Program::c_DrawFPS = false;
-	const bool Program::c_PrintFrametimes = false;
-
-#if COMPILE_CONFIG_DEBUG
-	const bool Program::c_SpeedupInverted = false;
-#endif
 }
