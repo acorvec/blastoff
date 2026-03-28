@@ -3633,10 +3633,13 @@ namespace BlastOff
 		const auto drawMainRect =
 			[this]()
 			{
-				const float progress =
+				float progress =
 				{
 					m_LoadedSurfaceCount / (float)m_TotalSurfaceCount
 				};
+				if (progress > 1)
+					progress = 1;
+
 				const Vector2i* const dimensions = m_Window->GetSize();
 				const float yPos = dimensions->y * (1 - progress);
 				const Vector2i position = { 0, (int)yPos };
