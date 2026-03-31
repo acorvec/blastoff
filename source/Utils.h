@@ -180,6 +180,11 @@ namespace BlastOff
 	);
 	float DoubleSineInterpolation(const float number);
 
+    void SetFramerateSafely(
+        const int framerate, 
+        int* const mostRecent=nullptr
+    );
+
 	struct Edge2f
 	{
 		Direction side;

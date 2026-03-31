@@ -3611,10 +3611,12 @@ namespace BlastOff
 
 	LoadingScreen::LoadingScreen(
 		const size_t totalSurfaces,
+        const int normalTargetFramerate,
 		const RayWindow* const window,
 		const function<void()>& terminateCallback
 	) :
 		m_TotalSurfaceCount(totalSurfaces),
+        m_NormalTargetFramerate(normalTargetFramerate),
 		m_Window(window),
 		m_TerminateCallback(terminateCallback)
 	{
@@ -3671,6 +3673,8 @@ namespace BlastOff
 				);
 			};
 
+        SetFramerateSafely(0);
+
 		BeginDrawing();
 		ClearBackground(c_BackgroundColour.ToRayColour());
 
@@ -3678,6 +3682,8 @@ namespace BlastOff
 		drawMiddleRect();
 
 		EndDrawing();
+
+        SetFramerateSafely(m_NormalTargetFramerate);
 	}
 
 	void LoadingScreen::HandleEvents()

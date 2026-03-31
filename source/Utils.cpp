@@ -141,6 +141,20 @@ namespace BlastOff
 		return NthSineInterpolation(number, 2);
 	}
 
+    void SetFramerateSafely(const int framerate, int* const mostRecent)
+    {
+#if COMPILE_TARGET_DESKTOP
+#if COMPILE_CONFIG_DEBUG
+		if ((!mostRecent) || framerate != *mostRecent)
+			SetTargetFPS(framerate);
+#else
+		SetTargetFPS(framerate);
+#endif
+#endif
+        if (mostRecent)
+            *mostRecent = framerate;
+    }
+
 
 	optional<float> Edge2f::GetSign() const
 	{

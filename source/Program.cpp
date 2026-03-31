@@ -520,18 +520,7 @@ namespace BlastOff
 
 	void Program::SetFramerate(const int framerate) 
 	{
-#if COMPILE_TARGET_DESKTOP
-#if COMPILE_CONFIG_DEBUG
-		if (framerate != m_MostRecentFramerateSet)
-			SetTargetFPS(framerate);
-#else
-		SetTargetFPS(framerate);
-#endif
-#endif
-
-#if COMPILE_CONFIG_DEBUG
-		m_MostRecentFramerateSet = framerate;
-#endif
+        SetFramerateSafely(framerate, &m_MostRecentFramerateSet);
 	}
 
 	void Program::DrawFramerate()
@@ -589,6 +578,7 @@ namespace BlastOff
 
 		m_LoadingScreen = std::make_unique<LoadingScreen>(
 			c_TotalSurfaceCount,
+            c_Config.GetTargetFramerate(),
 			m_Window.get(),
 			terminateCallback
 		);

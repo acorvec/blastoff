@@ -1268,6 +1268,7 @@ namespace BlastOff
 	{
 		LoadingScreen(
 			const size_t totalSurfaces, 
+            const int normalTargetFramerate,
 			const RayWindow* const window,
 			const function<void()>& terminateCallback
 		);
@@ -1282,6 +1283,8 @@ namespace BlastOff
 		const static float c_MiddleRectWidth;
 
 		function<void()> m_TerminateCallback;
+
+        int m_NormalTargetFramerate = 0;
 
 		size_t m_TotalSurfaceCount = 1;
 		size_t m_LoadedSurfaceCount = 0;
