@@ -3673,31 +3673,44 @@ namespace BlastOff
 				);
 			};
 
-        const auto performDrawing = []()
-        {
-            SetFramerateSafely(0);
+        const auto performDrawing = 
+            [&, this]()
+            {
+                SetFramerateSafely(0);
 
-            BeginDrawing();
-            ClearBackground(c_BackgroundColour.ToRayColour());
+                BeginDrawing();
+                ClearBackground(c_BackgroundColour.ToRayColour());
 
-            drawMainRect();
-            drawMiddleRect();
+                drawMainRect();
+                drawMiddleRect();
 
-            EndDrawing();
+                EndDrawing();
 
-            SetFramerateSafely(m_NormalTargetFramerate);
-        };
+                SetFramerateSafely(m_NormalTargetFramerate);
+            };
 
 #if COMPILE_TARGET_EMSCRIPTEN
         // emscripten is special, so we need to hold its hand 
         // through drawing the loading screen.
-        // try to draw it at 30 fps since it doesn't really matter 
-        // if it's drawn fast or not
-        const int thirtyFrameDivisor = m_NormalTargetFramerate / 30;
-        if (m_LoadedSurfaceCount % thirtyFrameDivisor == 0)
+        // draw the screen if the current frame has taken longer than 
+        // a 60fps frame
+        const auto getTimestamp = 
+            []()
+            {
+                return EM_ASM_DOUBLE({
+                    return performance.now();
+                });
+            };
+
+        const double timestamp = getTimestamp();
+        const double difference = timestamp - m_MostRecentDrawingTime;
+
+        if (difference > 1000.0 / 60)
         {
             performDrawing();
             emscripten_sleep(0);
+
+            m_MostRecentDrawingTime = getTimestamp(); 
         }
 #else
         performDrawing();

@@ -1286,6 +1286,10 @@ namespace BlastOff
 
         int m_NormalTargetFramerate = 0;
 
+#if COMPILE_TARGET_EMSCRIPTEN
+        double m_MostRecentDrawingTime = -1000.0 / 30;
+#endif
+
 		size_t m_TotalSurfaceCount = 1;
 		size_t m_LoadedSurfaceCount = 0;
 
