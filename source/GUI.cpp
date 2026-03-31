@@ -3684,6 +3684,12 @@ namespace BlastOff
 		EndDrawing();
 
         SetFramerateSafely(m_NormalTargetFramerate);
+
+#if COMPILE_TARGET_EMSCRIPTEN
+        const int thirtyFrameDivisor = m_NormalTargetFramerate / 30;
+        if (m_LoadedSurfaceCount % thirtyFrameDivisor == 0)
+            emscripten_sleep(0);
+#endif
 	}
 
 	void LoadingScreen::HandleEvents()
