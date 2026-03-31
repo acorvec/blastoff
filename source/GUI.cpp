@@ -3673,22 +3673,34 @@ namespace BlastOff
 				);
 			};
 
-        SetFramerateSafely(0);
+        const auto performDrawing = []()
+        {
+            SetFramerateSafely(0);
 
-		BeginDrawing();
-		ClearBackground(c_BackgroundColour.ToRayColour());
+            BeginDrawing();
+            ClearBackground(c_BackgroundColour.ToRayColour());
 
-		drawMainRect();
-		drawMiddleRect();
+            drawMainRect();
+            drawMiddleRect();
 
-		EndDrawing();
+            EndDrawing();
 
-        SetFramerateSafely(m_NormalTargetFramerate);
+            SetFramerateSafely(m_NormalTargetFramerate);
+        };
 
 #if COMPILE_TARGET_EMSCRIPTEN
+        // emscripten is special, so we need to hold its hand 
+        // through drawing the loading screen.
+        // try to draw it at 60 fps since it doesn't really matter 
+        // if it's drawn fast or not
         const int thirtyFrameDivisor = m_NormalTargetFramerate / 30;
         if (m_LoadedSurfaceCount % thirtyFrameDivisor == 0)
+        {
+            performDrawing();
             emscripten_sleep(0);
+        }
+#else
+        performDrawing();
 #endif
 	}
 
