@@ -3691,7 +3691,7 @@ namespace BlastOff
 #if COMPILE_TARGET_EMSCRIPTEN
         // emscripten is special, so we need to hold its hand 
         // through drawing the loading screen.
-        // try to draw it at 60 fps since it doesn't really matter 
+        // try to draw it at 30 fps since it doesn't really matter 
         // if it's drawn fast or not
         const int thirtyFrameDivisor = m_NormalTargetFramerate / 30;
         if (m_LoadedSurfaceCount % thirtyFrameDivisor == 0)
