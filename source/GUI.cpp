@@ -977,6 +977,11 @@ namespace BlastOff
 		return m_HasJustFinished;
 	}
 
+	bool SlideState::HasFinished() const
+	{
+		return m_SlideTick < 0;
+	}
+
 	void SlideState::Slide(const float waitInSeconds)
 	{
 		if (waitInSeconds <= 0)
@@ -3828,6 +3833,7 @@ namespace BlastOff
 		const Sprite* const parent,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
+		const InputManager* const inputManager,
 		TextTextureLoader* const textTextureLoader
 	) :
 		Popup(
@@ -3838,7 +3844,8 @@ namespace BlastOff
 			coordTransformer,
 			programConstants,
 			textTextureLoader
-		)
+		),
+		m_InputManager(inputManager)
 	{
 		const auto initializeSlideState =
 			[&, this]()
@@ -3865,11 +3872,15 @@ namespace BlastOff
 				m_OffScreenPosition = startPosition;
 			};
 
+		const float fps = programConstants->GetTargetFramerate();
+		m_MaxSpaceBarTick = c_SpaceBarTickLength * fps;
+
 		initializeSlideState();
 	}
 
-	const float ControlsPopup::c_MaxSlideInTick = 1 / 4.0f;
+	const float ControlsPopup::c_MaxSlideInTick = 1 / 3.0f;
 	const float ControlsPopup::c_SlideWait = 0;
+	const float ControlsPopup::c_SpaceBarTickLength = 2 / 3.0f;
 	const char* const ControlsPopup::c_Message =
 	{
 		"Press Space ([_])\n"
@@ -3900,16 +3911,45 @@ namespace BlastOff
 
 	void ControlsPopup::Update()
 	{
+		const auto updateSpaceBar =
+			[this]()
+			{
+				if (!m_SlideState->HasFinished())
+					return;
+
+				if (m_SpaceBarTick < 0 && m_InputManager->GetKeyDown(KEY_SPACE))
+					m_SpaceBarTick = m_MaxSpaceBarTick;
+				else if (m_SpaceBarTick == 0)
+				{
+					m_SlideState->SwapPositions();
+					m_SlideState->Slide();
+					m_SpaceBarTick = -1;
+					m_IsSlidingOut = true;
+				}
+				else if (m_SpaceBarTick > 0)
+					m_SpaceBarTick--;
+				else
+					m_SpaceBarTick = -1;
+			};
+
+		const auto updateSlideState =
+			[this]()
+			{
+				m_SlideState->Update();
+				if (m_SlideState->HasJustFinished() && m_IsSlidingOut)
+				{
+					m_IsSlidingOut = false;
+					m_IsEnabled = false;
+				}
+			};
+		
 		if (!m_IsEnabled)
 			return;
 
 		Popup::Update();
-		m_SlideState->Update();
-		if (m_SlideState->HasJustFinished() && m_IsSlidingOut)
-		{
-			m_IsSlidingOut = false;
-			m_IsEnabled = false;
-		}
+
+		updateSlideState();
+		updateSpaceBar();
 	}
 
 	Vector2f ControlsPopup::CalculatePosition

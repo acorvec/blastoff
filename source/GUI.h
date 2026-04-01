@@ -377,6 +377,7 @@ namespace BlastOff
 
 		Vector2f GetStartingPosition() const;
 		bool HasJustFinished() const;
+		bool HasFinished() const;
 		
 		void Slide(const float waitInSeconds = 0);
 		void SwapPositions();
@@ -1337,6 +1338,7 @@ namespace BlastOff
 			const Sprite* const parent,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
+			const InputManager* const inputManager,
 			TextTextureLoader* const textTextureLoader
 		);
 
@@ -1347,6 +1349,7 @@ namespace BlastOff
 	protected:
 		static const float c_MaxSlideInTick;
 		static const float c_SlideWait;
+		static const float c_SpaceBarTickLength;
 		static const char* const c_Message;
 		static const Theme* const c_BackingTheme;
 
@@ -1354,8 +1357,10 @@ namespace BlastOff
 			(const CoordinateTransformer* const coordTransformer);
 
 		bool m_IsSlidingOut = false;
+		int m_SpaceBarTick = -1, m_MaxSpaceBarTick = 1;
 		Vector2f m_OffScreenPosition = Vector2f::Zero();
 
 		unique_ptr<SlideState> m_SlideState = nullptr;
+		const InputManager* m_InputManager = nullptr;
 	};
 }
