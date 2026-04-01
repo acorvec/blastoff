@@ -2805,8 +2805,11 @@ namespace BlastOff
 				};
 				const Vector2f backingSize = m_Backing->GetEngineSize();
 				const float startX = (-viewportSize.x / 2.0f) - backingSize.x;
-				const Vector2f startPosition = { startX, 0 };
-				constexpr Vector2f endPosition = Vector2f::Zero();
+				const Vector2f startPosition =
+				{
+					m_Empty->GetLocalPosition() + Vector2f{ startX, 0 }
+				};
+				const Vector2f endPosition = m_Empty->GetLocalPosition();
 
 				m_SlideState = std::make_unique<SlideState>(
 					startPosition,
@@ -3597,6 +3600,7 @@ namespace BlastOff
 
 	const float SettingsMenu::c_MaxFadeInTick = 1 / 4.0f;
 	const float SettingsMenu::c_MaxFadeOutTick = 1 / 4.0f;
+	const Theme* const SettingsMenu::c_BackingTheme = &Theme::c_DarkTheme;
 
 
 	const Colour4i LoadingScreen::c_BackgroundColour = 
@@ -3723,5 +3727,195 @@ namespace BlastOff
 		if (WindowShouldClose())
 			m_TerminateCallback();
 #endif
+	}
+
+
+	bool Popup::IsEnabled() const
+	{
+		return m_IsEnabled;
+	}
+
+	void Popup::Enable()
+	{
+		m_IsEnabled = true;
+	}
+
+	void Popup::Disable()
+	{
+		m_IsEnabled = false;
+	}
+
+	void Popup::Update()
+	{
+		if (!m_IsEnabled)
+			return;
+
+		m_Backing->Update();
+		m_Message->Update();
+	}
+
+	void Popup::Draw() const
+	{
+		if (!m_IsEnabled)
+			return;
+
+		m_Backing->Draw();
+		m_Message->Draw();
+	}
+
+	const float Popup::c_FontSize = 32;
+	const float Popup::c_LineSpacing = 3 / 2.0f;
+
+	Popup::Popup(
+		const char* const message,
+		const Vector2f enginePosition,
+		const Sprite* const parent,
+		const Theme* const theme,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		TextTextureLoader* const textTextureLoader
+	)
+	{
+		const auto initializeEmpty =
+			[&, this]()
+			{
+				m_Empty = std::make_unique<Empty>(
+					enginePosition,
+					coordTransformer,
+					programConstants
+				);
+				m_Empty->SetParent(parent);
+			};
+
+		const auto initializeMessage =
+			[&, this]()
+			{
+				constexpr Vector2f enginePosition = Vector2f::Zero();
+				m_Message = std::make_unique<TextSprite>(
+					enginePosition,
+					theme->textColour,
+					c_FontSize,
+					c_LineSpacing,
+					coordTransformer,
+					programConstants,
+					textTextureLoader,
+					message,
+					m_Empty.get()
+				);
+			};
+
+		const auto initializeBacking =
+			[&, this]()
+			{
+				const Vector2f messageSize = m_Message->CalculateEngineSize();
+				m_Backing = std::make_unique<ThemedBacking>(
+					messageSize,
+					theme,
+					m_Empty.get(),
+					&c_Opacity,
+					coordTransformer,
+					programConstants
+				);
+			};
+
+		initializeEmpty();
+		initializeMessage();
+		initializeBacking();
+	}
+
+
+	ControlsPopup::ControlsPopup(
+		const Sprite* const parent,
+		const CoordinateTransformer* const coordTransformer,
+		const ProgramConstants* const programConstants,
+		TextTextureLoader* const textTextureLoader
+	) :
+		Popup(
+			c_Message,
+			CalculatePosition(coordTransformer),
+			parent,
+			c_BackingTheme,
+			coordTransformer,
+			programConstants,
+			textTextureLoader
+		)
+	{
+		const auto initializeSlideState =
+			[&, this]()
+			{
+				const Vector2f viewportSize =
+				{
+					coordTransformer->GetViewportSize()
+				};
+				const Vector2f backingSize = m_Backing->GetEngineSize();
+				const float startX = (-viewportSize.x / 2.0f) - backingSize.x;
+				const Vector2f startPosition = 
+				{
+					m_Empty->GetLocalPosition() + Vector2f{ startX, 0 }
+				};
+				const Vector2f endPosition = m_Empty->GetLocalPosition();
+
+				m_SlideState = std::make_unique<SlideState>(
+					startPosition,
+					endPosition,
+					c_MaxSlideInTick,
+					m_Empty.get(),
+					programConstants
+				);
+				m_OffScreenPosition = startPosition;
+			};
+
+		initializeSlideState();
+	}
+
+	const float ControlsPopup::c_MaxSlideInTick = 1 / 4.0f;
+	const float ControlsPopup::c_SlideWait = 0;
+	const char* const ControlsPopup::c_Message =
+	{
+		"Press Space ([_])\n"
+		"to accelerate towards\n"
+		"the mouse cursor!"
+	};
+	const Theme* const ControlsPopup::c_BackingTheme = &Theme::c_DarkTheme;
+
+	void ControlsPopup::Enable()
+	{
+		Popup::Enable();
+
+		if (m_SlideState->GetStartingPosition() != m_OffScreenPosition)
+			m_SlideState->SwapPositions();
+
+		m_SlideState->Slide(c_SlideWait);
+		m_IsSlidingOut = false;
+	}
+
+	void ControlsPopup::Disable()
+	{
+		if (m_SlideState->GetStartingPosition() == m_OffScreenPosition)
+			m_SlideState->SwapPositions();
+
+		m_SlideState->Slide(c_SlideWait);
+		m_IsSlidingOut = true;
+	}
+
+	void ControlsPopup::Update()
+	{
+		if (!m_IsEnabled)
+			return;
+
+		Popup::Update();
+		m_SlideState->Update();
+		if (m_SlideState->HasJustFinished() && m_IsSlidingOut)
+		{
+			m_IsSlidingOut = false;
+			m_IsEnabled = false;
+		}
+	}
+
+	Vector2f ControlsPopup::CalculatePosition
+		(const CoordinateTransformer* const coordTransformer)
+	{
+		(void)coordTransformer;
+		return { 0, 1 / 3.0f };
 	}
 }

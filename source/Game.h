@@ -109,6 +109,7 @@ namespace BlastOff
 		unique_ptr<MuteButton> m_MuteButton = nullptr;
 		unique_ptr<TopRightResetButton> m_ResetButton = nullptr;
 		unique_ptr<TopRightExitButton> m_ExitButton = nullptr;
+		unique_ptr<Popup> m_ControlsPopup = nullptr;
 
 		const Sound* m_WinSound = nullptr;
 		const Sound* m_LoseSound = nullptr;

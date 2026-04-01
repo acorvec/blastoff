@@ -739,11 +739,24 @@ namespace BlastOff
 				);
 			};
 
+		const auto initializeControlsPopup =
+			[this]()
+			{
+				m_ControlsPopup = std::make_unique<ControlsPopup>(
+					m_CameraEmpty.get(),
+					m_CoordinateTransformer.get(),
+					m_ProgramConstants,
+					m_TextTextureLoader
+				);
+				m_ControlsPopup->Enable();
+			};
+
 		initializeGraphics();
         initializeSound();
         initializeInput();
         initializeGameEndMenus();
         initializeGUIButtons();
+		initializeControlsPopup();
     }
 
     void PlayableGame::Update()
@@ -756,6 +769,7 @@ namespace BlastOff
                 m_MuteButton->Update();
                 m_ResetButton->Update();
 				m_ExitButton->Update();
+				m_ControlsPopup->Update();
             };
 
         Game::Update();
@@ -776,6 +790,7 @@ namespace BlastOff
         m_MuteButton->Draw();
         m_ResetButton->Draw();
 		m_ExitButton->Draw();
+		m_ControlsPopup->Draw();
     }
 
     void PlayableGame::ChooseOutcome(const Outcome outcome)

@@ -1238,7 +1238,7 @@ namespace BlastOff
 		static const float c_MaxFadeOutTick;
 		static const float c_MaxFadeInTick;
 
-		const Theme* c_BackingTheme = &Theme::c_DarkTheme;
+		static const Theme* const c_BackingTheme;
 
 		Callback m_ExitCallback;
 		float m_Opacity = 1;
@@ -1294,5 +1294,68 @@ namespace BlastOff
 		size_t m_LoadedSurfaceCount = 0;
 
 		const RayWindow* m_Window = nullptr;
+	};
+
+	struct Popup
+	{
+		bool IsEnabled() const;
+
+		virtual void Enable();
+		virtual void Disable();
+
+		virtual void Update();
+		void Draw() const;
+
+	protected:
+		static const float c_FontSize;
+		static const float c_LineSpacing;
+		static const Vector2f c_Offset;
+
+		static const inline float c_Opacity = 1;
+
+		bool m_IsEnabled = false;
+		int m_TicksEnabled = false;
+
+		unique_ptr<Empty> m_Empty = nullptr;
+		unique_ptr<ThemedBacking> m_Backing = nullptr;
+		unique_ptr<TextSprite> m_Message = nullptr;
+
+		Popup(
+			const char* const message,
+			const Vector2f enginePosition,
+			const Sprite* const parent,
+			const Theme* const theme,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			TextTextureLoader* const textTextureLoader
+		);
+	};
+
+	struct ControlsPopup : public Popup
+	{
+		ControlsPopup(
+			const Sprite* const parent,
+			const CoordinateTransformer* const coordTransformer,
+			const ProgramConstants* const programConstants,
+			TextTextureLoader* const textTextureLoader
+		);
+
+		void Enable() override;
+		void Disable() override;
+		void Update() override;
+
+	protected:
+		static const float c_MaxSlideInTick;
+		static const float c_SlideWait;
+		static const char* const c_Message;
+		static const Theme* const c_BackingTheme;
+
+		static Vector2f CalculatePosition
+			(const CoordinateTransformer* const coordTransformer);
+
+		bool m_IsSlidingOut = false;
+		Vector2f m_OffScreenPosition = Vector2f::Zero();
+
+		unique_ptr<SlideState> m_SlideState = nullptr;
 	};
 }
