@@ -1338,7 +1338,7 @@ namespace BlastOff
 			const Sprite* const parent,
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
-			const InputManager* const inputManager,
+			const Player* const player,
 			TextTextureLoader* const textTextureLoader
 		);
 
@@ -1357,10 +1357,10 @@ namespace BlastOff
 			(const CoordinateTransformer* const coordTransformer);
 
 		bool m_IsSlidingOut = false;
-		int m_SpaceBarTick = -1, m_MaxSpaceBarTick = 1;
+		int m_PlayerVelocityTick = -1, m_MaxSpaceBarTick = 1;
 		Vector2f m_OffScreenPosition = Vector2f::Zero();
 
 		unique_ptr<SlideState> m_SlideState = nullptr;
-		const InputManager* m_InputManager = nullptr;
+		const Player* m_Player = nullptr;
 	};
 }

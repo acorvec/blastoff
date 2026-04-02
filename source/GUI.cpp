@@ -3833,7 +3833,7 @@ namespace BlastOff
 		const Sprite* const parent,
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
-		const InputManager* const inputManager,
+		const Player* const player,
 		TextTextureLoader* const textTextureLoader
 	) :
 		Popup(
@@ -3845,7 +3845,7 @@ namespace BlastOff
 			programConstants,
 			textTextureLoader
 		),
-		m_InputManager(inputManager)
+		m_Player(player)
 	{
 		const auto initializeSlideState =
 			[&, this]()
@@ -3911,25 +3911,31 @@ namespace BlastOff
 
 	void ControlsPopup::Update()
 	{
-		const auto updateSpaceBar =
+		const auto updatePlayerVelocityTick =
 			[this]()
 			{
 				if (!m_SlideState->HasFinished())
 					return;
 
-				if (m_SpaceBarTick < 0 && m_InputManager->GetKeyDown(KEY_SPACE))
-					m_SpaceBarTick = m_MaxSpaceBarTick;
-				else if (m_SpaceBarTick == 0)
+				const auto getVelocityMagnitude = 
+					[this]()
+					{
+						return m_Player->GetVelocity().Magnitude();
+					};
+
+				if (m_PlayerVelocityTick < 0 && getVelocityMagnitude() > 0)
+					m_PlayerVelocityTick = m_MaxSpaceBarTick;
+				else if (m_PlayerVelocityTick == 0)
 				{
 					m_SlideState->SwapPositions();
 					m_SlideState->Slide();
-					m_SpaceBarTick = -1;
+					m_PlayerVelocityTick = -1;
 					m_IsSlidingOut = true;
 				}
-				else if (m_SpaceBarTick > 0)
-					m_SpaceBarTick--;
+				else if (m_PlayerVelocityTick > 0)
+					m_PlayerVelocityTick--;
 				else
-					m_SpaceBarTick = -1;
+					m_PlayerVelocityTick = -1;
 			};
 
 		const auto updateSlideState =
@@ -3949,7 +3955,7 @@ namespace BlastOff
 		Popup::Update();
 
 		updateSlideState();
-		updateSpaceBar();
+		updatePlayerVelocityTick();
 	}
 
 	Vector2f ControlsPopup::CalculatePosition

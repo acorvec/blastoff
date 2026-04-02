@@ -746,7 +746,7 @@ namespace BlastOff
 					m_CameraEmpty.get(),
 					m_CoordinateTransformer.get(),
 					m_ProgramConstants,
-					m_InputManager.get(),
+					m_Player.get(),
 					m_TextTextureLoader
 				);
 				m_ControlsPopup->Enable();
