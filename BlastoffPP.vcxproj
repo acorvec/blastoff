@@ -44,7 +44,6 @@
     <ClInclude Include="source\Graphics.h" />
     <ClInclude Include="source\GUI.h" />
     <ClInclude Include="source\InputManager.h" />
-    <ClInclude Include="source\JSONDefs.h" />
     <ClInclude Include="source\Logging.h" />
     <ClInclude Include="source\Platform.h" />
     <ClInclude Include="source\Player.h" />

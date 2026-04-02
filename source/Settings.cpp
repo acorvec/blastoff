@@ -3,14 +3,9 @@
 #include "Utils.h"
 #include "Logging.h"
 
-#if USE_GLAZE
-#include <glaze/json/prettify.hpp>
-#else
 #include <rapidjson/document.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
-#endif
-
 #include <raylib.h>
 #include <fstream>
 
@@ -102,27 +97,10 @@ namespace BlastOff
 
     void Settings::SaveToDefaultPath() const
     {
-#if USE_GLAZE
-        const Reflectable reflectable = ToReflectable();
-        const auto jsonExpected = glz::write_json(reflectable);
-        if (!jsonExpected.has_value())
-        {
-            const char* const message =
-            {
-                "Unable to generate json from ReflectableSettings object."
-            };
-            Logging::Log(message);
-            BreakProgram();
-        }
-
-        const string json = jsonExpected.value();
-        const string prettyJson = glz::prettify_json(json);
-#else
         StringBuffer buffer;
         PrettyWriter<StringBuffer> writer(buffer);
         WriteToJSONWriter(writer);
         const string prettyJson = buffer.GetString();
-#endif
 
         const auto getErrorMessage = 
             []() -> string
@@ -192,32 +170,6 @@ namespace BlastOff
         ApplyVolume();
     }
 
-#if USE_GLAZE
-    Settings::Settings(
-        const Reflectable& equivalent, 
-        const Vector2f aspectRatio
-    ) :
-        m_AspectRatio(aspectRatio)
-    {
-        m_AudioVolume = equivalent.audioVolume;
-        m_AudioIsMuted = equivalent.audioIsMuted;
-
-        m_ScreenSize = 
-        {
-            GetScreenWidth(), GetScreenHeight()
-        };
-        m_WindowPosition = 
-        {
-            equivalent.windowPosition.x,
-            equivalent.windowPosition.y 
-        };
-        m_WindowSize = 
-        {
-            equivalent.windowSize.x,
-            equivalent.windowSize.y
-        };
-    }
-#else
     Settings::Settings(const Document& document, const Vector2f aspectRatio)  :
         m_AspectRatio(aspectRatio)
     {
@@ -235,7 +187,6 @@ namespace BlastOff
         const Value& windowSize = document["windowSize"];
         m_WindowSize = Vector2i::FromJSONValue(windowSize);
     }
-#endif
 
     unique_ptr<Settings> Settings::LoadFromDefaultPath
         (const Vector2f aspectRatio)
@@ -259,26 +210,9 @@ namespace BlastOff
 
         const string text = readBuffer.str();
 
-#if USE_GLAZE
-        const auto parseResult = glz::read_json<Reflectable>(text);
-        if (!parseResult)
-        {
-            const string message = 
-            {
-                "File at path \"" + string(c_DefaultPath) + "\" "
-                "is present, but PARSING failed."
-            };
-            Logging::Log(message.c_str());
-            BreakProgram();
-        }
-
-        const Reflectable reflectable = parseResult.value();
-        return std::make_unique<Settings>(reflectable, aspectRatio);
-#else
         Document document;
         document.Parse(text.c_str());
         return std::make_unique<Settings>(document, aspectRatio);
-#endif
     }
 
     void Settings::UpdateScreenSize() 
@@ -295,19 +229,6 @@ namespace BlastOff
 #endif
     }
 
-
-#if USE_GLAZE
-    ReflectableSettings Settings::ToReflectable() const
-    {
-        return 
-        {
-            .audioVolume = m_AudioVolume,
-            .audioIsMuted = m_AudioIsMuted,
-            .windowPosition = { m_WindowPosition.x, m_WindowPosition.y },
-            .windowSize = { m_WindowSize.x, m_WindowSize.y }
-        };
-    }
-#else
     void Settings::WriteToJSONWriter(Writer<StringBuffer>& writer) const
     {
         writer.StartObject();
@@ -321,5 +242,4 @@ namespace BlastOff
         m_WindowSize.WriteToJSONWriter(writer);
         writer.EndObject();
     }
-#endif
 }

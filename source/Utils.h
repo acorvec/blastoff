@@ -18,13 +18,10 @@
 
 #include "Platform.h"
 #include "Debug.h"
-#include "JSONDefs.h"
 
-#if !USE_GLAZE
 #include <rapidjson/document.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
-#endif
 
 #if COMPILE_CONFIG_DEBUG
 // includes used for debugging only
