@@ -6,7 +6,8 @@
 /build/CMakeFiles/
 /build/_deps/
 /build/resource/
-/build/other/
+/build/linux/
+/build/web/
 /CMakeFiles/
 /_deps/
 BlastoffPP.vcxproj.user

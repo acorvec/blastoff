@@ -3939,7 +3939,6 @@ namespace BlastOff
 					m_SlideState->Slide();
 					m_PlayerVelocityTick = -1;
 					m_IsSlidingOut = true;
-					*m_HasBeenDismissed = true;
 				}
 				else if (m_PlayerVelocityTick > 0)
 				{
@@ -3960,6 +3959,7 @@ namespace BlastOff
 				{
 					m_IsSlidingOut = false;
 					m_IsEnabled = false;
+					*m_HasBeenDismissed = true;
 				}
 			};
 
