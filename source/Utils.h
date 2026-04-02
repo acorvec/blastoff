@@ -61,9 +61,7 @@ namespace BlastOff
 	using RayVector2f = Vector2;
 	using RayRect2f = Rectangle;
 
-#if !USE_GLAZE
 	using namespace rapidjson;
-#endif
 
 	static inline constexpr int c_DeactivatedTick = -1;
 	static inline constexpr int c_DeactivatedTracker = -1;
@@ -526,10 +524,8 @@ namespace BlastOff
 
 		static Vector2i FromRayVector2f(const RayVector2f value);
 		
-#if !USE_GLAZE
 		static Vector2i FromJSONValue(const Value& value);
 		void WriteToJSONWriter(Writer<StringBuffer>& writer) const;
-#endif
 
 		Vector2f Normalize() const;
 		float Magnitude() const;

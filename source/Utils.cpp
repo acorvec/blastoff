@@ -259,7 +259,6 @@ namespace BlastOff
 		return Vector2i{ (int)roundf(value.x), (int)roundf(value.y) };
 	}
 
-#if !USE_GLAZE
 	Vector2i Vector2i::FromJSONValue(const Value& value)
 	{
 		const Value& x = value["x"];
@@ -276,7 +275,6 @@ namespace BlastOff
 		writer.Int(y);
 		writer.EndObject();
 	}
-#endif
 
 	Vector2f Vector2i::Normalize() const
 	{
