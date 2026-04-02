@@ -3889,6 +3889,11 @@ namespace BlastOff
 	};
 	const Theme* const ControlsPopup::c_BackingTheme = &Theme::c_DarkTheme;
 
+	bool ControlsPopup::HasBeenDismissed()
+	{
+		return m_HasBeenDismissed;
+	}
+
 	void ControlsPopup::Enable()
 	{
 		Popup::Enable();
@@ -3931,9 +3936,15 @@ namespace BlastOff
 					m_SlideState->Slide();
 					m_PlayerVelocityTick = -1;
 					m_IsSlidingOut = true;
+					m_HasBeenDismissed = true;
 				}
 				else if (m_PlayerVelocityTick > 0)
-					m_PlayerVelocityTick--;
+				{
+					if (getVelocityMagnitude() > 0)
+						m_PlayerVelocityTick--;
+					else
+						m_PlayerVelocityTick = -1;
+				}
 				else
 					m_PlayerVelocityTick = -1;
 			};

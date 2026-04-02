@@ -1342,6 +1342,8 @@ namespace BlastOff
 			TextTextureLoader* const textTextureLoader
 		);
 
+		static bool HasBeenDismissed();
+
 		void Enable() override;
 		void Disable() override;
 		void Update() override;
@@ -1352,6 +1354,8 @@ namespace BlastOff
 		static const float c_SpaceBarTickLength;
 		static const char* const c_Message;
 		static const Theme* const c_BackingTheme;
+
+		static inline bool m_HasBeenDismissed = false;
 
 		static Vector2f CalculatePosition
 			(const CoordinateTransformer* const coordTransformer);

@@ -749,7 +749,8 @@ namespace BlastOff
 					m_Player.get(),
 					m_TextTextureLoader
 				);
-				m_ControlsPopup->Enable();
+				if (!ControlsPopup::HasBeenDismissed())
+					m_ControlsPopup->Enable();
 			};
 
 		initializeGraphics();
