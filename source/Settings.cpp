@@ -53,6 +53,11 @@ namespace BlastOff
         return m_WindowSize;
     }
 
+    bool* Settings::IsControlsPopupDismissed()
+    {
+        return &m_ControlsPopupIsDisabled;
+    }
+
     void Settings::MuteOrUnmute() 
     {
         m_AudioIsMuted = !m_AudioIsMuted;
@@ -178,6 +183,12 @@ namespace BlastOff
         const Value& audioIsMuted = document["audioIsMuted"];
         m_AudioIsMuted = audioIsMuted.GetBool();
 
+        const Value& controlsPopupIsDisabled = 
+        {
+            document["controlsPopupIsDisabled"]
+        };
+        m_ControlsPopupIsDisabled = controlsPopupIsDisabled.GetBool();
+
         const Value& audioVolume = document["audioVolume"];
         m_AudioVolume = audioVolume.GetFloat();
 
@@ -234,6 +245,8 @@ namespace BlastOff
         writer.StartObject();
         writer.Key("audioIsMuted");
         writer.Bool(m_AudioIsMuted);
+        writer.Key("controlsPopupIsDisabled");
+        writer.Bool(m_ControlsPopupIsDisabled);
         writer.Key("audioVolume");
         writer.Double((double)m_AudioVolume);
         writer.Key("windowPosition");

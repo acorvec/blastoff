@@ -3834,6 +3834,7 @@ namespace BlastOff
 		const CoordinateTransformer* const coordTransformer,
 		const ProgramConstants* const programConstants,
 		const Player* const player,
+		Settings* const settings,
 		TextTextureLoader* const textTextureLoader
 	) :
 		Popup(
@@ -3845,7 +3846,8 @@ namespace BlastOff
 			programConstants,
 			textTextureLoader
 		),
-		m_Player(player)
+		m_Player(player),
+		m_HasBeenDismissed(settings->IsControlsPopupDismissed())
 	{
 		const auto initializeSlideState =
 			[&, this]()
@@ -3889,13 +3891,11 @@ namespace BlastOff
 	};
 	const Theme* const ControlsPopup::c_BackingTheme = &Theme::c_DarkTheme;
 
-	bool ControlsPopup::HasBeenDismissed()
-	{
-		return m_HasBeenDismissed;
-	}
-
 	void ControlsPopup::Enable()
 	{
+		if (*m_HasBeenDismissed)
+			return;
+
 		Popup::Enable();
 
 		if (m_SlideState->GetStartingPosition() != m_OffScreenPosition)
@@ -3907,6 +3907,9 @@ namespace BlastOff
 
 	void ControlsPopup::Disable()
 	{
+		if (*m_HasBeenDismissed)
+			return;
+
 		if (m_SlideState->GetStartingPosition() == m_OffScreenPosition)
 			m_SlideState->SwapPositions();
 
@@ -3936,7 +3939,7 @@ namespace BlastOff
 					m_SlideState->Slide();
 					m_PlayerVelocityTick = -1;
 					m_IsSlidingOut = true;
-					m_HasBeenDismissed = true;
+					*m_HasBeenDismissed = true;
 				}
 				else if (m_PlayerVelocityTick > 0)
 				{
@@ -3959,7 +3962,10 @@ namespace BlastOff
 					m_IsEnabled = false;
 				}
 			};
-		
+
+		if (*m_HasBeenDismissed)
+			return;
+
 		if (!m_IsEnabled)
 			return;
 
@@ -3967,6 +3973,14 @@ namespace BlastOff
 
 		updateSlideState();
 		updatePlayerVelocityTick();
+	}
+
+	void ControlsPopup::Draw() const
+	{
+		if (*m_HasBeenDismissed)
+			return;
+
+		Popup::Draw();
 	}
 
 	Vector2f ControlsPopup::CalculatePosition

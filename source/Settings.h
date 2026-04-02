@@ -22,6 +22,8 @@ namespace BlastOff
         Vector2i GetWindowPosition() const;
         Vector2i GetWindowSize() const;
 
+        bool* IsControlsPopupDismissed();
+
         void MuteOrUnmute();
         void ChangeVolume(const float volume);
         void ChangeWindowHeight(const int windowHeight);
@@ -44,6 +46,7 @@ namespace BlastOff
 
         float m_AudioVolume = 1;
         bool m_AudioIsMuted = false;
+        bool m_ControlsPopupIsDisabled = false;
         
         Vector2i m_ScreenSize = Vector2i::Zero();
         Vector2i m_WindowPosition = Vector2i::Zero();

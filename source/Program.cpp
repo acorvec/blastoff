@@ -620,6 +620,7 @@ namespace BlastOff
 			&m_ImageTextureLoader,
 			m_TextTextureLoader.get(),
 			&m_SoundLoader,
+			m_Settings.get(),
             muteUnmuteUnmuteCallback,
 			resetCallback,
 			exitCallback,

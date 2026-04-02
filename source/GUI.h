@@ -1305,7 +1305,7 @@ namespace BlastOff
 		virtual void Disable();
 
 		virtual void Update();
-		void Draw() const;
+		virtual void Draw() const;
 
 	protected:
 		static const float c_FontSize;
@@ -1339,6 +1339,7 @@ namespace BlastOff
 			const CoordinateTransformer* const coordTransformer,
 			const ProgramConstants* const programConstants,
 			const Player* const player,
+			Settings* const settings,
 			TextTextureLoader* const textTextureLoader
 		);
 
@@ -1347,6 +1348,7 @@ namespace BlastOff
 		void Enable() override;
 		void Disable() override;
 		void Update() override;
+		void Draw() const override;
 
 	protected:
 		static const float c_MaxSlideInTick;
@@ -1354,8 +1356,6 @@ namespace BlastOff
 		static const float c_SpaceBarTickLength;
 		static const char* const c_Message;
 		static const Theme* const c_BackingTheme;
-
-		static inline bool m_HasBeenDismissed = false;
 
 		static Vector2f CalculatePosition
 			(const CoordinateTransformer* const coordTransformer);
@@ -1366,5 +1366,6 @@ namespace BlastOff
 
 		unique_ptr<SlideState> m_SlideState = nullptr;
 		const Player* m_Player = nullptr;
+		bool* m_HasBeenDismissed = nullptr;
 	};
 }

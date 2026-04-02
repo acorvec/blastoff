@@ -86,6 +86,7 @@ namespace BlastOff
 			ImageTextureLoader* const imageTextureLoader,
 			TextTextureLoader* const textTextureLoader,
 			SoundLoader* const soundLoader,
+			Settings* const settings,
 			const Callback& muteUnmuteUnmuteCallback,
 			const Callback& resetCallback,
 			const Callback& exitCallback,

@@ -626,6 +626,7 @@ namespace BlastOff
         ImageTextureLoader* const imageTextureLoader,
         TextTextureLoader* const textTextureLoader,
         SoundLoader* const soundLoader,
+		Settings* const settings,
         const Callback& muteUnmuteUnmuteCallback,
         const Callback& resetCallback,
 		const Callback& exitCallback,
@@ -740,17 +741,17 @@ namespace BlastOff
 			};
 
 		const auto initializeControlsPopup =
-			[this]()
+			[&, this]()
 			{
 				m_ControlsPopup = std::make_unique<ControlsPopup>(
 					m_CameraEmpty.get(),
 					m_CoordinateTransformer.get(),
 					m_ProgramConstants,
 					m_Player.get(),
+					settings,
 					m_TextTextureLoader
 				);
-				if (!ControlsPopup::HasBeenDismissed())
-					m_ControlsPopup->Enable();
+				m_ControlsPopup->Enable();
 			};
 
 		initializeGraphics();
