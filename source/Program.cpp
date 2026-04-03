@@ -148,14 +148,8 @@ namespace BlastOff
 
 	void Program::Deinitialize()
 	{
-		const auto writeSettingsFile =
-			[this]()
-			{
-				const Vector2i* positionPtr = m_Window->GetPosition();
-				m_Settings->UpdateWindowPosition(*positionPtr);
-
-				m_Settings->SaveToDefaultPath();
-			};
+        if (m_HasBeenDeinitialized)
+            return;
 
 		if (IsAudioDeviceReady())
 			CloseAudioDevice();
@@ -163,8 +157,12 @@ namespace BlastOff
 		if (m_Font.texture.id)
 			UnloadFont(m_Font);
 
-		writeSettingsFile();
-	}
+#if !COMPILE_TARGET_EMSCRIPTEN
+		WriteSettingsFile();
+#endif
+	
+        m_HasBeenDeinitialized = true;
+    }
 
 	bool Program::IsRunning() const
 	{
@@ -233,7 +231,7 @@ namespace BlastOff
 			[this]()
 			{
 				if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyDown(KEY_Q))
-					m_IsRunning = false;
+                    SetNotRunning();
 			};
 
 		const auto updateStateObject = 
@@ -465,7 +463,7 @@ namespace BlastOff
 			handleStateChange();
 
 		if (m_ShouldCloseAfterFrame)
-			m_IsRunning = false;
+            SetNotRunning();
 
 		if (m_GameShouldReset)
 		{
@@ -481,10 +479,27 @@ namespace BlastOff
 		m_FramesSinceCreation++;
 
 		if (WindowShouldClose())
-			m_IsRunning = false;
+            SetNotRunning();
 
 		calculateFrametimeStatistics();
+
+#if COMPILE_TARGET_EMSCRIPTEN
+        WriteSettingsFile();
+#endif
 	}
+
+    void Program::WriteSettingsFile()
+    {
+        const Vector2i* positionPtr = m_Window->GetPosition();
+        m_Settings->UpdateWindowPosition(*positionPtr);
+
+        m_Settings->SaveToDefaultPath();
+    }
+
+    void Program::SetNotRunning()
+    {
+		m_IsRunning = false;
+    }
 
 	bool Program::ShouldShowCutscene() const
 	{

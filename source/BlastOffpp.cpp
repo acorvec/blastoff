@@ -29,10 +29,11 @@ void mainloop()
 
 int main()
 {
-    const auto windowSizeCallback = [](const int width, const int height)
-    {
-        program.SetWindowSize(width, height);
-    };
+    const auto windowSizeCallback = 
+        [](const int width, const int height)
+        {
+            program.SetWindowSize(width, height);
+        };
 
     BlastOff::Emscripten::SetWindowSizeCallback(windowSizeCallback);
     BlastOff::Emscripten::SetAspectRatio(9 / 16.0f);

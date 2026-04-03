@@ -33,6 +33,8 @@ namespace BlastOff
 		void Update();
 		void Draw() const;
 
+        void WriteSettingsFile();
+        void SetNotRunning();
 		bool ShouldShowCutscene() const;
 		void MuteOrUnmute();
 		
@@ -63,6 +65,7 @@ namespace BlastOff
 		static const bool c_SpeedupInverted;
 #endif
 
+        bool m_HasBeenDeinitialized = false;
 		bool m_IsRunning = true;
 		bool m_ShouldCloseAfterFrame = false;
         bool m_IsMuted = false;

@@ -94,6 +94,7 @@ namespace BlastOff
 	namespace Emscripten
 	{
         std::function<void(int, int)> setWindowSize;
+        std::function<void()> deinitialize;
         float aspectRatio = 0;
 
         CursorPosition mostRecentCursorPosition = { 0, 0 };

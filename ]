@@ -34,24 +34,10 @@ namespace BlastOff
         }
 #else
         const auto cookies = getCookies();
-        auto attempt = std::make_unique<Settings>(cookies, aspectRatio);
+        auto result = std::make_unique<Settings>(cookies, aspectRatio);
         std::free(cookies);
-
-        if (attempt->IsValid())
-            return attempt;
-        else
-        {
-            return std::make_unique<Settings>(
-                aspectRatio, 
-                windowSizeIncrement
-            );
-        }
+        return result;
 #endif
-    }
-
-    bool Settings::IsValid() const
-    {
-        return m_IsValid;
     }
 
     float Settings::GetAudioVolume() const
@@ -167,14 +153,12 @@ namespace BlastOff
             }, cookie.c_str());
         };
 
-        [&, this]
-        {
+        [&, this]{
             string cookie = std::format("audioIsMuted={}", m_AudioIsMuted);
             setCookie(cookie);
         }();
 
-        [&, this]
-        {
+        [&, this]{
             string cookie = std::format(
                 "controlsPopupIsDisabled={}", 
                 m_ControlsPopupIsDisabled
@@ -182,14 +166,12 @@ namespace BlastOff
             setCookie(cookie);
         }();
 
-        [&, this]
-        {
+        [&, this]{
             string cookie = std::format("audioVolume={}", m_AudioVolume);
             setCookie(cookie);
         }();
 
-        [&, this]
-        {
+        [&, this]{
             string cookie = std::format(
                 "windowPosition={}", 
                 m_WindowPosition.ToJSON()
@@ -197,15 +179,10 @@ namespace BlastOff
             setCookie(cookie);
         }();
 
-        [&, this]
-        {
+        [&, this]{
             string cookie = std::format("windowSize={}", m_WindowSize.ToJSON());
             setCookie(cookie);
         }();
-
-        EM_ASM({
-            console.log(document.cookie);
-        });
 #endif
     }
 
@@ -256,20 +233,40 @@ namespace BlastOff
         UpdateScreenSize();
 
         const Value& audioIsMuted = document["audioIsMuted"];
+        m_AudioIsMuted = audioIsMuted.GetBool();
+
         const Value& controlsPopupIsDisabled = 
         {
             document["controlsPopupIsDisabled"]
         };
-        const Value& audioVolume = document["audioVolume"];
-        const Value& windowPosition = document["windowPosition"];
-        const Value& windowSize = document["windowSize"];
-
-        m_AudioIsMuted = audioIsMuted.GetBool();
         m_ControlsPopupIsDisabled = controlsPopupIsDisabled.GetBool();
+
+        const Value& audioVolume = document["audioVolume"];
         m_AudioVolume = audioVolume.GetFloat();
+
+        const Value& windowPosition = document["windowPosition"];
         m_WindowPosition = Vector2i::FromJSONValue(windowPosition);
+
+        const Value& windowSize = document["windowSize"];
         m_WindowSize = Vector2i::FromJSONValue(windowSize);
     }
+
+    EM_JS(char*, parseCookie, (const char* name), {
+        function getCookie(name) {
+            let cookieArr = document.cookie.split(";"); 
+          
+            for(let i = 0; i < cookieArr.length; i++) {
+                let cookiePair = cookieArr[i].split("="); 
+              
+                if(name == cookiePair[0].trim()) {
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+            return null;
+        }
+        const result = getCookie(name);
+        return result ? stringToNewUTF8(result) : null;
+    });
 
     Settings::Settings(const string& cookies, const Vector2f aspectRatio) :
         m_AspectRatio(aspectRatio)
@@ -278,9 +275,8 @@ namespace BlastOff
             [&](const char* const name)
             {
                 const auto cookieArr = SplitString(cookies.c_str(), ';');
-                for (auto token : cookieArr)
+                for (const auto token : cookieArr)
                 {
-                    token = TrimWhitespace(token.c_str());
                     const auto pair = SplitString(token.c_str(), '=');
                     if (pair[0] == name)
                         return pair[1];
@@ -290,45 +286,8 @@ namespace BlastOff
 
         UpdateScreenSize();
 
-        const auto audioIsMuted = getCookie("audioIsMuted");
-        const string controlsPopupIsDisabled = 
-        {
-            getCookie("controlsPopupIsDisabled")
-        };
-        const auto audioVolume = getCookie("audioVolume");
-        const auto windowPosition = getCookie("windowPosition");
-        const auto windowSize = getCookie("windowSize");
-
-        const auto audioIsMuted2 = StringToBool(audioIsMuted);
-        const auto controlsPopupIsDisabled2 = StringToBool(controlsPopupIsDisabled);
-        const auto audioVolume2 = StringToFloat(audioVolume);
-        const auto windowPosition2 = Vector2i::FromJSONString(windowPosition);
-        const auto windowSize2 = Vector2i::FromJSONString(windowSize);
-
-        if (audioIsMuted2)
-            m_AudioIsMuted = *audioIsMuted2;
-        else
-            m_IsValid = false;
-
-        if (controlsPopupIsDisabled2)
-            m_ControlsPopupIsDisabled = *controlsPopupIsDisabled2;
-        else
-            m_IsValid = false;
-
-        if (audioVolume2)
-            m_AudioVolume = *audioVolume2;
-        else
-            m_IsValid = false;
-
-        if (windowPosition2)
-            m_WindowPosition = *windowPosition2;
-        else
-            m_IsValid = false;
-
-        if (windowSize2)
-            m_WindowSize = *windowSize2;
-        else
-            m_IsValid = false;
+        const auto result = getCookie("windowSize");
+        std::println("{}", result);
     }
 
     unique_ptr<Settings> Settings::LoadFromDefaultPath

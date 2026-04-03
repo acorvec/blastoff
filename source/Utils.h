@@ -12,6 +12,8 @@
 #include <cstdint>
 #include <expected>
 #include <chrono>
+#include <errno.h>
+#include <cstdlib>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -159,10 +161,12 @@ namespace BlastOff
 
 	string ByteToHexString(const byte value);
 	string BoolToString(const bool value);
-
 	vector<string> SplitString(const char* const value, const char delim);
-
+    string TrimWhitespace(const char* const value);
 	bool StringContains(const char* const string, const char value);
+
+	optional<bool> StringToBool(const string& value);
+	optional<float> StringToFloat(const string& value);
 
 	float GetRandomFloat();
 	float RoundToFraction(const float num, const float fraction);
@@ -524,8 +528,10 @@ namespace BlastOff
 
 		static Vector2i FromRayVector2f(const RayVector2f value);
 		
+        static optional<Vector2i> FromJSONString(const string& value);
 		static Vector2i FromJSONValue(const Value& value);
 		void WriteToJSONWriter(Writer<StringBuffer>& writer) const;
+        string ToJSON() const;
 
 		Vector2f Normalize() const;
 		float Magnitude() const;

@@ -15,6 +15,8 @@ namespace BlastOff
             const int windowSizeIncrement
         );
 
+        bool IsValid() const;
+
         float GetAudioVolume() const;
         bool IsAudioMuted() const;
 
@@ -38,9 +40,12 @@ namespace BlastOff
             const int windowSizeIncrement
         );
         Settings(const Document& document, const Vector2f aspectRatio);
+        Settings(const string& cookies, const Vector2f aspectRatio);
 
     private:
         static const char* const c_DefaultPath;
+
+        bool m_IsValid = true;
 
         Vector2f m_AspectRatio = Vector2f::Zero();
 

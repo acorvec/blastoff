@@ -56,7 +56,7 @@ if (EMSCRIPTEN)
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
 
     # required due to bullshit
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FAGS} -s ASYNCIFY")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FAGS} -s ASYNCIFY -sEXIT_RUNTIME=1")
 
     target_compile_definitions(${PROJECT_NAME} PRIVATE COMPILE_TARGET_EMSCRIPTEN=1)
 

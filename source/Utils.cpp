@@ -73,6 +73,17 @@ namespace BlastOff
 		return result;
 	}
 
+    string TrimWhitespace(const char* const value)
+    {
+        const auto str = string(value);
+        const char* const whitespace = " \t\n\r\f\v";
+        const size_t begin = str.find_first_not_of(whitespace);
+        if (begin == std::string::npos)
+            return "";
+        const size_t end = str.find_last_not_of(whitespace);
+        return str.substr(begin, end - begin + 1);
+    }
+
 	bool StringContains(const char* const string, const char value)
 	{
 		size_t index = 0;
@@ -85,6 +96,28 @@ namespace BlastOff
 		}
 		return false;
 	}
+
+	optional<bool> StringToBool(const string& value)
+    {
+        if (value == "true")
+            return true;
+        else if (value == "false")
+            return false;
+        else
+            return std::nullopt;
+    }
+
+	optional<float> StringToFloat(const string& value)
+    {
+        errno = 0;
+        const auto result = std::strtof(value.c_str(), nullptr);
+        if (errno == ERANGE)
+        {
+            errno = 0;
+            return std::nullopt;
+        }
+        return result;
+    }
 
 	float GetRandomFloat()
 	{
@@ -259,6 +292,16 @@ namespace BlastOff
 		return Vector2i{ (int)roundf(value.x), (int)roundf(value.y) };
 	}
 
+    optional<Vector2i> Vector2i::FromJSONString(const string& value)
+    {
+        Document document;
+        document.Parse(value.c_str());
+        if (document.HasParseError())
+            return std::nullopt;
+        else
+            return FromJSONValue(document);
+    }
+
 	Vector2i Vector2i::FromJSONValue(const Value& value)
 	{
 		const Value& x = value["x"];
@@ -275,6 +318,11 @@ namespace BlastOff
 		writer.Int(y);
 		writer.EndObject();
 	}
+
+    string Vector2i::ToJSON() const
+    {
+        return std::format("{{ x: \"{}\", y: \"{}\"}}", x, y);
+    }
 
 	Vector2f Vector2i::Normalize() const
 	{
