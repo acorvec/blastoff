@@ -11,10 +11,12 @@
 
 namespace BlastOff
 {
+#if COMPILE_TARGET_EMSCRIPTEN
     EM_JS(char*, getCookies, (), {
         const result = document.cookie;
         return stringToNewUTF8(result);
     });
+#endif
 
     unique_ptr<Settings> Settings::LoadOrDefault(
         const Vector2f aspectRatio,
