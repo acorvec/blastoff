@@ -302,11 +302,22 @@ namespace BlastOff
             return FromJSONValue(document);
     }
 
-	Vector2i Vector2i::FromJSONValue(const Value& value)
+	optional<Vector2i> Vector2i::FromJSONValue(const Value& value)
 	{
+        if (!value.HasMember("x"))
+            return std::nullopt;
+        if (!value.HasMember("y"))
+            return std::nullopt;
+
 		const Value& x = value["x"];
 		const Value& y = value["y"];
-		return { x.GetInt(), y.GetInt() };
+
+        if (!x.IsInt())
+            return std::nullopt;
+        if (!y.IsInt())
+            return std::nullopt;
+
+		return Vector2i{ x.GetInt(), y.GetInt() };
 	}
 
 	void Vector2i::WriteToJSONWriter(Writer<StringBuffer>& writer) const
@@ -321,7 +332,7 @@ namespace BlastOff
 
     string Vector2i::ToJSON() const
     {
-        return std::format("{{ x: \"{}\", y: \"{}\"}}", x, y);
+        return std::format("{{ \"x\": {}, \"y\": {} }}", x, y);
     }
 
 	Vector2f Vector2i::Normalize() const

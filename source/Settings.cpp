@@ -202,10 +202,6 @@ namespace BlastOff
             string cookie = std::format("windowSize={}", m_WindowSize.ToJSON());
             setCookie(cookie);
         }();
-
-        EM_ASM({
-            console.log(document.cookie);
-        });
 #endif
     }
 
@@ -267,8 +263,8 @@ namespace BlastOff
         m_AudioIsMuted = audioIsMuted.GetBool();
         m_ControlsPopupIsDisabled = controlsPopupIsDisabled.GetBool();
         m_AudioVolume = audioVolume.GetFloat();
-        m_WindowPosition = Vector2i::FromJSONValue(windowPosition);
-        m_WindowSize = Vector2i::FromJSONValue(windowSize);
+        m_WindowPosition = *Vector2i::FromJSONValue(windowPosition);
+        m_WindowSize = *Vector2i::FromJSONValue(windowSize);
     }
 
     Settings::Settings(const string& cookies, const Vector2f aspectRatio) :

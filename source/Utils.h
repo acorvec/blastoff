@@ -529,7 +529,7 @@ namespace BlastOff
 		static Vector2i FromRayVector2f(const RayVector2f value);
 		
         static optional<Vector2i> FromJSONString(const string& value);
-		static Vector2i FromJSONValue(const Value& value);
+		static optional<Vector2i> FromJSONValue(const Value& value);
 		void WriteToJSONWriter(Writer<StringBuffer>& writer) const;
         string ToJSON() const;
 
