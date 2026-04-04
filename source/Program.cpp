@@ -230,8 +230,10 @@ namespace BlastOff
 		const auto updateControlQ =
 			[this]()
 			{
+#if COMPILE_TARGET_DESKTOP
 				if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyDown(KEY_Q))
                     SetNotRunning();
+#endif
 			};
 
 		const auto updateStateObject = 
