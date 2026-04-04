@@ -23,7 +23,7 @@ namespace BlastOff
     {
 #if !COMPILE_TARGET_EMSCRIPTEN
         unique_ptr<Settings> attempt = LoadFromDefaultPath(aspectRatio);
-        if (attempt)
+        if (attempt && attempt->IsValid())
             return attempt;
         else
         {
@@ -260,11 +260,33 @@ namespace BlastOff
         const Value& windowPosition = document["windowPosition"];
         const Value& windowSize = document["windowSize"];
 
-        m_AudioIsMuted = audioIsMuted.GetBool();
-        m_ControlsPopupIsDisabled = controlsPopupIsDisabled.GetBool();
-        m_AudioVolume = audioVolume.GetFloat();
-        m_WindowPosition = *Vector2i::FromJSONValue(windowPosition);
-        m_WindowSize = *Vector2i::FromJSONValue(windowSize);
+        if (audioIsMuted.IsBool())
+            m_AudioIsMuted = audioIsMuted.GetBool();
+        else
+            m_IsValid = false;
+
+        if (controlsPopupIsDisabled.IsBool())
+            m_ControlsPopupIsDisabled = controlsPopupIsDisabled.GetBool();
+        else
+            m_IsValid = false;
+
+        if (audioVolume.IsFloat())
+            m_AudioVolume = audioVolume.GetFloat();
+        else
+            m_IsValid = false;
+
+        const auto windowPosition2 = Vector2i::FromJSONValue(windowPosition);
+        const auto windowSize2 = Vector2i::FromJSONValue(windowSize);
+
+        if (windowPosition2)
+            m_WindowPosition = *windowPosition2;
+        else
+            m_IsValid = false;
+
+        if (windowSize2)
+            m_WindowSize = *windowSize2;
+        else
+            m_IsValid = false;
     }
 
     Settings::Settings(const string& cookies, const Vector2f aspectRatio) :
