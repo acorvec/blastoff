@@ -14,7 +14,7 @@ FetchContent_Declare(
     GIT_REPOSITORY "https://github.com/raysan5/raylib.git"
 # potentially required for building with make; otherwise unnecessary
 #   GIT_TAG "1eea511070ece8e4f96e961588811340ebd0b11e"
-    GIT_TAG "master"
+    GIT_TAG master
     GIT_PROGRESS TRUE
 )
 FetchContent_Declare(
@@ -29,6 +29,10 @@ FetchContent_MakeAvailable(rapidjson)
 
 file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/source/*.cpp")
 set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/sources/")
+
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type" FORCE)
+endif()
 
 add_executable(${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
@@ -56,7 +60,7 @@ if (EMSCRIPTEN)
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
 
     # required due to bullshit
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FAGS} -s ASYNCIFY -sEXIT_RUNTIME=1")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FAGS} -s ASYNCIFY -sEXIT_RUNTIME=1 -s ALLOW_MEMORY_GROWTH -s INITIAL_HEAP=307232768")
 
     target_compile_definitions(${PROJECT_NAME} PRIVATE COMPILE_TARGET_EMSCRIPTEN=1)
 
@@ -74,7 +78,6 @@ if (EMSCRIPTEN)
     foreach (FILE ${PRELOAD_FILES})
         target_link_libraries(${PROJECT_NAME} PRIVATE "--preload-file \"${FILE}\"")
     endforeach ()
-    message("${ASSET_BUNDLE_CMD}")
 
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         target_compile_options(${PROJECT_NAME} PRIVATE -g -O0 -gsource-map)
