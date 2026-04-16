@@ -195,6 +195,7 @@ namespace BlastOff
 			{
 				m_Window->SetSize(m_InitialWindowSize);
 				m_Window->SetPosition(m_InitialWindowPosition);
+				m_Window->SetHidden(false);
 
 				// pause for one frame because of 
 				// some weird bug with Raylib or GLFW

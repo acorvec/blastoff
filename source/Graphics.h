@@ -34,6 +34,7 @@ namespace BlastOff
 
 		void SetPosition(const Vector2i position);
 		void SetSize(const Vector2i size);
+		void SetHidden(const bool value = true);
 
 	private:
 		Vector2i m_Position = Vector2i::Zero();

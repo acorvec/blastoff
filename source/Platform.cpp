@@ -68,6 +68,8 @@ namespace BlastOff
 #if COMPILE_TARGET_WINDOWS
 	namespace Windows
 	{
+		CursorPosition mostRecentCursorPosition = { 0, 0 };
+
 		void SetUpPlatform(const int fps)
 		{
 			(void)fps;
@@ -78,9 +80,10 @@ namespace BlastOff
 			POINT result;
 			const bool success = GetCursorPos(&result);
 			if (success)
-				return CursorPosition{ (int)result.x, (int)result.y };
-			else
-				return std::nullopt;
+			{
+				mostRecentCursorPosition = { (int)result.x, (int)result.y };
+			}
+			return mostRecentCursorPosition;
 		}
 
         float GetWindowHeightMultiplier()

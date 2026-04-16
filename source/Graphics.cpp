@@ -44,6 +44,7 @@ namespace BlastOff
 		const string& title
 	) : m_Size(size)
 	{
+		SetConfigFlags(FLAG_WINDOW_HIDDEN);
 		InitWindow(size.x, size.y, title.c_str());
 	}
 
@@ -89,6 +90,14 @@ namespace BlastOff
 #endif
 
 		SetWindowSize(size.x, size.y);
+	}
+
+	void RayWindow::SetHidden(const bool value)
+	{
+		if (value)
+			SetWindowState(FLAG_WINDOW_HIDDEN);
+		else
+			ClearWindowState(FLAG_WINDOW_HIDDEN);
 	}
 
 	void RayWindow::UpdatePosition()
