@@ -535,11 +535,15 @@ namespace BlastOff
 		const float result = targetFramerate * multiplier;
 		return (int)roundf(result);
 	}
-
-	void Program::SetFramerate(const int framerate) 
-	{
+    
+	void Program::SetFramerate(const int framerate)
+    {
+#if COMPILE_CONFIG_DEBUG
         SetFramerateSafely(framerate, &m_MostRecentFramerateSet);
-	}
+#else
+        SetFramerateSafely(framerate);
+#endif
+    }
 
 	void Program::DrawFramerate()
 	{
