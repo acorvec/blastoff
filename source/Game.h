@@ -56,10 +56,6 @@ namespace BlastOff
 		unique_ptr<Crag> m_Crag = nullptr;
 		unique_ptr<SpawnPlatform> m_Platform = nullptr;
 		unique_ptr<Player> m_Player = nullptr;
-		unique_ptr<GUIBar> m_FuelBar = nullptr;
-		unique_ptr<GUIBar> m_SpeedupBar = nullptr;
-		unique_ptr<BarLabel> m_FuelBarLabel = nullptr;
-		unique_ptr<BarLabel> m_SpeedupBarLabel = nullptr;
 
 		vector<SpeedUpPowerup> m_SpeedUpPowerups = {};
 		vector<FuelUpPowerup> m_FuelUpPowerups = {};
@@ -111,6 +107,10 @@ namespace BlastOff
 		unique_ptr<TopRightResetButton> m_ResetButton = nullptr;
 		unique_ptr<TopRightExitButton> m_ExitButton = nullptr;
 		unique_ptr<Popup> m_ControlsPopup = nullptr;
+		unique_ptr<GUIBar> m_FuelBar = nullptr;
+		unique_ptr<GUIBar> m_SpeedupBar = nullptr;
+		unique_ptr<BarLabel> m_FuelBarLabel = nullptr;
+		unique_ptr<BarLabel> m_SpeedupBarLabel = nullptr;
 
 		const Sound* m_WinSound = nullptr;
 		const Sound* m_LoseSound = nullptr;

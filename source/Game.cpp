@@ -50,10 +50,6 @@ namespace BlastOff
 				m_InputManager->Update();
 
 				m_Player->Update();
-				m_FuelBar->Update();
-				m_SpeedupBar->Update();
-				m_FuelBarLabel->Update();
-				m_SpeedupBarLabel->Update();
 
 				for (Cloud* const cloud : m_AllClouds)
 					cloud->Update();
@@ -212,11 +208,6 @@ namespace BlastOff
 				
 				for (const Cloud* const cloud : m_AllClouds)
 					drawCloud(cloud, true);
-
-				m_FuelBar->Draw();
-				m_SpeedupBar->Draw();
-				m_FuelBarLabel->Draw();
-				m_SpeedupBarLabel->Draw();
 			};
 
 		drawObjects();
@@ -522,42 +513,6 @@ namespace BlastOff
 				registerPowerupVector(m_DownforcePowerups);
 			};
 
-		const auto initializeGUIBars =
-			[&, this]()
-			{
-				m_FuelBar = std::make_unique<FuelBar>(
-					m_CoordTransformer,
-					m_ProgramConstants,
-					m_ImageTextureLoader,
-					m_CameraEmpty,
-					m_Player.get()
-				);
-				m_SpeedupBar = std::make_unique<SpeedupBar>(
-					m_CoordTransformer,
-					m_ProgramConstants,
-					m_ImageTextureLoader,
-					m_CameraEmpty,
-					m_Player.get()
-				);
-			};
-
-		const auto initializeGUILabels =
-			[&, this]()
-			{
-				m_FuelBarLabel = std::make_unique<FuelBarLabel>(
-					m_FuelBar.get(),
-					m_CoordTransformer,
-					m_ProgramConstants,
-					m_TextTextureLoader
-				);
-				m_SpeedupBarLabel = std::make_unique<SpeedupBarLabel>(
-					m_SpeedupBar.get(),
-					m_CoordTransformer,
-					m_ProgramConstants,
-					m_TextTextureLoader
-				);
-			};
-
 		const auto initializeObjects =
 			[&]()
 			{
@@ -568,8 +523,6 @@ namespace BlastOff
 				initializeClouds();
 				initializePlayer();
 				initializePowerups();
-				initializeGUIBars();
-				initializeGUILabels();
 			};
 
 		m_CoordTransformer = coordTransformer;
@@ -754,12 +707,50 @@ namespace BlastOff
 				m_ControlsPopup->Enable();
 			};
 
+		const auto initializeGUIBars =
+			[&, this]()
+			{
+				m_FuelBar = std::make_unique<FuelBar>(
+					m_CoordinateTransformer.get(),
+					m_ProgramConstants,
+					m_ImageTextureLoader,
+					m_CameraEmpty.get(),
+					m_Player.get()
+				);
+				m_SpeedupBar = std::make_unique<SpeedupBar>(
+					m_CoordinateTransformer.get(),
+					m_ProgramConstants,
+					m_ImageTextureLoader,
+					m_CameraEmpty.get(),
+					m_Player.get()
+				);
+			};
+
+		const auto initializeGUILabels =
+			[&, this]()
+			{
+				m_FuelBarLabel = std::make_unique<FuelBarLabel>(
+					m_FuelBar.get(),
+					m_CoordinateTransformer.get(),
+					m_ProgramConstants,
+					m_TextTextureLoader
+				);
+				m_SpeedupBarLabel = std::make_unique<SpeedupBarLabel>(
+					m_SpeedupBar.get(),
+					m_CoordinateTransformer.get(),
+					m_ProgramConstants,
+					m_TextTextureLoader
+				);
+			};
+
 		initializeGraphics();
         initializeSound();
         initializeInput();
         initializeGameEndMenus();
         initializeGUIButtons();
 		initializeControlsPopup();
+		initializeGUIBars();
+		initializeGUILabels();
     }
 
     void PlayableGame::Update()
@@ -773,6 +764,10 @@ namespace BlastOff
                 m_ResetButton->Update();
 				m_ExitButton->Update();
 				m_ControlsPopup->Update();
+				m_FuelBar->Update();
+				m_SpeedupBar->Update();
+				m_FuelBarLabel->Update();
+				m_SpeedupBarLabel->Update();
             };
 
         Game::Update();
@@ -794,6 +789,10 @@ namespace BlastOff
         m_ResetButton->Draw();
 		m_ExitButton->Draw();
 		m_ControlsPopup->Draw();
+		m_FuelBar->Draw();
+		m_SpeedupBar->Draw();
+		m_FuelBarLabel->Draw();
+		m_SpeedupBarLabel->Draw();
     }
 
     void PlayableGame::ChooseOutcome(const Outcome outcome)
