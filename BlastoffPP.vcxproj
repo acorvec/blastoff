@@ -109,8 +109,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)\vendor\raylib-5.5_win64_msvc16\include;$(ProjectDir)\vendor\rapidjson\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)\vendor\raylib-5.5_win64_msvc16\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\vendor\raylib-6.0_win64_msvc16\include;$(ProjectDir)\vendor\rapidjson-1.1.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\vendor\raylib-6.0_win64_msvc16\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)\vendor\raylib-5.5_win64_msvc16\include;$(ProjectDir)\vendor\rapidjson\include;$(IncludePath)</IncludePath>

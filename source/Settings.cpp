@@ -1,13 +1,14 @@
-#include "Settings.h"
-#include "Platform.h"
-#include "Utils.h"
-#include "Logging.h"
-
+#define _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
 #include <rapidjson/document.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
 #include <raylib.h>
 #include <fstream>
+
+#include "Settings.h"
+#include "Platform.h"
+#include "Utils.h"
+#include "Logging.h"
 
 namespace BlastOff
 {

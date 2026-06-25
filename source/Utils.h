@@ -1,5 +1,10 @@
 #pragma once
 
+#define _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
+#include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/prettywriter.h>
+
 #include <optional>
 #include <string>
 #include <memory>
@@ -20,10 +25,6 @@
 
 #include "Platform.h"
 #include "Debug.h"
-
-#include <rapidjson/document.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/prettywriter.h>
 
 #if COMPILE_CONFIG_DEBUG
 // includes used for debugging only
